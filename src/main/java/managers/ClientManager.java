@@ -10,6 +10,9 @@ import java.util.List;
 public class ClientManager {
     //TODO ALL TODO :weary:
 
+    public ClientManager() {
+    }
+
     public Client registerClient(String name, String surname, Address address, String id, idType idType) {
 
         return null;
