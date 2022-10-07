@@ -2,6 +2,7 @@ package model;
 
 import model.EQ.Equipment;
 import org.joda.time.Days;
+import org.joda.time.LocalDateTime;
 
 public class Rent {
 
@@ -20,20 +21,20 @@ public class Rent {
 
     private Address shippingAddress;
 
-    public Rent(int id, org.joda.time.LocalDateTime beginTime, org.joda.time.LocalDateTime endTime, boolean shipped,
-                boolean eqReturned, Equipment equipment, Client client, Address shippingAddress) {
+    public Rent(int id, org.joda.time.LocalDateTime beginTime, org.joda.time.LocalDateTime endTime,
+                Equipment equipment, Client client, Address shippingAddress) {
         this.id = id; // W jaki sposób to id ma być generowane?
         this.beginTime = beginTime;
         // this.beginTime = LocalDateTime.now();  FIXME ?
         this.endTime = endTime;
-        this.shipped = shipped;
-        this.eqReturned = eqReturned;
+        this.shipped = false;
+        this.eqReturned = false;
         this.equipment = equipment;
         this.client = client;
         this.shippingAddress = shippingAddress;
     }
 
-    double getRentCost() {
+    public double getRentCost() {
         if (!eqReturned) {
             return 0.0;
         } else if (equipment.isMissing()) {
@@ -59,5 +60,37 @@ public class Rent {
         sb.append(", eqReturned=").append(eqReturned);
         sb.append('}');
         return sb.toString();
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public LocalDateTime getBeginTime() {
+        return beginTime;
+    }
+
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
+
+    public boolean isShipped() {
+        return shipped;
+    }
+
+    public boolean isEqReturned() {
+        return eqReturned;
+    }
+
+    public Equipment getEquipment() {
+        return equipment;
+    }
+
+    public Client getClient() {
+        return client;
+    }
+
+    public Address getShippingAddress() {
+        return shippingAddress;
     }
 }

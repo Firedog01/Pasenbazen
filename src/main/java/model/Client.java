@@ -13,10 +13,10 @@ public class Client {
     //TODO current rents? List?
 
 
-    public Client(String firstName, String lastName, Address address, String ID, model.idType idType, boolean archive) {
+    public Client(String firstName, String lastName, Address address, String ID, model.idType idType) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.archive = archive; //FIXME po co to jest???
+        this.archive = false; //FIXME po co to jest???
         this.ID = ID;
         this.idType = idType;
         this.address = address;

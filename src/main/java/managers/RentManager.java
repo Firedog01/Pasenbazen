@@ -1,30 +1,48 @@
 package managers;
 
+import model.Address;
 import model.Client;
 import model.EQ.Equipment;
 import model.Rent;
+import org.joda.time.LocalDateTime;
 import predicates.Predicate;
+import repository.impl.RentRepository;
 
 import java.util.List;
 
 public class RentManager {
+    private RentRepository rentRepository;
     //TODO
 
-    public Rent makeReservation(Client client, Equipment equipment, org.joda.time.LocalDateTime beginTime,
-                                org.joda.time.LocalDateTime endTime) {
-        return null;
+
+    public RentManager(RentRepository rentRepository) {
+        this.rentRepository = rentRepository;
     }
 
+    public Rent makeReservation(Client client, Equipment equipment, Address address, org.joda.time.LocalDateTime beginTime,
+                                org.joda.time.LocalDateTime endTime) {
+        Rent rent = new Rent(rentRepository.size(), beginTime, endTime, equipment, client, address);
+        rentRepository.add(rent);
+        return rent;
+    }
+
+
     public List<Rent> getClientRents(Client client) {
-        return null;
+        return rentRepository.findBy(x -> x.getClient() == client && !x.getClient().isArchive());
     }
 
     public String checkForShipments() {
-        return null;
+        org.joda.time.LocalDateTime nowTime = LocalDateTime.now();
+//        List<Rent> rentList = findRents(x -> x)
+        return null; //FIXME
     }
 
     public boolean isAvailable(Equipment equipment) {
-        return false;
+        if (whenAvailable(equipment) == LocalDateTime.now()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public org.joda.time.LocalDateTime whenAvailable(Equipment equipment) {
@@ -51,20 +69,30 @@ public class RentManager {
 
     }
 
-    public double checkClientBalance() { //Bez client?
-        return 0.0;
+    public double checkClientBalance(Client client) {
+        List<Rent> rentList = getClientRents(client);
+        double balance = 0.0;
+        for (Rent rent:
+             rentList) {
+            balance += rent.getRentCost();
+        }
+        return balance;
     }
 
     public List<Rent> findRents(Predicate<Rent> predicate) {
+//        return rentRepository.findBy(predicate);  //FIXME tutaj jest ten sam problem z predykatem
         return null;
     }
 
     public List<Rent> findAllRents() {
-        return null;
+        return rentRepository.findAll();
     }
 
     public Rent getRent(int id) {
-        return null;
+        if (id < rentRepository.size()) {
+            return rentRepository.get(id);
+        }
+        return null; //todo?
     }
 
 }
