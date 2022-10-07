@@ -1,4 +1,4 @@
-package model.eq;
+package model.EQ;
 
 public class Trivet extends Equipment{
     private double weigh;

@@ -1,4 +1,4 @@
-package model.eq;
+package model.EQ;
 
 public class Microphone extends Equipment{
     private String brightness;

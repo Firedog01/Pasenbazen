@@ -1,4 +1,4 @@
-package model.eq;
+package model.EQ;
 
 public class Lens extends Equipment{
     private String focalLength;

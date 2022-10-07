@@ -1,8 +1,7 @@
-import model.eq.Equipment;
-import org.joda.time.Days;
-import org.joda.time.Hours;
+package model;
 
-import java.time.LocalDateTime;
+import model.EQ.Equipment;
+import org.joda.time.Days;
 
 public class Rent {
 
@@ -25,7 +24,7 @@ public class Rent {
                 boolean eqReturned, Equipment equipment, Client client, Address shippingAddress) {
         this.id = id; // W jaki sposób to id ma być generowane?
         this.beginTime = beginTime;
-//        this.beginTime = LocalDateTime.now();  FIXME ?
+        // this.beginTime = LocalDateTime.now();  FIXME ?
         this.endTime = endTime;
         this.shipped = shipped;
         this.eqReturned = eqReturned;
@@ -41,7 +40,8 @@ public class Rent {
             return equipment.getBail();
         } else {
             long diffDays= Math.abs(Days.daysBetween(beginTime, endTime).getDays());
-            // Nie jestem pewien co do tego
+            // Nie jestem pewien co do tego, ustawiłem sprawdzanie od 1, bo myślę, że gdzieś indziej będzie sprawdzane
+            // Czy data jest w ogóle większa od 0?
             if (diffDays > 1) {
                 return equipment.getFirstDayCost() + equipment.getNextDaysCost() * (diffDays - 1);
             } else {
@@ -49,10 +49,9 @@ public class Rent {
             }
         }
     }
-
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Rent{");
+        final StringBuilder sb = new StringBuilder("model.Rent{");
         sb.append("id=").append(id);
         sb.append(", beginTime=").append(beginTime);
         sb.append(", endTime=").append(endTime);

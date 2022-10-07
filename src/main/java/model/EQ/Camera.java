@@ -1,4 +1,4 @@
-package model.eq;
+package model.EQ;
 
 public class Camera extends Equipment {
     private String resolution;

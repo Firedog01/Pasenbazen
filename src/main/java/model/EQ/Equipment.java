@@ -1,4 +1,4 @@
-package model.eq;
+package model.EQ;
 
 public abstract class Equipment {
     private double firstDayCost;
