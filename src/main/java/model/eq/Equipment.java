@@ -15,12 +15,12 @@ public abstract class Equipment {
 
     private boolean missing;
 
-    public Equipment(double firstDayCost, double nextDaysCost, double bait, String name, boolean archive,
+    public Equipment(double firstDayCost, double nextDaysCost, double bail, String name, boolean archive,
                      String description, int id, boolean missing) {
 
         this.firstDayCost = firstDayCost;
         this.nextDaysCost = nextDaysCost;
-        this.bait = bait;
+        this.bait = bail;
         this.name = name;
         this.archive = archive;
         this.description = description;
@@ -42,5 +42,37 @@ public abstract class Equipment {
         sb.append(", missing=").append(missing);
         sb.append('}');
         return sb.toString();
+    }
+
+    public double getFirstDayCost() {
+        return firstDayCost;
+    }
+
+    public double getNextDaysCost() {
+        return nextDaysCost;
+    }
+
+    public double getBail() {
+        return bait;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public boolean isArchive() {
+        return archive;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public boolean isMissing() {
+        return missing;
     }
 }

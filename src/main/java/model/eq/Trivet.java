@@ -17,4 +17,8 @@ public class Trivet extends Equipment{
         sb.append('}');
         return super.toString() + sb.toString();
     }
+
+    public double getWeigh() {
+        return weigh;
+    }
 }

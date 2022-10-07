@@ -16,4 +16,8 @@ public class Lens extends Equipment{
         sb.append('}');
         return super.toString() + sb.toString();
     }
+
+    public String getFocalLength() {
+        return focalLength;
+    }
 }

@@ -16,4 +16,8 @@ public class Microphone extends Equipment{
         sb.append('}');
         return super.toString() + sb.toString();
     }
+
+    public String getBrightness() {
+        return brightness;
+    }
 }

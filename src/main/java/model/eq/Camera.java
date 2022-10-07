@@ -16,4 +16,8 @@ public class Camera extends Equipment {
         sb.append('}');
         return super.toString() + sb.toString();
     }
+
+    public String getResolution() {
+        return resolution;
+    }
 }
