@@ -3,9 +3,8 @@ package model.EQ;
 public class Camera extends Equipment {
     private String resolution;
 
-    public Camera(double firstDayCost, double nextDaysCost, double bait, String name, boolean archive,
-                        String description, int id, boolean missing, String resolution) {
-        super(firstDayCost, nextDaysCost, bait, name, archive, description, id, missing);
+    public Camera(double firstDayCost, double nextDaysCost, double bail, String name, int id, String resolution) {
+        super(firstDayCost, nextDaysCost, bail, name, id);
         this.resolution = resolution;
     }
 

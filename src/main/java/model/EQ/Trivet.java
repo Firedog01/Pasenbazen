@@ -3,10 +3,10 @@ package model.EQ;
 public class Trivet extends Equipment{
     private double weigh;
 
-    public Trivet(double firstDayCost, double nextDaysCost, double bait, String name, boolean archive,
-                        String description, int id, boolean missing, double weigh) {
+    public Trivet(double firstDayCost, double nextDaysCost, double bail, String name,
+                         int id, double weigh) {
 
-        super(firstDayCost, nextDaysCost, bait, name, archive, description, id, missing);
+        super(firstDayCost, nextDaysCost, bail, name, id);
         this.weigh = weigh;
     }
 

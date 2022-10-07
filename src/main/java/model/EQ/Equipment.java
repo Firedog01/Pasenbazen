@@ -3,7 +3,7 @@ package model.EQ;
 public abstract class Equipment {
     private double firstDayCost;
     private double nextDaysCost;
-    private double bait;
+    private double bail;
 
     private String name;
 
@@ -15,17 +15,16 @@ public abstract class Equipment {
 
     private boolean missing;
 
-    public Equipment(double firstDayCost, double nextDaysCost, double bail, String name, boolean archive,
-                     String description, int id, boolean missing) {
+    public Equipment(double firstDayCost, double nextDaysCost, double bail, String name, int id) {
 
         this.firstDayCost = firstDayCost;
         this.nextDaysCost = nextDaysCost;
-        this.bait = bail;
+        this.bail = bail;
         this.name = name;
-        this.archive = archive;
-        this.description = description;
+        this.archive = true;
+        this.description = null;
         this.id = id;
-        this.missing = missing;
+        this.missing = false;
     }
 
 
@@ -34,7 +33,7 @@ public abstract class Equipment {
         final StringBuilder sb = new StringBuilder("Equipment{");
         sb.append("firstDayCost=").append(firstDayCost);
         sb.append(", nextDaysCost=").append(nextDaysCost);
-        sb.append(", bait=").append(bait);
+        sb.append(", bail=").append(bail);
         sb.append(", name='").append(name).append('\'');
         sb.append(", archive=").append(archive);
         sb.append(", description='").append(description).append('\'');
@@ -53,7 +52,7 @@ public abstract class Equipment {
     }
 
     public double getBail() {
-        return bait;
+        return bail;
     }
 
     public String getName() {

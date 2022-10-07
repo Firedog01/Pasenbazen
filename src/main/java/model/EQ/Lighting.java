@@ -3,9 +3,9 @@ package model.EQ;
 public class Lighting extends Equipment{
     private String brightness;
 
-    public Lighting(double firstDayCost, double nextDaysCost, double bait, String name, boolean archive,
-                    String description, int id, boolean missing, String brightness) {
-        super(firstDayCost, nextDaysCost, bait, name, archive, description, id, missing);
+    public Lighting(double firstDayCost, double nextDaysCost, double bail, String name,
+                    int id, String brightness) {
+        super(firstDayCost, nextDaysCost, bail, name, id);
         this.brightness = brightness;
     }
 
