@@ -8,15 +8,18 @@ public class Client {
     private idType idType;
     private boolean archive;
 
+    private Address address;
+
     //TODO current rents? List?
 
 
-    public Client(String firstName, String lastName, String ID, model.idType idType, boolean archive) {
+    public Client(String firstName, String lastName, Address address, String ID, model.idType idType, boolean archive) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.archive = archive; //FIXME po co to jest???
         this.ID = ID;
         this.idType = idType;
-        this.archive = archive;
+        this.address = address;
     }
 
     @Override
@@ -29,6 +32,8 @@ public class Client {
         sb.append('}');
         return sb.toString();
     }
+
+    //TODO Ogólnie są gettery i settery, ale nie wszystkie są potrzebne więc idk, można wywalić?
 
     public String getFirstName() {
         return firstName;

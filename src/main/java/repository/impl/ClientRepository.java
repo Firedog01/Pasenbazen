@@ -27,10 +27,10 @@ public class ClientRepository implements Repository<Client> {
 
     @Override
     public List<Client> findBy(Predicate<Client> predicate) {
-        return repository.stream().filter(predicate).collect(Collectors.toList()); //TODO?
+        return repository.stream().filter(predicate).collect(Collectors.toList());
+        //FIXME tu jest problem z predykatami, jak to ma wyglądać
 
     }
-
 
     @Override
     public String report() { //TODO??
