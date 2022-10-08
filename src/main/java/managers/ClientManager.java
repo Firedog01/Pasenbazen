@@ -1,8 +1,10 @@
 package managers;
 
+import exception.ClientException;
 import model.Address;
 import model.Client;
 import model.idType;
+import predicates.Predicate;
 import predicates.impl.ClientPredicate;
 import repository.impl.ClientRepository;
 
@@ -19,27 +21,38 @@ public class ClientManager {
 
     public Client registerClient(String name, String surname, Address address, String id, idType idType) {
 
-        Client client = new Client(name, surname, address, id, idType, true);  //FIXME nie wiem po co są te archive
-        clientRepository.add(client);
-        return client;
+        Client gotClient = getClient(id, idType);
+        if (gotClient == null) {
+
+            Client client = new Client(name, surname, address, id, idType);  //FIXME nie wiem po co są te archive
+            clientRepository.add(client);
+            return client;
+        } else
+            return gotClient;
     }
 
     public void unregisterClient(Client client) {
-        clientRepository.remove(client);
+        if (!clientRepository.findBy(x -> x == client).isEmpty()) {
+            clientRepository.findBy(x -> x == client).get(0).setArchive(true);
+        }
     }
 
     public Client getClient(String id, idType idType) {
-        return (Client) clientRepository.findBy(x -> Objects.equals(x.getID(), id));
-        //FIXME w zasadzie to jest bardzo niebezpieczne ale idę zgodnie z diagramem, a tam findBy zwraca listę,
-        // a nie wiem jak znaleźć po ID w inny sposób, chyba tylko inna funkcja xD
+
+        //TODO CHECK PREDICATES, also i don't know how to put that in variable.
+        if (clientRepository.findBy(c -> (c.getIdType() == idType && Objects.equals(c.getID(), id))).isEmpty()) {
+            return null;
+        } else {
+            return clientRepository.findBy(c -> (c.getIdType() == idType && Objects.equals(c.getID(), id))).get(0);
+        }
     }
 
     public List<Client> findClients(ClientPredicate predicate) {
-//        return clientRepository.findBy(predicate);  //TODO Problem z predykatami
-        return null;
+        return clientRepository.findBy(client -> !client.isArchive());
+        //TODO CHECK
     }
 
     public List<Client> getAllClients() {
-        return clientRepository.findAll();
+        return clientRepository.findBy(x -> !x.isArchive());
     }
 }
