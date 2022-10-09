@@ -1,6 +1,5 @@
 package repository.impl;
 
-import model.EQ.Equipment;
 import model.Rent;
 import repository.Repository;
 
@@ -10,6 +9,11 @@ import java.util.stream.Collectors;
 
 public class RentRepository implements Repository<Rent> {
     private List<Rent> repository;
+
+    public RentRepository(List<Rent> repository) {
+        this.repository = repository;
+    }
+
     //TODO
     @Override
     public Rent get(int pos) {

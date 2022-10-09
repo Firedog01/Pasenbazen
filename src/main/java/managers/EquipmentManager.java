@@ -15,7 +15,14 @@ public class EquipmentManager {
     }
 
     public void UnregisterEquipment(Equipment equipment) {
-        equipmentRepository.remove(equipment);
+        Predicate<Equipment> equipmentPredicate = (
+                x -> x == equipment
+        );
+
+        if (!equipmentRepository.findBy(equipmentPredicate).isEmpty()) {
+            equipmentRepository.findBy(equipmentPredicate).get(0).setArchive(true);
+        }
+
     }
 
     public List<Equipment> findEquipment(Predicate<Equipment> predicate) {
@@ -60,7 +67,21 @@ public class EquipmentManager {
     }
 
     public Equipment getEquipment(int id) {
-        return equipmentRepository.get(id);
+        Predicate<Equipment> equipmentPredicate = (
+                x -> x.getId() == id
+        );
+        if (equipmentRepository.findBy(equipmentPredicate).isEmpty()) {
+            return null;
+        } else {
+            return equipmentRepository.findBy(equipmentPredicate).get(0);
+        }
+    }
+
+    public List<Equipment> getAllEquipment() {
+        Predicate<Equipment> equipmentPredicate = (
+                x -> !x.isArchive() && !x.isMissing()
+                );
+        return equipmentRepository.findBy(equipmentPredicate);
     }
 
 }

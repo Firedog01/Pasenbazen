@@ -1,7 +1,6 @@
 package repository.impl;
 
 import model.Client;
-import model.EQ.Equipment;
 import repository.Repository;
 
 import java.util.List;
@@ -10,6 +9,11 @@ import java.util.stream.Collectors;
 
 public class ClientRepository implements Repository<Client> {
     private List<Client> repository;
+
+    public ClientRepository(List<Client> repository) {
+        this.repository = repository;
+    }
+
     //TODO
     @Override
     public Client get(int pos) {

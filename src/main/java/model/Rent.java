@@ -8,8 +8,8 @@ public class Rent {
 
     private int id;
 
-    private org.joda.time.LocalDateTime beginTime;
-    private org.joda.time.LocalDateTime endTime;
+    private LocalDateTime beginTime;
+    private LocalDateTime endTime;
 
     private boolean shipped;
 
@@ -21,11 +21,10 @@ public class Rent {
 
     private Address shippingAddress;
 
-    public Rent(int id, org.joda.time.LocalDateTime beginTime, org.joda.time.LocalDateTime endTime,
+    public Rent(int id, LocalDateTime beginTime, LocalDateTime endTime,
                 Equipment equipment, Client client, Address shippingAddress) {
-        this.id = id; // W jaki sposób to id ma być generowane?
+        this.id = id;
         this.beginTime = beginTime;
-        // this.beginTime = LocalDateTime.now();  FIXME ?
         this.endTime = endTime;
         this.shipped = false;
         this.eqReturned = false;

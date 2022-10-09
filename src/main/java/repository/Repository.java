@@ -5,16 +5,16 @@ import java.util.function.Predicate;
 
 public interface Repository<T> {
 
-    public T get(int pos);
+    T get(int pos);
 
-    public void add(T elem);
+    void add(T elem);
 
-    public void remove(T elem);
+    void remove(T elem);
 
-    public List<T> findBy(Predicate<T> predicate);
-    public String report();
+    List<T> findBy(Predicate<T> predicate);
+    String report();
 
-    public int size();
+    int size();
 
-    public List<T> findAll();
+    List<T> findAll();
 }

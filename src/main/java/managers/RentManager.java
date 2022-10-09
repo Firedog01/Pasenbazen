@@ -41,7 +41,8 @@ public class RentManager {
         boolean good = true;
         List<Rent> rentEquipmentList = getEquipmentRents(equipment);
 
-        for (int i = 0; i < rentRepository.size(); i++) {
+
+        for (int i = 0; i < rentEquipmentList.size(); i++) {
             if (beginTime.isAfter(rentEquipmentList.get(i).getBeginTime()) &&
                     beginTime.isBefore(rentEquipmentList.get(i).getEndTime())) {
                 good = false;
@@ -54,6 +55,7 @@ public class RentManager {
                     endTime.isAfter(rentEquipmentList.get(i).getEndTime())) {
                 good = false;
             }
+
         }
 
         if (good) {
@@ -204,7 +206,7 @@ public class RentManager {
     public Rent getRent(int id) {
         for (int i = 0; i < rentRepository.size(); i++) {
             if (rentRepository.get(i).getId() == id) {
-                return rentRepository.get(id);
+                return rentRepository.get(i);
             }
         }
         return null;

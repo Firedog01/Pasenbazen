@@ -1,5 +1,6 @@
 package managers;
 
+import exception.ClientException;
 import model.Address;
 import model.Client;
 import model.idType;
@@ -17,12 +18,13 @@ public class ClientManager {
         this.clientRepository = clientRepository;
     }
 
-    public Client registerClient(String name, String surname, Address address, String id, idType idType) {
+    public Client registerClient(String name, String surname, Address address, String id, idType idType)
+            throws ClientException {
 
         Client gotClient = getClient(id, idType);
         if (gotClient == null) {
 
-            Client client = new Client(name, surname, address, id, idType);  //FIXME nie wiem po co są te archive
+            Client client = new Client(name, surname, address, id, idType);
             clientRepository.add(client);
             return client;
         } else
@@ -30,27 +32,36 @@ public class ClientManager {
     }
 
     public void unregisterClient(Client client) {
-        if (!clientRepository.findBy(x -> x == client).isEmpty()) {
-            clientRepository.findBy(x -> x == client).get(0).setArchive(true);
+        Predicate<Client> clientPredicate = (x -> x == client);
+
+        if (!clientRepository.findBy(clientPredicate).isEmpty()) {
+            clientRepository.findBy(clientPredicate).get(0).setArchive(true);
         }
     }
 
     public Client getClient(String id, idType idType) {
+        Predicate<Client> clientPredicate = (
+                c -> (c.getIdType() == idType && Objects.equals(c.getID(), id))
+                );
 
-        //TODO CHECK PREDICATES, also i don't know how to put that in variable.
-        if (clientRepository.findBy(c -> (c.getIdType() == idType && Objects.equals(c.getID(), id))).isEmpty()) {
+        if (clientRepository.findBy(clientPredicate).isEmpty()) {
             return null;
         } else {
-            return clientRepository.findBy(c -> (c.getIdType() == idType && Objects.equals(c.getID(), id))).get(0);
+            return clientRepository.findBy(clientPredicate).get(0);
         }
     }
 
     public List<Client> findClients(Predicate<Client> predicate) {
-        return clientRepository.findBy(client -> !client.isArchive());
-        //TODO CHECK
+        Predicate<Client> clientPredicate = (
+                client -> !client.isArchive());
+
+        return clientRepository.findBy(clientPredicate);
     }
 
     public List<Client> getAllClients() {
-        return clientRepository.findBy(x -> !x.isArchive());
+        Predicate<Client> clientPredicate = (
+                x -> !x.isArchive());
+
+        return clientRepository.findBy(clientPredicate);
     }
 }

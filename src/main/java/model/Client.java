@@ -1,5 +1,9 @@
 package model;
 
+import exception.ClientException;
+
+import java.util.List;
+
 public class Client {
     private String firstName;
     private String lastName;
@@ -10,13 +14,29 @@ public class Client {
 
     private Address address;
 
-    //TODO current rents? List?
 
+    public Client(String firstName, String lastName, Address address, String ID,
+                  model.idType idType) throws ClientException {
 
-    public Client(String firstName, String lastName, Address address, String ID, model.idType idType) {
+        if (firstName.isEmpty()) {
+            throw new ClientException("Imię nie może być puste");
+        }
+
+        if (lastName.isEmpty()) {
+            throw new ClientException("Nazwisko nie może być puste");
+        }
+
+        if (ID.isEmpty()) {
+            throw new ClientException("ID nie może być puste");
+        }
+
+        if (address == null) {
+            throw new ClientException("Adres nie może być pusty");
+        }
+
         this.firstName = firstName;
         this.lastName = lastName;
-        this.archive = false; //FIXME po co to jest???
+        this.archive = false;
         this.ID = ID;
         this.idType = idType;
         this.address = address;
@@ -32,8 +52,6 @@ public class Client {
         sb.append('}');
         return sb.toString();
     }
-
-    //TODO Ogólnie są gettery i settery, ale nie wszystkie są potrzebne więc idk, można wywalić?
 
     public String getFirstName() {
         return firstName;
@@ -57,6 +75,7 @@ public class Client {
 
 
     public void setFirstName(String firstName) {
+
         this.firstName = firstName;
     }
 
@@ -74,5 +93,13 @@ public class Client {
 
     public void setArchive(boolean archive) {
         this.archive = archive;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
     }
 }
