@@ -35,7 +35,5 @@ public class main {
                 rentList) {
             System.out.println(rent.getRentInfo());
         }
-
-
     }
 }

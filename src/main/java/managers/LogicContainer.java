@@ -78,6 +78,7 @@ public class LogicContainer {
 
         LocalDateTime timeNow = LocalDateTime.now();
 
+        LocalDateTime time1d = timeNow.plusHours(24 * 1);
         LocalDateTime time2d = timeNow.plusHours(24 * 2);
         LocalDateTime time4d = timeNow.plusHours(24 * 4);
         LocalDateTime time6d = timeNow.plusHours(24 * 6);
@@ -86,7 +87,7 @@ public class LogicContainer {
         LocalDateTime time11d = timeNow.plusHours(24 * 11);
 
         getRentManager().makeReservation(getClientManager().getClient(id3, DowodOsobisty),
-                getEquipmentManager().getEquipment(2), address3, timeNow.plusSeconds(1), time2d);
+                getEquipmentManager().getEquipment(2), address3, time1d, time2d);
 
         getRentManager().makeReservation(getClientManager().getClient(id1, DowodOsobisty),
                 getEquipmentManager().getEquipment(0), address1, time2d, time4d);

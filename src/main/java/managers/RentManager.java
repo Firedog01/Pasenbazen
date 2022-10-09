@@ -4,6 +4,7 @@ import model.Address;
 import model.Client;
 import model.EQ.Equipment;
 import model.Rent;
+import net.bytebuddy.asm.Advice;
 import org.joda.time.LocalDateTime;
 import repository.impl.RentRepository;
 
@@ -29,8 +30,8 @@ public class RentManager {
         if (client.isArchive()) {
             return null;
         }
-
-        if (beginTime.isBefore(LocalDateTime.now())) {
+        LocalDateTime now = LocalDateTime.now();
+        if (beginTime.isEqual(now) || beginTime.isBefore(now)) {
             return null;
         }
 
