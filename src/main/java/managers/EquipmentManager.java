@@ -18,9 +18,12 @@ public class EquipmentManager {
         equipmentRepository.remove(equipment);
     }
 
-    public Equipment findEquipment(Predicate<Equipment> predicate) {
-        return null;
-    } //FIXME PREDYKAT IDK
+    public List<Equipment> findEquipment(Predicate<Equipment> predicate) {
+        Predicate<Equipment> equipmentPredicate = (
+                x -> !x.isArchive() && !x.isMissing() && predicate.test(x)
+        );
+        return equipmentRepository.findBy(equipmentPredicate);
+    }
 
     public List<Equipment> findAllEquipment() {
         return equipmentRepository.findAll();

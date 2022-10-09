@@ -1,6 +1,7 @@
 package repository.impl;
 
 import model.Client;
+import model.EQ.Equipment;
 import repository.Repository;
 
 import java.util.List;
@@ -28,16 +29,18 @@ public class ClientRepository implements Repository<Client> {
     @Override
     public List<Client> findBy(Predicate<Client> predicate) {
         return repository.stream().filter(predicate).collect(Collectors.toList());
-        //FIXME tu jest problem z predykatami, jak to ma wyglądać
-
     }
 
     @Override
-    public String report() { //TODO??
-        final StringBuilder sb = new StringBuilder("ClientRepository{");
-        sb.append("repository=").append(repository);
-        sb.append('}');
-        return sb.toString();
+    public String report() {
+        StringBuilder ret = new StringBuilder(new String("Informacje o repozytorium Client {\n"));
+
+        for (Client client :
+                repository) {
+            ret.append(client.toString()).append('\n');
+        }
+        ret.append("}");
+        return ret.toString();
     }
 
     @Override

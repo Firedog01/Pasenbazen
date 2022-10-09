@@ -100,7 +100,7 @@ public class RentManager {
 
     public LocalDateTime whenAvailable(Equipment equipment) {
         if (equipment.isArchive() || equipment.isMissing()) {
-            return null; //FIXME ten null mnie zastanawia?
+            return null;
         }
         LocalDateTime when = LocalDateTime.now();
         List<Rent> equipmentRents = getEquipmentRents(equipment);

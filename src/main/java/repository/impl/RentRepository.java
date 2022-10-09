@@ -1,5 +1,6 @@
 package repository.impl;
 
+import model.EQ.Equipment;
 import model.Rent;
 import repository.Repository;
 
@@ -32,10 +33,14 @@ public class RentRepository implements Repository<Rent> {
 
     @Override
     public String report() {
-        final StringBuilder sb = new StringBuilder("EquipmentRepository{");
-        sb.append("repository=").append(repository);
-        sb.append('}');
-        return sb.toString();
+        StringBuilder ret = new StringBuilder(new String("Informacje o repozytorium Rent {\n"));
+
+        for (Rent rent :
+                repository) {
+            ret.append(rent.toString()).append('\n');
+        }
+        ret.append("}");
+        return ret.toString();
     }
 
     @Override

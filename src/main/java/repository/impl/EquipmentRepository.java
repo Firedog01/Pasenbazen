@@ -32,15 +32,19 @@ public class EquipmentRepository implements Repository<Equipment> {
 
     @Override
     public List<Equipment> findBy(Predicate<Equipment> predicate) {
-        return repository.stream().filter(predicate).collect(Collectors.toList()); //TODO To wystarczy?
+        return repository.stream().filter(predicate).collect(Collectors.toList());
     }
 
     @Override
-    public String report() { //TODO??
-        final StringBuilder sb = new StringBuilder("EquipmentRepository{");
-        sb.append("repository=").append(repository);
-        sb.append('}');
-        return sb.toString();
+    public String report() {
+        StringBuilder ret = new StringBuilder(new String("Informacje o repozytorium Equipment{\n"));
+
+        for (Equipment eq :
+                repository) {
+            ret.append(eq.toString()).append('\n');
+        }
+        ret.append("}");
+        return ret.toString();
     }
 
     @Override
@@ -50,6 +54,6 @@ public class EquipmentRepository implements Repository<Equipment> {
 
     @Override
     public List<Equipment> findAll() {
-        return repository; //To wszystko?
+        return repository;
     }
 }
