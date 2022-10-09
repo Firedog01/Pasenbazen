@@ -35,4 +35,13 @@ public class Address {
     public void setStreetNr(String streetNr) {
         this.streetNr = streetNr;
     }
+
+    String getAddressInfo() {
+        final StringBuilder sb = new StringBuilder("Rent{");
+        sb.append("Miasto=").append(getCity());
+        sb.append("Ulica=").append(getStreet());
+        sb.append("Numer mieszkania=").append(getStreetNr());
+
+        return sb.toString();
+    }
 }

@@ -50,17 +50,21 @@ public class Rent {
             }
         }
     }
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("model.Rent{");
+    public String getRentInfo() {
+        final StringBuilder sb = new StringBuilder("Rent{");
         sb.append("id=").append(id);
-        sb.append(", beginTime=").append(beginTime);
-        sb.append(", endTime=").append(endTime);
-        sb.append(", shipped=").append(shipped);
-        sb.append(", eqReturned=").append(eqReturned);
+        sb.append("Klient=").append(getClient().toString()); //FIXME to string
+        sb.append("Sprzęt=").append(getEquipment().toString());
+        sb.append("Adres dostawy= ").append(getShippingAddress().getAddressInfo());
+        sb.append("Czas wypożyczenia=");
+        sb.append("Początek=").append(beginTime);
+        sb.append(" do ");
+        sb.append("Koniec=").append(endTime);
         sb.append('}');
         return sb.toString();
     }
+
+
 
     public int getId() {
         return id;
@@ -92,5 +96,37 @@ public class Rent {
 
     public Address getShippingAddress() {
         return shippingAddress;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setBeginTime(LocalDateTime beginTime) {
+        this.beginTime = beginTime;
+    }
+
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
+    }
+
+    public void setShipped(boolean shipped) {
+        this.shipped = shipped;
+    }
+
+    public void setEqReturned(boolean eqReturned) {
+        this.eqReturned = eqReturned;
+    }
+
+    public void setEquipment(Equipment equipment) {
+        this.equipment = equipment;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
+    }
+
+    public void setShippingAddress(Address shippingAddress) {
+        this.shippingAddress = shippingAddress;
     }
 }

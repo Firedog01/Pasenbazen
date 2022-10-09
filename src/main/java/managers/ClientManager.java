@@ -1,19 +1,17 @@
 package managers;
 
-import exception.ClientException;
 import model.Address;
 import model.Client;
 import model.idType;
-import predicates.Predicate;
-import predicates.impl.ClientPredicate;
+
 import repository.impl.ClientRepository;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Predicate;
 
 public class ClientManager {
     ClientRepository clientRepository;
-    //TODO ALL TODO :weary:
 
     public ClientManager(ClientRepository clientRepository) {
         this.clientRepository = clientRepository;
@@ -47,7 +45,7 @@ public class ClientManager {
         }
     }
 
-    public List<Client> findClients(ClientPredicate predicate) {
+    public List<Client> findClients(Predicate<Client> predicate) {
         return clientRepository.findBy(client -> !client.isArchive());
         //TODO CHECK
     }

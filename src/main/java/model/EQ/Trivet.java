@@ -21,4 +21,8 @@ public class Trivet extends Equipment{
     public double getWeigh() {
         return weigh;
     }
+
+    public void setWeigh(double weigh) {
+        this.weigh = weigh;
+    }
 }

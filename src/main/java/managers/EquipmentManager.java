@@ -1,10 +1,11 @@
 package managers;
 
 import model.EQ.*;
-import predicates.Predicate;
+
 import repository.impl.EquipmentRepository;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 public class EquipmentManager {
     EquipmentRepository equipmentRepository;

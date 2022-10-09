@@ -20,4 +20,8 @@ public class Microphone extends Equipment{
     public String getBrightness() {
         return brightness;
     }
+
+    public void setBrightness(String brightness) {
+        this.brightness = brightness;
+    }
 }

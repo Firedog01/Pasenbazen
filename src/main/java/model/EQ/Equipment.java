@@ -74,4 +74,36 @@ public abstract class Equipment {
     public boolean isMissing() {
         return missing;
     }
+
+    public void setFirstDayCost(double firstDayCost) {
+        this.firstDayCost = firstDayCost;
+    }
+
+    public void setNextDaysCost(double nextDaysCost) {
+        this.nextDaysCost = nextDaysCost;
+    }
+
+    public void setBail(double bail) {
+        this.bail = bail;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setArchive(boolean archive) {
+        this.archive = archive;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setMissing(boolean missing) {
+        this.missing = missing;
+    }
 }

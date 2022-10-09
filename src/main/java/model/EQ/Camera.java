@@ -19,4 +19,8 @@ public class Camera extends Equipment {
     public String getResolution() {
         return resolution;
     }
+
+    public void setResolution(String resolution) {
+        this.resolution = resolution;
+    }
 }

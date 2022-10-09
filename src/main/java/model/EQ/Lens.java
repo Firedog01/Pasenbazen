@@ -20,4 +20,8 @@ public class Lens extends Equipment{
     public String getFocalLength() {
         return focalLength;
     }
+
+    public void setFocalLength(String focalLength) {
+        this.focalLength = focalLength;
+    }
 }
