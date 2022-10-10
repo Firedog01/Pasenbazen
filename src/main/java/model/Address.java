@@ -1,15 +1,45 @@
 package model;
 
+import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotNull;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "address")
 public class Address {
 
+    @Column(name = "city")
+    @NotNull
     private String city;
+    @Column("street")
     private String street;
+    @Column("streetNr")
+    @NotNull
     private String streetNr;
+
+    @Id
+    @NotNull
+    @Column(name = "addressId")
+    private int addressId;
 
     public Address(String city, String street, String streetNr) {
         this.city = city;
         this.street = street;
         this.streetNr = streetNr;
+
+    }
+// FIXME
+//    public Address(String city, String street, String streetNr, int addressId) {
+//        this.city = city;
+//        this.street = street;
+//        this.streetNr = streetNr;
+//        this.addressId = addressId;
+//    }
+
+    public Address() {
     }
 
     public String getCity() {

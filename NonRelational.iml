@@ -6,6 +6,7 @@
         <setting name="validation-enabled" value="true" />
         <setting name="provider-name" value="Hibernate" />
         <datasource-mapping>
+          <factory-entry name="POSTGRES_DB" value="71a57b40-5608-4e99-a333-f77edfa39821" />
           <factory-entry name="default" />
         </datasource-mapping>
         <naming-strategy-map />

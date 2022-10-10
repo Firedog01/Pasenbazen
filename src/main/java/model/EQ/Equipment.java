@@ -1,18 +1,37 @@
 package model.EQ;
 
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+
+@MappedSuperclass
+@Inheritance(strategy = InheritanceType.JOINED)
+@Access(AccessType.FIELD)
 public abstract class Equipment {
-    private double firstDayCost;
-    private double nextDaysCost;
+
+    @Id
+    @Column(name = "id", unique = true)
+    @NotNull
+    private int id;
+
+    @Column(name = "bail")
     private double bail;
 
+    @Column(name = "name")
+    @NotNull
     private String name;
 
+    @Column(name = "firstDayCost")
+    private double firstDayCost;
+    @Column(name = "nextDayCost")
+    private double nextDaysCost;
+
+    @Column(name = "archive")
     private boolean archive;
 
-    private String description; //Maybe something other?
+    @Column(name = "description")
+    private String description;
 
-    private int id; //int? Integer?
-
+    @Column(name = "missing")
     private boolean missing;
 
     public Equipment(double firstDayCost, double nextDaysCost, double bail, String name, int id) {
@@ -27,6 +46,8 @@ public abstract class Equipment {
         this.missing = false;
     }
 
+    public Equipment() {
+    }
 
     @Override
     public String toString() {

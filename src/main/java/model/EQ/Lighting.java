@@ -1,6 +1,14 @@
 package model.EQ;
 
-public class Lighting extends Equipment{
+import jakarta.persistence.Access;
+import jakarta.persistence.AccessType;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+
+@Entity
+@Access(AccessType.FIELD)
+@DiscriminatorValue("lightning")
+public class Lighting extends Equipment {
     private String brightness;
 
     public Lighting(double firstDayCost, double nextDaysCost, double bail, String name,
