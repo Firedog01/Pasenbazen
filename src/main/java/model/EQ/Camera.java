@@ -8,6 +8,10 @@ public class Camera extends Equipment {
         this.resolution = resolution;
     }
 
+    public Camera() {
+
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Camera{");

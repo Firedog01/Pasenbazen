@@ -1,9 +1,7 @@
 package managers;
 
 import exception.ClientException;
-import model.Address;
 import model.Client;
-import model.idType;
 
 import repository.impl.ClientRepository;
 
@@ -18,13 +16,14 @@ public class ClientManager {
         this.clientRepository = clientRepository;
     }
 
-    public Client registerClient(String name, String surname, Address address, String id, idType idType)
+    public Client registerClient(String name, String surname, String id,
+                                 Client.idType idType, String city, String street, String streetNr)
             throws ClientException {
 
         Client gotClient = getClient(id, idType);
         if (gotClient == null) {
 
-            Client client = new Client(name, surname, address, id, idType);
+            Client client = new Client(name, surname, id, idType, city, street, streetNr);
             clientRepository.add(client);
             return client;
         } else
@@ -39,7 +38,7 @@ public class ClientManager {
         }
     }
 
-    public Client getClient(String id, idType idType) {
+    public Client getClient(String id, Client.idType idType) {
         Predicate<Client> clientPredicate = (
                 c -> (c.getIdType() == idType && Objects.equals(c.getID(), id))
                 );

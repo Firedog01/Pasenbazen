@@ -3,7 +3,7 @@ package model.EQ;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
-@MappedSuperclass
+@AbstractEntity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Access(AccessType.FIELD)
 public abstract class Equipment {

@@ -9,6 +9,10 @@ public class Microphone extends Equipment{
         this.brightness = brightness;
     }
 
+    public Microphone() {
+
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Microphone{");

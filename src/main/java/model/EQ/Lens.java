@@ -9,6 +9,10 @@ public class Lens extends Equipment{
         this.focalLength = focalLength;
     }
 
+    public Lens() {
+
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Lens{");

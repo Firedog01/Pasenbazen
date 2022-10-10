@@ -1,10 +1,8 @@
 package managers;
 
-import model.Address;
 import model.Client;
 import model.EQ.Equipment;
 import model.Rent;
-import net.bytebuddy.asm.Advice;
 import org.joda.time.LocalDateTime;
 import repository.impl.RentRepository;
 
@@ -20,7 +18,7 @@ public class RentManager {
         this.rentRepository = rentRepository;
     }
 
-    public Rent makeReservation(Client client, Equipment equipment, Address address, LocalDateTime beginTime,
+    public Rent makeReservation(Client client, Equipment equipment, Client.Address address, LocalDateTime beginTime,
                                 LocalDateTime endTime) {
 
         if (equipment.isMissing() || equipment.isArchive()) {
@@ -66,6 +64,10 @@ public class RentManager {
         } else {
             return null;
         }
+    }
+
+    public RentManager() {
+
     }
 
     public List<Rent> getClientRents(Client client) {

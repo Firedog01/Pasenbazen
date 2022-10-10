@@ -1,8 +1,8 @@
 package managers;
 
 import exception.ClientException;
-import model.Address;
-import static model.idType.DowodOsobisty;
+
+import static model.Client.idType.DowodOsobisty;
 
 import model.Client;
 import model.EQ.Equipment;
@@ -53,19 +53,26 @@ public class LogicContainer {
         this.clientManager = new ClientManager(clientRepository);
         this.rentManager = new RentManager(rentRepository);
         this.equipmentManager = new EquipmentManager(equipmentRepository);
-
-        Address address1 = new Address("Uc", "Czeresniowa", "23A");
-        Address address2 = new Address("Warszawa", "Wisniowa", "48");
-        Address address3 = new Address("Krakow", "Ananasowa", "3C");
-        Address address4 = new Address("Zakopane", "Brzoskwiniowa", "75");
+//
+//        Client.Address address1 = new Client.Address("Uc", "Czeresniowa", "23A");
+//        Client.Address address2 = new Address("Warszawa", "Wisniowa", "48");
+//        Client.Address address3 = new Address("Krakow", "Ananasowa", "3C");
+//        Client.Address address4 = new Address("Zakopane", "Brzoskwiniowa", "75");
 
         String id1 = "4178632";
         String id2 = "SDK43987";
         String id3 = "LFKSJDL";
 
-        getClientManager().registerClient("Zbigniew", "Nowak", address1, id1, DowodOsobisty);
-        getClientManager().registerClient("Andrzej", "Wisinewski", address2, id2, DowodOsobisty);
-        getClientManager().registerClient("Stefan", "Kowalski", address3, id3, DowodOsobisty);
+        getClientManager().registerClient("Zbigniew", "Nowak", id1,
+                DowodOsobisty, "Uc", "Czeresniowa", "23A");
+
+        getClientManager().registerClient("Andrzej", "Wisinewski", id2,
+                DowodOsobisty, "Warszawa", "Wisniowa", "48");
+
+        getClientManager().registerClient("Stefan", "Kowalski",  id3,
+                DowodOsobisty, "Krakow", "Ananasowa", "3C");
+
+
 
 
         getEquipmentManager().registerCamera(100.0, 50.0, 2000.0, "Panasonic GX80", "4K");
@@ -87,22 +94,30 @@ public class LogicContainer {
         LocalDateTime time11d = timeNow.plusHours(24 * 11);
 
         getRentManager().makeReservation(getClientManager().getClient(id3, DowodOsobisty),
-                getEquipmentManager().getEquipment(2), address3, time1d, time2d);
+                getEquipmentManager().getEquipment(2), getClientManager()
+                        .getClient(id3, DowodOsobisty).getAddress(), time1d, time2d);
 
         getRentManager().makeReservation(getClientManager().getClient(id1, DowodOsobisty),
-                getEquipmentManager().getEquipment(0), address1, time2d, time4d);
+                getEquipmentManager().getEquipment(0), getClientManager()
+                        .getClient(id1, DowodOsobisty).getAddress(), time2d, time4d);
 
         getRentManager().makeReservation(getClientManager().getClient(id1, DowodOsobisty),
-                getEquipmentManager().getEquipment(1), address1, time4d, time6d);
+                getEquipmentManager().getEquipment(1), getClientManager()
+                        .getClient(id1, DowodOsobisty).getAddress(), time4d, time6d);
 
         getRentManager().makeReservation(getClientManager().getClient(id2, DowodOsobisty),
-                getEquipmentManager().getEquipment(2), address2, time4d, time6d);
+                getEquipmentManager().getEquipment(2), getClientManager()
+                        .getClient(id2, DowodOsobisty).getAddress(), time4d, time6d);
 
         getRentManager().makeReservation(getClientManager().getClient(id2, DowodOsobisty),
-                getEquipmentManager().getEquipment(0), address4, time6d, time7d);
+                getEquipmentManager().getEquipment(0), getClientManager()
+                        .getClient(id2, DowodOsobisty).getAddress(), time6d, time7d);
 
         getRentManager().makeReservation(getClientManager().getClient(id2, DowodOsobisty),
-                getEquipmentManager().getEquipment(0), address2, time9d, time11d);
+                getEquipmentManager().getEquipment(0), getClientManager()
+                        .getClient(id2, DowodOsobisty).getAddress(), time9d, time11d);
+        //FIXME I don't like it
+
 
         getRentManager().returnEquipment(getRentManager().getRent(0), false);
         getRentManager().returnEquipment(getRentManager().getRent(1), false);

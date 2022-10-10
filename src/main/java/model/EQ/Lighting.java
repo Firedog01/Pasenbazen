@@ -17,6 +17,10 @@ public class Lighting extends Equipment {
         this.brightness = brightness;
     }
 
+    public Lighting() {
+
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Lighting{");

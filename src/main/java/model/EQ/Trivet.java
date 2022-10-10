@@ -10,6 +10,10 @@ public class Trivet extends Equipment{
         this.weigh = weigh;
     }
 
+    public Trivet() {
+
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Trivet{");

@@ -1,12 +1,32 @@
 package model;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotNull;
 import model.EQ.Equipment;
 import org.joda.time.Days;
 import org.joda.time.LocalDateTime;
 
+
+@Entity
 public class Rent {
 
+    @Id
+    @NotNull
+    @Column(name = "id")
     private int id;
+
+
+    @NotNull
+    @Column(name = "equipment")
+    private Equipment equipment;
+
+    @ManyToOne
+    private Client client;
+
+    private Client.Address shippingAddress;
 
     private LocalDateTime beginTime;
     private LocalDateTime endTime;
@@ -15,14 +35,9 @@ public class Rent {
 
     private boolean eqReturned;
 
-    private Equipment equipment;
-
-    private Client client;
-
-    private Address shippingAddress;
 
     public Rent(int id, LocalDateTime beginTime, LocalDateTime endTime,
-                Equipment equipment, Client client, Address shippingAddress) {
+                Equipment equipment, Client client, Client.Address shippingAddress) {
         this.id = id;
         this.beginTime = beginTime;
         this.endTime = endTime;
@@ -93,7 +108,7 @@ public class Rent {
         return client;
     }
 
-    public Address getShippingAddress() {
+    public Client.Address getShippingAddress() {
         return shippingAddress;
     }
 
@@ -125,7 +140,7 @@ public class Rent {
         this.client = client;
     }
 
-    public void setShippingAddress(Address shippingAddress) {
+    public void setShippingAddress(Client.Address shippingAddress) {
         this.shippingAddress = shippingAddress;
     }
 }
