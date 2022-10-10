@@ -33,7 +33,7 @@ public class Client {
     @Column(name = "address") //FIXME?
     private Address address;
 
-    @OneToMany
+    @OneToMany //TODO Fetch type LAZY?? Limiting amount of rents??
     private List<Rent> currentRents;
 
 

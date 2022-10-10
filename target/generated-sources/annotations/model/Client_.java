@@ -1,5 +1,6 @@
 package model;
 
+import jakarta.persistence.metamodel.ListAttribute;
 import jakarta.persistence.metamodel.SingularAttribute;
 import jakarta.persistence.metamodel.StaticMetamodel;
 import javax.annotation.Generated;
@@ -16,6 +17,7 @@ public abstract class Client_ {
 	public static volatile SingularAttribute<Client, Address> address;
 	public static volatile SingularAttribute<Client, Boolean> archive;
 	public static volatile SingularAttribute<Client, String> ID;
+	public static volatile ListAttribute<Client, Rent> currentRents;
 
 	public static final String FIRST_NAME = "firstName";
 	public static final String LAST_NAME = "lastName";
@@ -23,6 +25,7 @@ public abstract class Client_ {
 	public static final String ADDRESS = "address";
 	public static final String ARCHIVE = "archive";
 	public static final String I_D = "ID";
+	public static final String CURRENT_RENTS = "currentRents";
 
 }
 

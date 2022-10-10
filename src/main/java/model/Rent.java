@@ -1,9 +1,7 @@
 package model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import model.EQ.Equipment;
 import org.joda.time.Days;
@@ -11,24 +9,33 @@ import org.joda.time.LocalDateTime;
 
 
 @Entity
+@Table(name = "Rent")
+@Access(AccessType.FIELD)
 public class Rent {
 
     @Id
-    @NotNull
+    @NotEmpty
     @Column(name = "id")
     private int id;
 
 
     @NotNull
     @Column(name = "equipment")
-    private Equipment equipment;
+    @OneToOne(mappedBy = "????", fetch = FetchType.LAZY)  //TODO Lazy or eager? Eager is default
+    private Equipment equipment; //FIXME !!! And also some kind of JoinColumn?
 
+    @NotNull
     @ManyToOne
     private Client client;
 
     private Client.Address shippingAddress;
 
+    @NotNull
+    @Column(name = "bTime")
     private LocalDateTime beginTime;
+
+    @NotNull
+    @Column(name = "eTime")
     private LocalDateTime endTime;
 
     private boolean shipped;
@@ -48,6 +55,10 @@ public class Rent {
         this.shippingAddress = shippingAddress;
     }
 
+    public Rent() {
+
+    }
+
     public double getRentCost() {
         if (!eqReturned) {
             return 0.0;
@@ -55,7 +66,7 @@ public class Rent {
             return equipment.getBail();
         } else {
             long diffDays= Math.abs(Days.daysBetween(beginTime, endTime).getDays());
-            // Nie jestem pewien co do tego, ustawiłem sprawdzanie od 1, bo myślę, że gdzieś indziej będzie sprawdzane
+            //FIXME Nie jestem pewien co do tego, ustawiłem sprawdzanie od 1, bo myślę, że gdzieś indziej będzie sprawdzane
             // Czy data jest w ogóle większa od 0?
             if (diffDays > 1) {
                 return equipment.getFirstDayCost() + equipment.getNextDaysCost() * (diffDays - 1);

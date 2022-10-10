@@ -1,13 +1,20 @@
 package model.EQ;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "TRV_EQ")
+@DiscriminatorValue("TRV")
+@PrimaryKeyJoinColumn(name = "TRV_EQID")
 public class Trivet extends Equipment{
-    private double weigh;
+    @Column(name = "weight")
+    private double weight;
 
     public Trivet(double firstDayCost, double nextDaysCost, double bail, String name,
-                         int id, double weigh) {
+                         int id, double weight) {
 
         super(firstDayCost, nextDaysCost, bail, name, id);
-        this.weigh = weigh;
+        this.weight = weight;
     }
 
     public Trivet() {
@@ -17,16 +24,16 @@ public class Trivet extends Equipment{
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Trivet{");
-        sb.append("weigh=").append(weigh);
+        sb.append("weigh=").append(weight);
         sb.append('}');
         return super.toString() + sb.toString();
     }
 
-    public double getWeigh() {
-        return weigh;
+    public double getWeight() {
+        return weight;
     }
 
-    public void setWeigh(double weigh) {
-        this.weigh = weigh;
+    public void setWeight(double weigh) {
+        this.weight = weigh;
     }
 }

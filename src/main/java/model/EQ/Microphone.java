@@ -1,12 +1,19 @@
 package model.EQ;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "MIC_EQ")
+@DiscriminatorValue("MIC")
+@PrimaryKeyJoinColumn(name = "MIC_EQID")
 public class Microphone extends Equipment{
-    private String brightness;
+    @Column(name = "sensitivity")
+    private String sensitivity;
 
     public Microphone(double firstDayCost, double nextDaysCost, double bail, String name,
-                            int id, String brightness) {
+                            int id, String sensitivity) {
         super(firstDayCost, nextDaysCost, bail, name, id);
-        this.brightness = brightness;
+        this.sensitivity = sensitivity;
     }
 
     public Microphone() {
@@ -16,16 +23,16 @@ public class Microphone extends Equipment{
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Microphone{");
-        sb.append("brightness='").append(brightness).append('\'');
+        sb.append("brightness='").append(sensitivity).append('\'');
         sb.append('}');
         return super.toString() + sb.toString();
     }
 
-    public String getBrightness() {
-        return brightness;
+    public String getSensitivity() {
+        return sensitivity;
     }
 
-    public void setBrightness(String brightness) {
-        this.brightness = brightness;
+    public void setSensitivity(String brightness) {
+        this.sensitivity = brightness;
     }
 }

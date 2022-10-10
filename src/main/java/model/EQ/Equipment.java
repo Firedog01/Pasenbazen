@@ -1,36 +1,45 @@
 package model.EQ;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
-@AbstractEntity
+@Entity
+@Table(name = "EQ")
 @Inheritance(strategy = InheritanceType.JOINED)
-@Access(AccessType.FIELD)
 public abstract class Equipment {
+
+    @Version
+    protected int version; //FIXME not sure
 
     @Id
     @Column(name = "id", unique = true)
-    @NotNull
-    private int id;
-
-    @Column(name = "bail")
-    private double bail;
+    @NotEmpty
+    private int id; //FIXME I'm worried about this type of id, because it's just created based on number in list
 
     @Column(name = "name")
     @NotNull
     private String name;
 
+    @NotEmpty
+    @Column(name = "bail")
+    private double bail;
+    @NotEmpty
     @Column(name = "firstDayCost")
     private double firstDayCost;
+
+    @NotEmpty
     @Column(name = "nextDayCost")
     private double nextDaysCost;
 
+    @NotEmpty
     @Column(name = "archive")
     private boolean archive;
 
     @Column(name = "description")
     private String description;
 
+    @NotEmpty
     @Column(name = "missing")
     private boolean missing;
 

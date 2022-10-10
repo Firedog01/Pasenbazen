@@ -1,6 +1,14 @@
 package model.EQ;
 
+
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "LENS_EQ")
+@DiscriminatorValue("LENS")
+@PrimaryKeyJoinColumn(name = "LENS_EQID")
 public class Lens extends Equipment{
+    @Column(name = "fLength")
     private String focalLength;
 
     public Lens(double firstDayCost, double nextDaysCost, double bail, String name,

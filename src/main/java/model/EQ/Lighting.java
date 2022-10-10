@@ -1,14 +1,13 @@
 package model.EQ;
 
-import jakarta.persistence.Access;
-import jakarta.persistence.AccessType;
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 
 @Entity
-@Access(AccessType.FIELD)
-@DiscriminatorValue("lightning")
+@Table(name = "LGHT_EQ")
+@DiscriminatorValue("LGHT")
+@PrimaryKeyJoinColumn(name = "LGHT_EQID")
 public class Lighting extends Equipment {
+    @Column(name = "brightness")
     private String brightness;
 
     public Lighting(double firstDayCost, double nextDaysCost, double bail, String name,
