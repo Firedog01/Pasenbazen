@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "CAM_EQ")
-@DiscriminatorValue("CAM")
+@DiscriminatorValue("CAM") //FIXME Discriminator is not necessary?
 @PrimaryKeyJoinColumn(name = "CAM_EQID")
 public class Camera extends Equipment {
 

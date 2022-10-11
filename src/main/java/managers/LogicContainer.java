@@ -5,6 +5,7 @@ import exception.ClientException;
 import static model.Client.idType.DowodOsobisty;
 
 import model.Client;
+import model.EQ.Address;
 import model.EQ.Equipment;
 import model.Rent;
 import org.joda.time.LocalDateTime;
@@ -53,24 +54,24 @@ public class LogicContainer {
         this.clientManager = new ClientManager(clientRepository);
         this.rentManager = new RentManager(rentRepository);
         this.equipmentManager = new EquipmentManager(equipmentRepository);
-//
-//        Client.Address address1 = new Client.Address("Uc", "Czeresniowa", "23A");
-//        Client.Address address2 = new Address("Warszawa", "Wisniowa", "48");
-//        Client.Address address3 = new Address("Krakow", "Ananasowa", "3C");
-//        Client.Address address4 = new Address("Zakopane", "Brzoskwiniowa", "75");
+
+        Address address1 = new Address("Uc", "Czeresniowa", "23A");
+        Address address2 = new Address("Warszawa", "Wisniowa", "48");
+        Address address3 = new Address("Krakow", "Ananasowa", "3C");
+        Address address4 = new Address("Zakopane", "Brzoskwiniowa", "75");
 
         String id1 = "4178632";
         String id2 = "SDK43987";
         String id3 = "LFKSJDL";
 
         getClientManager().registerClient("Zbigniew", "Nowak", id1,
-                DowodOsobisty, "Uc", "Czeresniowa", "23A");
+                DowodOsobisty, address1);
 
         getClientManager().registerClient("Andrzej", "Wisinewski", id2,
-                DowodOsobisty, "Warszawa", "Wisniowa", "48");
+                DowodOsobisty, address2);
 
         getClientManager().registerClient("Stefan", "Kowalski",  id3,
-                DowodOsobisty, "Krakow", "Ananasowa", "3C");
+                DowodOsobisty, address3);
 
 
 

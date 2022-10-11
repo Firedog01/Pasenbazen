@@ -3,6 +3,7 @@ package managers;
 import exception.ClientException;
 import model.Client;
 
+import model.EQ.Address;
 import repository.impl.ClientRepository;
 
 import java.util.List;
@@ -17,13 +18,13 @@ public class ClientManager {
     }
 
     public Client registerClient(String name, String surname, String id,
-                                 Client.idType idType, String city, String street, String streetNr)
+                                 Client.idType idType, Address address)
             throws ClientException {
 
         Client gotClient = getClient(id, idType);
         if (gotClient == null) {
 
-            Client client = new Client(name, surname, id, idType, city, street, streetNr);
+            Client client = new Client(name, surname, id, idType, address);
             clientRepository.add(client);
             return client;
         } else
@@ -40,7 +41,7 @@ public class ClientManager {
 
     public Client getClient(String id, Client.idType idType) {
         Predicate<Client> clientPredicate = (
-                c -> (c.getIdType() == idType && Objects.equals(c.getID(), id))
+                c -> (c.getIdType() == idType && Objects.equals(c.getID(), id)) //FIXME
                 );
 
         if (clientRepository.findBy(clientPredicate).isEmpty()) {

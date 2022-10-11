@@ -3,19 +3,24 @@ package model.EQ;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import model.AbstractEntity;
+
+import java.io.Serializable;
 
 @Entity
 @Table(name = "EQ")
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class Equipment {
+@DiscriminatorColumn(name = "type")
+public abstract class Equipment extends AbstractEntity {
 
     @Version
     protected int version; //FIXME not sure
 
-    @Id
-    @Column(name = "id", unique = true)
-    @NotEmpty
-    private int id; //FIXME I'm worried about this type of id, because it's just created based on number in list
+//    @Id
+//    @Column(name = "id", unique = true)
+//    @GeneratedValue(strategy = GenerationType.AUTO)
+//    @NotEmpty
+    private int id;
 
     @Column(name = "name")
     @NotNull

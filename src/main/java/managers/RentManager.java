@@ -1,6 +1,7 @@
 package managers;
 
 import model.Client;
+import model.EQ.Address;
 import model.EQ.Equipment;
 import model.Rent;
 import org.joda.time.LocalDateTime;
@@ -18,7 +19,7 @@ public class RentManager {
         this.rentRepository = rentRepository;
     }
 
-    public Rent makeReservation(Client client, Equipment equipment, Client.Address address, LocalDateTime beginTime,
+    public Rent makeReservation(Client client, Equipment equipment, Address address, LocalDateTime beginTime,
                                 LocalDateTime endTime) {
 
         if (equipment.isMissing() || equipment.isArchive()) {
@@ -208,7 +209,7 @@ public class RentManager {
 
     public Rent getRent(int id) {
         for (int i = 0; i < rentRepository.size(); i++) {
-            if (rentRepository.get(i).getId() == id) {
+            if (rentRepository.get(i).getRent_id() == id) {
                 return rentRepository.get(i);
             }
         }

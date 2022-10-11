@@ -4,13 +4,14 @@ import exception.ClientException;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import model.EQ.Address;
 
 import java.util.List;
 
 @Entity
 @Table(name = "Client")
 @Access(AccessType.FIELD)
-public class Client {
+public class Client extends AbstractEntity  {
 
     @NotEmpty
     @Column(name = "firstname")
@@ -20,9 +21,9 @@ public class Client {
     @Column(name = "lastname")
     private String lastName;
 
-    @Id
-    @NotNull
-    @Column(name = "id")
+//    @Id
+//    @NotNull
+//    @Column(name = "id")
     private String ID;
 
     @Column(name = "idtype")
@@ -30,16 +31,18 @@ public class Client {
     @Column(name = "archive")
     private boolean archive;
 
+    @NotNull
     @Column(name = "address") //FIXME?
     private Address address;
 
     @OneToMany //TODO Fetch type LAZY?? Limiting amount of rents??
     private List<Rent> currentRents;
-
+    @Id
+    private Long id_client;
 
 
     public Client(String firstName, String lastName, String ID,
-                  idType idType, String city, String street, String streetNr) throws ClientException {
+                  idType idType, Address address) throws ClientException {
 
         if (firstName.isEmpty()) {
             throw new ClientException("Imię nie może być puste");
@@ -59,8 +62,6 @@ public class Client {
         this.ID = ID;
         this.idType = idType;
 
-        this.address = new Address(city, street, streetNr);
-
         if (address == null) {
             throw new ClientException("Adres nie może być pusty");
         }
@@ -71,6 +72,15 @@ public class Client {
     }
 
 
+    public void setId_client(Long id_client) {
+        this.id_client = id_client;
+    }
+
+    public Long getId_client() {
+        return id_client;
+    }
+
+
     @Embeddable
     @Access(AccessType.FIELD)
     public enum idType {
@@ -78,69 +88,7 @@ public class Client {
     }
 
 
-    @Embeddable
-    @Access(AccessType.FIELD)
-    public class Address {
 
-        @Column(name = "city")
-        @NotNull
-        private String city;
-        @Column(name = "street")
-        private String street;
-        @Column(name = "streetNr")
-        @NotNull
-        private String streetNr;
-
-        public Address(String city, String street, String streetNr) {
-            this.city = city;
-            this.street = street;
-            this.streetNr = streetNr;
-
-        }
-        // FIXME
-        //    public Address(String city, String street, String streetNr, int addressId) {
-        //        this.city = city;
-        //        this.street = street;
-        //        this.streetNr = streetNr;
-        //        this.addressId = addressId;
-        //    }
-
-        public Address() {
-        }
-
-        public String getCity() {
-            return city;
-        }
-
-        public String getStreet() {
-            return street;
-        }
-
-        public String getStreetNr() {
-            return streetNr;
-        }
-
-        public void setCity(String city) {
-            this.city = city;
-        }
-
-        public void setStreet(String street) {
-            this.street = street;
-        }
-
-        public void setStreetNr(String streetNr) {
-            this.streetNr = streetNr;
-        }
-
-        String getAddressInfo() {
-            final StringBuilder sb = new StringBuilder("Rent{");
-            sb.append("Miasto=").append(getCity());
-            sb.append("Ulica=").append(getStreet());
-            sb.append("Numer mieszkania=").append(getStreetNr());
-
-            return sb.toString();
-        }
-    }
 
 
     public String getFirstName() {
@@ -173,9 +121,13 @@ public class Client {
         this.lastName = lastName;
     }
 
+
+
     public void setID(String ID) {
         this.ID = ID;
     }
+
+
 
     public void setIdType(idType idType) {
         this.idType = idType;

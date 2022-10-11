@@ -3,20 +3,19 @@ package model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import model.EQ.Address;
 import model.EQ.Equipment;
 import org.joda.time.Days;
 import org.joda.time.LocalDateTime;
 
 
+
 @Entity
 @Table(name = "Rent")
 @Access(AccessType.FIELD)
-public class Rent {
+public class Rent extends AbstractEntity {
 
-    @Id
-    @NotEmpty
-    @Column(name = "id")
-    private int id;
+
 
 
     @NotNull
@@ -26,9 +25,10 @@ public class Rent {
 
     @NotNull
     @ManyToOne
+    @Column(name = "client")
     private Client client;
 
-    private Client.Address shippingAddress;
+    private Address shippingAddress;
 
     @NotNull
     @Column(name = "bTime")
@@ -38,14 +38,24 @@ public class Rent {
     @Column(name = "eTime")
     private LocalDateTime endTime;
 
+
+    @NotEmpty
+    @Column(name = "shipped")
     private boolean shipped;
 
+
+    @NotEmpty
+    @Column(name = "eqRet")
     private boolean eqReturned;
+    @Id
+    private Long id;
 
+    private int rent_id;
 
-    public Rent(int id, LocalDateTime beginTime, LocalDateTime endTime,
-                Equipment equipment, Client client, Client.Address shippingAddress) {
-        this.id = id;
+    public Rent(int rent_id, LocalDateTime beginTime, LocalDateTime endTime,
+                Equipment equipment, Client client, Address shippingAddress) {
+
+        this.rent_id = rent_id;
         this.beginTime = beginTime;
         this.endTime = endTime;
         this.shipped = false;
@@ -80,7 +90,7 @@ public class Rent {
         sb.append("id=").append(id);
         sb.append("Klient=").append(getClient().toString()); //FIXME to string
         sb.append("Sprzęt=").append(getEquipment().toString());
-        sb.append("Adres dostawy= ").append(getShippingAddress().getAddressInfo());
+        sb.append("Adres dostawy= ").append(shippingAddress);
         sb.append("Czas wypożyczenia=");
         sb.append("Początek=").append(beginTime);
         sb.append(" do ");
@@ -89,11 +99,6 @@ public class Rent {
         return sb.toString();
     }
 
-
-
-    public int getId() {
-        return id;
-    }
 
     public LocalDateTime getBeginTime() {
         return beginTime;
@@ -119,12 +124,12 @@ public class Rent {
         return client;
     }
 
-    public Client.Address getShippingAddress() {
+    public Address getShippingAddress() {
         return shippingAddress;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public int getRent_id() {
+        return rent_id;
     }
 
     public void setBeginTime(LocalDateTime beginTime) {
@@ -151,7 +156,22 @@ public class Rent {
         this.client = client;
     }
 
-    public void setShippingAddress(Client.Address shippingAddress) {
+    public void setShippingAddress(Address shippingAddress) {
         this.shippingAddress = shippingAddress;
     }
+
+
+    public void setRent_id(int rent_id) {
+        this.rent_id = rent_id;
+    }
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+
+
 }
