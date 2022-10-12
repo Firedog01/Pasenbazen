@@ -3,7 +3,7 @@ package managers;
 import exception.ClientException;
 import model.Client;
 
-import model.EQ.Address;
+import model.Address;
 import repository.impl.ClientRepository;
 
 import java.util.List;

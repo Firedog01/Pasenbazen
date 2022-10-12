@@ -5,7 +5,7 @@ import exception.ClientException;
 import static model.Client.idType.DowodOsobisty;
 
 import model.Client;
-import model.EQ.Address;
+import model.Address;
 import model.EQ.Equipment;
 import model.Rent;
 import org.joda.time.LocalDateTime;

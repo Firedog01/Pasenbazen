@@ -1,11 +1,12 @@
-package model.EQ;
+package model;
 
-import jakarta.persistence.Access;
-import jakarta.persistence.AccessType;
-import jakarta.persistence.Column;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import model.AbstractEntity;
 
+
+
+@Entity
+@Table(name = "Address")
 @Access(AccessType.FIELD)
 public class Address extends AbstractEntity {
 
@@ -17,20 +18,14 @@ public class Address extends AbstractEntity {
     @Column(name = "streetNr")
     @NotNull
     private String streetNr;
+    @Id
+    private Long id;
 
     public Address(String city, String street, String streetNr) {
         this.city = city;
         this.street = street;
         this.streetNr = streetNr;
-
     }
-    // FIXME
-    //    public Address(String city, String street, String streetNr, int addressId) {
-    //        this.city = city;
-    //        this.street = street;
-    //        this.streetNr = streetNr;
-    //        this.addressId = addressId;
-    //    }
 
     public Address() {
     }
@@ -66,5 +61,13 @@ public class Address extends AbstractEntity {
         sb.append("Numer mieszkania=").append(getStreetNr());
 
         return sb.toString();
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getId() {
+        return id;
     }
 }

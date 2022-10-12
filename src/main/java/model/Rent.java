@@ -3,20 +3,14 @@ package model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import model.EQ.Address;
 import model.EQ.Equipment;
 import org.joda.time.Days;
 import org.joda.time.LocalDateTime;
-
-
 
 @Entity
 @Table(name = "Rent")
 @Access(AccessType.FIELD)
 public class Rent extends AbstractEntity {
-
-
-
 
     @NotNull
     @Column(name = "equipment")
@@ -128,9 +122,6 @@ public class Rent extends AbstractEntity {
         return shippingAddress;
     }
 
-    public int getRent_id() {
-        return rent_id;
-    }
 
     public void setBeginTime(LocalDateTime beginTime) {
         this.beginTime = beginTime;
@@ -164,6 +155,11 @@ public class Rent extends AbstractEntity {
     public void setRent_id(int rent_id) {
         this.rent_id = rent_id;
     }
+
+    public int getRent_id() {
+        return rent_id;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }

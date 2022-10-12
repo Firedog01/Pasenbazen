@@ -5,22 +5,20 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import model.AbstractEntity;
 
-import java.io.Serializable;
-
 @Entity
 @Table(name = "EQ")
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "type")
+@Access(AccessType.FIELD)
 public abstract class Equipment extends AbstractEntity {
 
     @Version
     protected int version; //FIXME not sure
 
-//    @Id
-//    @Column(name = "id", unique = true)
-//    @GeneratedValue(strategy = GenerationType.AUTO)
-//    @NotEmpty
-    private int id;
+    @Id
+    private Long id;
+
+    private int eq_id;
 
     @Column(name = "name")
     @NotNull
@@ -48,7 +46,8 @@ public abstract class Equipment extends AbstractEntity {
     @Column(name = "missing")
     private boolean missing;
 
-    public Equipment(double firstDayCost, double nextDaysCost, double bail, String name, int id) {
+
+    public Equipment(double firstDayCost, double nextDaysCost, double bail, String name, int eq_id) {
 
         this.firstDayCost = firstDayCost;
         this.nextDaysCost = nextDaysCost;
@@ -56,7 +55,7 @@ public abstract class Equipment extends AbstractEntity {
         this.name = name;
         this.archive = true;
         this.description = null;
-        this.id = id;
+        this.eq_id = eq_id;
         this.missing = false;
     }
 
@@ -72,7 +71,7 @@ public abstract class Equipment extends AbstractEntity {
         sb.append(", name='").append(name).append('\'');
         sb.append(", archive=").append(archive);
         sb.append(", description='").append(description).append('\'');
-        sb.append(", id=").append(id);
+        sb.append(", id=").append(eq_id);
         sb.append(", missing=").append(missing);
         sb.append('}');
         return sb.toString();
@@ -102,8 +101,8 @@ public abstract class Equipment extends AbstractEntity {
         return description;
     }
 
-    public int getId() {
-        return id;
+    public int getEq_id() {
+        return eq_id;
     }
 
     public boolean isMissing() {
@@ -134,11 +133,19 @@ public abstract class Equipment extends AbstractEntity {
         this.description = description;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setEq_id(int id) {
+        this.eq_id = id;
     }
 
     public void setMissing(boolean missing) {
         this.missing = missing;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getId() {
+        return id;
     }
 }

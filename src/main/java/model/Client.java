@@ -4,7 +4,6 @@ import exception.ClientException;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import model.EQ.Address;
 
 import java.util.List;
 
