@@ -8,40 +8,47 @@ import jakarta.validation.constraints.NotNull;
 import java.util.List;
 
 @Entity
-@Table(name = "Client")
+@Table(name = "client")
 @Access(AccessType.FIELD)
 public class Client extends AbstractEntity  {
 
+//    @Embeddable
+//    @Access(AccessType.FIELD)
+//    public enum idType {
+//        DowodOsobisty, Passport
+//    }
+
     @NotEmpty
-    @Column(name = "firstname")
+    @Column(name = "first_name")
     private String firstName;
 
     @NotEmpty
-    @Column(name = "lastname")
+    @Column(name = "last_name")
     private String lastName;
 
-//    @Id
-//    @NotNull
-//    @Column(name = "id")
-    private String ID;
+    @NotEmpty
+    @Column(name = "client_id")
+    private String clientId; // pesel or passport
 
-    @Column(name = "idtype")
+    @NotEmpty
+    @Column(name = "id_type")
     private idType idType;
+
+    @NotEmpty
     @Column(name = "archive")
     private boolean archive;
 
     @NotNull
     @Column(name = "address") //FIXME?
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     private Address address;
 
-    @OneToMany //TODO Fetch type LAZY?? Limiting amount of rents??
-    private List<Rent> currentRents;
-    @Id
-    private Long id_client;
-
-
-    public Client(String firstName, String lastName, String ID,
-                  idType idType, Address address) throws ClientException {
+    public Client(String firstName,
+                  String lastName,
+                  String clientId,
+                  idType idType,
+                  Address address
+    ) throws ClientException {
 
         if (firstName.isEmpty()) {
             throw new ClientException("Imię nie może być puste");
@@ -51,14 +58,14 @@ public class Client extends AbstractEntity  {
             throw new ClientException("Nazwisko nie może być puste");
         }
 
-        if (ID.isEmpty()) {
+        if (clientId.isEmpty()) {
             throw new ClientException("ID nie może być puste");
         }
 
         this.firstName = firstName;
         this.lastName = lastName;
         this.archive = false;
-        this.ID = ID;
+        this.clientId = clientId;
         this.idType = idType;
 
         if (address == null) {
@@ -66,29 +73,16 @@ public class Client extends AbstractEntity  {
         }
     }
 
-    public Client() {
-
-    }
+    public Client() {}
 
 
-    public void setId_client(Long id_client) {
-        this.id_client = id_client;
-    }
-
-    public Long getId_client() {
-        return id_client;
-    }
-
-
-    @Embeddable
-    @Access(AccessType.FIELD)
-    public enum idType {
-        DowodOsobisty, Passport
-    }
-
-
-
-
+//    public void setId_client(Long id_client) {
+//        this.clientId = id_client;
+//    }
+//
+//    public Long getId_client() {
+//        return id_client;
+//    }
 
     public String getFirstName() {
         return firstName;
@@ -98,8 +92,8 @@ public class Client extends AbstractEntity  {
         return lastName;
     }
 
-    public String getID() {
-        return ID;
+    public String getClientId() {
+        return clientId;
     }
 
     public idType getIdType() {
@@ -110,9 +104,7 @@ public class Client extends AbstractEntity  {
         return archive;
     }
 
-
     public void setFirstName(String firstName) {
-
         this.firstName = firstName;
     }
 
@@ -120,13 +112,9 @@ public class Client extends AbstractEntity  {
         this.lastName = lastName;
     }
 
-
-
-    public void setID(String ID) {
-        this.ID = ID;
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
     }
-
-
 
     public void setIdType(idType idType) {
         this.idType = idType;
@@ -149,7 +137,7 @@ public class Client extends AbstractEntity  {
         final StringBuilder sb = new StringBuilder("model.Client{");
         sb.append("firstName='").append(firstName).append('\'');
         sb.append(", lastName='").append(lastName).append('\'');
-        sb.append(", ID='").append(ID).append('\'');
+        sb.append(", clientId='").append(clientId).append('\'');
         sb.append(", archive=").append(archive);
         sb.append('}');
         return sb.toString();

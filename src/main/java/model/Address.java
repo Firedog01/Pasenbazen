@@ -9,17 +9,19 @@ import jakarta.validation.constraints.NotNull;
 @Table(name = "Address")
 @Access(AccessType.FIELD)
 public class Address extends AbstractEntity {
+//    @Id
+//    private Long id;
+
+    @Column(name = "street_nr")
+    @NotNull
+    private String streetNr;
 
     @Column(name = "city")
     @NotNull
     private String city;
+
     @Column(name = "street")
     private String street;
-    @Column(name = "streetNr")
-    @NotNull
-    private String streetNr;
-    @Id
-    private Long id;
 
     public Address(String city, String street, String streetNr) {
         this.city = city;
@@ -27,8 +29,7 @@ public class Address extends AbstractEntity {
         this.streetNr = streetNr;
     }
 
-    public Address() {
-    }
+    public Address() {}
 
     public String getCity() {
         return city;
@@ -63,11 +64,11 @@ public class Address extends AbstractEntity {
         return sb.toString();
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getId() {
-        return id;
-    }
+//    public void setId(Long id) {
+//        this.id = id;
+//    }
+//
+//    public Long getId() {
+//        return id;
+//    }
 }

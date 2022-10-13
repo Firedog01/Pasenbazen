@@ -4,22 +4,6 @@
              xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd"
              version="3.0">
   <persistence-unit name="POSTGRES_DB" transaction-type="RESOURCE_LOCAL">
-
-      <class>model.Address</class>
-      <class>model.Client</class>
-      <class>model.idType</class>
-      <class>model.Rent</class>
-      <class>model.EQ.Equipment</class>
-      <class>model.EQ.Camera</class>
-      <class>model.EQ.Lighting</class>
-      <class>model.EQ.Lens</class>
-      <class>model.EQ.Microphone</class>
-      <class>model.EQ.Trivet</class>
-      <exclude-unlisted-classes>true</exclude-unlisted-classes>
-      <shared-cache-mode>NONE</shared-cache-mode>
-      <validation-mode>CALLBACK</validation-mode>
-
-
     <properties>
       <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
       <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/nbddb;create:true"/>

@@ -2,7 +2,7 @@ package managers;
 
 import exception.ClientException;
 
-import static model.Client.idType.DowodOsobisty;
+import static model.idType.DowodOsobisty;
 
 import model.Client;
 import model.Address;

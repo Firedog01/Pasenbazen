@@ -2,7 +2,7 @@ package model;
 
 import jakarta.persistence.metamodel.SingularAttribute;
 import jakarta.persistence.metamodel.StaticMetamodel;
-import javax.annotation.Generated;
+import javax.annotation.processing.Generated;
 import model.EQ.Equipment;
 import org.joda.time.LocalDateTime;
 
@@ -15,6 +15,7 @@ public abstract class Rent_ extends model.AbstractEntity_ {
 	public static volatile SingularAttribute<Rent, Boolean> eqReturned;
 	public static volatile SingularAttribute<Rent, Equipment> equipment;
 	public static volatile SingularAttribute<Rent, Client> client;
+	public static volatile SingularAttribute<Rent, Address> shippingAddress;
 	public static volatile SingularAttribute<Rent, LocalDateTime> beginTime;
 	public static volatile SingularAttribute<Rent, LocalDateTime> endTime;
 	public static volatile SingularAttribute<Rent, Long> id;
@@ -24,6 +25,7 @@ public abstract class Rent_ extends model.AbstractEntity_ {
 	public static final String EQ_RETURNED = "eqReturned";
 	public static final String EQUIPMENT = "equipment";
 	public static final String CLIENT = "client";
+	public static final String SHIPPING_ADDRESS = "shippingAddress";
 	public static final String BEGIN_TIME = "beginTime";
 	public static final String END_TIME = "endTime";
 	public static final String ID = "id";

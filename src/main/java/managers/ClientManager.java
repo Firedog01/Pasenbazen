@@ -4,6 +4,7 @@ import exception.ClientException;
 import model.Client;
 
 import model.Address;
+import model.idType;
 import repository.impl.ClientRepository;
 
 import java.util.List;
@@ -17,10 +18,12 @@ public class ClientManager {
         this.clientRepository = clientRepository;
     }
 
-    public Client registerClient(String name, String surname, String id,
-                                 Client.idType idType, Address address)
-            throws ClientException {
-
+    public Client registerClient(String name,
+                                 String surname,
+                                 String id,
+                                 idType idType,
+                                 Address address
+    ) throws ClientException {
         Client gotClient = getClient(id, idType);
         if (gotClient == null) {
 
@@ -39,9 +42,9 @@ public class ClientManager {
         }
     }
 
-    public Client getClient(String id, Client.idType idType) {
+    public Client getClient(String id, idType idType) {
         Predicate<Client> clientPredicate = (
-                c -> (c.getIdType() == idType && Objects.equals(c.getID(), id)) //FIXME
+                c -> (c.getIdType() == idType && Objects.equals(c.getClientId(), id)) //FIXME
                 );
 
         if (clientRepository.findBy(clientPredicate).isEmpty()) {

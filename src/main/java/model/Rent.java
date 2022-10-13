@@ -22,6 +22,9 @@ public class Rent extends AbstractEntity {
     @Column(name = "client")
     private Client client;
 
+    @NotNull
+    @Column(name = "address") //FIXME?
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     private Address shippingAddress;
 
     @NotNull
@@ -43,12 +46,17 @@ public class Rent extends AbstractEntity {
     private boolean eqReturned;
     @Id
     private Long id;
-
+//
     private int rent_id;
 
-    public Rent(int rent_id, LocalDateTime beginTime, LocalDateTime endTime,
-                Equipment equipment, Client client, Address shippingAddress) {
-
+    public Rent(
+            int rent_id,
+            LocalDateTime beginTime,
+            LocalDateTime endTime,
+            Equipment equipment,
+            Client client,
+            Address shippingAddress
+    ) {
         this.rent_id = rent_id;
         this.beginTime = beginTime;
         this.endTime = endTime;
@@ -167,7 +175,4 @@ public class Rent extends AbstractEntity {
     public Long getId() {
         return id;
     }
-
-
-
 }
