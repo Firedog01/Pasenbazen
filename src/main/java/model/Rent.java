@@ -2,54 +2,59 @@ package model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import model.EQ.Equipment;
 import org.joda.time.Days;
 import org.joda.time.LocalDateTime;
 
 @Entity
-@Table(name = "Rent")
+@Table(name = "RENT")
 @Access(AccessType.FIELD)
 public class Rent extends AbstractEntity {
 
-    @NotNull
-    @Column(name = "equipment")
-    @OneToOne(mappedBy = "????", fetch = FetchType.LAZY)  //TODO Lazy or eager? Eager is default
-    private Equipment equipment; //FIXME !!! And also some kind of JoinColumn?
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Long rent_id;
 
-    @NotNull
-    @ManyToOne
-    @Column(name = "client")
+
+    private int id;
+
+    @NotEmpty
+    @Column(name = "EQ_RENT")
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    private Equipment equipment;
+                                                    //FIXME merge albo refresh?
+    @NotEmpty
+    @Column(name = "CLIENT")
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     private Client client;
 
+
+    @NotEmpty
+    @Column(name = "ADDRESS")
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private Address shippingAddress;
 
-    @NotNull
-    @Column(name = "bTime")
+    @NotEmpty
+    @Column(name = "BTIME")
     private LocalDateTime beginTime;
 
-    @NotNull
+    @NotEmpty
     @Column(name = "eTime")
     private LocalDateTime endTime;
 
 
-    @NotEmpty
     @Column(name = "shipped")
     private boolean shipped;
 
 
-    @NotEmpty
     @Column(name = "eqRet")
     private boolean eqReturned;
-    @Id
-    private Long id;
 
-    private int rent_id;
 
-    public Rent(int rent_id, LocalDateTime beginTime, LocalDateTime endTime,
+    public Rent(int id, LocalDateTime beginTime, LocalDateTime endTime,
                 Equipment equipment, Client client, Address shippingAddress) {
 
-        this.rent_id = rent_id;
+        this.id = id;
         this.beginTime = beginTime;
         this.endTime = endTime;
         this.shipped = false;
@@ -152,22 +157,13 @@ public class Rent extends AbstractEntity {
     }
 
 
-    public void setRent_id(int rent_id) {
-        this.rent_id = rent_id;
-    }
-
-    public int getRent_id() {
-        return rent_id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
 
 
 }

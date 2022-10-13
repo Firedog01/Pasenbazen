@@ -1,5 +1,6 @@
 package model;
 
+import jakarta.persistence.metamodel.SingularAttribute;
 import jakarta.persistence.metamodel.StaticMetamodel;
 import javax.annotation.Generated;
 
@@ -7,7 +8,11 @@ import javax.annotation.Generated;
 @StaticMetamodel(AbstractEntity.class)
 public abstract class AbstractEntity_ {
 
+	public static volatile SingularAttribute<AbstractEntity, UniqueId> entityId;
+	public static volatile SingularAttribute<AbstractEntity, Long> version;
 
+	public static final String ENTITY_ID = "entityId";
+	public static final String VERSION = "version";
 
 }
 

@@ -1,7 +1,6 @@
 package model;
 
 import jakarta.persistence.Embedded;
-import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotEmpty;

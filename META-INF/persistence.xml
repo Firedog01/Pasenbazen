@@ -7,7 +7,6 @@
 
       <class>model.Address</class>
       <class>model.Client</class>
-      <class>model.idType</class>
       <class>model.Rent</class>
       <class>model.EQ.Equipment</class>
       <class>model.EQ.Camera</class>

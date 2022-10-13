@@ -6,9 +6,9 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "LENS_EQ")
 @DiscriminatorValue("LENS")
-@PrimaryKeyJoinColumn(name = "LENS_EQID")
+@PrimaryKeyJoinColumn(name = "LENS_EQ_ID")
 public class Lens extends Equipment{
-    @Column(name = "fLength")
+    @Column(name = "FLENGTH")
     private String focalLength;
 
     public Lens(double firstDayCost, double nextDaysCost, double bail, String name,

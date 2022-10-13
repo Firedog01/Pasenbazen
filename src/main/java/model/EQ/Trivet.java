@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 @DiscriminatorValue("TRV")
 @PrimaryKeyJoinColumn(name = "TRV_EQID")
 public class Trivet extends Equipment{
-    @Column(name = "weight")
+    @Column(name = "WEIGHT")
     private double weight;
 
     public Trivet(double firstDayCost, double nextDaysCost, double bail, String name,

@@ -41,7 +41,7 @@ public class ClientManager {
 
     public Client getClient(String id, Client.idType idType) {
         Predicate<Client> clientPredicate = (
-                c -> (c.getIdType() == idType && Objects.equals(c.getID(), id)) //FIXME
+                c -> (c.getIdType() == idType && Objects.equals(c.getPesel(), id)) //FIXME
                 );
 
         if (clientRepository.findBy(clientPredicate).isEmpty()) {

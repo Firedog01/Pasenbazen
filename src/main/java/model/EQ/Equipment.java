@@ -8,17 +8,20 @@ import model.AbstractEntity;
 @Entity
 @Table(name = "EQ")
 @Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn(name = "type")
+
 @Access(AccessType.FIELD)
 public abstract class Equipment extends AbstractEntity {
 
+
     @Version
-    protected int version; //FIXME not sure
+    protected long version; //FIXME not sure
 
     @Id
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Long equipment_id;
 
-    private int eq_id;
+
+    private int id;
 
     @Column(name = "name")
     @NotNull
@@ -47,7 +50,7 @@ public abstract class Equipment extends AbstractEntity {
     private boolean missing;
 
 
-    public Equipment(double firstDayCost, double nextDaysCost, double bail, String name, int eq_id) {
+    public Equipment(double firstDayCost, double nextDaysCost, double bail, String name, int id) {
 
         this.firstDayCost = firstDayCost;
         this.nextDaysCost = nextDaysCost;
@@ -55,7 +58,7 @@ public abstract class Equipment extends AbstractEntity {
         this.name = name;
         this.archive = true;
         this.description = null;
-        this.eq_id = eq_id;
+        this.id = id;
         this.missing = false;
     }
 
@@ -71,7 +74,7 @@ public abstract class Equipment extends AbstractEntity {
         sb.append(", name='").append(name).append('\'');
         sb.append(", archive=").append(archive);
         sb.append(", description='").append(description).append('\'');
-        sb.append(", id=").append(eq_id);
+        sb.append(", id=").append(id);
         sb.append(", missing=").append(missing);
         sb.append('}');
         return sb.toString();
@@ -101,12 +104,12 @@ public abstract class Equipment extends AbstractEntity {
         return description;
     }
 
-    public int getEq_id() {
-        return eq_id;
-    }
-
     public boolean isMissing() {
         return missing;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public void setFirstDayCost(double firstDayCost) {
@@ -133,19 +136,13 @@ public abstract class Equipment extends AbstractEntity {
         this.description = description;
     }
 
-    public void setEq_id(int id) {
-        this.eq_id = id;
-    }
-
     public void setMissing(boolean missing) {
         this.missing = missing;
     }
 
-    public void setId(Long id) {
+
+    public void setId(int id) {
         this.id = id;
     }
-
-    public Long getId() {
-        return id;
-    }
 }
+
