@@ -4,8 +4,6 @@ import exception.ClientException;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 
-import java.util.List;
-
 @Entity
 @Table(name = "client")
 @Access(AccessType.FIELD)
@@ -119,7 +117,7 @@ public class Client extends AbstractEntity  {
         final StringBuilder sb = new StringBuilder("model.Client{");
         sb.append("firstName='").append(firstName).append('\'');
         sb.append(", lastName='").append(lastName).append('\'');
-        sb.append(", ID='").append(pesel).append('\'');
+        sb.append(", ID='").append(clientId).append('\'');
         sb.append(", archive=").append(archive);
         sb.append('}');
         return sb.toString();

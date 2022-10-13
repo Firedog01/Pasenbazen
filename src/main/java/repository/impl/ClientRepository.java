@@ -1,5 +1,6 @@
 package repository.impl;
 
+import jakarta.persistence.EntityManager;
 import model.Client;
 import repository.Repository;
 
@@ -8,10 +9,10 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class ClientRepository implements Repository<Client> {
-    private List<Client> repository;
+    private EntityManager em;
 
-    public ClientRepository(List<Client> repository) {
-        this.repository = repository;
+    public ClientRepository(EntityManager em) {
+        this.em = em;
     }
 
     //TODO
@@ -39,8 +40,7 @@ public class ClientRepository implements Repository<Client> {
     public String report() {
         StringBuilder ret = new StringBuilder(new String("Informacje o repozytorium Client {\n"));
 
-        for (Client client :
-                repository) {
+        for (Client client : repository) {
             ret.append(client.toString()).append('\n');
         }
         ret.append("}");

@@ -18,7 +18,7 @@ public abstract class AbstractEntity implements Serializable {
     @NotEmpty
     private long version;
 
-    public AbstractEntity() {}
+    protected AbstractEntity() {}
 
     public AbstractEntity(UniqueId entityId, long version) {
         this.entityId = entityId;

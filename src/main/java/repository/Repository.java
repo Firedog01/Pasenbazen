@@ -10,8 +10,6 @@ import java.util.function.Predicate;
 
 public interface Repository<T> {
 
-    static EntityManagerFactory efm = Persistence.createEntityManagerFactory("POSTGRES_DB");
-
     T get(int pos);
 
     void add(T elem);

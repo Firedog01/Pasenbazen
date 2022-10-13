@@ -11,16 +11,17 @@ public class Trivet extends Equipment{
     @Column(name = "weight")
     private double weight;
 
-    public Trivet(double firstDayCost, double nextDaysCost, double bail, String name,
-                         int id, double weight) {
-
-        super(firstDayCost, nextDaysCost, bail, name, id);
+    public Trivet(double firstDayCost,
+                  double nextDaysCost,
+                  double bail,
+                  String name,
+                  double weight
+    ) {
+        super(firstDayCost, nextDaysCost, bail, name);
         this.weight = weight;
     }
 
-    public Trivet() {
-
-    }
+    protected Trivet() {}
 
     @Override
     public String toString() {

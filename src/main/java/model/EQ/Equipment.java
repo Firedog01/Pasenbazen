@@ -101,9 +101,7 @@ public abstract class Equipment extends AbstractEntity {
         return missing;
     }
 
-    public int getId() {
-        return id;
-    }
+
 
     public void setFirstDayCost(double firstDayCost) {
         this.firstDayCost = firstDayCost;

@@ -1,5 +1,6 @@
 package repository.impl;
 
+import jakarta.persistence.EntityManager;
 import model.EQ.Equipment;
 import repository.Repository;
 
@@ -8,11 +9,11 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class EquipmentRepository implements Repository<Equipment> {
-    private List<Equipment> repository;
+    private EntityManager em;
 
     public EquipmentRepository(List<Equipment> repository) {
-        this.repository = repository;
-    }
+            this.repository = repository;
+        }
 
     //TODO
     @Override

@@ -11,14 +11,17 @@ public class Camera extends Equipment {
     @Column(name = "resolution")
     private String resolution;
 
-    public Camera(double firstDayCost, double nextDaysCost, double bail, String name, int id, String resolution) {
-        super(firstDayCost, nextDaysCost, bail, name, id);
+    public Camera(double firstDayCost,
+                  double nextDaysCost,
+                  double bail,
+                  String name,
+                  String resolution
+    ) {
+        super(firstDayCost, nextDaysCost, bail, name);
         this.resolution = resolution;
     }
 
-    public Camera() {
-
-    }
+    protected Camera() {}
 
     @Override
     public String toString() {

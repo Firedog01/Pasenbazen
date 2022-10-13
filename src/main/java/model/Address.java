@@ -28,7 +28,7 @@ public class Address extends AbstractEntity {
         this.streetNr = streetNr;
     }
 
-    public Address() {}
+    protected Address() {}
 
     public String getCity() {
         return city;

@@ -11,15 +11,17 @@ public class Microphone extends Equipment{
     @Column(name = "sensitivity")
     private String sensitivity;
 
-    public Microphone(double firstDayCost, double nextDaysCost, double bail, String name,
-                            int id, String sensitivity) {
-        super(firstDayCost, nextDaysCost, bail, name, id);
+    public Microphone(double firstDayCost,
+                      double nextDaysCost,
+                      double bail,
+                      String name,
+                      String sensitivity
+    ) {
+        super(firstDayCost, nextDaysCost, bail, name);
         this.sensitivity = sensitivity;
     }
 
-    public Microphone() {
-
-    }
+    protected Microphone() {}
 
     @Override
     public String toString() {

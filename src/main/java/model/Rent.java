@@ -28,8 +28,8 @@ public class Rent extends AbstractEntity {
     private Client client;
 
     @NotEmpty
-    @Column(name = "ADDRESS")
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "address_id")
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST) //FIXME muszę poczytać o tym
     private Address shippingAddress;
 
     @NotEmpty
@@ -61,9 +61,7 @@ public class Rent extends AbstractEntity {
         this.shippingAddress = shippingAddress;
     }
 
-    public Rent() {
-
-    }
+    protected Rent() {}
 
     public double getRentCost() {
         if (!eqReturned) {
