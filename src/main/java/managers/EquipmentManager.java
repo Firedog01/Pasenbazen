@@ -68,7 +68,7 @@ public class EquipmentManager {
 
     public Equipment getEquipment(int id) {
         Predicate<Equipment> equipmentPredicate = (
-                x -> x.getEq_id() == id
+                x -> x.getId() == id
         );
         if (equipmentRepository.findBy(equipmentPredicate).isEmpty()) {
             return null;

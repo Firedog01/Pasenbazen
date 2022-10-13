@@ -18,21 +18,18 @@ public abstract class AbstractEntity implements Serializable {
     @NotEmpty
     private long version;
 
-    public AbstractEntity() {
-        entityId = new UniqueId();
-        version = 0;
-    }
+    public AbstractEntity() {}
 
     public AbstractEntity(UniqueId entityId, long version) {
         this.entityId = entityId;
         this.version = version;
     }
 
-    public long getVersion() {
-        return version;
+    public UniqueId getEntityId() {
+        return entityId;
     }
 
-    public void setVersion(long version) {
-        this.version = version;
+    public void setEntityId(UniqueId entityId) {
+        this.entityId = entityId;
     }
 }

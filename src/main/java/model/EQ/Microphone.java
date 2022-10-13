@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 @DiscriminatorValue("MIC")
 @PrimaryKeyJoinColumn(name = "MIC_EQID")
 public class Microphone extends Equipment{
-    @Column(name = "sensitivity")
+    @Column(name = "SENSITIVITY")
     private String sensitivity;
 
     public Microphone(double firstDayCost, double nextDaysCost, double bail, String name,

@@ -209,7 +209,7 @@ public class RentManager {
 
     public Rent getRent(int id) {
         for (int i = 0; i < rentRepository.size(); i++) {
-            if (rentRepository.get(i).getRent_id() == id) {
+            if (rentRepository.get(i).getId() == id) {
                 return rentRepository.get(i);
             }
         }

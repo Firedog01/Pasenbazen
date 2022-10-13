@@ -3,54 +3,45 @@ package model;
 import exception.ClientException;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
 @Entity
-@Table(name = "client")
+@Table(name = "CLIENT")
 @Access(AccessType.FIELD)
 public class Client extends AbstractEntity  {
 
-//    @Embeddable
-//    @Access(AccessType.FIELD)
-//    public enum idType {
-//        DowodOsobisty, Passport
-//    }
     @Id
-    private long id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Long id_client;
+
+    private String pesel;  //TODO
 
     @NotEmpty
-    @Column(name = "first_name")
+    @Column(name = "FIRSTNAME")
     private String firstName;
 
     @NotEmpty
-    @Column(name = "last_name")
+    @Column(name = "LASTNAME")
     private String lastName;
 
     @NotEmpty
-    @Column(name = "client_id")
-    private String clientId; // pesel or passport
-
-    @NotEmpty
-    @Column(name = "id_type")
+    @Column(name = "IDTYPE")
     private idType idType;
-
-    @NotEmpty
-    @Column(name = "archive")
+    @Column(name = "ARCHIVE")
     private boolean archive;
 
-    @NotNull
-//    @Column(name = "address") //FIXME?
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @NotEmpty
+    @Column(name = "ADDRESS")
+    @ManyToOne()  //TODO
     private Address address;
 
-    public Client(String firstName,
-                  String lastName,
-                  String clientId,
-                  idType idType,
-                  Address address
-    ) throws ClientException {
+    @OneToMany //TODO Fetch type LAZY?? Limiting amount of rents??
+    private List<Rent> currentRents;
+
+
+    public Client(String firstName, String lastName, String pesel,
+                  idType idType, Address address) throws ClientException {
 
         if (firstName.isEmpty()) {
             throw new ClientException("Imię nie może być puste");
@@ -60,14 +51,14 @@ public class Client extends AbstractEntity  {
             throw new ClientException("Nazwisko nie może być puste");
         }
 
-        if (clientId.isEmpty()) {
+        if (pesel.isEmpty()) {
             throw new ClientException("ID nie może być puste");
         }
 
         this.firstName = firstName;
         this.lastName = lastName;
         this.archive = false;
-        this.clientId = clientId;
+        this.pesel = pesel;
         this.idType = idType;
 
         if (address == null) {
@@ -75,16 +66,16 @@ public class Client extends AbstractEntity  {
         }
     }
 
-    public Client() {}
+    public Client() {
 
+    }
 
-//    public void setId_client(Long id_client) {
-//        this.clientId = id_client;
-//    }
-//
-//    public Long getId_client() {
-//        return id_client;
-//    }
+    @Embeddable
+    @Access(AccessType.FIELD)
+    public enum idType {
+        DowodOsobisty, Passport
+    }
+
 
     public String getFirstName() {
         return firstName;
@@ -94,8 +85,8 @@ public class Client extends AbstractEntity  {
         return lastName;
     }
 
-    public String getClientId() {
-        return clientId;
+    public String getPesel() {
+        return pesel;
     }
 
     public idType getIdType() {
@@ -106,7 +97,16 @@ public class Client extends AbstractEntity  {
         return archive;
     }
 
+    public Address getAddress() {
+        return address;
+    }
+
+    public Long getId_client() {
+        return id_client;
+    }
+
     public void setFirstName(String firstName) {
+
         this.firstName = firstName;
     }
 
@@ -114,8 +114,9 @@ public class Client extends AbstractEntity  {
         this.lastName = lastName;
     }
 
-    public void setClientId(String clientId) {
-        this.clientId = clientId;
+
+    public void setPesel(String ID) {
+        this.pesel = ID;
     }
 
     public void setIdType(idType idType) {
@@ -126,20 +127,21 @@ public class Client extends AbstractEntity  {
         this.archive = archive;
     }
 
-    public Address getAddress() {
-        return address;
-    }
-
     public void setAddress(Address address) {
         this.address = address;
     }
+
+    public void setId_client(Long id_client) {
+        this.id_client = id_client;
+    }
+
 
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("model.Client{");
         sb.append("firstName='").append(firstName).append('\'');
         sb.append(", lastName='").append(lastName).append('\'');
-        sb.append(", clientId='").append(clientId).append('\'');
+        sb.append(", ID='").append(pesel).append('\'');
         sb.append(", archive=").append(archive);
         sb.append('}');
         return sb.toString();

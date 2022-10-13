@@ -11,23 +11,23 @@ public abstract class Equipment_ extends model.AbstractEntity_ {
 	public static volatile SingularAttribute<Equipment, String> name;
 	public static volatile SingularAttribute<Equipment, Boolean> missing;
 	public static volatile SingularAttribute<Equipment, String> description;
-	public static volatile SingularAttribute<Equipment, Integer> eq_id;
 	public static volatile SingularAttribute<Equipment, Boolean> archive;
-	public static volatile SingularAttribute<Equipment, Long> id;
+	public static volatile SingularAttribute<Equipment, Integer> id;
 	public static volatile SingularAttribute<Equipment, Double> bail;
-	public static volatile SingularAttribute<Equipment, Integer> version;
+	public static volatile SingularAttribute<Equipment, Long> version;
 	public static volatile SingularAttribute<Equipment, Double> nextDaysCost;
+	public static volatile SingularAttribute<Equipment, Long> equipment_id;
 	public static volatile SingularAttribute<Equipment, Double> firstDayCost;
 
 	public static final String NAME = "name";
 	public static final String MISSING = "missing";
 	public static final String DESCRIPTION = "description";
-	public static final String EQ_ID = "eq_id";
 	public static final String ARCHIVE = "archive";
 	public static final String ID = "id";
 	public static final String BAIL = "bail";
 	public static final String VERSION = "version";
 	public static final String NEXT_DAYS_COST = "nextDaysCost";
+	public static final String EQUIPMENT_ID = "equipment_id";
 	public static final String FIRST_DAY_COST = "firstDayCost";
 
 }

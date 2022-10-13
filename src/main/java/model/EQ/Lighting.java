@@ -3,11 +3,11 @@ package model.EQ;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "LGHT_EQ")
-@DiscriminatorValue("LGHT")
-@PrimaryKeyJoinColumn(name = "LGHT_EQID")
+@Table(name = "LIGHT_EQ")
+@DiscriminatorValue("LIGHT")
+@PrimaryKeyJoinColumn(name = "LIGHT_EQID")
 public class Lighting extends Equipment {
-    @Column(name = "brightness")
+    @Column(name = "BRIGHTNESS")
     private String brightness;
 
     public Lighting(double firstDayCost, double nextDaysCost, double bail, String name,
