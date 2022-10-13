@@ -1,15 +1,10 @@
 package repository.impl;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.TypedQuery;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.From;
-import jakarta.persistence.criteria.Root;
+import jakarta.transaction.Transactional;
 import model.Client;
-import model.Client_;
-import org.hibernate.hql.internal.classic.WhereParser;
 import repository.Repository;
 
 import java.util.List;
@@ -24,59 +19,47 @@ public class ClientRepository implements Repository<Client> {
     }
 
     @Override
-    public Client get(long id) {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Client> cq = cb.createQuery(Client.class);
-        Root<Client> client = cq.from(Client.class);
-        cq.select(client);
-        cq.where(cb.equal(client.get(Client_.CLIENT_ID), id));
-
-        TypedQuery<Client> q = em.createQuery(cq);
-        List<Client> clients = q.getResultList();
-
-        if(!clients.isEmpty()) {
-            return clients.get(0);
+    public Client get(long clientID) {
+        Client client = em.find(Client.class, clientID);
+        if (client == null) {
+            throw new EntityNotFoundException("There is no client with ID " + clientID);
         }
-        return null;
+        return client;
     }
 
     @Override
     public List<Client> getAll() {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Client> cq = cb.createQuery(Client.class);
-        Root<Client> client = cq.from(Client.class);
-        cq.select(client);
-
-        TypedQuery<Client> q = em.createQuery(cq);
-        return q.getResultList();
+        List<Client> clientList = em.createQuery("Select client from Client client", Client.class).getResultList();
+        return clientList;
     }
 
     @Override
     public void add(Client elem) {
-        EntityTransaction t = em.getTransaction();
-        t.begin();
-        em.persist(elem);
-        t.commit();
+        EntityTransaction et = em.getTransaction();
+        et.begin();
+        this.em.persist(elem);
+        et.commit();
     }
 
     @Override
     public void remove(Client elem) {
-        EntityTransaction t = em.getTransaction();
-        t.begin();
-        em.remove(elem);
-        t.commit();
+        EntityTransaction et = em.getTransaction();
+        et.begin();
+        this.em.remove(elem);
+        et.commit();
     }
 
     @Override
     public void update(Client elem) {
-        EntityTransaction t = em.getTransaction();
-        t.begin();
-        em.merge(elem);
-        t.commit();
+        EntityTransaction et = em.getTransaction();
+        et.begin();
+        this.em.merge(elem);
+        et.commit();
     }
 
     @Override
     public long count() {
-        return 0;
+        long lenClient = em.createQuery("SELECT COUNT(client) from Client client", Client.class).getFirstResult();
+        return lenClient;
     }
 }
