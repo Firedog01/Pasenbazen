@@ -1,6 +1,9 @@
 package repository.impl;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.EntityTransaction;
+import jakarta.transaction.Transactional;
 import model.Client;
 import repository.Repository;
 
@@ -15,45 +18,48 @@ public class ClientRepository implements Repository<Client> {
         this.em = em;
     }
 
-    //TODO
     @Override
-    public Client get(int pos) {
-        return repository.get(pos);
+    public Client get(long clientID) {
+        Client client = em.find(Client.class, clientID);
+        if (client == null) {
+            throw new EntityNotFoundException("There is no client with ID " + clientID);
+        }
+        return client;
+    }
+
+    @Override
+    public List<Client> getAll() {
+        List<Client> clientList = em.createQuery("Select client from Client client", Client.class).getResultList();
+        return clientList;
     }
 
     @Override
     public void add(Client elem) {
-        repository.add(elem);
+        EntityTransaction et = em.getTransaction();
+        et.begin();
+        this.em.persist(elem);
+        et.commit();
     }
 
     @Override
     public void remove(Client elem) {
-        repository.remove(elem);
+        EntityTransaction et = em.getTransaction();
+        et.begin();
+        this.em.remove(elem);
+        et.commit();
     }
 
     @Override
-    public List<Client> findBy(Predicate<Client> predicate) {
-        return repository.stream().filter(predicate).collect(Collectors.toList());
+    public void update(Client elem) {
+        EntityTransaction et = em.getTransaction();
+        et.begin();
+        this.em.merge(elem);
+        et.commit();
     }
 
     @Override
-    public String report() {
-        StringBuilder ret = new StringBuilder(new String("Informacje o repozytorium Client {\n"));
-
-        for (Client client : repository) {
-            ret.append(client.toString()).append('\n');
-        }
-        ret.append("}");
-        return ret.toString();
-    }
-
-    @Override
-    public int size() {
-        return repository.size();
-    }
-
-    @Override
-    public List<Client> findAll() {
-        return repository;
+    public long count() {
+        long lenClient = em.createQuery("SELECT COUNT(client) from Client client", Client.class).getFirstResult();
+        return lenClient;
     }
 }
