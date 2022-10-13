@@ -1,12 +1,13 @@
 package repository.impl;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.EntityTransaction;
 import model.EQ.Equipment;
 import repository.Repository;
 
 import java.util.List;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
+
 
 public class EquipmentRepository implements Repository<Equipment> {
 
@@ -18,31 +19,46 @@ public class EquipmentRepository implements Repository<Equipment> {
 
     @Override
     public Equipment get(long id) {
-        return null;
+        Equipment equipment = em.find(Equipment.class, id);
+        if (equipment == null) {
+            throw new EntityNotFoundException("There is no client with ID " + id);
+        }
+        return equipment;
     }
 
     @Override
     public List<Equipment> getAll() {
-        return null;
+        List<Equipment> equipmentList = em.createQuery("Select eq from Equipment eq", Equipment.class).getResultList();
+        return equipmentList;
     }
 
     @Override
     public void add(Equipment elem) {
-
+        EntityTransaction et = em.getTransaction();
+        et.begin();
+        this.em.persist(elem);
+        et.commit();
     }
 
     @Override
     public void remove(Equipment elem) {
-
+        EntityTransaction et = em.getTransaction();
+        et.begin();
+        this.em.remove(elem);
+        et.commit();
     }
 
     @Override
     public void update(Equipment elem) {
-
+        EntityTransaction et = em.getTransaction();
+        et.begin();
+        this.em.merge(elem);
+        et.commit();
     }
 
     @Override
     public long count() {
-        return 0;
+        long lenEq = em.createQuery("SELECT COUNT(e) from Equipment e", Equipment.class).getFirstResult();
+        return lenEq; //FIXME to trzeba sprawdzic
     }
 }

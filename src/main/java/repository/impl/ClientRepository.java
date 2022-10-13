@@ -3,13 +3,11 @@ package repository.impl;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.EntityTransaction;
-import jakarta.transaction.Transactional;
 import model.Client;
 import repository.Repository;
 
 import java.util.List;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
+
 
 public class ClientRepository implements Repository<Client> {
     private EntityManager em;
