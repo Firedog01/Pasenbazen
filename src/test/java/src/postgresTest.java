@@ -28,5 +28,6 @@ class postgresTest {
     @Test
     void create() {
         emf = Persistence.createEntityManagerFactory("POSTGRES_DB");
+        em = emf.createEntityManager();
     }
 }

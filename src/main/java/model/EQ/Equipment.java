@@ -27,6 +27,7 @@ public abstract class Equipment extends AbstractEntity {
     @NotEmpty
     @Column(name = "bail")
     private double bail;
+
     @NotEmpty
     @Column(name = "firstDayCost")
     private double firstDayCost;
@@ -48,7 +49,6 @@ public abstract class Equipment extends AbstractEntity {
 
 
     public Equipment(double firstDayCost, double nextDaysCost, double bail, String name, int eq_id) {
-
         this.firstDayCost = firstDayCost;
         this.nextDaysCost = nextDaysCost;
         this.bail = bail;
