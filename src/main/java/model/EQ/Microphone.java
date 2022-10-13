@@ -3,11 +3,12 @@ package model.EQ;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "MIC_EQ")
-@DiscriminatorValue("MIC")
-@PrimaryKeyJoinColumn(name = "MIC_EQID")
+@Table(name = "microphone")
+@DiscriminatorValue("MICROPHONE")
+@PrimaryKeyJoinColumn(name = "equipment_id")
 public class Microphone extends Equipment{
-    @Column(name = "SENSITIVITY")
+
+    @Column(name = "sensitivity")
     private String sensitivity;
 
     public Microphone(double firstDayCost, double nextDaysCost, double bail, String name,

@@ -6,14 +6,12 @@ import jakarta.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.UUID;
 
-@Entity
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@MappedSuperclass
 @Embeddable
 public class UniqueId implements Serializable {
 
-    @Id
     @NotNull
-    @Column(name = "id")
+    @Column(name = "unique_id")
     private UUID uniqueID;
 
     public UniqueId() {

@@ -3,25 +3,24 @@ package model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
-
-
 @Entity
-@Table(name = "Address")
+@Table(name = "address")
 @Access(AccessType.FIELD)
 public class Address extends AbstractEntity {
     @Id
-    private Long id;
+    @Column(name = "address_id")
+    private long id;
 
-    @JoinColumn(name = "street_nr")
-    @NotNull
-    private String streetNr;
-
-    @JoinColumn(name = "city")
+    @Column(name = "city")
     @NotNull
     private String city;
 
-    @JoinColumn(name = "street")
+    @Column(name = "street")
     private String street;
+
+    @Column(name = "street_nr")
+    @NotNull
+    private String streetNr;
 
     public Address(String city, String street, String streetNr) {
         this.city = city;
@@ -63,12 +62,4 @@ public class Address extends AbstractEntity {
 
         return sb.toString();
     }
-
-//    public void setId(Long id) {
-//        this.id = id;
-//    }
-//
-//    public Long getId() {
-//        return id;
-//    }
 }

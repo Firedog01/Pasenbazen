@@ -3,11 +3,12 @@ package model.EQ;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "TRV_EQ")
-@DiscriminatorValue("TRV")
-@PrimaryKeyJoinColumn(name = "TRV_EQID")
+@Table(name = "trivet")
+@DiscriminatorValue("TRIVET")
+@PrimaryKeyJoinColumn(name = "equipment_id")
 public class Trivet extends Equipment{
-    @Column(name = "WEIGHT")
+
+    @Column(name = "weight")
     private double weight;
 
     public Trivet(double firstDayCost, double nextDaysCost, double bail, String name,

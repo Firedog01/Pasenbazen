@@ -4,22 +4,25 @@ package model.EQ;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "LENS_EQ")
+@Table(name = "lens")
 @DiscriminatorValue("LENS")
-@PrimaryKeyJoinColumn(name = "LENS_EQ_ID")
+@PrimaryKeyJoinColumn(name = "equipment_id")
 public class Lens extends Equipment{
-    @Column(name = "FLENGTH")
+
+    @Column(name = "focal_length")
     private String focalLength;
 
-    public Lens(double firstDayCost, double nextDaysCost, double bail, String name,
-                        int id, String focalLength) {
-        super(firstDayCost, nextDaysCost, bail, name, id);
+    public Lens(double firstDayCost,
+                double nextDaysCost,
+                double bail,
+                String name,
+                String focalLength
+    ) {
+        super(firstDayCost, nextDaysCost, bail, name);
         this.focalLength = focalLength;
     }
 
-    public Lens() {
-
-    }
+    protected Lens() {}
 
     @Override
     public String toString() {

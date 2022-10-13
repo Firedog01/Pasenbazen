@@ -3,22 +3,24 @@ package model.EQ;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "LIGHT_EQ")
+@Table(name = "light")
 @DiscriminatorValue("LIGHT")
-@PrimaryKeyJoinColumn(name = "LIGHT_EQID")
+@PrimaryKeyJoinColumn(name = "equipment_id")
 public class Lighting extends Equipment {
-    @Column(name = "BRIGHTNESS")
+    @Column(name = "brightness")
     private String brightness;
 
-    public Lighting(double firstDayCost, double nextDaysCost, double bail, String name,
-                    int id, String brightness) {
-        super(firstDayCost, nextDaysCost, bail, name, id);
+    public Lighting(double firstDayCost,
+                    double nextDaysCost,
+                    double bail,
+                    String name,
+                    String brightness
+    ) {
+        super(firstDayCost, nextDaysCost, bail, name);
         this.brightness = brightness;
     }
 
-    public Lighting() {
-
-    }
+    protected Lighting() {}
 
     @Override
     public String toString() {

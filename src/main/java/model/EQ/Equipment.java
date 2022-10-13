@@ -6,21 +6,16 @@ import jakarta.validation.constraints.NotNull;
 import model.AbstractEntity;
 
 @Entity
-@Table(name = "EQ")
+@Table(name = "equipment")
 @Inheritance(strategy = InheritanceType.JOINED)
 //@DiscriminatorColumn(name = "type")
 @Access(AccessType.FIELD)
 public abstract class Equipment extends AbstractEntity {
 
-    @Version
-    protected long version; //FIXME not sure
-
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long equipment_id;
-
-
-    private int id;
+    @Column(name = "equipment_id")
+    private long id;
 
     @Column(name = "name")
     @NotNull
@@ -31,11 +26,11 @@ public abstract class Equipment extends AbstractEntity {
     private double bail;
 
     @NotEmpty
-    @Column(name = "firstDayCost")
+    @Column(name = "first_day_cost")
     private double firstDayCost;
 
     @NotEmpty
-    @Column(name = "nextDayCost")
+    @Column(name = "next_day_cost")
     private double nextDaysCost;
 
     @NotEmpty
@@ -50,7 +45,7 @@ public abstract class Equipment extends AbstractEntity {
     private boolean missing;
 
 
-    public Equipment(double firstDayCost, double nextDaysCost, double bail, String name, int id) {
+    public Equipment(double firstDayCost, double nextDaysCost, double bail, String name) {
 
         this.firstDayCost = firstDayCost;
         this.nextDaysCost = nextDaysCost;
@@ -58,12 +53,10 @@ public abstract class Equipment extends AbstractEntity {
         this.name = name;
         this.archive = true;
         this.description = null;
-        this.id = id;
         this.missing = false;
     }
 
-    public Equipment() {
-    }
+    protected Equipment() {}
 
     @Override
     public String toString() {
@@ -140,8 +133,4 @@ public abstract class Equipment extends AbstractEntity {
         this.missing = missing;
     }
 
-
-    public void setId(int id) {
-        this.id = id;
-    }
 }

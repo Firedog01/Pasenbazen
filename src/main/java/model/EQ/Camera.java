@@ -3,12 +3,12 @@ package model.EQ;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "CAM_EQ")
-@DiscriminatorValue("CAM")
-@PrimaryKeyJoinColumn(name = "CAM_EQID")
+@Table(name = "camera")
+@DiscriminatorValue("CAMERA")
+@PrimaryKeyJoinColumn(name = "equipment_id")
 public class Camera extends Equipment {
 
-    @Column(name = "RESOLUTION")
+    @Column(name = "resolution")
     private String resolution;
 
     public Camera(double firstDayCost, double nextDaysCost, double bail, String name, int id, String resolution) {

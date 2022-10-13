@@ -7,27 +7,25 @@ import org.joda.time.Days;
 import org.joda.time.LocalDateTime;
 
 @Entity
-@Table(name = "RENT")
+@Table(name = "rent")
 @Access(AccessType.FIELD)
 public class Rent extends AbstractEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long rent_id;
-
-
-    private int id;
+    @Column(name = "rent_id")
+    private long id;
 
     @NotEmpty
-    @Column(name = "EQ_RENT")
+    @JoinColumn(name = "equipment_id")
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     private Equipment equipment;
-                                                    //FIXME merge albo refresh?
+
     @NotEmpty
-    @Column(name = "CLIENT")
+    @JoinColumn(name = "client_id")
+    @JoinColumn(name = "client_id_type")
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     private Client client;
-
 
     @NotEmpty
     @Column(name = "ADDRESS")
@@ -35,11 +33,11 @@ public class Rent extends AbstractEntity {
     private Address shippingAddress;
 
     @NotEmpty
-    @Column(name = "BTIME")
+    @Column(name = "begin_time")
     private LocalDateTime beginTime;
 
     @NotEmpty
-    @Column(name = "eTime")
+    @Column(name = "end_time")
     private LocalDateTime endTime;
 
 
@@ -47,14 +45,13 @@ public class Rent extends AbstractEntity {
     private boolean shipped;
 
 
-    @Column(name = "eqRet")
+    @Column(name = "eq_returned")
     private boolean eqReturned;
 
 
-    public Rent(int id, LocalDateTime beginTime, LocalDateTime endTime,
+    public Rent(LocalDateTime beginTime, LocalDateTime endTime,
                 Equipment equipment, Client client, Address shippingAddress) {
 
-        this.id = id;
         this.beginTime = beginTime;
         this.endTime = endTime;
         this.shipped = false;
@@ -103,67 +100,56 @@ public class Rent extends AbstractEntity {
         return beginTime;
     }
 
-    public LocalDateTime getEndTime() {
-        return endTime;
-    }
-
-    public boolean isShipped() {
-        return shipped;
-    }
-
-    public boolean isEqReturned() {
-        return eqReturned;
-    }
-
-    public Equipment getEquipment() {
-        return equipment;
-    }
-
-    public Client getClient() {
-        return client;
-    }
-
-    public Address getShippingAddress() {
-        return shippingAddress;
-    }
-
-
     public void setBeginTime(LocalDateTime beginTime) {
         this.beginTime = beginTime;
+    }
+
+    public LocalDateTime getEndTime() {
+        return endTime;
     }
 
     public void setEndTime(LocalDateTime endTime) {
         this.endTime = endTime;
     }
 
+    public boolean isShipped() {
+        return shipped;
+    }
+
     public void setShipped(boolean shipped) {
         this.shipped = shipped;
+    }
+
+    public boolean isEqReturned() {
+        return eqReturned;
     }
 
     public void setEqReturned(boolean eqReturned) {
         this.eqReturned = eqReturned;
     }
 
+    public Equipment getEquipment() {
+        return equipment;
+    }
+
     public void setEquipment(Equipment equipment) {
         this.equipment = equipment;
+    }
+
+    public Client getClient() {
+        return client;
     }
 
     public void setClient(Client client) {
         this.client = client;
     }
 
+    public Address getShippingAddress() {
+        return shippingAddress;
+    }
+
     public void setShippingAddress(Address shippingAddress) {
         this.shippingAddress = shippingAddress;
     }
-
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
 
 }

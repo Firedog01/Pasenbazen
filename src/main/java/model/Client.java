@@ -7,134 +7,112 @@ import jakarta.validation.constraints.NotEmpty;
 import java.util.List;
 
 @Entity
-@Table(name = "CLIENT")
+@Table(name = "client")
 @Access(AccessType.FIELD)
 public class Client extends AbstractEntity  {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long id_client;
+    @Column(name = "client_id")
+    private String clientId;
 
-    private String pesel;  //TODO
+    @Id
+    @Column(name = "client_id_type")
+    private idType idType;
 
     @NotEmpty
-    @Column(name = "FIRSTNAME")
+    @Column(name = "first_name")
     private String firstName;
 
     @NotEmpty
-    @Column(name = "LASTNAME")
+    @Column(name = "last_name")
     private String lastName;
 
     @NotEmpty
-    @Column(name = "IDTYPE")
-    private idType idType;
-    @Column(name = "ARCHIVE")
-    private boolean archive;
-
-    @NotEmpty
-    @Column(name = "ADDRESS")
-    @ManyToOne()  //TODO
+    @JoinColumn(name = "address_id")
+    @ManyToOne(fetch =  FetchType.EAGER, cascade = CascadeType.MERGE)
     private Address address;
 
-    @OneToMany //TODO Fetch type LAZY?? Limiting amount of rents??
-    private List<Rent> currentRents;
+    @Column(name = "archive")
+    private boolean archive;
 
-
-    public Client(String firstName, String lastName, String pesel,
-                  idType idType, Address address) throws ClientException {
-
+    public Client(
+            String clientId,
+            idType idType,
+            String firstName,
+            String lastName,
+            Address address
+    ) throws ClientException {
         if (firstName.isEmpty()) {
             throw new ClientException("Imię nie może być puste");
         }
-
         if (lastName.isEmpty()) {
             throw new ClientException("Nazwisko nie może być puste");
         }
-
-        if (pesel.isEmpty()) {
-            throw new ClientException("ID nie może być puste");
+        if (clientId.isEmpty()) {
+            throw new ClientException("Identyfikator klienta nie może być pusty");
         }
-
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.archive = false;
-        this.pesel = pesel;
-        this.idType = idType;
-
         if (address == null) {
             throw new ClientException("Adres nie może być pusty");
         }
+
+        this.clientId = clientId;
+        this.idType = idType;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.address = address;
+        this.archive = false;
+
     }
 
-    public Client() {
+    protected Client() {}
 
+    public String getClientId() {
+        return clientId;
     }
 
-    @Embeddable
-    @Access(AccessType.FIELD)
-    public enum idType {
-        DowodOsobisty, Passport
-    }
-
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public String getPesel() {
-        return pesel;
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
     }
 
     public idType getIdType() {
         return idType;
     }
 
-    public boolean isArchive() {
-        return archive;
+    public void setIdType(idType idType) {
+        this.idType = idType;
     }
 
-    public Address getAddress() {
-        return address;
-    }
-
-    public Long getId_client() {
-        return id_client;
+    public String getFirstName() {
+        return firstName;
     }
 
     public void setFirstName(String firstName) {
-
         this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
     }
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
 
-
-    public void setPesel(String ID) {
-        this.pesel = ID;
-    }
-
-    public void setIdType(idType idType) {
-        this.idType = idType;
-    }
-
-    public void setArchive(boolean archive) {
-        this.archive = archive;
+    public Address getAddress() {
+        return address;
     }
 
     public void setAddress(Address address) {
         this.address = address;
     }
 
-    public void setId_client(Long id_client) {
-        this.id_client = id_client;
+    public boolean isArchive() {
+        return archive;
     }
 
+    public void setArchive(boolean archive) {
+        this.archive = archive;
+    }
 
     @Override
     public String toString() {
