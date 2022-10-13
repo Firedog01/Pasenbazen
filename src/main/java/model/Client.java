@@ -17,6 +17,8 @@ public class Client extends AbstractEntity  {
 //    public enum idType {
 //        DowodOsobisty, Passport
 //    }
+    @Id
+    private long id;
 
     @NotEmpty
     @Column(name = "first_name")
@@ -39,7 +41,7 @@ public class Client extends AbstractEntity  {
     private boolean archive;
 
     @NotNull
-    @Column(name = "address") //FIXME?
+//    @Column(name = "address") //FIXME?
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     private Address address;
 

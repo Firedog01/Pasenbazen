@@ -6,10 +6,10 @@
   <persistence-unit name="POSTGRES_DB" transaction-type="RESOURCE_LOCAL">
     <properties>
       <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
-      <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/nbddb;create:true"/>
+      <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/nbddb"/>
 
       <property name="jakarta.persistence.jdbc.user" value="nbd"/>
-      <property name="jakarta.persistence.jdbc.password" value="nbd"/>
+      <property name="jakarta.persistence.jdbc.password" value="nbdpassword"/>
 
       <property name="eclipselink.logging.level" value="FINE"/>
       <property name="jakarta.persistence.schema-generation.database.action" value="drop-and-create"/>

@@ -13,17 +13,17 @@ import org.joda.time.LocalDateTime;
 public class Rent extends AbstractEntity {
 
     @NotNull
-    @Column(name = "equipment")
-    @OneToOne(mappedBy = "????", fetch = FetchType.LAZY)  //TODO Lazy or eager? Eager is default
+//    @Column(name = "equipment")
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)  //TODO Lazy or eager? Eager is default
     private Equipment equipment; //FIXME !!! And also some kind of JoinColumn?
 
     @NotNull
     @ManyToOne
-    @Column(name = "client")
+//    @Column(name = "client")
     private Client client;
 
     @NotNull
-    @Column(name = "address") //FIXME?
+//    @Column(name = "address") //FIXME?
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     private Address shippingAddress;
 

@@ -8,7 +8,7 @@ import model.AbstractEntity;
 @Entity
 @Table(name = "EQ")
 @Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn(name = "type")
+//@DiscriminatorColumn(name = "type")
 @Access(AccessType.FIELD)
 public abstract class Equipment extends AbstractEntity {
 

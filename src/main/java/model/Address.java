@@ -9,18 +9,18 @@ import jakarta.validation.constraints.NotNull;
 @Table(name = "Address")
 @Access(AccessType.FIELD)
 public class Address extends AbstractEntity {
-//    @Id
-//    private Long id;
+    @Id
+    private Long id;
 
-    @Column(name = "street_nr")
+    @JoinColumn(name = "street_nr")
     @NotNull
     private String streetNr;
 
-    @Column(name = "city")
+    @JoinColumn(name = "city")
     @NotNull
     private String city;
 
-    @Column(name = "street")
+    @JoinColumn(name = "street")
     private String street;
 
     public Address(String city, String street, String streetNr) {
