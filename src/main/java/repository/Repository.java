@@ -10,16 +10,15 @@ import java.util.function.Predicate;
 
 public interface Repository<T> {
 
-    T get(int pos);
+    T get(long id);
+
+    List<T> getAll();
 
     void add(T elem);
 
     void remove(T elem);
 
-    List<T> findBy(Predicate<T> predicate);
-    String report();
+    void update(T elem);
 
-    int size();
-
-    List<T> findAll();
+    long count();
 }
