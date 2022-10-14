@@ -33,7 +33,7 @@ public class Client extends AbstractEntity  {
 
     @NotNull
     @JoinColumn(name = "address_id")
-    @ManyToOne(fetch =  FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch =  FetchType.EAGER, cascade = CascadeType.PERSIST)
     private Address address;
 
     @Column(name = "archive")

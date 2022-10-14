@@ -30,16 +30,13 @@ class ClientRepositoryTest {
     }
 
     @Test
-    void get() {
-
-    }
-
-    @Test
-    void getAll() {
-    }
-
-    @Test
     void add() {
+        List<Client> cl1 = cr.getAll();
+        System.out.println("client list size " + cl1.size());
+        for(Client c : cl1) {
+            System.out.println(c);
+        }
+
         Address a = new Address("City", "street", "streetNr");
         Client c = null;
         try {
@@ -47,7 +44,19 @@ class ClientRepositoryTest {
         } catch (ClientException e) {
             fail();
         }
+        System.out.println(c);
         cr.add(c);
+
+        Address a1 = new Address("cityRem", "streetRem", "streetNrRem");
+        Client c1 = null;
+        try {
+            c1 = new Client("clientIdRem", idType.Passport, "firstNameRem", "lastNameRem", a1);
+        } catch (ClientException e) {
+            fail();
+        }
+        System.out.println(c1);
+        cr.add(c1);
+
         List<Client> cl = cr.getAll();
         assertEquals(cl.size(), 1);
         System.out.println(cl.get(0));
@@ -55,6 +64,12 @@ class ClientRepositoryTest {
 
     @Test
     void remove() {
+        List<Client> cl1 = cr.getAll();
+        System.out.println("client list size " + cl1.size());
+        for(Client c : cl1) {
+            System.out.println(c);
+        }
+
         Address a = new Address("cityRem", "streetRem", "streetNrRem");
         Client c = null;
         try {
@@ -71,12 +86,16 @@ class ClientRepositoryTest {
 
         cl = cr.getAll();
         assertEquals(cl.size(), 0);
-
-
     }
 
     @Test
     void update() {
+        List<Client> cl1 = cr.getAll();
+        System.out.println("client list size " + cl1.size());
+        for(Client c : cl1) {
+            System.out.println(c);
+        }
+
         Address address1 = new Address("cityUpd", "streetUpd", "streetNrUpd");
         Client client1 = null;
         try {
@@ -86,7 +105,7 @@ class ClientRepositoryTest {
             fail();
         }
         cr.add(client1);
-        Address address2 = new Address("city", "street", "streetNr");
+        Address address2 = new Address("city1", "street1", "streetNr1");
         Client client2 = null;
         try {
             client2 = new Client("clientIdUpd", idType.DowodOsobisty, "firstNameUpd",
@@ -100,9 +119,5 @@ class ClientRepositoryTest {
             //FIXME tak, adres nie jest updatowany, nie wiem czy to błąd?
         List<Client> cl = cr.getAll();
         assertEquals(cl.size(), 1);
-    }
-
-    @Test
-    void count() {
     }
 }

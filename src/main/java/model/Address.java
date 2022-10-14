@@ -9,6 +9,8 @@ import jakarta.validation.constraints.NotNull;
 public class Address extends AbstractEntity {
     @Id
     @Column(name = "address_id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(initialValue = 0, name = "address_sequence_generator")
     private long id;
 
     @Column(name = "city")
