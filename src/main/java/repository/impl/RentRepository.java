@@ -70,4 +70,9 @@ public class RentRepository implements Repository<Rent> {
         this.em.merge(elem);
         et.commit();
     }
+
+    public Long count() {
+        Long rentSize = em.createQuery("Select count(rent) from Rent rent", Long.class).getSingleResult();
+        return rentSize;
+    }
 }

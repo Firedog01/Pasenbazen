@@ -97,4 +97,21 @@ class EquipmentRepositoryTest {
         equipmentList = er.getAll();
         assertEquals(0, equipmentList.size());
     }
+
+    @Test
+    void count() {
+        Equipment eq1 = DataFaker.getCamera();
+        Equipment eq2 = DataFaker.getTrivet();
+        Equipment eq3 = DataFaker.getMicrophone();
+
+        er.add(eq1);
+        er.add(eq2);
+        er.add(eq3);
+
+        assertEquals(er.count(), 3);
+
+        er.remove(eq1);
+
+        assertEquals(er.count(), 2);
+    }
 }

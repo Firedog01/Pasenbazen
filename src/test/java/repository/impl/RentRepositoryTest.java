@@ -103,4 +103,30 @@ class RentRepositoryTest {
 //        assertEquals(count, 0);
     }
 
+    @Test
+    void count() {
+        Address address1 = DataFaker.getAddress();
+        Address address2 = DataFaker.getAddress();
+        Address address3 = DataFaker.getAddress();
+        Client client1 = DataFaker.getClient(address1);
+        Client client2 = DataFaker.getClient(address2);
+        Client client3 = DataFaker.getClient(address3);
+        Equipment eq1 = DataFaker.getCamera();
+        Equipment eq2 = DataFaker.getTrivet();
+        Equipment eq3 = DataFaker.getMicrophone();
+
+        Rent r1 = DataFaker.getRent(eq1, client1, address1);
+        Rent r2 = DataFaker.getRent(eq2, client2, address2);
+        Rent r3 = DataFaker.getRent(eq3, client3, address3);
+
+        rr.add(r1);
+        rr.add(r2);
+        rr.add(r3);
+
+        assertEquals(rr.count(), 3);
+
+        rr.remove(r1);
+
+        assertEquals(rr.count(), 2);
+    }
 }
