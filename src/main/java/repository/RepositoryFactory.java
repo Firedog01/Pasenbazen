@@ -8,7 +8,7 @@ import repository.impl.RentRepository;
 public class RepositoryFactory {
     EntityManagerFactory emf;
 
-    RepositoryFactory(EntityManagerFactory emf) {
+    public RepositoryFactory(EntityManagerFactory emf) {
         this.emf = emf;
     }
 

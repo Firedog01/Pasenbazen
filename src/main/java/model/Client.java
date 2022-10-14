@@ -3,6 +3,9 @@ package model;
 import exception.ClientException;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+
+import java.util.Objects;
 
 @Entity
 @Table(name = "client")
@@ -10,10 +13,12 @@ import jakarta.validation.constraints.NotEmpty;
 public class Client extends AbstractEntity  {
 
     @Id
+    @NotEmpty
     @Column(name = "client_id")
     private String clientId;
 
     @Id
+    @NotEmpty
     @Column(name = "client_id_type")
     private idType idType;
 
@@ -121,5 +126,18 @@ public class Client extends AbstractEntity  {
         sb.append(", archive=").append(archive);
         sb.append('}');
         return sb.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Client client = (Client) o;
+        return clientId.equals(client.clientId) && idType == client.idType;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(clientId, idType);
     }
 }
