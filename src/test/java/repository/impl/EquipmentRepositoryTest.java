@@ -1,14 +1,10 @@
 package repository.impl;
 
-import exception.ClientException;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.Persistence;
-import model.Address;
-import model.Client;
 import model.EQ.Equipment;
 import model.UniqueId;
-import model.idType;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import repository.DataFaker;
@@ -16,7 +12,6 @@ import repository.RepositoryFactory;
 import repository.RepositoryType;
 
 import java.util.List;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -48,7 +43,7 @@ class EquipmentRepositoryTest {
     }
 
     @Test
-    void update_count() {
+    void update_remove() {
         Equipment e1 = DataFaker.getLens();
         Equipment e2 = DataFaker.getLighting();
         Equipment e3 = DataFaker.getMicrophone();

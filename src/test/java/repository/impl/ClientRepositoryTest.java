@@ -2,9 +2,11 @@ package repository.impl;
 
 import exception.ClientException;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.Persistence;
 import model.Address;
 import model.Client;
+import model.EQ.Equipment;
 import model.UniqueId;
 import model.idType;
 import org.junit.jupiter.api.BeforeAll;
@@ -32,110 +34,74 @@ class ClientRepositoryTest {
     }
 
     @Test
-    void add_getAll() {
-        Address a = new Address("City", "street", "streetNr");
-        Client c = null;
-        try {
-            c = new Client("clientId", idType.DowodOsobisty, "firstName", "lastName", a);
-        } catch (ClientException e) {
-            fail();
-        }
+    void add_get_remove() {
+        Client c = DataFaker.getClient();
         System.out.println(c);
         cr.add(c);
-
-        List<Client> cl = cr.getAll();
-        assertEquals(cl.size(), 1);
-
+        UniqueId uid = c.getEntityId();
+        Client c1 = cr.get(uid);
+        assertEquals(c, c1);
+        cr.remove(c1);
+        assertThrows(EntityNotFoundException.class, () -> {
+            cr.get(uid);
+        });
     }
 
     @Test
-    void remove() {
-        Address a = new Address("cityRem", "streetRem", "streetNrRem");
-        Client c = null;
-        try {
-            c = new Client("clientIdRem", idType.DowodOsobisty, "firstNameRem", "lastNameRem", a);
-        } catch (ClientException e) {
-            fail();
-        }
-        cr.add(c);
+    void update_remove() {
+        Address a1 = DataFaker.getAddress();
+        Address a2 = DataFaker.getAddress();
+        Address a3 = DataFaker.getAddress();
+        Client c1_a1 = DataFaker.getClient(a1);
+        Client c2_a1 = DataFaker.getClient(a1);
+        Client c3_a2 = DataFaker.getClient(a2);
+        Client c4_a3 = DataFaker.getClient(a3);
 
-        List<Client> cl = cr.getAll();
-        assertEquals(cl.size(), 1);
+        cr.add(c1_a1);
+        cr.add(c2_a1);
+        cr.add(c3_a2);
+        cr.add(c4_a3);
 
-        cr.remove(c);
+        boolean c1_ar = true;
+        String c2_fname = "_1_";
+        String c3_lname = "_2_";
 
-        cl = cr.getAll();
-        assertEquals(cl.size(), 0);
-    }
+        c1_a1.setArchive(c1_ar);
+        c2_a1.setFirstName(c2_fname);
+        c3_a2.setLastName(c3_lname);
+        c4_a3.setAddress(a2);
 
-    @Test
-    void update() {
-        Address address1 = new Address("cityUpd", "streetUpd", "streetNrUpd");
-        Client client1 = null;
-        try {
-            client1 = new Client("clientIdUpd", idType.DowodOsobisty, "firstNameUpd",
-                    "lastNameUpd", address1);
-        } catch (ClientException e) {
-            fail();
-        }
-        cr.add(client1);
+        cr.update(c1_a1);
+        cr.update(c2_a1);
+        cr.update(c3_a2);
+        cr.update(c4_a3);
 
-        Address address2 = new Address("city1", "street1", "streetNr1");
-        Client client2 = null;
-        try {
-            client2 = new Client("clientIdUpd", idType.DowodOsobisty, "firstNameUpd",
-                    "test", address2);
-        } catch (ClientException e) {
-            fail();
-        }
-        cr.update(client2);
+        Client c1_ = cr.get(c1_a1.getEntityId());
+        Client c2_ = cr.get(c2_a1.getEntityId());
+        Client c3_ = cr.get(c3_a2.getEntityId());
+        Client c4_ = cr.get(c4_a3.getEntityId());
 
-        List<Client> cl = cr.getAll();
-        assertEquals(cl.size(), 1);
-    }
+        assertEquals(c1_.isArchive(), c1_ar);
+        assertEquals(c1_a1, c1_);
+        assertEquals(c2_.getFirstName(), c2_fname);
+        assertEquals(c2_a1, c2_);
+        assertEquals(c3_.getLastName(), c3_lname);
+        assertEquals(c3_a2, c3_);
+        assertEquals(c4_.getAddress(), a2);
+        assertEquals(c4_a3, c4_);
 
-    @Test
-    void getGetAll() {
+        List<Client> clientList = cr.getAll();
+        assertEquals(4, clientList.size());
 
-        Address address1 = new Address("cityGet1", "streetGet1", "streetNrGet1");
-        Client client1 = null;
-        try {
-            client1 = new Client("clientIdGet1", idType.DowodOsobisty, "firstNameGet1",
-                    "lastNameGet1", address1);
-        } catch (ClientException e) {
-            fail();
-        }
+        // address a1 should not be removed
+        cr.remove(c1_);
+//        assertDoesNotThrow(() -> {
+//            ar.get(a1.getEntityId());
+//        });
 
-        Address address2 = new Address("cityGet2", "streetGet2", "streetNrGet2");
-        Client client2 = null;
-        try {
-            client2 = new Client("clientIdGet2", idType.DowodOsobisty, "firstNameGet2",
-                    "lastNameGet2", address2);
-        } catch (ClientException e) {
-            fail();
-        }
-
-        cr.add(client1);
-        cr.add(client2);
-
-        UniqueId uniqueId1 = client1.getEntityId();
-        UniqueId uniqueId2 = client2.getEntityId();
-
-        Client getClient1 = cr.get(uniqueId1);
-        Client getClient2 = cr.get(uniqueId2);
-
-        assertSame(client1, getClient1);
-        assertSame(client2, getClient2);
-
-        assertNotSame(getClient1, getClient2);
-        assertNotSame(getClient1, client2);
-        assertNotSame(client1, getClient2);
+        // on address update client should get updated address
 
 
-        List<Client> getAll = cr.getAll();
-        assertTrue(getAll.contains(client1));
-        assertTrue(getAll.contains(client2));
-        assertEquals(getAll.size(), 2);
     }
 
     @Test

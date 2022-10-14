@@ -75,16 +75,8 @@ public class Client extends AbstractEntity  {
         return clientId;
     }
 
-    public void setClientId(String clientId) {
-        this.clientId = clientId;
-    }
-
     public idType getIdType() {
         return idType;
-    }
-
-    public void setIdType(idType idType) {
-        this.idType = idType;
     }
 
     public String getFirstName() {
@@ -106,8 +98,6 @@ public class Client extends AbstractEntity  {
     public Address getAddress() {
         return address;
     }
-
-
 
     public void setAddress(Address address) {
         this.address = address;

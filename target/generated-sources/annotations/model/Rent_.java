@@ -2,7 +2,7 @@ package model;
 
 import jakarta.persistence.metamodel.SingularAttribute;
 import jakarta.persistence.metamodel.StaticMetamodel;
-import javax.annotation.Generated;
+import javax.annotation.processing.Generated;
 import model.EQ.Equipment;
 import org.joda.time.LocalDateTime;
 
