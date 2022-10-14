@@ -1,3 +1,5 @@
+package repository;
+
 import exception.ClientException;
 import model.Address;
 import model.Client;
@@ -15,30 +17,22 @@ public class DataFaker {
     }
 
     public static Client getClient(Address a) {
-        int tries = 5;
-        while(tries >= 0) {
-            try {
-                return new Client(randStr(7), idType.values()[(int)(Math.random() * 2) % 2],
-                        randStr(10), randStr(10), a);
-            } catch(ClientException e) {
-                tries--;
-            }
+        try {
+            return new Client(randStr(7), idType.values()[(int)(Math.random() * 2) % 2],
+                    randStr(10), randStr(10), a);
+        } catch(ClientException e) {
+            return null; // will never happen
         }
-        return null;
     }
 
     public static Client getClient() {
-        int tries = 5;
-        while(tries >= 0) {
-            try {
-                Address a = getAddress();
-                return new Client(randStr(7), idType.values()[(int)(Math.random() * 2) % 2],
-                        randStr(10), randStr(10), a);
-            } catch(ClientException e) {
-                tries--;
-            }
+        try {
+            Address a = getAddress();
+            return new Client(randStr(7), idType.values()[(int)(Math.random() * 2) % 2],
+                    randStr(10), randStr(10), a);
+        } catch(ClientException e) {
+            return null; // will never happen
         }
-        return null;
     }
 
     public static Camera getCamera() {
