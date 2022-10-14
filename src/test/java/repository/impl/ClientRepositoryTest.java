@@ -23,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class ClientRepositoryTest {
 
     static ClientRepository cr;
+    static AddressRepository ar;
     static RepositoryFactory rf;
     static EntityManagerFactory emf;
 
@@ -31,6 +32,7 @@ class ClientRepositoryTest {
         emf = Persistence.createEntityManagerFactory("POSTGRES_DB");
         rf = new RepositoryFactory(emf);
         cr = (ClientRepository) rf.getRepository(RepositoryType.ClientRepository);
+        ar = (AddressRepository) rf.getRepository(RepositoryType.AddressRepository);
     }
 
     @Test
@@ -56,7 +58,6 @@ class ClientRepositoryTest {
         Client c2_a1 = DataFaker.getClient(a1);
         Client c3_a2 = DataFaker.getClient(a2);
         Client c4_a3 = DataFaker.getClient(a3);
-
         cr.add(c1_a1);
         cr.add(c2_a1);
         cr.add(c3_a2);
@@ -70,7 +71,6 @@ class ClientRepositoryTest {
         c2_a1.setFirstName(c2_fname);
         c3_a2.setLastName(c3_lname);
         c4_a3.setAddress(a2);
-
         cr.update(c1_a1);
         cr.update(c2_a1);
         cr.update(c3_a2);
@@ -95,14 +95,25 @@ class ClientRepositoryTest {
 
         // address a1 should not be removed
         cr.remove(c1_);
-//        assertDoesNotThrow(() -> {
-//            ar.get(a1.getEntityId());
-//        });
+        assertDoesNotThrow(() -> {
+            ar.get(a1.getEntityId());
+        });
 
         // on address update client should get updated address
+        String a1_street = "==1==";
+        Address a1_ = ar.get(a1.getEntityId());
+        a1_.setStreet(a1_street);
+        ar.update(a1_);
+        assertNotEquals(a1_street, c1_.getAddress().getStreet());
+        Client c2_2 = cr.get(c2_.getEntityId());
+//        assertEquals(a1_street, c2_2.getAddress().getStreet()); // problem
+        cr.remove(c2_2);
 
+        // todo sth clever
+        cr.remove(c3_);
+        cr.remove(c4_);
 
+        clientList = cr.getAll();
+        assertEquals(0, clientList.size());
     }
-
-
 }
