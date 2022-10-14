@@ -70,10 +70,4 @@ public class ClientRepository implements Repository<Client> {
         this.em.merge(elem);
         et.commit();
     }
-
-    @Override
-    public long count() {
-        long lenClient = em.createQuery("SELECT COUNT(client) from Client client", Client.class).getFirstResult();
-        return lenClient;
-    }
 }
