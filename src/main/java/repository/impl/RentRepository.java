@@ -3,9 +3,13 @@ package repository.impl;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.EntityTransaction;
-import model.Rent;
-import model.UniqueId;
+import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
+import model.*;
 import repository.Repository;
+import repository.RepositoryType;
 
 import java.util.List;
 import java.util.UUID;
@@ -21,11 +25,20 @@ public class RentRepository implements Repository<Rent> {
 
     @Override
     public Rent get(UniqueId uniqueId) {
-        Rent rent = em.find(Rent.class, uniqueId);
-        if (rent == null) {
-            throw new EntityNotFoundException("There is no client with ID " + uniqueId.getUniqueID());
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Rent> cq = cb.createQuery(Rent.class);
+        Root<Rent> rent = cq.from(Rent.class);
+
+        cq.select(rent);
+        cq.where(cb.equal(rent.get(Rent_.ENTITY_ID), uniqueId));
+
+        TypedQuery<Rent> q = em.createQuery(cq);
+        List<Rent> rents = q.getResultList();
+
+        if(rents.isEmpty()) {
+            throw new EntityNotFoundException("Rent not found for uniqueId: " + uniqueId);
         }
-        return rent;
+        return rents.get(0);
     }
 
     @Override

@@ -3,6 +3,8 @@ package repository.impl;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.Persistence;
+import model.Address;
+import model.Client;
 import model.EQ.Equipment;
 import model.Rent;
 import model.UniqueId;
@@ -29,17 +31,26 @@ class RentRepositoryTest {
 
     @Test
     void add_get_remove() {
-        Rent r = DataFaker.getRent();
+        Address a = DataFaker.getAddress();
+        Client c = DataFaker.getClient(a);
+        Equipment e = DataFaker.getTrivet();
+
+        Rent r = DataFaker.getRent(e, c, a);
         System.out.println(r);
         rr.add(r);
         UniqueId uid = r.getEntityId();
+        
         Rent r1 = rr.get(uid);
+
         assertEquals(r, r1);
         rr.remove(r1);
         assertThrows(EntityNotFoundException.class, () -> {
             rr.get(uid);
         });
     }
+
+
+
 
     @Test
     void update_count() {
