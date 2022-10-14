@@ -4,6 +4,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.EntityTransaction;
 import model.EQ.Equipment;
+import model.UniqueId;
 import repository.Repository;
 
 import java.util.List;
@@ -19,10 +20,10 @@ public class EquipmentRepository implements Repository<Equipment> {
     }
 
     @Override
-    public Equipment get(UUID id) {
-        Equipment equipment = em.find(Equipment.class, id);
+    public Equipment get(UniqueId uniqueId) {
+        Equipment equipment = em.find(Equipment.class, uniqueId);  //FIXME ??
         if (equipment == null) {
-            throw new EntityNotFoundException("There is no client with ID " + id);
+            throw new EntityNotFoundException("There is no client with ID " + uniqueId.getUniqueID());
         }
         return equipment;
     }

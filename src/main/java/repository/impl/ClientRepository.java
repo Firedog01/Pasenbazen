@@ -3,7 +3,13 @@ package repository.impl;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 import model.Client;
+import model.Client_;
+import model.UniqueId;
 import repository.Repository;
 
 import java.util.List;
@@ -18,12 +24,21 @@ public class ClientRepository implements Repository<Client> {
     }
 
     @Override
-    public Client get(UUID clientID) {
-        Client client = em.find(Client.class, clientID);
-        if (client == null) {
-            throw new EntityNotFoundException("There is no client with ID " + clientID);
+    public Client get(UniqueId uniqueId) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Client> cq = cb.createQuery(Client.class);
+        Root<Client> client = cq.from(Client.class);
+
+        cq.select(client);
+        cq.where(cb.equal(client.get(Client_.ENTITY_ID), uniqueId));
+
+        TypedQuery<Client> q = em.createQuery(cq);
+        List<Client> clients = q.getResultList();
+
+        if(!clients.isEmpty()) {
+            return clients.get(0);
         }
-        return client;
+        return null;
     }
 
     @Override
