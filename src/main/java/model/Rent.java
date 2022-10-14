@@ -20,18 +20,18 @@ public class Rent extends AbstractEntity {
 
     @NotNull
     @JoinColumn(name = "equipment_id")
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Equipment equipment;
 
     @NotNull
     @JoinColumn(name = "client_id")
     @JoinColumn(name = "client_id_type")
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Client client;
 
     @NotNull
     @JoinColumn(name = "address_id")
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST) //FIXME muszę poczytać o tym
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Address shippingAddress;
 
     @NotNull
@@ -53,6 +53,7 @@ public class Rent extends AbstractEntity {
 
     public Rent(LocalDateTime beginTime, LocalDateTime endTime,
                 Equipment equipment, Client client, Address shippingAddress) {
+        super();
 
         this.beginTime = beginTime;
         this.endTime = endTime;

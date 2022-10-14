@@ -21,7 +21,7 @@ public class RentRepository implements Repository<Rent> {
 
     @Override
     public Rent get(UniqueId uniqueId) {
-        Rent rent = em.find(Rent.class, uniqueId); //FIXME ??
+        Rent rent = em.find(Rent.class, uniqueId);
         if (rent == null) {
             throw new EntityNotFoundException("There is no client with ID " + uniqueId.getUniqueID());
         }
