@@ -35,10 +35,10 @@ public class ClientRepository implements Repository<Client> {
         TypedQuery<Client> q = em.createQuery(cq);
         List<Client> clients = q.getResultList();
 
-        if(!clients.isEmpty()) {
-            return clients.get(0);
+        if(clients.isEmpty()) {
+            throw new EntityNotFoundException("Client not found for uniqueId: " + uniqueId);
         }
-        return null;
+        return clients.get(0);
     }
 
     @Override

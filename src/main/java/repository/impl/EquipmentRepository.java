@@ -3,6 +3,12 @@ package repository.impl;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
+import model.Client;
+import model.Client_;
 import model.EQ.Equipment;
 import model.UniqueId;
 import repository.Repository;
@@ -21,11 +27,20 @@ public class EquipmentRepository implements Repository<Equipment> {
 
     @Override
     public Equipment get(UniqueId uniqueId) {
-        Equipment equipment = em.find(Equipment.class, uniqueId);  //FIXME ??
-        if (equipment == null) {
-            throw new EntityNotFoundException("There is no client with ID " + uniqueId.getUniqueID());
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Equipment> cq = cb.createQuery(Equipment.class);
+        Root<Equipment> equipment = cq.from(Equipment.class);
+
+        cq.select(equipment);
+        cq.where(cb.equal(equipment.get(Client_.ENTITY_ID), uniqueId));
+
+        TypedQuery<Equipment> q = em.createQuery(cq);
+        List<Equipment> equipmentList = q.getResultList();
+
+        if(equipmentList.isEmpty()) {
+            throw new EntityNotFoundException("Equipment not found for uniqueId: " + uniqueId);
         }
-        return equipment;
+        return equipmentList.get(0);
     }
 
     @Override
@@ -60,7 +75,7 @@ public class EquipmentRepository implements Repository<Equipment> {
 
     @Override
     public long count() {
-        long lenEq = em.createQuery("SELECT COUNT(e) from Equipment e", Equipment.class).getFirstResult();
+        long lenEq = em.createQuery("SELECT COUNT(e) from Equipment e", Long.class).getFirstResult();
         return lenEq; //FIXME to trzeba sprawdzic
     }
 }

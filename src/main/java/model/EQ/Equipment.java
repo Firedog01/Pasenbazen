@@ -14,6 +14,7 @@ public abstract class Equipment extends AbstractEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(initialValue = 0, name = "equipment_sequence_generator")
     @Column(name = "equipment_id")
     private long id;
 
@@ -21,15 +22,12 @@ public abstract class Equipment extends AbstractEntity {
     @NotNull
     private String name;
 
-    @NotEmpty
     @Column(name = "bail")
     private double bail;
 
-    @NotNull
     @Column(name = "first_day_cost")
     private double firstDayCost;
 
-    @NotNull
     @Column(name = "next_day_cost")
     private double nextDaysCost;
 
@@ -51,7 +49,7 @@ public abstract class Equipment extends AbstractEntity {
         this.nextDaysCost = nextDaysCost;
         this.bail = bail;
         this.name = name;
-        this.archive = true;
+        this.archive = false;
         this.description = null;
         this.missing = false;
     }

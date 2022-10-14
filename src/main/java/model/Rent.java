@@ -14,6 +14,7 @@ public class Rent extends AbstractEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(initialValue = 0, name = "rent_sequence_generator")
     @Column(name = "rent_id")
     private long id;
 

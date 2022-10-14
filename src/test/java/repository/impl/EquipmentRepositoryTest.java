@@ -30,7 +30,7 @@ class EquipmentRepositoryTest {
     static void beforeAll() {
         emf = Persistence.createEntityManagerFactory("POSTGRES_DB");
         rf = new RepositoryFactory(emf);
-        er = (EquipmentRepository) rf.getRepository(RepositoryType.ClientRepository);
+        er = (EquipmentRepository) rf.getRepository(RepositoryType.EquipmentRepository);
     }
 
     @Test
@@ -41,7 +41,7 @@ class EquipmentRepositoryTest {
         UniqueId uid = e.getEntityId();
         Equipment e1 = er.get(uid);
         assertEquals(e, e1);
-        er.remove(e);
+        er.remove(e1);
         assertThrows(EntityNotFoundException.class, () -> {
             er.get(uid);
         });
@@ -89,12 +89,13 @@ class EquipmentRepositoryTest {
         assertEquals(e4, e4_);
 
         long count = er.count();
-        assertEquals(count, 4);
+        assertEquals(4, count);
         er.remove(e1_);
         er.remove(e2_);
         er.remove(e3_);
         er.remove(e4_);
+
         count = er.count();
-        assertEquals(count, 0);
+        assertEquals(0, count);
     }
 }
