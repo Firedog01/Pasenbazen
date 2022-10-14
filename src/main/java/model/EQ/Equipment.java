@@ -44,7 +44,7 @@ public abstract class Equipment extends AbstractEntity {
 
 
     public Equipment(double firstDayCost, double nextDaysCost, double bail, String name) {
-
+        super();
         this.firstDayCost = firstDayCost;
         this.nextDaysCost = nextDaysCost;
         this.bail = bail;
