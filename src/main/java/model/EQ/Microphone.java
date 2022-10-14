@@ -1,6 +1,7 @@
 package model.EQ;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "microphone")
@@ -8,6 +9,7 @@ import jakarta.persistence.*;
 @PrimaryKeyJoinColumn(name = "equipment_id")
 public class Microphone extends Equipment{
 
+    @NotNull
     @Column(name = "sensitivity")
     private String sensitivity;
 

@@ -25,22 +25,22 @@ public abstract class Equipment extends AbstractEntity {
     @Column(name = "bail")
     private double bail;
 
-    @NotEmpty
+    @NotNull
     @Column(name = "first_day_cost")
     private double firstDayCost;
 
-    @NotEmpty
+    @NotNull
     @Column(name = "next_day_cost")
     private double nextDaysCost;
 
-    @NotEmpty
+    @NotNull
     @Column(name = "archive")
     private boolean archive;
 
     @Column(name = "description")
     private String description;
 
-    @NotEmpty
+    @NotNull
     @Column(name = "missing")
     private boolean missing;
 

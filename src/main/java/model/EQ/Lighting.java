@@ -1,12 +1,15 @@
 package model.EQ;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "light")
 @DiscriminatorValue("LIGHT")
 @PrimaryKeyJoinColumn(name = "equipment_id")
 public class Lighting extends Equipment {
+
+    @NotNull
     @Column(name = "brightness")
     private String brightness;
 

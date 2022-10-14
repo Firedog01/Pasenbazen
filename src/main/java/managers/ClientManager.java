@@ -12,27 +12,25 @@ import java.util.Objects;
 import java.util.function.Predicate;
 
 public class ClientManager {
-//    ClientRepository clientRepository;
-//
-//    public ClientManager(ClientRepository clientRepository) {
-//        this.clientRepository = clientRepository;
-//    }
-//
-//    public Client registerClient(String name,
-//                                 String surname,
-//                                 String id,
-//                                 idType idtype,
-//                                 Address address
-//    ) throws ClientException {
-//        Client gotClient = getClient(id, idtype);
-//        if (gotClient == null) {
-//
-//            Client client = new Client(name, idtype, surname, id, address);
-//            clientRepository.add(client);
-//            return client;
-//        } else
-//            return gotClient;
-//    }
+    ClientRepository clientRepository;
+
+    public ClientManager(ClientRepository clientRepository) {
+        this.clientRepository = clientRepository;
+    }
+
+    public Client registerClient(String name,
+                                 String surname,
+                                 String id,
+                                 idType idtype,
+                                 Address address
+    ) throws ClientException {
+
+
+        Client client = new Client(name, idtype, surname, id, address);
+        clientRepository.add(client);
+        return client;
+
+    }
 //
 //    public void unregisterClient(Client client) {
 //        Predicate<Client> clientPredicate = (x -> x == client);

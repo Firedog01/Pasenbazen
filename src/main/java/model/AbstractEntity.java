@@ -15,13 +15,14 @@ public abstract class AbstractEntity implements Serializable {
     private UniqueId entityId;
 
     @Version
-    @NotEmpty
+    @NotNull
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long version;
 
-    protected AbstractEntity() {}
+//    protected AbstractEntity() {}
 
-    public AbstractEntity(UniqueId entityId, long version) {
-        this.entityId = entityId;
+    protected AbstractEntity() {
+        this.entityId = new UniqueId();
         this.version = version;
     }
 

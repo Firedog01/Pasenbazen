@@ -1,6 +1,7 @@
 package model.EQ;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "trivet")
@@ -8,6 +9,7 @@ import jakarta.persistence.*;
 @PrimaryKeyJoinColumn(name = "equipment_id")
 public class Trivet extends Equipment{
 
+    @NotNull
     @Column(name = "weight")
     private double weight;
 

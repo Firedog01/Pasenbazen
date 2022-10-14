@@ -2,6 +2,7 @@ package model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import model.EQ.Equipment;
 import org.joda.time.Days;
 import org.joda.time.LocalDateTime;
@@ -16,27 +17,27 @@ public class Rent extends AbstractEntity {
     @Column(name = "rent_id")
     private long id;
 
-    @NotEmpty
+    @NotNull
     @JoinColumn(name = "equipment_id")
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     private Equipment equipment;
 
-    @NotEmpty
+    @NotNull
     @JoinColumn(name = "client_id")
     @JoinColumn(name = "client_id_type")
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     private Client client;
 
-    @NotEmpty
+    @NotNull
     @JoinColumn(name = "address_id")
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST) //FIXME muszę poczytać o tym
     private Address shippingAddress;
 
-    @NotEmpty
+    @NotNull
     @Column(name = "begin_time")
     private LocalDateTime beginTime;
 
-    @NotEmpty
+    @NotNull
     @Column(name = "end_time")
     private LocalDateTime endTime;
 

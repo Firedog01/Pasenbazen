@@ -2,8 +2,9 @@ package model;
 
 import exception.ClientException;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import org.hibernate.mapping.Value;
 
 import java.util.Objects;
 
@@ -13,26 +14,26 @@ import java.util.Objects;
 public class Client extends AbstractEntity  {
 
     @Id
-    @NotEmpty
+    @Size(min = 1)
     @Column(name = "client_id")
     private String clientId;
 
     @Id
-    @NotEmpty
+    @NotNull
     @Column(name = "client_id_type")
     private idType idType;
 
-    @NotEmpty
+    @Size(min = 1)
     @Column(name = "first_name")
     private String firstName;
 
-    @NotEmpty
+    @Size(min = 1)
     @Column(name = "last_name")
     private String lastName;
 
-    @NotEmpty
+    @NotNull
     @JoinColumn(name = "address_id")
-    @ManyToOne(fetch =  FetchType.EAGER, cascade = CascadeType.MERGE)
+    @ManyToOne(fetch =  FetchType.EAGER, cascade = CascadeType.ALL)
     private Address address;
 
     @Column(name = "archive")
@@ -45,6 +46,7 @@ public class Client extends AbstractEntity  {
             String lastName,
             Address address
     ) throws ClientException {
+        super();
         if (firstName.isEmpty()) {
             throw new ClientException("Imię nie może być puste");
         }

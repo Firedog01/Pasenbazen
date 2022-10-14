@@ -55,6 +55,16 @@ class ClientRepositoryTest {
 
     @Test
     void remove() {
+//        Address a = new Address("City", "street", "streetNr");
+//        Client c = null;
+//        try {
+//            c = new Client("clientId", idType.DowodOsobisty, "firstName", "lastName", a);
+//        } catch (ClientException e) {
+//            fail();
+//        }
+//        cr.add(c);
+
+
     }
 
     @Test

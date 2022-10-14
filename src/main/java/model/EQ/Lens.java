@@ -2,6 +2,7 @@ package model.EQ;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "lens")
@@ -9,6 +10,7 @@ import jakarta.persistence.*;
 @PrimaryKeyJoinColumn(name = "equipment_id")
 public class Lens extends Equipment{
 
+    @NotNull
     @Column(name = "focal_length")
     private String focalLength;
 
