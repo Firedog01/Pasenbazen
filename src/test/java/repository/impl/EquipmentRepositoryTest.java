@@ -85,12 +85,12 @@ class EquipmentRepositoryTest {
 
         List<Equipment> equipmentList = er.getAll();
         assertEquals(4, equipmentList.size());
+        assertEquals(4, er.count());
         er.remove(e1_);
         er.remove(e2_);
         er.remove(e3_);
         er.remove(e4_);
-        equipmentList = er.getAll();
-        assertEquals(0, equipmentList.size());
+        assertEquals(0, er.count());
     }
 
     @Test

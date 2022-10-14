@@ -73,8 +73,8 @@ public class EquipmentRepository implements Repository<Equipment> {
         et.commit();
     }
 
+    @Override
     public Long count() {
-        Long eqSize = em.createQuery("Select count(eq) from Equipment eq", Long.class).getSingleResult();
-        return eqSize;
+        return em.createQuery("Select count(eq) from Equipment eq", Long.class).getSingleResult();
     }
 }

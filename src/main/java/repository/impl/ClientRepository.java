@@ -10,6 +10,7 @@ import jakarta.persistence.criteria.Root;
 import model.Client;
 import model.Client_;
 import model.UniqueId;
+import net.bytebuddy.asm.Advice;
 import repository.Repository;
 
 import java.util.List;
@@ -71,8 +72,8 @@ public class ClientRepository implements Repository<Client> {
         et.commit();
     }
 
+    @Override
     public Long count() {
-        Long clientSize = em.createQuery("Select count(client) from Client client", Long.class).getSingleResult();
-        return clientSize;
+        return em.createQuery("Select count(client) from Client client", Long.class).getSingleResult();
     }
 }

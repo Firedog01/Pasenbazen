@@ -71,8 +71,8 @@ public class RentRepository implements Repository<Rent> {
         et.commit();
     }
 
+    @Override
     public Long count() {
-        Long rentSize = em.createQuery("Select count(rent) from Rent rent", Long.class).getSingleResult();
-        return rentSize;
+        return em.createQuery("Select count(rent) from Rent rent", Long.class).getSingleResult();
     }
 }

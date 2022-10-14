@@ -61,8 +61,8 @@ class AddressRepositoryTest {
 
         List<Address> addressList = ar.getAll();
         assertEquals(1, addressList.size());
+        assertEquals(1, ar.count());
         ar.remove(a1_);
-        addressList = ar.getAll();
-        assertEquals(0, addressList.size());
+        assertEquals(0, ar.count());
     }
 }

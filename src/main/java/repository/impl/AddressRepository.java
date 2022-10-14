@@ -67,4 +67,9 @@ public class AddressRepository implements Repository<Address> {
         this.em.merge(elem);
         et.commit();
     }
+
+    @Override
+    public Long count() {
+        return em.createQuery("Select count(address) from Address address", Long.class).getSingleResult();
+    }
 }

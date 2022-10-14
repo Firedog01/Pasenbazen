@@ -17,4 +17,6 @@ public interface Repository<T> {
     void remove(T elem);
 
     void update(T elem);
+
+    Long count();
 }
