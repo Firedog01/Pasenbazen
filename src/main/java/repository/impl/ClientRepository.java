@@ -40,7 +40,7 @@ public class ClientRepository implements Repository<Client> {
     }
 
     @Override
-    public void remove(Client elem) {
+    public void remove(Client elem) { //FIXME może tutaj jakiś try catch? Czy to niżej
         EntityTransaction et = em.getTransaction();
         et.begin();
         this.em.remove(elem);

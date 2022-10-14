@@ -23,7 +23,6 @@ public abstract class AbstractEntity implements Serializable {
 
     protected AbstractEntity() {
         this.entityId = new UniqueId();
-        this.version = version;
     }
 
     public UniqueId getEntityId() {

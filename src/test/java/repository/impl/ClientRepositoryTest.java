@@ -55,20 +55,51 @@ class ClientRepositoryTest {
 
     @Test
     void remove() {
-//        Address a = new Address("City", "street", "streetNr");
-//        Client c = null;
-//        try {
-//            c = new Client("clientId", idType.DowodOsobisty, "firstName", "lastName", a);
-//        } catch (ClientException e) {
-//            fail();
-//        }
-//        cr.add(c);
+        Address a = new Address("cityRem", "streetRem", "streetNrRem");
+        Client c = null;
+        try {
+            c = new Client("clientIdRem", idType.DowodOsobisty, "firstNameRem", "lastNameRem", a);
+        } catch (ClientException e) {
+            fail();
+        }
+        cr.add(c);
+
+        List<Client> cl = cr.getAll();
+        assertEquals(cl.size(), 1);
+
+        cr.remove(c);  //FIXME adres powinien zostawać po usunięciu Klienta?
+
+        cl = cr.getAll();
+        assertEquals(cl.size(), 0);
 
 
     }
 
     @Test
     void update() {
+        Address address1 = new Address("cityUpd", "streetUpd", "streetNrUpd");
+        Client client1 = null;
+        try {
+            client1 = new Client("clientIdUpd", idType.DowodOsobisty, "firstNameUpd",
+                    "lastNameUpd", address1);
+        } catch (ClientException e) {
+            fail();
+        }
+        cr.add(client1);
+        Address address2 = new Address("city", "street", "streetNr");
+        Client client2 = null;
+        try {
+            client2 = new Client("clientIdUpd", idType.DowodOsobisty, "firstNameUpd",
+                    "test", address1);
+        } catch (ClientException e) {
+            fail();
+        }
+
+        cr.update(client2);
+
+            //FIXME tak, adres nie jest updatowany, nie wiem czy to błąd?
+        List<Client> cl = cr.getAll();
+        assertEquals(cl.size(), 1);
     }
 
     @Test
