@@ -1,6 +1,7 @@
 package repository;
 
 import jakarta.persistence.EntityManagerFactory;
+import repository.impl.AddressRepository;
 import repository.impl.ClientRepository;
 import repository.impl.EquipmentRepository;
 import repository.impl.RentRepository;
@@ -22,6 +23,9 @@ public class RepositoryFactory {
             }
             case ClientRepository -> {
                 return new ClientRepository(emf.createEntityManager());
+            }
+            case AddressRepository -> {
+                return new AddressRepository(emf.createEntityManager());
             }
         }
         return null;
