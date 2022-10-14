@@ -4,6 +4,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.EntityTransaction;
 import model.Rent;
+import model.UniqueId;
 import repository.Repository;
 
 import java.util.List;
@@ -19,10 +20,10 @@ public class RentRepository implements Repository<Rent> {
     }
 
     @Override
-    public Rent get(UUID id) {
-        Rent rent = em.find(Rent.class, id);
+    public Rent get(UniqueId uniqueId) {
+        Rent rent = em.find(Rent.class, uniqueId); //FIXME ??
         if (rent == null) {
-            throw new EntityNotFoundException("There is no client with ID " + id);
+            throw new EntityNotFoundException("There is no client with ID " + uniqueId.getUniqueID());
         }
         return rent;
     }

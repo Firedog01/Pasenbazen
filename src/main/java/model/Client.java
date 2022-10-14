@@ -140,10 +140,10 @@ public class Client extends AbstractEntity  {
         return clientId.equals(client.clientId) && idType == client.idType;
     }
 
-
-
     @Override
     public int hashCode() {
         return Objects.hash(clientId, idType);
     }
+
+
 }

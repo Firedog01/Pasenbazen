@@ -5,6 +5,7 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import model.Address;
 import model.Client;
+import model.UniqueId;
 import model.idType;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -116,11 +117,11 @@ class ClientRepositoryTest {
         cr.add(client1);
         cr.add(client2);
 
-        UUID uuid1 = client1.getEntityId().getUniqueID();
-        UUID uuid2 = client2.getEntityId().getUniqueID();
+        UniqueId uniqueId1 = client1.getEntityId();
+        UniqueId uniqueId2 = client2.getEntityId();
 
-        Client getClient1 = cr.get(uuid1);
-        Client getClient2 = cr.get(uuid2);
+        Client getClient1 = cr.get(uniqueId1);
+        Client getClient2 = cr.get(uniqueId2);
 
         assertSame(client1, getClient1);
         assertSame(client2, getClient2);
@@ -128,5 +129,11 @@ class ClientRepositoryTest {
         assertNotSame(getClient1, getClient2);
         assertNotSame(getClient1, client2);
         assertNotSame(client1, getClient2);
+
+
+        List<Client> getAll = cr.getAll();
+        assertTrue(getAll.contains(client1));
+        assertTrue(getAll.contains(client2));
+        assertEquals(getAll.size(), 2);
     }
 }

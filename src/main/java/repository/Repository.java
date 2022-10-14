@@ -1,12 +1,14 @@
 package repository;
 
 
+import model.UniqueId;
+
 import java.util.List;
 import java.util.UUID;
 
 public interface Repository<T> {
 
-    T get(UUID id);
+    T get(UniqueId id);
 
     List<T> getAll();
 

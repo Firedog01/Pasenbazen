@@ -12,6 +12,7 @@ public abstract class AbstractEntity implements Serializable {
 
     @Embedded
     @NotNull
+//    @Column(name = "entity_ID")
     private UniqueId entityId;
 
     @Version

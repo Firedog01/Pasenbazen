@@ -25,4 +25,8 @@ public class UniqueId implements Serializable {
     public UUID getUniqueID() {
         return uniqueID;
     }
+
+    public void setUniqueID(UUID uniqueID) {
+        this.uniqueID = uniqueID;
+    }
 }
