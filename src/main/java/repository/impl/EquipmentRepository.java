@@ -72,10 +72,4 @@ public class EquipmentRepository implements Repository<Equipment> {
         this.em.merge(elem);
         et.commit();
     }
-
-    @Override
-    public long count() {
-        long lenEq = em.createQuery("SELECT COUNT(e) from Equipment e", Long.class).getFirstResult();
-        return lenEq; //FIXME to trzeba sprawdzic
-    }
 }

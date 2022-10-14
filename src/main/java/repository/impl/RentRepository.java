@@ -57,10 +57,4 @@ public class RentRepository implements Repository<Rent> {
         this.em.merge(elem);
         et.commit();
     }
-
-    @Override
-    public long count() {
-        long lenRent = em.createQuery("SELECT COUNT(r) from Rent r", Rent.class).getFirstResult();
-        return lenRent; //FIXME to trzeba sprawdzic
-    }
 }

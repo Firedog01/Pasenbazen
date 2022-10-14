@@ -88,14 +88,13 @@ class EquipmentRepositoryTest {
         assertEquals(e4_.getFirstDayCost(), e4_fdc);
         assertEquals(e4, e4_);
 
-        long count = er.count();
-        assertEquals(4, count);
+        List<Equipment> equipmentList = er.getAll();
+        assertEquals(4, equipmentList.size());
         er.remove(e1_);
         er.remove(e2_);
         er.remove(e3_);
         er.remove(e4_);
-
-        count = er.count();
-        assertEquals(0, count);
+        equipmentList = er.getAll();
+        assertEquals(0, equipmentList.size());
     }
 }
