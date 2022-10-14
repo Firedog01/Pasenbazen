@@ -7,6 +7,7 @@ import model.Client;
 import repository.Repository;
 
 import java.util.List;
+import java.util.UUID;
 
 
 public class ClientRepository implements Repository<Client> {
@@ -17,7 +18,7 @@ public class ClientRepository implements Repository<Client> {
     }
 
     @Override
-    public Client get(long clientID) {
+    public Client get(UUID clientID) {
         Client client = em.find(Client.class, clientID);
         if (client == null) {
             throw new EntityNotFoundException("There is no client with ID " + clientID);
@@ -40,7 +41,7 @@ public class ClientRepository implements Repository<Client> {
     }
 
     @Override
-    public void remove(Client elem) { //FIXME może tutaj jakiś try catch? Czy to niżej
+    public void remove(Client elem) {
         EntityTransaction et = em.getTransaction();
         et.begin();
         this.em.remove(elem);

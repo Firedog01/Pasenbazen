@@ -21,4 +21,8 @@ public class UniqueId implements Serializable {
     public String toString() {
         return uniqueID.toString();
     }
+
+    public UUID getUniqueID() {
+        return uniqueID;
+    }
 }

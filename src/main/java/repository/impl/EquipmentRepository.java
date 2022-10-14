@@ -7,6 +7,7 @@ import model.EQ.Equipment;
 import repository.Repository;
 
 import java.util.List;
+import java.util.UUID;
 
 
 public class EquipmentRepository implements Repository<Equipment> {
@@ -18,7 +19,7 @@ public class EquipmentRepository implements Repository<Equipment> {
     }
 
     @Override
-    public Equipment get(long id) {
+    public Equipment get(UUID id) {
         Equipment equipment = em.find(Equipment.class, id);
         if (equipment == null) {
             throw new EntityNotFoundException("There is no client with ID " + id);

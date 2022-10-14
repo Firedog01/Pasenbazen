@@ -7,6 +7,7 @@ import model.Rent;
 import repository.Repository;
 
 import java.util.List;
+import java.util.UUID;
 
 
 public class RentRepository implements Repository<Rent> {
@@ -18,7 +19,7 @@ public class RentRepository implements Repository<Rent> {
     }
 
     @Override
-    public Rent get(long id) {
+    public Rent get(UUID id) {
         Rent rent = em.find(Rent.class, id);
         if (rent == null) {
             throw new EntityNotFoundException("There is no client with ID " + id);

@@ -33,7 +33,7 @@ public class Client extends AbstractEntity  {
 
     @NotNull
     @JoinColumn(name = "address_id")
-    @ManyToOne(fetch =  FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch =  FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Address address;
 
     @Column(name = "archive")
@@ -107,6 +107,8 @@ public class Client extends AbstractEntity  {
         return address;
     }
 
+
+
     public void setAddress(Address address) {
         this.address = address;
     }
@@ -137,6 +139,8 @@ public class Client extends AbstractEntity  {
         Client client = (Client) o;
         return clientId.equals(client.clientId) && idType == client.idType;
     }
+
+
 
     @Override
     public int hashCode() {

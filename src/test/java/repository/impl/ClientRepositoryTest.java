@@ -12,7 +12,7 @@ import repository.RepositoryFactory;
 import repository.RepositoryType;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -58,7 +58,7 @@ class ClientRepositoryTest {
         cr.add(c1);
 
         List<Client> cl = cr.getAll();
-        assertEquals(cl.size(), 1);
+        assertEquals(cl.size(), 3);
         System.out.println(cl.get(0));
     }
 
@@ -82,7 +82,7 @@ class ClientRepositoryTest {
         List<Client> cl = cr.getAll();
         assertEquals(cl.size(), 1);
 
-        cr.remove(c);  //FIXME adres powinien zostawać po usunięciu Klienta?
+        cr.remove(c);
 
         cl = cr.getAll();
         assertEquals(cl.size(), 0);
@@ -109,15 +109,52 @@ class ClientRepositoryTest {
         Client client2 = null;
         try {
             client2 = new Client("clientIdUpd", idType.DowodOsobisty, "firstNameUpd",
-                    "test", address1);
+                    "test", address2);
         } catch (ClientException e) {
             fail();
         }
 
         cr.update(client2);
 
-            //FIXME tak, adres nie jest updatowany, nie wiem czy to błąd?
         List<Client> cl = cr.getAll();
         assertEquals(cl.size(), 1);
+    }
+
+    @Test
+    void getGetAll() {
+
+        Address address1 = new Address("cityGet1", "streetGet1", "streetNrGet1");
+        Client client1 = null;
+        try {
+            client1 = new Client("clientIdGet1", idType.DowodOsobisty, "firstNameGet1",
+                    "lastNameGet1", address1);
+        } catch (ClientException e) {
+            fail();
+        }
+
+        Address address2 = new Address("cityGet2", "streetGet2", "streetNrGet2");
+        Client client2 = null;
+        try {
+            client2 = new Client("clientIdGet2", idType.DowodOsobisty, "firstNameGet2",
+                    "lastNameGet2", address2);
+        } catch (ClientException e) {
+            fail();
+        }
+
+        cr.add(client1);
+        cr.add(client2);
+
+        UUID uuid1 = client1.getEntityId().getUniqueID();
+        UUID uuid2 = client2.getEntityId().getUniqueID();
+
+        Client getClient1 = cr.get(uuid1);
+        Client getClient2 = cr.get(uuid2);
+
+        assertSame(client1, getClient1);
+        assertSame(client2, getClient2);
+
+        assertNotSame(getClient1, getClient2);
+        assertNotSame(getClient1, client2);
+        assertNotSame(client1, getClient2);
     }
 }

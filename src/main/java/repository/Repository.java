@@ -1,16 +1,12 @@
 package repository;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
-import org.hibernate.engine.spi.SessionFactoryDelegatingImpl;
 
 import java.util.List;
-import java.util.function.Predicate;
+import java.util.UUID;
 
 public interface Repository<T> {
 
-    T get(long id);
+    T get(UUID id);
 
     List<T> getAll();
 
