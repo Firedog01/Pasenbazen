@@ -3,6 +3,8 @@ package repository.impl;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.Persistence;
+import model.Address;
+import model.Client;
 import model.EQ.Equipment;
 import model.Rent;
 import model.UniqueId;
@@ -29,17 +31,26 @@ class RentRepositoryTest {
 
     @Test
     void add_get_remove() {
-        Rent r = DataFaker.getRent();
+        Address a = DataFaker.getAddress();
+        Client c = DataFaker.getClient(a);
+        Equipment e = DataFaker.getTrivet();
+
+        Rent r = DataFaker.getRent(e, c, a);
         System.out.println(r);
         rr.add(r);
         UniqueId uid = r.getEntityId();
+        
         Rent r1 = rr.get(uid);
+
         assertEquals(r, r1);
         rr.remove(r1);
         assertThrows(EntityNotFoundException.class, () -> {
             rr.get(uid);
         });
     }
+
+
+
 
     @Test
     void update_count() {
@@ -92,4 +103,30 @@ class RentRepositoryTest {
 //        assertEquals(count, 0);
     }
 
+    @Test
+    void count() {
+        Address address1 = DataFaker.getAddress();
+        Address address2 = DataFaker.getAddress();
+        Address address3 = DataFaker.getAddress();
+        Client client1 = DataFaker.getClient(address1);
+        Client client2 = DataFaker.getClient(address2);
+        Client client3 = DataFaker.getClient(address3);
+        Equipment eq1 = DataFaker.getCamera();
+        Equipment eq2 = DataFaker.getTrivet();
+        Equipment eq3 = DataFaker.getMicrophone();
+
+        Rent r1 = DataFaker.getRent(eq1, client1, address1);
+        Rent r2 = DataFaker.getRent(eq2, client2, address2);
+        Rent r3 = DataFaker.getRent(eq3, client3, address3);
+
+        rr.add(r1);
+        rr.add(r2);
+        rr.add(r3);
+
+        assertEquals(rr.count(), 3);
+
+        rr.remove(r1);
+
+        assertEquals(rr.count(), 2);
+    }
 }

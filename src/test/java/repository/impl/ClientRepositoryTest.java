@@ -116,4 +116,24 @@ class ClientRepositoryTest {
         clientList = cr.getAll();
         assertEquals(0, clientList.size());
     }
+
+    @Test
+    void count() {
+        Address address1 = DataFaker.getAddress();
+        Address address2 = DataFaker.getAddress();
+        Address address3 = DataFaker.getAddress();
+        Client client1 = DataFaker.getClient(address1);
+        Client client2 = DataFaker.getClient(address2);
+        Client client3 = DataFaker.getClient(address3);
+
+        cr.add(client1);
+        cr.add(client2);
+        cr.add(client3);
+
+        assertEquals(cr.count(), 3);
+
+        cr.remove(client1);
+
+        assertEquals(cr.count(), 2);
+    }
 }
