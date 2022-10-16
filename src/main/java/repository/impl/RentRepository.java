@@ -8,6 +8,7 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import model.*;
+import model.EQ.Equipment;
 import repository.Repository;
 import repository.RepositoryType;
 
@@ -93,4 +94,40 @@ public class RentRepository implements Repository<Rent> {
     public Long count() {
         return em.createQuery("Select count(rent) from Rent rent", Long.class).getSingleResult();
     }
+
+    public List<Rent> getRentByClient(Client clientP) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Rent> cq = cb.createQuery(Rent.class);
+        Root<Rent> rent = cq.from(Rent.class);
+
+        cq.select(rent);
+        cq.where(cb.equal(rent.get(Rent_.CLIENT), clientP));
+
+        TypedQuery<Rent> q = em.createQuery(cq);
+        List<Rent> rents = q.getResultList();
+
+        if(rents.isEmpty()) {
+            throw new EntityNotFoundException("Rent not found for client: " + clientP);
+        }
+        return rents;
+    }
+
+    public List<Rent> getRentByEq(Equipment equipment) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Rent> cq = cb.createQuery(Rent.class);
+        Root<Rent> rent = cq.from(Rent.class);
+
+        cq.select(rent);
+        cq.where(cb.equal(rent.get(Rent_.EQUIPMENT), equipment));
+
+        TypedQuery<Rent> q = em.createQuery(cq);
+        List<Rent> rents = q.getResultList();
+
+        if(rents.isEmpty()) {
+            throw new EntityNotFoundException("Rent not found for equipment: " + equipment);
+        }
+        return rents;
+    }
+
+
 }

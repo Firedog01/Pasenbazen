@@ -1,11 +1,14 @@
 package managers;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.LockModeType;
 import model.Client;
 import model.Address;
 import model.EQ.Equipment;
 import model.Rent;
 import model.UniqueId;
+import org.hibernate.annotations.OptimisticLock;
+import org.hibernate.annotations.OptimisticLocking;
 import org.joda.time.LocalDateTime;
 import repository.impl.RentRepository;
 
@@ -68,6 +71,7 @@ public class RentManager {
             }
         }
 
+
         if (good) {
             Rent rent = new Rent(beginTime, endTime, equipment, client, address);
             rentRepository.add(rent);
@@ -78,12 +82,8 @@ public class RentManager {
     }
 
     public List<Rent> getClientRents(Client client) {
-        // todo
-//        Predicate<Rent> rentPredicate = (
-//                x -> x.getClient() == client && !x.getClient().isArchive()
-//                );
-//
-//        return rentRepository.findBy(rentPredicate);
+        // todo  To w sumie mozna albo brac wszystko i wybierac, albo zrobic w repository metode do tego
+        return rentRepository.getRentByClient(client);
     }
 
     public void shipEquipment(Rent rent) {
@@ -98,39 +98,41 @@ public class RentManager {
 
     public LocalDateTime whenAvailable(Equipment equipment) {
         // todo
-//        if (equipment.isArchive() || equipment.isMissing()) {
-//            return null;
-//        }
-//        LocalDateTime when = LocalDateTime.now();
-//        List<Rent> equipmentRents = getEquipmentRents(equipment);
-//
-//        for (Rent rent :
-//                equipmentRents) {
-//            if (when.isAfter(rent.getBeginTime()) && when.isBefore(rent.getEndTime())) {
-//                when = rent.getEndTime();
-//            }
-//        }
-//        return when;
+        if (equipment.isArchive() || equipment.isMissing()) {
+            return null;
+        }
+        LocalDateTime when = LocalDateTime.now();
+        List<Rent> equipmentRents = rentRepository.getRentByEq(equipment);
+//        List<Rent> equipmentRents = equipment.getEquipmentRents();
+
+        for (Rent rent :
+                equipmentRents) {
+            if (when.isAfter(rent.getBeginTime()) && when.isBefore(rent.getEndTime())) {
+                when = rent.getEndTime();
+            }
+        }
+        return when;
     }
 
     public LocalDateTime untilAvailable(Equipment equipment) {
         // todo
-//        LocalDateTime until = null;
-//
-//        if (equipment.isArchive() || equipment.isMissing()) {
-//            return null;
-//        }
-//
-//        LocalDateTime when = whenAvailable(equipment);
-//        List<Rent> equipmentRents = getEquipmentRents(equipment);
-//
-//        for (Rent rent :
-//                equipmentRents) {
-//            if (when.isBefore(rent.getBeginTime())) {
-//                until = rent.getEndTime();
-//            }
-//        } //FIXME Is there a mistake?
-//        return until;
+        LocalDateTime until = null;
+
+        if (equipment.isArchive() || equipment.isMissing()) {
+            return null;
+        }
+
+        LocalDateTime when = whenAvailable(equipment);
+        List<Rent> equipmentRents = rentRepository.getRentByEq(equipment);
+//        List<Rent> equipmentRents = equipment.getEquipmentRents();
+
+        for (Rent rent :
+                equipmentRents) {
+            if (when.isBefore(rent.getBeginTime())) {
+                until = rent.getEndTime();
+            }
+        }
+        return until;
     }
 
     public void cancelReservation(Rent rent) {
@@ -145,13 +147,13 @@ public class RentManager {
 
     public double checkClientBalance(Client client) {
         // todo
-//        List<Rent> rentList = getClientRents(client);
-//        double balance = 0.0;
-//        for (Rent rent :
-//                rentList) {
-//            balance += rent.getRentCost();
-//        }
-//        return balance;
+        List<Rent> rentList = getClientRents(client);
+        double balance = 0.0;
+        for (Rent rent :
+                rentList) {
+            balance += rent.getRentCost();
+        }
+        return balance;
     }
 
     public List<Rent> getAllRents() {
