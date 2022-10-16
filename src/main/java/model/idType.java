@@ -9,4 +9,16 @@ public enum idType {
     idType(int id) {
         this.id = id;
     }
+
+    public String toString() {
+        switch(id) {
+            case 0 -> {
+                return "Dowod Osobisty";
+            }
+            case 1 -> {
+                return "Paszport";
+            }
+        }
+        return "";
+    }
 }

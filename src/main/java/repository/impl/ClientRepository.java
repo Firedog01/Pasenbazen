@@ -1,20 +1,18 @@
 package repository.impl;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityNotFoundException;
-import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.TypedQuery;
+import exception.ClientException;
+import jakarta.persistence.*;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
+import jakarta.transaction.Transactional;
 import model.Client;
 import model.Client_;
 import model.UniqueId;
-import net.bytebuddy.asm.Advice;
+import model.idType;
 import repository.Repository;
 
 import java.util.List;
-import java.util.UUID;
 
 
 public class ClientRepository implements Repository<Client> {
@@ -40,6 +38,26 @@ public class ClientRepository implements Repository<Client> {
             throw new EntityNotFoundException("Client not found for uniqueId: " + uniqueId);
         }
         return clients.get(0);
+    }
+
+    public Client getByClientId(String clientId, idType clientIdType) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Client> cq = cb.createQuery(Client.class);
+        Root<Client> clientRoot = cq.from(Client.class);
+
+        cq.select(clientRoot);
+        cq.where(cb.and(
+                cb.equal(clientRoot.get(Client_.CLIENT_ID), clientId),
+                cb.equal(clientRoot.get(Client_.ID_TYPE), clientIdType)
+        ));
+
+        TypedQuery<Client> q = em.createQuery(cq);
+        try {
+            return q.getSingleResult();
+        } catch (NoResultException e) {
+            throw new EntityNotFoundException("Client not found for clientId and clientIdType:" +
+                    " " + clientId + " " + clientIdType.toString());
+        }
     }
 
     @Override

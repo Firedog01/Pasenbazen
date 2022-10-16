@@ -1,14 +1,12 @@
 package repository.impl;
 
 import exception.ClientException;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.EntityNotFoundException;
-import jakarta.persistence.Persistence;
-import model.Address;
-import model.Client;
+import jakarta.persistence.*;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
+import model.*;
 import model.EQ.Equipment;
-import model.UniqueId;
-import model.idType;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import repository.DataFaker;
@@ -26,6 +24,8 @@ class ClientRepositoryTest {
     static AddressRepository ar;
     static RepositoryFactory rf;
     static EntityManagerFactory emf;
+
+    static EntityTransaction et;
 
     @BeforeAll
     static void beforeAll() {
@@ -136,4 +136,85 @@ class ClientRepositoryTest {
 
         assertEquals(cr.count(), 2);
     }
+
+
+    @Test
+    void idkGet() {
+        ClientRepository cr2 = (ClientRepository) rf.getRepository(RepositoryType.ClientRepository);
+        AddressRepository ar2 = (AddressRepository) rf.getRepository(RepositoryType.AddressRepository);
+
+        Client c = DataFaker.getClient();
+        Client c2 = DataFaker.getClient();
+
+        cr.add(c);
+
+        EntityManager em = emf.createEntityManager();
+        EntityManager em2 = emf.createEntityManager();
+
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Client> cq = cb.createQuery(Client.class);
+        Root<Client> client = cq.from(Client.class);
+
+        EntityTransaction et = em.getTransaction();
+        EntityTransaction et2 = em2.getTransaction();
+
+        et.begin();
+        et2.begin();
+
+        c.setFirstName("test");
+        cr.update(c);
+
+
+        cq.select(client);
+        cq.where(cb.equal(client.get(Client_.ENTITY_ID), c.getEntityId()));
+
+        et2.rollback();
+
+        TypedQuery<Client> q = em.createQuery(cq);
+        q.setLockMode(LockModeType.OPTIMISTIC);
+        List<Client> clients = q.getResultList();
+
+
+        et.commit();
+//        et2.commit();
+
+
+        System.out.println(clients.get(0));
+
+        if(clients.isEmpty()) {
+            throw new EntityNotFoundException("Client not found for uniqueId: " + c.getEntityId());
+        }
+
+
+    }
+
+    @Test
+    void getByClientIdTest() throws ClientException {
+        Address a1 = DataFaker.getAddress();
+
+        String clientId1 = "__1__";
+        String clientId2 = "__2__";
+
+
+        Client c1 = new Client(clientId1, idType.DowodOsobisty, "fname", "lname", a1);
+        Client c2 = new Client(clientId1, idType.Passport, "fname", "lname", a1);
+        Client c3 = new Client(clientId2, idType.DowodOsobisty, "fname", "lname", a1);
+
+        Client c4 = new Client(clientId1, idType.DowodOsobisty, "fname", "lname", a1);
+
+        cr.add(c1);
+        cr.add(c2);
+        cr.add(c3);
+
+        assertThrows(EntityExistsException.class, () -> {cr.add(c4);});
+
+        Client c1_ = cr.getByClientId(clientId1, idType.DowodOsobisty);
+        assertEquals(c1, c1_);
+        Client c2_ = cr.getByClientId(clientId1, idType.Passport);
+        assertEquals(c2, c2_);
+        Client c3_ = cr.getByClientId(clientId2, idType.DowodOsobisty);
+        assertEquals(c3, c3_);
+    }
+
+
 }
