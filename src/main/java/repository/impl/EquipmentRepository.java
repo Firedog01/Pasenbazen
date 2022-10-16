@@ -53,24 +53,42 @@ public class EquipmentRepository implements Repository<Equipment> {
     public void add(Equipment elem) {
         EntityTransaction et = em.getTransaction();
         et.begin();
-        this.em.persist(elem);
-        et.commit();
+        try {
+            this.em.persist(elem);
+            et.commit();
+        } finally {
+            if(et.isActive()) {
+                et.rollback();
+            }
+        }
     }
 
     @Override
     public void remove(Equipment elem) {
         EntityTransaction et = em.getTransaction();
         et.begin();
-        this.em.remove(elem);
-        et.commit();
+        try {
+            this.em.remove(elem);
+            et.commit();
+        } finally {
+            if(et.isActive()) {
+                et.rollback();
+            }
+        }
     }
 
     @Override
     public void update(Equipment elem) {
         EntityTransaction et = em.getTransaction();
         et.begin();
-        this.em.merge(elem);
-        et.commit();
+        try {
+            this.em.merge(elem);
+            et.commit();
+        } finally {
+            if(et.isActive()) {
+                et.rollback();
+            }
+        }
     }
 
     @Override

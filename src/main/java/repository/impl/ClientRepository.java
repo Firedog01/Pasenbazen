@@ -84,16 +84,28 @@ public class ClientRepository implements Repository<Client> {
     public void remove(Client elem) {
         EntityTransaction et = em.getTransaction();
         et.begin();
-        this.em.remove(elem);
-        et.commit();
+        try {
+            this.em.remove(elem);
+            et.commit();
+        } finally {
+            if(et.isActive()) {
+                et.rollback();
+            }
+        }
     }
 
     @Override
     public void update(Client elem) {
         EntityTransaction et = em.getTransaction();
         et.begin();
-        this.em.merge(elem);
-        et.commit();
+        try {
+            this.em.merge(elem);
+            et.commit();
+        } finally {
+            if(et.isActive()) {
+                et.rollback();
+            }
+        }
     }
 
     @Override
