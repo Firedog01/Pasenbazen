@@ -119,6 +119,8 @@ class ClientRepositoryTest {
 
     @Test
     void count() {
+        Long startingCount = cr.count();
+
         Address address1 = DataFaker.getAddress();
         Address address2 = DataFaker.getAddress();
         Address address3 = DataFaker.getAddress();
@@ -130,11 +132,14 @@ class ClientRepositoryTest {
         cr.add(client2);
         cr.add(client3);
 
-        assertEquals(cr.count(), 3);
+        assertEquals(startingCount + 3, cr.count());
 
         cr.remove(client1);
 
-        assertEquals(cr.count(), 2);
+        assertEquals( startingCount + 2, cr.count());
+
+        cr.remove(client2);
+        cr.remove(client3);
     }
 
 
@@ -184,8 +189,6 @@ class ClientRepositoryTest {
         if(clients.isEmpty()) {
             throw new EntityNotFoundException("Client not found for uniqueId: " + c.getEntityId());
         }
-
-
     }
 
     @Test
@@ -194,7 +197,6 @@ class ClientRepositoryTest {
 
         String clientId1 = "__1__";
         String clientId2 = "__2__";
-
 
         Client c1 = new Client(clientId1, idType.DowodOsobisty, "fname", "lname", a1);
         Client c2 = new Client(clientId1, idType.Passport, "fname", "lname", a1);
@@ -214,6 +216,10 @@ class ClientRepositoryTest {
         assertEquals(c2, c2_);
         Client c3_ = cr.getByClientId(clientId2, idType.DowodOsobisty);
         assertEquals(c3, c3_);
+
+        cr.remove(c1_);
+        cr.remove(c2_);
+        cr.remove(c3_);
     }
 
 

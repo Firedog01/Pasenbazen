@@ -70,8 +70,14 @@ public class ClientRepository implements Repository<Client> {
     public void add(Client elem) {
         EntityTransaction et = em.getTransaction();
         et.begin();
-        this.em.persist(elem);
-        et.commit();
+        try {
+            this.em.persist(elem);
+            et.commit();
+        } finally {
+            if(et.isActive()) {
+                et.rollback();
+            }
+        }
     }
 
     @Override
