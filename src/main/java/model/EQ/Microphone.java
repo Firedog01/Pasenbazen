@@ -1,5 +1,6 @@
 package model.EQ;
 
+import exception.EquipmentException;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
@@ -18,7 +19,7 @@ public class Microphone extends Equipment{
                       double bail,
                       String name,
                       String sensitivity
-    ) {
+    ) throws EquipmentException {
         super(firstDayCost, nextDaysCost, bail, name);
         this.sensitivity = sensitivity;
     }

@@ -1,5 +1,6 @@
 package model.EQ;
 
+import exception.EquipmentException;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
@@ -18,7 +19,7 @@ public class Trivet extends Equipment{
                   double bail,
                   String name,
                   double weight
-    ) {
+    ) throws EquipmentException {
         super(firstDayCost, nextDaysCost, bail, name);
         this.weight = weight;
     }

@@ -1,6 +1,7 @@
 package model.EQ;
 
 
+import exception.EquipmentException;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
@@ -19,7 +20,7 @@ public class Lens extends Equipment{
                 double bail,
                 String name,
                 String focalLength
-    ) {
+    ) throws EquipmentException {
         super(firstDayCost, nextDaysCost, bail, name);
         this.focalLength = focalLength;
     }

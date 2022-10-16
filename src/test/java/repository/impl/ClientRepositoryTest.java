@@ -105,6 +105,10 @@ class ClientRepositoryTest {
         a1_.setStreet(a1_street);
         ar.update(a1_);
         assertNotEquals(a1_street, c1_.getAddress().getStreet());
+
+        Address a1__ = ar.get(a1.getEntityId());
+        assertEquals(a1_street, a1__.getStreet());
+
         Client c2_2 = cr.get(c2_.getEntityId());
 //        assertEquals(a1_street, c2_2.getAddress().getStreet()); // problem
         cr.remove(c2_2);
@@ -142,54 +146,6 @@ class ClientRepositoryTest {
         cr.remove(client3);
     }
 
-
-    @Test
-    void idkGet() {
-        ClientRepository cr2 = (ClientRepository) rf.getRepository(RepositoryType.ClientRepository);
-        AddressRepository ar2 = (AddressRepository) rf.getRepository(RepositoryType.AddressRepository);
-
-        Client c = DataFaker.getClient();
-        Client c2 = DataFaker.getClient();
-
-        cr.add(c);
-
-        EntityManager em = emf.createEntityManager();
-        EntityManager em2 = emf.createEntityManager();
-
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Client> cq = cb.createQuery(Client.class);
-        Root<Client> client = cq.from(Client.class);
-
-        EntityTransaction et = em.getTransaction();
-        EntityTransaction et2 = em2.getTransaction();
-
-        et.begin();
-        et2.begin();
-
-        c.setFirstName("test");
-        cr.update(c);
-
-
-        cq.select(client);
-        cq.where(cb.equal(client.get(Client_.ENTITY_ID), c.getEntityId()));
-
-        et2.rollback();
-
-        TypedQuery<Client> q = em.createQuery(cq);
-        q.setLockMode(LockModeType.OPTIMISTIC);
-        List<Client> clients = q.getResultList();
-
-
-        et.commit();
-//        et2.commit();
-
-
-        System.out.println(clients.get(0));
-
-        if(clients.isEmpty()) {
-            throw new EntityNotFoundException("Client not found for uniqueId: " + c.getEntityId());
-        }
-    }
 
     @Test
     void getByClientIdTest() throws ClientException {

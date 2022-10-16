@@ -1,9 +1,14 @@
 package model.EQ;
 
+import exception.EquipmentException;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import model.AbstractEntity;
+import model.Rent;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "equipment")
@@ -42,9 +47,18 @@ public abstract class Equipment extends AbstractEntity {
     @Column(name = "missing")
     private boolean missing;
 
+    @OneToMany(targetEntity = Rent.class, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<Rent> equipmentRents = new ArrayList<>();
 
-    public Equipment(double firstDayCost, double nextDaysCost, double bail, String name) {
-        super();
+
+    public Equipment(double firstDayCost, double nextDaysCost, double bail, String name
+    ) throws EquipmentException {
+        if(firstDayCost <= 0.0 || nextDaysCost <= 0.0 || bail <= 0.0) {
+            throw new EquipmentException("Prosze podac prawidlowy koszt wyporzycznia");
+        }
+        if(name.length() == 0) {
+            throw new EquipmentException("Prosze podac prawidlowa nazwe");
+        }
         this.firstDayCost = firstDayCost;
         this.nextDaysCost = nextDaysCost;
         this.bail = bail;
@@ -99,6 +113,9 @@ public abstract class Equipment extends AbstractEntity {
         return missing;
     }
 
+    public List<Rent> getEquipmentRents() {
+        return equipmentRents;
+    }
 
 
     public void setFirstDayCost(double firstDayCost) {
@@ -129,4 +146,7 @@ public abstract class Equipment extends AbstractEntity {
         this.missing = missing;
     }
 
+    public void setEquipmentRents(List<Rent> equipmentRents) {
+        this.equipmentRents = equipmentRents;
+    }
 }

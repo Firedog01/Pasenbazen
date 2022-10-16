@@ -1,6 +1,7 @@
 package repository;
 
 import exception.ClientException;
+import exception.EquipmentException;
 import model.Address;
 import model.Client;
 import model.EQ.*;
@@ -41,28 +42,48 @@ public class DataFaker {
     }
 
     public static Camera getCamera() {
-        return new Camera(Math.random() * 100, Math.random() * 200,
-                Math.random() * 1000, randStr(10), randStr(8));
+        try {
+            return new Camera(Math.random() * 100, Math.random() * 200,
+                    Math.random() * 1000, randStr(10), randStr(8));
+        } catch (EquipmentException e) {
+            return null;
+        }
     }
 
     public static Lens getLens() {
-        return new Lens(Math.random() * 100, Math.random() * 200,
-                Math.random() * 1000, randStr(10), randStr(8));
+        try {
+            return new Lens(Math.random() * 100, Math.random() * 200,
+                    Math.random() * 1000, randStr(10), randStr(8));
+        } catch (EquipmentException e) {
+            return null;
+        }
     }
 
     public static Lighting getLighting() {
-        return new Lighting(Math.random() * 100, Math.random() * 200,
-                Math.random() * 1000, randStr(10), randStr(8));
+        try {
+            return new Lighting(Math.random() * 100, Math.random() * 200,
+                    Math.random() * 1000, randStr(10), randStr(8));
+        } catch (EquipmentException e) {
+            return null;
+        }
     }
 
     public static Microphone getMicrophone() {
-        return new Microphone(Math.random() * 100, Math.random() * 200,
+        try {
+            return new Microphone(Math.random() * 100, Math.random() * 200,
                 Math.random() * 1000, randStr(10), randStr(8));
+        } catch (EquipmentException e) {
+            return null;
+        }
     }
 
     public static Trivet getTrivet() {
-        return new Trivet(Math.random() * 100, Math.random() * 200,
+        try {
+            return new Trivet(Math.random() * 100, Math.random() * 200,
                 Math.random() * 1000, randStr(10), Math.random() * 10);
+        } catch (EquipmentException e) {
+            return null;
+        }
     }
 
     public static Rent getRent(Equipment e, Client c, Address a) {

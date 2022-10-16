@@ -1,12 +1,14 @@
 package managers;
 
 import exception.ClientException;
+import jakarta.persistence.EntityNotFoundException;
 import model.Client;
 
 import model.Address;
 import model.idType;
 import repository.impl.ClientRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
@@ -18,51 +20,39 @@ public class ClientManager {
         this.clientRepository = clientRepository;
     }
 
-    public Client registerClient(String name,
-                                 String surname,
-                                 String id,
-                                 idType idtype,
-                                 Address address
+    public Client registerClient(String clientId, idType idtype, String name,
+                                 String surname, Address address
     ) throws ClientException {
-
-
-        Client client = new Client(name, idtype, surname, id, address);
+        Client client = new Client(clientId, idtype, name, surname, address);
         clientRepository.add(client);
         return client;
-
     }
-//
-//    public void unregisterClient(Client client) {
-//        Predicate<Client> clientPredicate = (x -> x == client);
-//
-//        if (!clientRepository.findBy(clientPredicate).isEmpty()) {
-//            clientRepository.findBy(clientPredicate).get(0).setArchive(true);
-//        }
-//    }
-//
-//    public Client getClient(String id, idType idType) {
-//        Predicate<Client> clientPredicate = (
-//                c -> (c.getIdType() == idType && Objects.equals(c.getClientId(), id)) //FIXME
-//                );
-//
-//        if (clientRepository.findBy(clientPredicate).isEmpty()) {
-//            return null;
-//        } else {
-//            return clientRepository.findBy(clientPredicate).get(0);
-//        }
-//    }
-//
-//    public List<Client> findClients(Predicate<Client> predicate) {
-//        Predicate<Client> clientPredicate = (
-//                client -> !client.isArchive());
-//
-//        return clientRepository.findBy(clientPredicate);
-//    }
-//
-//    public List<Client> getAllClients() {
-//        Predicate<Client> clientPredicate = (
-//                x -> !x.isArchive());
-//
-//        return clientRepository.findBy(clientPredicate);
-//    }
+
+    public void unregisterClient(Client client) {
+        Client c = clientRepository.get(client.getEntityId());
+        clientRepository.remove(c);
+    }
+
+    public Client getClient(String clientId, idType idType) {
+        try {
+            return clientRepository.getByClientId(clientId, idType);
+        } catch (EntityNotFoundException ex) {
+            return null;
+        }
+    }
+
+    public List<Client> getAllClients() {
+        return clientRepository.getAll();
+    }
+
+    public List<Client> getAllAvailableClients() {
+        List<Client> all = getAllClients();
+        List<Client> available = new ArrayList<>();
+        for (Client c : all) {
+            if(!(c.isArchive())) {
+                available.add(c);
+            }
+        }
+        return available;
+    }
 }
