@@ -36,7 +36,6 @@ public class RentManager {
         if (beginTime.isEqual(now) || beginTime.isBefore(now)) {
             return null;
         }
-
         if (beginTime.isAfter(endTime)) {
             return null;
         }
@@ -52,16 +51,14 @@ public class RentManager {
             if (beginTime.isBefore(curRent.getEndTime()) && beginTime.isAfter(curRent.getBeginTime())) {
                 good = false;
             }
-
-            // new rent time inside another rent
+            //         +----- old rent -----+
+            // +----- new rent -----+
+            if (endTime.isAfter(curRent.getBeginTime()) && endTime.isBefore(curRent.getEndTime())) {
+                good = false;
+            }
             // +----- old rent -----+
             //    +-- new rent --+
             if (beginTime.isAfter(curRent.getBeginTime()) && beginTime.isBefore(curRent.getEndTime())) {
-                good = false;
-            }
-            //    +-- old rent -----+
-            // +----- new rent --+
-            if (endTime.isAfter(curRent.getBeginTime()) && endTime.isBefore(curRent.getEndTime())) {
                 good = false;
             }
             //    +-- old rent --+

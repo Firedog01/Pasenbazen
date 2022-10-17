@@ -34,10 +34,10 @@ public class RentRepository implements Repository<Rent> {
         EntityTransaction et = em.getTransaction();
         et.begin();
 
-        List<Rent> rents =  em.createQuery(cq).setLockMode(LockModeType.OPTIMISTIC).getResultList();
+        List<Rent> rents = em.createQuery(cq).setLockMode(LockModeType.OPTIMISTIC).getResultList();
         et.commit();
 
-        if(rents.isEmpty()) {
+        if (rents.isEmpty()) {
             throw new EntityNotFoundException("Rent not found for uniqueId: " + uniqueId);
         }
         return rents.get(0);
@@ -60,11 +60,21 @@ public class RentRepository implements Repository<Rent> {
         EntityTransaction et = em.getTransaction();
         et.begin();
         try {
+            Equipment e = em.find(Equipment.class, elem.getEquipment().getId());
+            em.lock(e, LockModeType.OPTIMISTIC_FORCE_INCREMENT);
+            elem.setEquipment(e);
+//            try {
+//                em.lock(elem.getEquipment(), LockModeType.OPTIMISTIC_FORCE_INCREMENT);
+//            } catch (IllegalArgumentException e) { // equipment does not exist, cannot put lock
+//                // System.out.println("lock failed");
+//            }
+
             em.persist(elem);
-            em.lock(elem.getEquipment(), LockModeType.OPTIMISTIC_FORCE_INCREMENT);
             et.commit();
-        }
-        finally {
+            System.out.println("equipment found: " + e.toString());
+        } catch (RollbackException e) {
+            System.out.println("rollback");
+        } finally {
             if (et.isActive()) {
                 et.rollback();
             }

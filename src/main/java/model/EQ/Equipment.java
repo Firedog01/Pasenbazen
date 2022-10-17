@@ -21,7 +21,7 @@ public abstract class Equipment extends AbstractEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(initialValue = 0, name = "equipment_sequence_generator")
     @Column(name = "equipment_id")
-    private long id;
+    private Long id;
 
     @Column(name = "name")
     @NotNull
@@ -54,7 +54,7 @@ public abstract class Equipment extends AbstractEntity {
     public Equipment(double firstDayCost, double nextDaysCost, double bail, String name
     ) throws EquipmentException {
         if(firstDayCost <= 0.0 || nextDaysCost <= 0.0 || bail <= 0.0) {
-            throw new EquipmentException("Prosze podac prawidlowy koszt wyporzycznia");
+            throw new EquipmentException("Prosze podac prawidlowy koszt wypozyczenia");
         }
         if(name.length() == 0) {
             throw new EquipmentException("Prosze podac prawidlowa nazwe");
@@ -72,8 +72,9 @@ public abstract class Equipment extends AbstractEntity {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Equipment{");
-        sb.append("firstDayCost=").append(firstDayCost);
+        final StringBuilder sb = new StringBuilder("-------------------- Equipment{");
+        sb.append("id=").append(id);
+        sb.append(", firstDayCost=").append(firstDayCost);
         sb.append(", nextDaysCost=").append(nextDaysCost);
         sb.append(", bail=").append(bail);
         sb.append(", name='").append(name).append('\'');
@@ -83,6 +84,10 @@ public abstract class Equipment extends AbstractEntity {
         sb.append(", missing=").append(missing);
         sb.append('}');
         return sb.toString();
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public double getFirstDayCost() {

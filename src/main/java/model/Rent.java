@@ -90,7 +90,8 @@ public class Rent extends AbstractEntity {
             }
         }
     }
-    public String getRentInfo() {
+
+    public String toString() {
         final StringBuilder sb = new StringBuilder("Rent{");
         sb.append("id=").append(id);
         sb.append("Klient=").append(getClient().toString()); //FIXME to string
