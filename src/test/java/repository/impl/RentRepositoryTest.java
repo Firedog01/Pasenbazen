@@ -112,6 +112,8 @@ class RentRepositoryTest {
 
     @Test
     void count() {
+        Long startingCount = rr.count();
+
         Address address1 = DataFaker.getAddress();
         Address address2 = DataFaker.getAddress();
         Address address3 = DataFaker.getAddress();
@@ -130,11 +132,11 @@ class RentRepositoryTest {
         rr.add(r2);
         rr.add(r3);
 
-        assertEquals(rr.count(), 3);
+        assertEquals(startingCount + 3, rr.count());
 
         rr.remove(r1);
 
-        assertEquals(rr.count(), 2);
+        assertEquals(startingCount + 2, rr.count());
     }
 
     @Test
@@ -155,6 +157,8 @@ class RentRepositoryTest {
             rentRepositoryList.add((RentRepository) rf.getRepository(RepositoryType.RentRepository));
         }
 
+        List<Rent> rents;
+
         AtomicInteger atomicInteger = new AtomicInteger();
         CyclicBarrier cyclicBarrier = new CyclicBarrier(amount);
         List<Thread> threadList = new ArrayList<Thread>();
@@ -165,6 +169,7 @@ class RentRepositoryTest {
                 @Override
                 public void run() {
                     try {
+
                         cyclicBarrier.await();
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);

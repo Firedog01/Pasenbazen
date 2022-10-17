@@ -66,6 +66,14 @@ public class Rent extends AbstractEntity {
 
     protected Rent() {}
 
+    public Rent(long id, LocalDateTime beginTime, LocalDateTime endTime,
+                Equipment equipment, Client client, Address shippingAddress) {
+
+        this(beginTime, endTime, equipment, client, shippingAddress);
+        this.id = id;
+    }
+
+
     public double getRentCost() {
         if (!eqReturned) {
             return 0.0;
