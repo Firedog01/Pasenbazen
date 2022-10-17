@@ -31,8 +31,10 @@ public class ClientRepository implements Repository<Client> {
         cq.select(client);
         cq.where(cb.equal(client.get(Client_.ENTITY_ID), uniqueId));
 
-        TypedQuery<Client> q = em.createQuery(cq);
-        List<Client> clients = q.getResultList();
+        EntityTransaction et = em.getTransaction();
+        et.begin();
+        List<Client> clients = em.createQuery(cq).setLockMode(LockModeType.OPTIMISTIC).getResultList();
+        et.commit();
 
         if(clients.isEmpty()) {
             throw new EntityNotFoundException("Client not found for uniqueId: " + uniqueId);
@@ -51,9 +53,14 @@ public class ClientRepository implements Repository<Client> {
                 cb.equal(clientRoot.get(Client_.ID_TYPE), clientIdType)
         ));
 
-        TypedQuery<Client> q = em.createQuery(cq);
+        EntityTransaction et = em.getTransaction();
+        et.begin();
+        TypedQuery<Client> q = em.createQuery(cq).setLockMode(LockModeType.OPTIMISTIC);
+
         try {
-            return q.getSingleResult();
+            Client client = q.getSingleResult(); //Transaction is not ending so commit is needed.
+            et.commit();
+            return client;
         } catch (NoResultException e) {
             throw new EntityNotFoundException("Client not found for clientId and clientIdType:" +
                     " " + clientId + " " + clientIdType.toString());
@@ -62,7 +69,12 @@ public class ClientRepository implements Repository<Client> {
 
     @Override
     public List<Client> getAll() {
-        List<Client> clientList = em.createQuery("Select client from Client client", Client.class).getResultList();
+
+        EntityTransaction et = em.getTransaction();
+        et.begin();
+        List<Client> clientList = em.createQuery("Select client from Client client", Client.class)
+                .setLockMode(LockModeType.OPTIMISTIC).getResultList();
+        et.commit();
         return clientList;
     }
 
@@ -72,6 +84,7 @@ public class ClientRepository implements Repository<Client> {
         et.begin();
         try {
             this.em.persist(elem);
+            em.lock(elem, LockModeType.OPTIMISTIC_FORCE_INCREMENT);
             et.commit();
         } finally {
             if(et.isActive()) {
@@ -85,6 +98,7 @@ public class ClientRepository implements Repository<Client> {
         EntityTransaction et = em.getTransaction();
         et.begin();
         try {
+            em.lock(elem, LockModeType.OPTIMISTIC_FORCE_INCREMENT);
             this.em.remove(elem);
             et.commit();
         } finally {
@@ -99,6 +113,7 @@ public class ClientRepository implements Repository<Client> {
         EntityTransaction et = em.getTransaction();
         et.begin();
         try {
+            em.lock(elem, LockModeType.OPTIMISTIC_FORCE_INCREMENT);
             this.em.merge(elem);
             et.commit();
         } finally {
@@ -110,6 +125,11 @@ public class ClientRepository implements Repository<Client> {
 
     @Override
     public Long count() {
-        return em.createQuery("Select count(client) from Client client", Long.class).getSingleResult();
+        EntityTransaction et = em.getTransaction();
+        et.begin();
+        Long count =  em.createQuery("Select count(client) from Client client", Long.class)
+                .setLockMode(LockModeType.OPTIMISTIC).getSingleResult();
+        et.commit();
+        return count;
     }
 }

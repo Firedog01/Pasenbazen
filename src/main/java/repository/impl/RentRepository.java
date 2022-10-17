@@ -1,19 +1,14 @@
 package repository.impl;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityNotFoundException;
-import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.TypedQuery;
+import jakarta.persistence.*;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import model.*;
 import model.EQ.Equipment;
 import repository.Repository;
-import repository.RepositoryType;
 
 import java.util.List;
-import java.util.UUID;
 
 
 public class RentRepository implements Repository<Rent> {
@@ -26,6 +21,8 @@ public class RentRepository implements Repository<Rent> {
 
     @Override
     public Rent get(UniqueId uniqueId) {
+
+
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Rent> cq = cb.createQuery(Rent.class);
         Root<Rent> rent = cq.from(Rent.class);
@@ -33,8 +30,12 @@ public class RentRepository implements Repository<Rent> {
         cq.select(rent);
         cq.where(cb.equal(rent.get(Rent_.ENTITY_ID), uniqueId));
 
-        TypedQuery<Rent> q = em.createQuery(cq);
-        List<Rent> rents = q.getResultList();
+
+        EntityTransaction et = em.getTransaction();
+        et.begin();
+
+        List<Rent> rents =  em.createQuery(cq).setLockMode(LockModeType.OPTIMISTIC).getResultList();
+        et.commit();
 
         if(rents.isEmpty()) {
             throw new EntityNotFoundException("Rent not found for uniqueId: " + uniqueId);
@@ -44,8 +45,14 @@ public class RentRepository implements Repository<Rent> {
 
     @Override
     public List<Rent> getAll() {
-        List<Rent> rentList = em.createQuery("Select r from Rent r", Rent.class).getResultList();
-        return rentList;
+        EntityTransaction et = em.getTransaction();
+        et.begin();
+
+        TypedQuery<Rent> rentQuery = em.createQuery("Select r from Rent r", Rent.class)
+                .setLockMode(LockModeType.OPTIMISTIC);
+
+        et.commit();
+        return rentQuery.getResultList();
     }
 
     @Override
@@ -54,6 +61,7 @@ public class RentRepository implements Repository<Rent> {
         et.begin();
         try {
             this.em.persist(elem);
+            em.lock(elem, LockModeType.OPTIMISTIC_FORCE_INCREMENT);
             et.commit();
         } finally {
             if(et.isActive()) {
@@ -67,6 +75,7 @@ public class RentRepository implements Repository<Rent> {
         EntityTransaction et = em.getTransaction();
         et.begin();
         try {
+            em.lock(elem, LockModeType.OPTIMISTIC_FORCE_INCREMENT);
             this.em.remove(elem);
             et.commit();
         } finally {
@@ -81,6 +90,7 @@ public class RentRepository implements Repository<Rent> {
         EntityTransaction et = em.getTransaction();
         et.begin();
         try {
+            em.lock(elem, LockModeType.OPTIMISTIC_FORCE_INCREMENT);
             this.em.merge(elem);
             et.commit();
         } finally {
@@ -91,8 +101,12 @@ public class RentRepository implements Repository<Rent> {
     }
 
     @Override
-    public Long count() {
-        return em.createQuery("Select count(rent) from Rent rent", Long.class).getSingleResult();
+    public Long count() {  //FIXME not sure if that's necessary
+        EntityTransaction et = em.getTransaction();
+        et.begin();
+        Long count = em.createQuery("Select count(rent) from Rent rent", Long.class).getSingleResult();
+        et.commit();
+        return count;
     }
 
     public List<Rent> getRentByClient(Client clientP) {
@@ -103,7 +117,7 @@ public class RentRepository implements Repository<Rent> {
         cq.select(rent);
         cq.where(cb.equal(rent.get(Rent_.CLIENT), clientP));
 
-        TypedQuery<Rent> q = em.createQuery(cq);
+        TypedQuery<Rent> q = em.createQuery(cq).setLockMode(LockModeType.OPTIMISTIC);
         List<Rent> rents = q.getResultList();
 
         if(rents.isEmpty()) {
@@ -120,7 +134,7 @@ public class RentRepository implements Repository<Rent> {
         cq.select(rent);
         cq.where(cb.equal(rent.get(Rent_.EQUIPMENT), equipment));
 
-        TypedQuery<Rent> q = em.createQuery(cq);
+        TypedQuery<Rent> q = em.createQuery(cq).setLockMode(LockModeType.OPTIMISTIC);
         List<Rent> rents = q.getResultList();
 
         if(rents.isEmpty()) {

@@ -1,9 +1,6 @@
 package repository.impl;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityNotFoundException;
-import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.TypedQuery;
+import jakarta.persistence.*;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
@@ -29,8 +26,12 @@ public class AddressRepository implements Repository<Address> {
         cq.select(address);
         cq.where(cb.equal(address.get(Address_.ENTITY_ID), id));
 
-        TypedQuery<Address> q = em.createQuery(cq);
-        List<Address> addressList = q.getResultList();
+
+        EntityTransaction et = em.getTransaction();
+        et.begin();
+
+        List<Address> addressList = em.createQuery(cq).getResultList();
+        et.commit();
 
         if(addressList.isEmpty()) {
             throw new EntityNotFoundException("Address not found for uniqueId: " + id);
@@ -40,8 +41,12 @@ public class AddressRepository implements Repository<Address> {
 
     @Override
     public List<Address> getAll() {
-        List<Address> addressList = em.createQuery("Select address from Address address", Address.class).getResultList();
-        return addressList;
+        EntityTransaction et = em.getTransaction();
+        et.begin();
+
+        TypedQuery<Address> addressList = em.createQuery("Select address from Address address", Address.class)
+                .setLockMode(LockModeType.OPTIMISTIC);
+        return addressList.getResultList();
     }
 
     @Override
@@ -49,7 +54,8 @@ public class AddressRepository implements Repository<Address> {
         EntityTransaction et = em.getTransaction();
         et.begin();
         try {
-            this.em.persist(elem);
+            em.persist(elem);
+            em.lock(elem, LockModeType.OPTIMISTIC_FORCE_INCREMENT);
             et.commit();
         } finally {
             if(et.isActive()) {
@@ -63,6 +69,7 @@ public class AddressRepository implements Repository<Address> {
         EntityTransaction et = em.getTransaction();
         et.begin();
         try {
+            em.lock(elem, LockModeType.OPTIMISTIC_FORCE_INCREMENT);
             this.em.remove(elem);
             et.commit();
         } finally {
@@ -77,6 +84,7 @@ public class AddressRepository implements Repository<Address> {
         EntityTransaction et = em.getTransaction();
         et.begin();
         try {
+            em.lock(elem, LockModeType.OPTIMISTIC_FORCE_INCREMENT);
             this.em.merge(elem);
             et.commit();
         } finally {
@@ -88,6 +96,10 @@ public class AddressRepository implements Repository<Address> {
 
     @Override
     public Long count() {
-        return em.createQuery("Select count(address) from Address address", Long.class).getSingleResult();
+        EntityTransaction et = em.getTransaction();
+        et.begin();
+        Long count = em.createQuery("Select count(address) from Address address", Long.class).getSingleResult();
+        et.commit();
+        return count;
     }
 }

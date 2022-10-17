@@ -1,9 +1,6 @@
 package repository.impl;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityNotFoundException;
-import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.TypedQuery;
+import jakarta.persistence.*;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
@@ -34,8 +31,11 @@ public class EquipmentRepository implements Repository<Equipment> {
         cq.select(equipment);
         cq.where(cb.equal(equipment.get(Client_.ENTITY_ID), uniqueId));
 
-        TypedQuery<Equipment> q = em.createQuery(cq);
-        List<Equipment> equipmentList = q.getResultList();
+        EntityTransaction et = em.getTransaction();
+        et.begin();
+        List<Equipment> equipmentList = em.createQuery(cq).setLockMode(LockModeType.OPTIMISTIC).getResultList();
+        et.commit();
+
 
         if(equipmentList.isEmpty()) {
             throw new EntityNotFoundException("Equipment not found for uniqueId: " + uniqueId);
@@ -45,7 +45,11 @@ public class EquipmentRepository implements Repository<Equipment> {
 
     @Override
     public List<Equipment> getAll() {
-        List<Equipment> equipmentList = em.createQuery("Select eq from Equipment eq", Equipment.class).getResultList();
+        EntityTransaction et = em.getTransaction();
+        et.begin();
+        List<Equipment> equipmentList = em.createQuery("Select eq from Equipment eq", Equipment.class)
+                .setLockMode(LockModeType.OPTIMISTIC).getResultList();
+        et.commit();
         return equipmentList;
     }
 
@@ -54,7 +58,8 @@ public class EquipmentRepository implements Repository<Equipment> {
         EntityTransaction et = em.getTransaction();
         et.begin();
         try {
-            this.em.persist(elem);
+            em.persist(elem);
+            em.lock(elem, LockModeType.OPTIMISTIC_FORCE_INCREMENT);
             et.commit();
         } finally {
             if(et.isActive()) {
@@ -68,6 +73,7 @@ public class EquipmentRepository implements Repository<Equipment> {
         EntityTransaction et = em.getTransaction();
         et.begin();
         try {
+            em.lock(elem, LockModeType.OPTIMISTIC_FORCE_INCREMENT);
             this.em.remove(elem);
             et.commit();
         } finally {
@@ -82,6 +88,7 @@ public class EquipmentRepository implements Repository<Equipment> {
         EntityTransaction et = em.getTransaction();
         et.begin();
         try {
+            em.lock(elem, LockModeType.OPTIMISTIC_FORCE_INCREMENT);
             this.em.merge(elem);
             et.commit();
         } finally {
@@ -93,6 +100,10 @@ public class EquipmentRepository implements Repository<Equipment> {
 
     @Override
     public Long count() {
-        return em.createQuery("Select count(eq) from Equipment eq", Long.class).getSingleResult();
+        EntityTransaction et = em.getTransaction();
+        et.begin();
+        Long count =  em.createQuery("Select count(eq) from Equipment eq", Long.class).getSingleResult();
+        et.commit();
+        return count;
     }
 }
