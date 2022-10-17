@@ -41,7 +41,12 @@ public class RentManager {
         }
 
         boolean good = true;
-        List<Rent> rentEquipmentList = equipment.getEquipmentRents();
+        List<Rent> rentEquipmentList = rentRepository.getEquipmentRents(equipment);
+
+        System.out.println(rentEquipmentList);
+        for(Rent r : rentEquipmentList) {
+            System.out.println(r);
+        }
 
         for (int i = 0; i < rentEquipmentList.size(); i++) {
             Rent curRent = rentEquipmentList.get(i);
@@ -68,7 +73,6 @@ public class RentManager {
             }
         }
 
-
         if (good) {
             Rent rent = new Rent(beginTime, endTime, equipment, client, address);
             rentRepository.add(rent);
@@ -79,7 +83,6 @@ public class RentManager {
     }
 
     public List<Rent> getClientRents(Client client) {
-        // todo  To w sumie mozna albo brac wszystko i wybierac, albo zrobic w repository metode do tego
         return rentRepository.getRentByClient(client);
     }
 

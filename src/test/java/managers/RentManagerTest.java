@@ -62,8 +62,14 @@ class RentManagerTest {
 
     @Test
     void makeReservation() {
-        
+        Client client = DataFaker.getClient();
+        Address address = DataFaker.getAddress();
+        Camera camera = DataFaker.getCamera();
+        Rent goodRent = rm.makeReservation(client, camera, address, t1, t3);
+        Rent first = rm.makeReservation(client, camera, address, t2, t4);
+        assertEquals(null, first);
     }
+
 //FIXME I'm detached from reality
     @Test
     void concurrentReservationTest() throws BrokenBarrierException, InterruptedException {

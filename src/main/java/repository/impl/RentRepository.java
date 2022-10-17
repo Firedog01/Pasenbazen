@@ -1,5 +1,6 @@
 package repository.impl;
 
+import exception.EquipmentException;
 import jakarta.persistence.*;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -55,23 +56,37 @@ public class RentRepository implements Repository<Rent> {
         return rents;
     }
 
+    public List<Rent> getEquipmentRents(Equipment e) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Rent> cq = cb.createQuery(Rent.class);
+        Root<Rent> rent = cq.from(Rent.class);
+
+        cq.select(rent);
+        cq.where(cb.equal(rent.get(Rent_.EQUIPMENT), e));
+        // jakiś błąd z cascade type
+
+        EntityTransaction et = em.getTransaction();
+        et.begin();
+        List<Rent> rents = em.createQuery(cq).
+                setLockMode(LockModeType.OPTIMISTIC).
+                getResultList();
+        et.commit();
+        return rents;
+    }
+
     @Override
     public void add(Rent elem) {
         EntityTransaction et = em.getTransaction();
         et.begin();
         try {
-            Equipment e = em.find(Equipment.class, elem.getEquipment().getId());
-            em.lock(e, LockModeType.OPTIMISTIC_FORCE_INCREMENT);
-            elem.setEquipment(e);
-//            try {
-//                em.lock(elem.getEquipment(), LockModeType.OPTIMISTIC_FORCE_INCREMENT);
-//            } catch (IllegalArgumentException e) { // equipment does not exist, cannot put lock
-//                // System.out.println("lock failed");
-//            }
-
+            if(elem.getEquipment().getId() != null) {
+                Equipment e = em.find(Equipment.class, elem.getEquipment().getId());
+                em.lock(e, LockModeType.OPTIMISTIC_FORCE_INCREMENT);
+                elem.setEquipment(e);
+            }
             em.persist(elem);
             et.commit();
-            System.out.println("equipment found: " + e.toString());
+//            System.out.println("equipment found: " + e.toString());
         } catch (RollbackException e) {
             System.out.println("rollback");
         } finally {
@@ -84,17 +99,20 @@ public class RentRepository implements Repository<Rent> {
     @Override
     public void remove(Rent elem) {
         EntityTransaction et = em.getTransaction();
-        et.begin();
-        try {
-            em.lock(elem, LockModeType.OPTIMISTIC);
-            this.em.remove(elem);
-            et.commit();
-        } finally {
-            if(et.isActive()) {
-                et.rollback();
-            }
-        }
-    }
+        et.begin()                      ;
+        try                             {
+            em.lock                     (
+                    elem                      ,
+                    LockModeType.OPTIMISTIC   );
+            this.em.remove              (
+        elem                            );
+            et.commit                   ();
+                                        }
+        finally                         {
+            if                          (
+                et.isActive             ()){
+                et.rollback             ();
+                                        }}}
 
     @Override
     public void update(Rent elem) {
