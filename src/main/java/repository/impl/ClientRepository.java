@@ -98,7 +98,7 @@ public class ClientRepository implements Repository<Client> {
         EntityTransaction et = em.getTransaction();
         et.begin();
         try {
-            em.lock(elem, LockModeType.OPTIMISTIC_FORCE_INCREMENT);
+            em.lock(elem, LockModeType.OPTIMISTIC);
             this.em.remove(elem);
             et.commit();
         } finally {
@@ -114,7 +114,7 @@ public class ClientRepository implements Repository<Client> {
         et.begin();
         try {
             em.lock(elem, LockModeType.OPTIMISTIC_FORCE_INCREMENT);
-            this.em.merge(elem);
+            em.merge(elem);
             et.commit();
         } finally {
             if(et.isActive()) {

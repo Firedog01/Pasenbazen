@@ -50,9 +50,9 @@ public class RentRepository implements Repository<Rent> {
 
         TypedQuery<Rent> rentQuery = em.createQuery("Select r from Rent r", Rent.class)
                 .setLockMode(LockModeType.OPTIMISTIC);
-
+        List<Rent> rents = rentQuery.getResultList();
         et.commit();
-        return rentQuery.getResultList();
+        return rents;
     }
 
     @Override
@@ -60,11 +60,12 @@ public class RentRepository implements Repository<Rent> {
         EntityTransaction et = em.getTransaction();
         et.begin();
         try {
-            this.em.persist(elem);
-            em.lock(elem, LockModeType.OPTIMISTIC_FORCE_INCREMENT);
+            em.persist(elem);
+            em.lock(elem.getEquipment(), LockModeType.OPTIMISTIC_FORCE_INCREMENT);
             et.commit();
-        } finally {
-            if(et.isActive()) {
+        }
+        finally {
+            if (et.isActive()) {
                 et.rollback();
             }
         }
@@ -75,7 +76,7 @@ public class RentRepository implements Repository<Rent> {
         EntityTransaction et = em.getTransaction();
         et.begin();
         try {
-            em.lock(elem, LockModeType.OPTIMISTIC_FORCE_INCREMENT);
+            em.lock(elem, LockModeType.OPTIMISTIC);
             this.em.remove(elem);
             et.commit();
         } finally {
@@ -91,7 +92,7 @@ public class RentRepository implements Repository<Rent> {
         et.begin();
         try {
             em.lock(elem, LockModeType.OPTIMISTIC_FORCE_INCREMENT);
-            this.em.merge(elem);
+            em.merge(elem);
             et.commit();
         } finally {
             if(et.isActive()) {

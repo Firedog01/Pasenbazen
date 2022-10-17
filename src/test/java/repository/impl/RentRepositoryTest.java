@@ -14,6 +14,12 @@ import repository.DataFaker;
 import repository.RepositoryFactory;
 import repository.RepositoryType;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class RentRepositoryTest {
@@ -129,5 +135,55 @@ class RentRepositoryTest {
         rr.remove(r1);
 
         assertEquals(rr.count(), 2);
+    }
+
+    @Test
+    void makeReservationTest() {
+
+    }
+
+    @Test
+    void concurrentReservationTest() throws BrokenBarrierException, InterruptedException {
+        Address address1 = DataFaker.getAddress();
+        Client client1 = DataFaker.getClient(address1);
+        Equipment eq1 = DataFaker.getCamera();
+        Rent r1 = DataFaker.getRent(eq1, client1, address1);
+
+        int amount = 5;
+        List<RentRepository> rentRepositoryList = new ArrayList<>();
+        for (int i = 0; i < amount; i++) {
+            rentRepositoryList.add((RentRepository) rf.getRepository(RepositoryType.RentRepository));
+        }
+
+        AtomicInteger atomicInteger = new AtomicInteger();
+        CyclicBarrier cyclicBarrier = new CyclicBarrier(amount);
+        List<Thread> threadList = new ArrayList<Thread>();
+
+        for (int i = 0; i < amount; i++) {
+            int finalI = i;
+            threadList.add(new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        cyclicBarrier.await();
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    } catch (BrokenBarrierException e) {
+                        throw new RuntimeException(e);
+                    }
+                    rentRepositoryList.get(finalI).add(r1);
+                    atomicInteger.getAndIncrement();
+                }}));
+        }
+
+        threadList.forEach(Thread::start);
+        cyclicBarrier.await();
+
+        for (int i = 0; i < 5; i++) {
+            System.out.println(rentRepositoryList.get(0).getAll());
+        }
+
+
+
     }
 }

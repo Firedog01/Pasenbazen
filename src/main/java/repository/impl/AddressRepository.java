@@ -84,7 +84,7 @@ public class AddressRepository implements Repository<Address> {
         EntityTransaction et = em.getTransaction();
         et.begin();
         try {
-            em.lock(elem, LockModeType.OPTIMISTIC_FORCE_INCREMENT);
+            em.lock(elem, LockModeType.OPTIMISTIC);
             this.em.merge(elem);
             et.commit();
         } finally {

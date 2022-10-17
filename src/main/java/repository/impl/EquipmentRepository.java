@@ -73,7 +73,7 @@ public class EquipmentRepository implements Repository<Equipment> {
         EntityTransaction et = em.getTransaction();
         et.begin();
         try {
-            em.lock(elem, LockModeType.OPTIMISTIC_FORCE_INCREMENT);
+            em.lock(elem, LockModeType.OPTIMISTIC);
             this.em.remove(elem);
             et.commit();
         } finally {
