@@ -41,6 +41,7 @@ public class RentManager {
         }
 
         boolean good = true;
+//        List<Rent> rentEquipmentList = equipment.getEquipmentRents();
         List<Rent> rentEquipmentList = rentRepository.getEquipmentRents(equipment);
 
         System.out.println(rentEquipmentList);

@@ -9,6 +9,7 @@ import model.*;
 import model.EQ.Equipment;
 import repository.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -57,6 +58,9 @@ public class RentRepository implements Repository<Rent> {
     }
 
     public List<Rent> getEquipmentRents(Equipment e) {
+        if(e.getId() == null) {
+            return new ArrayList<Rent>();
+        }
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Rent> cq = cb.createQuery(Rent.class);
         Root<Rent> rent = cq.from(Rent.class);
@@ -99,20 +103,17 @@ public class RentRepository implements Repository<Rent> {
     @Override
     public void remove(Rent elem) {
         EntityTransaction et = em.getTransaction();
-        et.begin()                      ;
-        try                             {
-            em.lock                     (
-                    elem                      ,
-                    LockModeType.OPTIMISTIC   );
-            this.em.remove              (
-        elem                            );
-            et.commit                   ();
-                                        }
-        finally                         {
-            if                          (
-                et.isActive             ()){
-                et.rollback             ();
-                                        }}}
+        et.begin();
+        try {
+            em.lock(elem, LockModeType.OPTIMISTIC);
+            this.em.remove(elem);
+            et.commit();
+        } finally {
+            if(et.isActive()) {
+                et.rollback();
+            }
+        }
+    }
 
     @Override
     public void update(Rent elem) {
@@ -130,7 +131,7 @@ public class RentRepository implements Repository<Rent> {
     }
 
     @Override
-    public Long count() {  //FIXME not sure if that's necessary
+    public Long count() {
         EntityTransaction et = em.getTransaction();
         et.begin();
         Long count = em.createQuery("Select count(rent) from Rent rent", Long.class).getSingleResult();

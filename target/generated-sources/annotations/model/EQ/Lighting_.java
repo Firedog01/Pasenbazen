@@ -2,7 +2,7 @@ package model.EQ;
 
 import jakarta.persistence.metamodel.SingularAttribute;
 import jakarta.persistence.metamodel.StaticMetamodel;
-import javax.annotation.Generated;
+import javax.annotation.processing.Generated;
 
 @Generated(value = "org.hibernate.jpamodelgen.JPAMetaModelEntityProcessor")
 @StaticMetamodel(Lighting.class)

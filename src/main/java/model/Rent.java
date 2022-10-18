@@ -20,7 +20,8 @@ public class Rent extends AbstractEntity {
 
     @NotNull
     @JoinColumn(name = "equipment_id")
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne(fetch = FetchType.EAGER,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Equipment equipment;
 
     @NotNull

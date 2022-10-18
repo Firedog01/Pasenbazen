@@ -20,7 +20,7 @@ public abstract class Equipment extends AbstractEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(initialValue = 0, name = "equipment_sequence_generator")
-    @Column(name = "equipment_id")
+    @Column(name = "equipment_id", updatable = false)
     private Long id;
 
     @Column(name = "name")
@@ -47,7 +47,7 @@ public abstract class Equipment extends AbstractEntity {
     @Column(name = "missing")
     private boolean missing;
 
-    @OneToMany(targetEntity = Rent.class, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToMany(mappedBy = "equipment")
     private List<Rent> equipmentRents = new ArrayList<>();
 
 

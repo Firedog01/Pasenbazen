@@ -65,9 +65,32 @@ class RentManagerTest {
         Client client = DataFaker.getClient();
         Address address = DataFaker.getAddress();
         Camera camera = DataFaker.getCamera();
-        Rent goodRent = rm.makeReservation(client, camera, address, t1, t3);
-        Rent first = rm.makeReservation(client, camera, address, t2, t4);
-        assertEquals(null, first);
+        rm.makeReservation(client, camera, address, t1, t3);
+
+        // +----- old rent -----+
+        //         +----- new rent -----+
+        Rent r1 = rm.makeReservation(client, camera, address, t2, t4);
+        assertEquals(null, r1);
+
+        //         +----- old rent -----+
+        // +----- new rent -----+
+        Rent r2 = rm.makeReservation(client, camera, address, t0, t2);
+        assertEquals(null, r2);
+
+        // +----- old rent -----+
+        //    +-- new rent --+
+        Rent r3 = rm.makeReservation(client, camera, address, t2, t3);
+        assertEquals(null, r3);
+
+        //    +-- old rent --+
+        // +----- new rent -----+
+        Rent r4 = rm.makeReservation(client, camera, address, t0, t4);
+        assertEquals(null, r4);
+
+        // +-- old rent --+
+        //                   +-- new rent --+
+        Rent r5 = rm.makeReservation(client, camera, address, t4, t5);
+        assertNotEquals(null, r5);
     }
 
 //FIXME I'm detached from reality
