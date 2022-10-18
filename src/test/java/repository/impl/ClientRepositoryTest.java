@@ -99,21 +99,7 @@ class ClientRepositoryTest {
             ar.get(a1.getEntityId());
         });
 
-        // on address update client should get updated address
-        String a1_street = "==1==";
-        Address a1_ = ar.get(a1.getEntityId());
-        a1_.setStreet(a1_street);
-        ar.update(a1_);
-        assertNotEquals(a1_street, c1_.getAddress().getStreet());
-
-        Address a1__ = ar.get(a1.getEntityId());
-        assertEquals(a1_street, a1__.getStreet());
-
-        Client c2_2 = cr.get(c2_.getEntityId());
-//        assertEquals(a1_street, c2_2.getAddress().getStreet()); // problem
-        cr.remove(c2_2);
-
-        // todo sth clever
+        cr.remove(c2_);
         cr.remove(c3_);
         cr.remove(c4_);
 

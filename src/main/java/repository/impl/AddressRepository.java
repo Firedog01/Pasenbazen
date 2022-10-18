@@ -46,7 +46,9 @@ public class AddressRepository implements Repository<Address> {
 
         TypedQuery<Address> addressList = em.createQuery("Select address from Address address", Address.class)
                 .setLockMode(LockModeType.OPTIMISTIC);
-        return addressList.getResultList();
+        List<Address> ret = addressList.getResultList();
+        et.commit();
+        return ret;
     }
 
     @Override

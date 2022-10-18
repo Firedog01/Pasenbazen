@@ -136,16 +136,4 @@ class RentRepositoryTest {
 
         assertEquals(startingCount + 2, rr.count());
     }
-
-//    @Test
-//    void sameEquipmentAdd() {
-//        Equipment e = DataFaker.getCamera();
-//        Rent r1 = DataFaker.getRent(e, null, null);
-//        Rent r2 = DataFaker.getRent(e, null, null);
-//
-//        rr.add(r1); // equipment e is added
-//        rr.add(r2); // lock should not throw
-//    }
-
-
 }

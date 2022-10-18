@@ -39,7 +39,7 @@ class RentManagerTest {
     LocalDateTime t3;
     LocalDateTime t4;
     LocalDateTime t5;
-    // t0 =~ now
+    // t0 = now
     // t0 < t1 < t2 < t3 < t4 < t5
 
     @BeforeAll
@@ -93,7 +93,7 @@ class RentManagerTest {
         assertNotEquals(null, r5);
     }
 
-//FIXME I'm detached from reality
+    // czasem działa czasem nie
     @Test
     void concurrentReservationTest() throws BrokenBarrierException, InterruptedException {
         int amount = 5;
