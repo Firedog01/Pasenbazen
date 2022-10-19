@@ -30,6 +30,7 @@ public class Rent extends AbstractEntity {
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Client client;
 
+    // jako embbedable
     @NotNull
     @JoinColumn(name = "address_id")
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})

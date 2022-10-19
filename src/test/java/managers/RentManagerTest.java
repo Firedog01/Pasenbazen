@@ -110,8 +110,10 @@ class RentManagerTest {
 
         AtomicInteger atomicInteger = new AtomicInteger();
         CyclicBarrier cyclicBarrier = new CyclicBarrier(amount);
+        // pula wątków Executors
         List<Thread> threadList = new ArrayList<Thread>();
 
+        // inne persistance unity
         for (int i = 0; i < amount; i++) {
             threadList.add(new Thread(new Runnable() {
                 @Override

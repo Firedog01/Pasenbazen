@@ -84,7 +84,7 @@ public class RentRepository implements Repository<Rent> {
         et.begin();
         try {
             if(elem.getEquipment().getId() != null) {
-                Equipment e = em.find(Equipment.class, elem.getEquipment().getId());
+                Equipment e = em.find(Equipment.class, elem.getEquipment().getId()); // tutaj lock!
                 em.lock(e, LockModeType.OPTIMISTIC_FORCE_INCREMENT);
                 elem.setEquipment(e);
             }
