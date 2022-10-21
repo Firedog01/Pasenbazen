@@ -1,7 +1,6 @@
 package managers;
 
 import exception.EquipmentException;
-import jakarta.persistence.EntityNotFoundException;
 import model.EQ.*;
 
 import repository.impl.EquipmentRepository;

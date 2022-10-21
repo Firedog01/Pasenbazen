@@ -43,7 +43,8 @@ public class RentManager {
 
         boolean good = true;
 //        List<Rent> rentEquipmentList = equipment.getEquipmentRents();
-        List<Rent> rentEquipmentList = rentRepository.getEquipmentRents(equipment);
+//        List<Rent> rentEquipmentList = rentRepository.getEquipmentRents(equipment);
+        List<Rent> rentEquipmentList = rentRepository.getRentByEq(equipment); //Isn't it the same? ^
 
         System.out.println(rentEquipmentList);
         for (Rent r : rentEquipmentList) {
@@ -138,7 +139,7 @@ public class RentManager {
     }
 
     public void cancelReservation(Rent rent) {
-        rentRepository.remove(rent);
+        rentRepository.remove(rent.getUniqueRentId());
     } //FIXME send UUID or get UUID from rent obj?
 
     public void returnEquipment(Rent rent, boolean missing) {

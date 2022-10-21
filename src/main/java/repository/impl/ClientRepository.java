@@ -2,11 +2,14 @@ package repository.impl;
 
 import jakarta.persistence.EntityManager;
 import model.Client;
+import model.Rent;
+import model.idType;
 import repository.Repository;
 
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 
 public class ClientRepository implements Repository<Client> {
@@ -64,4 +67,11 @@ public class ClientRepository implements Repository<Client> {
     public int count() {
         return clientMap.size();
     }
-}
+
+    public Client getByClientId(String clientId, idType idtype) {
+        return  clientMap.values().stream()
+                .filter(client -> (clientId).equals(client.getClientId())
+                        && idtype.equals(client.getIdType()))
+                .toList().get(0);
+        //What a joke
+    }}

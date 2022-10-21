@@ -2,6 +2,7 @@ package repository.impl;
 
 import jakarta.persistence.*;
 import model.*;
+import model.EQ.Equipment;
 import repository.Repository;
 
 import java.util.List;
@@ -82,41 +83,24 @@ public class RentRepository implements Repository<Rent> {
     public int count() {
         return rentMap.size();
     }
-/*
+
     public List<Rent> getRentByClient(Client clientP) {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Rent> cq = cb.createQuery(Rent.class);
-        Root<Rent> rent = cq.from(Rent.class);
-
-        cq.select(rent);
-        cq.where(cb.equal(rent.get(Rent_.CLIENT), clientP));
-
-        TypedQuery<Rent> q = em.createQuery(cq).setLockMode(LockModeType.OPTIMISTIC);
-        List<Rent> rents = q.getResultList();
-
-        if(rents.isEmpty()) {
-            throw new EntityNotFoundException("Rent not found for client: " + clientP);
-        }
-        return rents;
+        List<Rent> result = rentMap.values().stream()
+                .filter(rent -> clientP.getUuid().equals(rent.getClient().getUuid())).toList();
+        //Bruh
+        return result;
     }
-*/
-    /*
-    public List<Rent> getRentByEq(Equipment equipment) {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Rent> cq = cb.createQuery(Rent.class);
-        Root<Rent> rent = cq.from(Rent.class);
 
-        cq.select(rent);
-        cq.where(cb.equal(rent.get(Rent_.EQUIPMENT), equipment));
 
-        TypedQuery<Rent> q = em.createQuery(cq).setLockMode(LockModeType.OPTIMISTIC);
-        List<Rent> rents = q.getResultList();
-
-        if(rents.isEmpty()) {
-            throw new EntityNotFoundException("Rent not found for equipment: " + equipment);
-        }
-        return rents;
+    public List<Rent> getRentByEq(Equipment eq) {
+        List<Rent> result = rentMap.values().stream()
+                .filter(rent -> eq.getEqUUID().equals(rent.getEquipment().getEqUUID())).toList();
+        return result;
     }
-*/
+
+//    public List<Rent> getEquipmentRents(Equipment eq) {
+//
+//    }
+
 
 }

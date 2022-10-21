@@ -22,23 +22,19 @@ public class ClientManager {
                                  String surname, Address address
     ) throws ClientException {
         Client client = new Client(clientId, idtype, name, surname, address);
-        clientRepository.add(client);
+        clientRepository.add(client.getUuid(), client);
         return client;
     }
 
     public void unregisterClient(Client client) {
-        Client c = clientRepository.get(client.getClientUniqueID());
-        clientRepository.remove(c);
+//        Client c = clientRepository.get(client.getUuid());
+        clientRepository.remove(client.getUuid());
     }
 
-// FIXME
-//    public Client getClient(String clientId, idType idType) {
-//        try {
-//            return clientRepository.getByClientId(clientId, idType);
-//        } catch (EntityNotFoundException ex) {
-//            return null;
-//        }
-//  }
+    public Client getClient(String clientId, idType idType) {
+
+        return clientRepository.getByClientId(clientId, idType);
+  }
 
       public Client getClient(UUID uuid) {
         return clientRepository.get(uuid);

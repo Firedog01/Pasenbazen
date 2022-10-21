@@ -110,7 +110,7 @@ class RentRepositoryTest {
 
     @Test
     void count() {
-        Long startingCount = rr.count();
+//        Long startingCount = rr.count();
 
         Address address1 = DataFaker.getAddress();
         Address address2 = DataFaker.getAddress();
