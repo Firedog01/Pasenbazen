@@ -109,7 +109,7 @@ class ClientRepositoryTest {
 
     @Test
     void count() {
-        Long startingCount = cr.count();
+        int startingCount = cr.count();
 
         Address address1 = DataFaker.getAddress();
         Address address2 = DataFaker.getAddress();

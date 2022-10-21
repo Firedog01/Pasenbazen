@@ -1,6 +1,5 @@
 package repository.impl;
 
-import exception.EquipmentException;
 import jakarta.persistence.*;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -14,6 +13,8 @@ import java.util.List;
 
 
 public class RentRepository implements Repository<Rent> {
+
+    private List<Rent> rentList;
 
     private EntityManager em;
 
@@ -47,14 +48,7 @@ public class RentRepository implements Repository<Rent> {
 
     @Override
     public List<Rent> getAll() {
-        EntityTransaction et = em.getTransaction();
-        et.begin();
-
-        TypedQuery<Rent> rentQuery = em.createQuery("Select r from Rent r", Rent.class)
-                .setLockMode(LockModeType.OPTIMISTIC);
-        List<Rent> rents = rentQuery.getResultList();
-        et.commit();
-        return rents;
+        return this.rentList;
     }
 
     public List<Rent> getEquipmentRents(Equipment e) {
@@ -79,7 +73,7 @@ public class RentRepository implements Repository<Rent> {
     }
 
     @Override
-    public void add(Rent elem) {
+    public boolean add(Rent elem) {
         EntityTransaction et = em.getTransaction();
         et.begin();
         try {
@@ -116,7 +110,7 @@ public class RentRepository implements Repository<Rent> {
     }
 
     @Override
-    public void update(Rent elem) {
+    public boolean update(Rent elem) {
         EntityTransaction et = em.getTransaction();
         et.begin();
         try {
@@ -131,7 +125,7 @@ public class RentRepository implements Repository<Rent> {
     }
 
     @Override
-    public Long count() {
+    public int count() {
         EntityTransaction et = em.getTransaction();
         et.begin();
         Long count = em.createQuery("Select count(rent) from Rent rent", Long.class).getSingleResult();

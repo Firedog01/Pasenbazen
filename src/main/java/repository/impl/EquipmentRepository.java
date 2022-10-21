@@ -4,14 +4,12 @@ import jakarta.persistence.*;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
-import model.Client;
 import model.Client_;
 import model.EQ.Equipment;
 import model.UniqueId;
 import repository.Repository;
 
 import java.util.List;
-import java.util.UUID;
 
 
 public class EquipmentRepository implements Repository<Equipment> {
@@ -54,7 +52,7 @@ public class EquipmentRepository implements Repository<Equipment> {
     }
 
     @Override
-    public void add(Equipment elem) {
+    public boolean add(Equipment elem) {
         EntityTransaction et = em.getTransaction();
         et.begin();
         try {
@@ -84,7 +82,7 @@ public class EquipmentRepository implements Repository<Equipment> {
     }
 
     @Override
-    public void update(Equipment elem) {
+    public boolean update(Equipment elem) {
         EntityTransaction et = em.getTransaction();
         et.begin();
         try {
@@ -99,7 +97,7 @@ public class EquipmentRepository implements Repository<Equipment> {
     }
 
     @Override
-    public Long count() {
+    public int count() {
         EntityTransaction et = em.getTransaction();
         et.begin();
         Long count =  em.createQuery("Select count(eq) from Equipment eq", Long.class).getSingleResult();

@@ -1,7 +1,6 @@
 package managers;
 
 import exception.ClientException;
-import jakarta.persistence.EntityNotFoundException;
 import model.Client;
 
 import model.Address;
@@ -10,8 +9,7 @@ import repository.impl.ClientRepository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.function.Predicate;
+import java.util.UUID;
 
 public class ClientManager {
     ClientRepository clientRepository;
@@ -29,16 +27,21 @@ public class ClientManager {
     }
 
     public void unregisterClient(Client client) {
-        Client c = clientRepository.get(client.getEntityId());
+        Client c = clientRepository.get(client.getUniqueId());
         clientRepository.remove(c);
     }
 
-    public Client getClient(String clientId, idType idType) {
-        try {
-            return clientRepository.getByClientId(clientId, idType);
-        } catch (EntityNotFoundException ex) {
-            return null;
-        }
+// FIXME
+//    public Client getClient(String clientId, idType idType) {
+//        try {
+//            return clientRepository.getByClientId(clientId, idType);
+//        } catch (EntityNotFoundException ex) {
+//            return null;
+//        }
+//  }
+
+      public Client getClient(UUID uuid) {
+        return clientRepository.get(uuid);
     }
 
     public List<Client> getAllClients() {

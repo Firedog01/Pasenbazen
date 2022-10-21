@@ -1,42 +1,26 @@
 package model;
 
 import exception.ClientException;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import org.hibernate.mapping.Value;
 
 import java.util.Objects;
+import java.util.UUID;
 
-@Entity
-@Table(name = "client")
-@Access(AccessType.FIELD)
-public class Client extends AbstractEntity  {
 
-    @Id
-    @Size(min = 1)
-    @Column(name = "client_id")
+public class Client {
+
+
+    private UUID uniqueId;
+
     private String clientId;
 
-    @Id
-    @NotNull
-    @Column(name = "client_id_type")
     private idType idType;
 
-    @Size(min = 1)
-    @Column(name = "first_name")
     private String firstName;
 
-    @Size(min = 1)
-    @Column(name = "last_name")
     private String lastName;
 
-    @NotNull
-    @JoinColumn(name = "address_id")
-    @ManyToOne(fetch =  FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Address address;
 
-    @Column(name = "archive")
     private boolean archive;
 
     public Client(
@@ -60,6 +44,7 @@ public class Client extends AbstractEntity  {
             throw new ClientException("Adres nie może być pusty");
         }
 
+        this.uniqueId = UUID.randomUUID();
         this.clientId = clientId;
         this.idType = idType;
         this.firstName = firstName;
@@ -97,6 +82,10 @@ public class Client extends AbstractEntity  {
 
     public Address getAddress() {
         return address;
+    }
+
+    public UUID getUniqueId() {
+        return uniqueId;
     }
 
     public void setAddress(Address address) {

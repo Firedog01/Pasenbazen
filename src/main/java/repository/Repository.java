@@ -4,7 +4,6 @@ package repository;
 import model.UniqueId;
 
 import java.util.List;
-import java.util.UUID;
 
 public interface Repository<T> {
 
@@ -12,11 +11,11 @@ public interface Repository<T> {
 
     List<T> getAll();
 
-    void add(T elem);
+    boolean add(T elem);
 
-    void remove(T elem);
+    boolean remove(T elem);
 
-    void update(T elem);
+    boolean update(T elem);
 
-    Long count();
+    int count();
 }

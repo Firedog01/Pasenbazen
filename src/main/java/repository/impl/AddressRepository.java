@@ -52,7 +52,7 @@ public class AddressRepository implements Repository<Address> {
     }
 
     @Override
-    public void add(Address elem) {
+    public boolean add(Address elem) {
         EntityTransaction et = em.getTransaction();
         et.begin();
         try {
@@ -82,7 +82,7 @@ public class AddressRepository implements Repository<Address> {
     }
 
     @Override
-    public void update(Address elem) {
+    public boolean update(Address elem) {
         EntityTransaction et = em.getTransaction();
         et.begin();
         try {
@@ -97,7 +97,7 @@ public class AddressRepository implements Repository<Address> {
     }
 
     @Override
-    public Long count() {
+    public int count() {
         EntityTransaction et = em.getTransaction();
         et.begin();
         Long count = em.createQuery("Select count(address) from Address address", Long.class).getSingleResult();

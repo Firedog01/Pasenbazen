@@ -10,7 +10,7 @@ import org.joda.time.LocalDateTime;
 @Entity
 @Table(name = "rent")
 @Access(AccessType.FIELD)
-public class Rent extends AbstractEntity {
+public class Rent {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

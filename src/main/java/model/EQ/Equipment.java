@@ -4,7 +4,6 @@ import exception.EquipmentException;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import model.AbstractEntity;
 import model.Rent;
 
 import java.util.ArrayList;
@@ -15,7 +14,7 @@ import java.util.List;
 @Inheritance(strategy = InheritanceType.JOINED)
 //@DiscriminatorColumn(name = "type")
 @Access(AccessType.FIELD)
-public abstract class Equipment extends AbstractEntity {
+public abstract class Equipment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

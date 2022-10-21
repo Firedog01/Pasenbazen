@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 @Entity
 @Table(name = "address")
 @Access(AccessType.FIELD)
-public class Address extends AbstractEntity {
+public class Address {
 
     @Id
     @Column(name = "address_id")
