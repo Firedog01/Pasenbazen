@@ -1,18 +1,9 @@
 package model.EQ;
 
-
 import exception.EquipmentException;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 
-@Entity
-@Table(name = "lens")
-@DiscriminatorValue("LENS")
-@PrimaryKeyJoinColumn(name = "equipment_id")
 public class Lens extends Equipment{
 
-    @NotNull
-    @Column(name = "focal_length")
     private String focalLength;
 
     public Lens(double firstDayCost,

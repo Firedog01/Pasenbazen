@@ -9,7 +9,7 @@ import java.util.UUID;
 public class Client {
 
 
-    private UUID uniqueId;
+    private UUID clientUniqueID;
 
     private String clientId;
 
@@ -44,7 +44,7 @@ public class Client {
             throw new ClientException("Adres nie może być pusty");
         }
 
-        this.uniqueId = UUID.randomUUID();
+        this.clientUniqueID = UUID.randomUUID();
         this.clientId = clientId;
         this.idType = idType;
         this.firstName = firstName;
@@ -76,6 +76,7 @@ public class Client {
         return lastName;
     }
 
+
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
@@ -84,8 +85,8 @@ public class Client {
         return address;
     }
 
-    public UUID getUniqueId() {
-        return uniqueId;
+    public UUID getClientUniqueID() {
+        return clientUniqueID;
     }
 
     public void setAddress(Address address) {

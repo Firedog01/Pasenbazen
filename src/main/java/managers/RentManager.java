@@ -14,6 +14,7 @@ import repository.impl.RentRepository;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.function.Predicate;
 
 
@@ -45,7 +46,7 @@ public class RentManager {
         List<Rent> rentEquipmentList = rentRepository.getEquipmentRents(equipment);
 
         System.out.println(rentEquipmentList);
-        for(Rent r : rentEquipmentList) {
+        for (Rent r : rentEquipmentList) {
             System.out.println(r);
         }
 
@@ -76,7 +77,7 @@ public class RentManager {
 
         if (good) {
             Rent rent = new Rent(beginTime, endTime, equipment, client, address);
-            rentRepository.add(rent);
+            rentRepository.add(rent.getUniqueRentId(), rent);
             return rent;
         } else {
             return null;
@@ -138,7 +139,7 @@ public class RentManager {
 
     public void cancelReservation(Rent rent) {
         rentRepository.remove(rent);
-    }
+    } //FIXME send UUID or get UUID from rent obj?
 
     public void returnEquipment(Rent rent, boolean missing) {
         rent.setEqReturned(true);
@@ -147,7 +148,6 @@ public class RentManager {
     }
 
     public double checkClientBalance(Client client) {
-        // todo
         List<Rent> rentList = getClientRents(client);
         double balance = 0.0;
         for (Rent rent :
@@ -161,11 +161,7 @@ public class RentManager {
         return rentRepository.getAll();
     }
 
-    public Rent getRent(UniqueId id) {
-        try {
-            return rentRepository.get(id);
-        } catch(EntityNotFoundException ex) {
-            return null;
-        }
+    public Rent getRent(UUID uuid) { //FIXME UUID or rent obj
+        return rentRepository.get(uuid);
     }
 }

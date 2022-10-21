@@ -27,7 +27,7 @@ public class ClientManager {
     }
 
     public void unregisterClient(Client client) {
-        Client c = clientRepository.get(client.getUniqueId());
+        Client c = clientRepository.get(client.getClientUniqueID());
         clientRepository.remove(c);
     }
 

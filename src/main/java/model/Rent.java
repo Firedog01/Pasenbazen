@@ -1,8 +1,5 @@
 package model;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import model.EQ.Equipment;
 import org.joda.time.Days;
 import org.joda.time.LocalDateTime;

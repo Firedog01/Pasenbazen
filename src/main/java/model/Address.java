@@ -1,31 +1,21 @@
 package model;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
+import java.util.UUID;
 
-@Entity
-@Table(name = "address")
-@Access(AccessType.FIELD)
+
 public class Address {
 
-    @Id
-    @Column(name = "address_id")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(initialValue = 0, name = "address_sequence_generator")
-    private long id;
+    private UUID addressUUID;
 
-    @Column(name = "city")
-    @NotNull
     private String city;
 
-    @Column(name = "street")
     private String street;
 
-    @Column(name = "street_nr")
-    @NotNull
+
     private String streetNr;
 
     public Address(String city, String street, String streetNr) {
+        addressUUID = UUID.randomUUID();
         this.city = city;
         this.street = street;
         this.streetNr = streetNr;
@@ -43,6 +33,10 @@ public class Address {
 
     public String getStreetNr() {
         return streetNr;
+    }
+
+    public UUID getAddressUUID() {
+        return addressUUID;
     }
 
     public void setCity(String city) {

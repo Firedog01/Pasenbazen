@@ -1,5 +1,6 @@
 package repository.impl;
 
+import jakarta.persistence.EntityManager;
 import model.Client;
 import repository.Repository;
 
@@ -10,17 +11,18 @@ import java.util.UUID;
 
 public class ClientRepository implements Repository<Client> {
 
-    private Map<UUID, Client> clientList;
+    private Map<UUID, Client> clientMap;
 
-    /* yyyyyyyy
+    private EntityManager em;
+
     public ClientRepository(EntityManager em) {
         this.em = em;
     }
-*/
+
     @Override
     public Client get(UUID uuid) {
-        if (clientList.containsKey(uuid)) {
-            return clientList.get(uuid);
+        if (clientMap.containsKey(uuid)) {
+            return clientMap.get(uuid);
         }
         return null; //FIXME not sure
     }
@@ -28,22 +30,22 @@ public class ClientRepository implements Repository<Client> {
 
     @Override
     public List<Client> getAll() {
-        return clientList.values().stream().toList(); //Somehow idk
+        return clientMap.values().stream().toList(); //Somehow idk
     }
 
-        @Override
-        public boolean add(UUID uuid, Client elem) {
-        if (!clientList.containsKey(uuid)) {
-            clientList.put(uuid, elem);
-            return true;
-        }
-        return false; //FIXME Same client cannot be added twice?
+    @Override
+    public boolean add(UUID uuid, Client elem) {
+    if (!clientMap.containsKey(uuid)) {
+        clientMap.put(uuid, elem);
+        return true;
+    }
+    return false; // FIXME Same client cannot be added twice?
     }
 
     @Override
     public boolean remove(UUID key) {
-        if (clientList.containsKey(key)) {
-            clientList.remove(key);  //FIXME returns boolean or Client?
+        if (clientMap.containsKey(key)) {
+            clientMap.remove(key);  //FIXME returns boolean or Client?
             return true;
         }
         return false;
@@ -51,8 +53,8 @@ public class ClientRepository implements Repository<Client> {
 
     @Override
     public boolean update(UUID uuid, Client elem) {
-        if (clientList.containsKey(uuid)) {
-            clientList.put(uuid, elem); //FIXME bool or Client from here?
+        if (clientMap.containsKey(uuid)) {
+            clientMap.put(uuid, elem); //FIXME bool or Client from here?
             return true;
         }
         return false;
@@ -60,6 +62,6 @@ public class ClientRepository implements Repository<Client> {
 
     @Override
     public int count() {
-        return clientList.size();
+        return clientMap.size();
     }
 }

@@ -4,12 +4,11 @@ import exception.EquipmentException;
 import jakarta.persistence.EntityNotFoundException;
 import model.EQ.*;
 
-import model.UniqueId;
 import repository.impl.EquipmentRepository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
+import java.util.UUID;
 
 public class EquipmentManager {
     EquipmentRepository equipmentRepository;
@@ -19,8 +18,8 @@ public class EquipmentManager {
     }
 
     public void unregisterEquipment(Equipment equipment) {
-        Equipment e = equipmentRepository.get(equipment.getEntityId());
-        equipmentRepository.remove(e);
+//        Equipment e = equipmentRepository.get(equipment.getEqUUID());
+        equipmentRepository.remove(equipment.getEqUUID());
     }
 
     public List<Equipment> getAllEquipment() {
@@ -31,7 +30,7 @@ public class EquipmentManager {
         List<Equipment> all = getAllEquipment();
         List<Equipment> available = new ArrayList<>();
         for (Equipment e : all) {
-            if(!(e.isArchive() || e.isMissing())) {
+            if (!(e.isArchive() || e.isMissing())) {
                 available.add(e);
             }
         }
@@ -40,39 +39,35 @@ public class EquipmentManager {
 
     public Equipment registerCamera(double fDayCost, double nDayCost, double bail, String name, String resolution) throws EquipmentException {
         Camera camera = new Camera(fDayCost, nDayCost, bail, name, resolution);
-        equipmentRepository.add(camera);
+        equipmentRepository.add(camera.getEqUUID(), camera);
         return camera;
     }
 
     public Equipment registerTrivet(double fDayCost, double nDayCost, double bail, String name, double weight) throws EquipmentException {
         Trivet trivet = new Trivet(fDayCost, nDayCost, bail, name, weight);
-        equipmentRepository.add(trivet);
+        equipmentRepository.add(trivet.getEqUUID(), trivet);
         return trivet;
     }
 
     public Equipment registerLens(double fDayCost, double nDayCost, double bail, String name, String length) throws EquipmentException {
         Lens lens = new Lens(fDayCost, nDayCost, bail, name, length);
-        equipmentRepository.add(lens);
+        equipmentRepository.add(lens.getEqUUID(), lens);
         return lens;
     }
 
     public Equipment registerMicrophone(double fDayCost, double nDayCost, double bail, String name, String sensitivity) throws EquipmentException {
         Microphone microphone = new Microphone(fDayCost, nDayCost, bail, name, sensitivity);
-        equipmentRepository.add(microphone);
+        equipmentRepository.add(microphone.getEqUUID(), microphone);
         return microphone;
     }
 
     public Equipment registerLighting(double fDayCost, double nDayCost, double bail, String name, String brightness) throws EquipmentException {
         Lighting lighting = new Lighting(fDayCost, nDayCost, bail, name, brightness);
-        equipmentRepository.add(lighting);
+        equipmentRepository.add(lighting.getEqUUID(), lighting);
         return lighting;
     }
 
-    public Equipment getEquipment(UniqueId id) {
-        try {
-            return equipmentRepository.get(id);
-        } catch(EntityNotFoundException ex) {
-            return null;
-        }
+    public Equipment getEquipment(UUID uuid) {
+        return equipmentRepository.get(uuid);
     }
 }

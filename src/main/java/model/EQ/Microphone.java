@@ -1,17 +1,9 @@
 package model.EQ;
 
 import exception.EquipmentException;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 
-@Entity
-@Table(name = "microphone")
-@DiscriminatorValue("MICROPHONE")
-@PrimaryKeyJoinColumn(name = "equipment_id")
 public class Microphone extends Equipment{
 
-    @NotNull
-    @Column(name = "sensitivity")
     private String sensitivity;
 
     public Microphone(double firstDayCost,
@@ -23,7 +15,6 @@ public class Microphone extends Equipment{
         super(firstDayCost, nextDaysCost, bail, name);
         this.sensitivity = sensitivity;
     }
-
     protected Microphone() {}
 
     @Override

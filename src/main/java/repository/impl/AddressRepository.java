@@ -1,16 +1,16 @@
 package repository.impl;
 
 import jakarta.persistence.*;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Root;
 import model.*;
 import repository.Repository;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public class AddressRepository implements Repository<Address> {
+
+    private Map<UUID, Address> addressMap;
 
     private EntityManager em;
 
@@ -19,90 +19,49 @@ public class AddressRepository implements Repository<Address> {
     }
 
     @Override
-    public Address get(UniqueId id) {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Address> cq = cb.createQuery(Address.class);
-        Root<Address> address = cq.from(Address.class);
-
-        cq.select(address);
-        cq.where(cb.equal(address.get(Address_.ENTITY_ID), id));
-
-
-        EntityTransaction et = em.getTransaction();
-        et.begin();
-
-        List<Address> addressList = em.createQuery(cq).getResultList();
-        et.commit();
-
-        if(addressList.isEmpty()) {
-            throw new EntityNotFoundException("Address not found for uniqueId: " + id);
+    public Address get(UUID uuid) {
+        if (addressMap.containsKey(uuid)) {
+            return addressMap.get(uuid);
         }
-        return addressList.get(0);
+        return null; //FIXME not sure
     }
 
     @Override
     public List<Address> getAll() {
-        EntityTransaction et = em.getTransaction();
-        et.begin();
-
-        TypedQuery<Address> addressList = em.createQuery("Select address from Address address", Address.class)
-                .setLockMode(LockModeType.OPTIMISTIC);
-        List<Address> ret = addressList.getResultList();
-        et.commit();
-        return ret;
+        return addressMap.values().stream().toList();
     }
 
     @Override
-    public boolean add(Address elem) {
-        EntityTransaction et = em.getTransaction();
-        et.begin();
-        try {
-            em.persist(elem);
-            em.lock(elem, LockModeType.OPTIMISTIC_FORCE_INCREMENT);
-            et.commit();
-        } finally {
-            if(et.isActive()) {
-                et.rollback();
-            }
+    public boolean add(UUID uuid, Address elem) {
+        if (!addressMap.containsKey(uuid)) {
+            addressMap.put(uuid, elem);
+            return true;
         }
+        return false; //FIXME Same address cannot be added twice?
     }
 
     @Override
-    public void remove(Address elem) {
-        EntityTransaction et = em.getTransaction();
-        et.begin();
-        try {
-            em.lock(elem, LockModeType.OPTIMISTIC_FORCE_INCREMENT);
-            this.em.remove(elem);
-            et.commit();
-        } finally {
-            if(et.isActive()) {
-                et.rollback();
-            }
+    public boolean remove(UUID key) {
+        if (addressMap.containsKey(key)) {
+            addressMap.remove(key);  //FIXME returns boolean or Client?
+            return true;
         }
+        return false;
     }
 
     @Override
     public boolean update(UUID uuid, Address elem) {
-        EntityTransaction et = em.getTransaction();
-        et.begin();
-        try {
-            em.lock(elem, LockModeType.OPTIMISTIC);
-            this.em.merge(elem);
-            et.commit();
-        } finally {
-            if(et.isActive()) {
-                et.rollback();
-            }
+        if (addressMap.containsKey(uuid)) {
+            addressMap.put(uuid, elem); //FIXME bool or Address from here?
+            return true;
         }
+        return false;
     }
 
     @Override
     public int count() {
-        EntityTransaction et = em.getTransaction();
-        et.begin();
-        Long count = em.createQuery("Select count(address) from Address address", Long.class).getSingleResult();
-        et.commit();
-        return count;
+
+        return addressMap.size();
+
     }
 }

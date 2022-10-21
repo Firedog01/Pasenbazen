@@ -1,17 +1,9 @@
 package model.EQ;
 
 import exception.EquipmentException;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 
-@Entity
-@Table(name = "camera")
-@DiscriminatorValue("CAMERA")
-@PrimaryKeyJoinColumn(name = "equipment_id")
 public class Camera extends Equipment {
 
-    @NotNull
-    @Column(name = "resolution")
     private String resolution;
 
     public Camera(double firstDayCost,

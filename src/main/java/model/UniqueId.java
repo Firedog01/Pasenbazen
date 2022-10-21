@@ -6,8 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.UUID;
 
-@MappedSuperclass
-@Embeddable
+
 public class UniqueId implements Serializable {
 
     @NotNull

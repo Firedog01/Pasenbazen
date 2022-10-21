@@ -1,52 +1,32 @@
 package model.EQ;
 
 import exception.EquipmentException;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import model.Rent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
-@Entity
-@Table(name = "equipment")
-@Inheritance(strategy = InheritanceType.JOINED)
-//@DiscriminatorColumn(name = "type")
-@Access(AccessType.FIELD)
+
 public abstract class Equipment {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(initialValue = 0, name = "equipment_sequence_generator")
-    @Column(name = "equipment_id", updatable = false)
-    private Long id;
 
-    @Column(name = "name")
-    @NotNull
+    private UUID eqUUID;
+
     private String name;
 
-    @Column(name = "bail")
     private double bail;
 
-    @Column(name = "first_day_cost")
     private double firstDayCost;
 
-    @Column(name = "next_day_cost")
     private double nextDaysCost;
 
-    @NotNull
-    @Column(name = "archive")
     private boolean archive;
 
-    @Column(name = "description")
     private String description;
 
-    @NotNull
-    @Column(name = "missing")
     private boolean missing;
 
-    @OneToMany(mappedBy = "equipment")
     private List<Rent> equipmentRents = new ArrayList<>();
 
 
@@ -58,6 +38,7 @@ public abstract class Equipment {
         if(name.length() == 0) {
             throw new EquipmentException("Prosze podac prawidlowa nazwe");
         }
+        this.eqUUID = UUID.randomUUID();
         this.firstDayCost = firstDayCost;
         this.nextDaysCost = nextDaysCost;
         this.bail = bail;
@@ -72,21 +53,20 @@ public abstract class Equipment {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("-------------------- Equipment{");
-        sb.append("id=").append(id);
+        sb.append("id=").append(eqUUID);
         sb.append(", firstDayCost=").append(firstDayCost);
         sb.append(", nextDaysCost=").append(nextDaysCost);
         sb.append(", bail=").append(bail);
         sb.append(", name='").append(name).append('\'');
         sb.append(", archive=").append(archive);
         sb.append(", description='").append(description).append('\'');
-        sb.append(", id=").append(id);
         sb.append(", missing=").append(missing);
         sb.append('}');
         return sb.toString();
     }
 
-    public Long getId() {
-        return id;
+    public UUID getEqUUID() {
+        return eqUUID;
     }
 
     public double getFirstDayCost() {

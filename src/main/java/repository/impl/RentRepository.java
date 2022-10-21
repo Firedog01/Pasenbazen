@@ -2,7 +2,6 @@ package repository.impl;
 
 import jakarta.persistence.*;
 import model.*;
-import model.EQ.Equipment;
 import repository.Repository;
 
 import java.util.List;
@@ -12,7 +11,7 @@ import java.util.UUID;
 
 public class RentRepository implements Repository<Rent> {
 
-    private Map<UUID, Rent> rentList;
+    private Map<UUID, Rent> rentMap;
 
     private EntityManager em;
 
@@ -22,15 +21,15 @@ public class RentRepository implements Repository<Rent> {
 
     @Override
     public Rent get(UUID uuid) {
-        if (rentList.containsKey(uuid)) {
-            return rentList.get(uuid);
+        if (rentMap.containsKey(uuid)) {
+            return rentMap.get(uuid);
         }
         return null; //FIXME
     }
 
     @Override
     public List<Rent> getAll() {
-        return rentList.values().stream().toList();
+        return rentMap.values().stream().toList();
     }
 
 //FIXME ???
@@ -54,8 +53,8 @@ public class RentRepository implements Repository<Rent> {
 
     @Override
     public boolean add(UUID uuid, Rent elem) {
-        if (!rentList.containsKey(uuid)) {
-            rentList.put(uuid, elem);
+        if (!rentMap.containsKey(uuid)) {
+            rentMap.put(uuid, elem);
             return true;
         }
         return false; //FIXME Same client cannot be added twice?
@@ -63,8 +62,8 @@ public class RentRepository implements Repository<Rent> {
 
     @Override
     public boolean remove(UUID key) {
-        if (rentList.containsKey(key)) {
-            rentList.remove(key);  //FIXME returns boolean or Client?
+        if (rentMap.containsKey(key)) {
+            rentMap.remove(key);  //FIXME returns boolean or Client?
             return true;
         }
         return false;
@@ -72,8 +71,8 @@ public class RentRepository implements Repository<Rent> {
 
     @Override
     public boolean update(UUID uuid, Rent elem) {
-        if (rentList.containsKey(uuid)) {
-            rentList.put(uuid, elem); //FIXME bool or Rent from here?
+        if (rentMap.containsKey(uuid)) {
+            rentMap.put(uuid, elem); //FIXME bool or Rent from here?
             return true;
         }
         return false;
@@ -81,7 +80,7 @@ public class RentRepository implements Repository<Rent> {
 
     @Override
     public int count() {
-        return rentList.size();
+        return rentMap.size();
     }
 /*
     public List<Rent> getRentByClient(Client clientP) {
