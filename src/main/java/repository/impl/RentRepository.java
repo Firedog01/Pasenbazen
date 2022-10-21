@@ -1,20 +1,18 @@
 package repository.impl;
 
 import jakarta.persistence.*;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Root;
 import model.*;
 import model.EQ.Equipment;
 import repository.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 
 public class RentRepository implements Repository<Rent> {
 
-    private List<Rent> rentList;
+    private Map<UUID, Rent> rentList;
 
     private EntityManager em;
 
@@ -23,116 +21,69 @@ public class RentRepository implements Repository<Rent> {
     }
 
     @Override
-    public Rent get(UniqueId uniqueId) {
-
-
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Rent> cq = cb.createQuery(Rent.class);
-        Root<Rent> rent = cq.from(Rent.class);
-
-        cq.select(rent);
-        cq.where(cb.equal(rent.get(Rent_.ENTITY_ID), uniqueId));
-
-
-        EntityTransaction et = em.getTransaction();
-        et.begin();
-
-        List<Rent> rents = em.createQuery(cq).setLockMode(LockModeType.OPTIMISTIC).getResultList();
-        et.commit();
-
-        if (rents.isEmpty()) {
-            throw new EntityNotFoundException("Rent not found for uniqueId: " + uniqueId);
+    public Rent get(UUID uuid) {
+        if (rentList.containsKey(uuid)) {
+            return rentList.get(uuid);
         }
-        return rents.get(0);
+        return null; //FIXME
     }
 
     @Override
     public List<Rent> getAll() {
-        return this.rentList;
+        return rentList.values().stream().toList();
     }
 
-    public List<Rent> getEquipmentRents(Equipment e) {
-        if(e.getId() == null) {
-            return new ArrayList<Rent>();
+//FIXME ???
+//    public List<Rent> getEquipmentRents(Equipment e) {
+//        if(e.getId() == null) {
+//            return new ArrayList<Rent>();
+//        }
+//        CriteriaBuilder cb = em.getCriteriaBuilder();
+//        CriteriaQuery<Rent> cq = cb.createQuery(Rent.class);
+//        Root<Rent> rent = cq.from(Rent.class);
+//        cq.select(rent);
+//        cq.where(cb.equal(rent.get(Rent_.EQUIPMENT), e));
+//        EntityTransaction et = em.getTransaction();
+//        et.begin();
+//        List<Rent> rents = em.createQuery(cq).
+//                setLockMode(LockModeType.OPTIMISTIC).
+//                getResultList();
+//        et.commit();
+//        return rents;
+//    }
+
+    @Override
+    public boolean add(UUID uuid, Rent elem) {
+        if (!rentList.containsKey(uuid)) {
+            rentList.put(uuid, elem);
+            return true;
         }
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Rent> cq = cb.createQuery(Rent.class);
-        Root<Rent> rent = cq.from(Rent.class);
-
-        cq.select(rent);
-        cq.where(cb.equal(rent.get(Rent_.EQUIPMENT), e));
-        // jakiś błąd z cascade type
-
-        EntityTransaction et = em.getTransaction();
-        et.begin();
-        List<Rent> rents = em.createQuery(cq).
-                setLockMode(LockModeType.OPTIMISTIC).
-                getResultList();
-        et.commit();
-        return rents;
+        return false; //FIXME Same client cannot be added twice?
     }
 
     @Override
-    public boolean add(Rent elem) {
-        EntityTransaction et = em.getTransaction();
-        et.begin();
-        try {
-            if(elem.getEquipment().getId() != null) {
-                Equipment e = em.find(Equipment.class, elem.getEquipment().getId()); // tutaj lock!
-                em.lock(e, LockModeType.OPTIMISTIC_FORCE_INCREMENT);
-                elem.setEquipment(e);
-            }
-            em.persist(elem);
-            et.commit();
-//            System.out.println("equipment found: " + e.toString());
-        } catch (RollbackException e) {
-            System.out.println("rollback");
-        } finally {
-            if (et.isActive()) {
-                et.rollback();
-            }
+    public boolean remove(UUID key) {
+        if (rentList.containsKey(key)) {
+            rentList.remove(key);  //FIXME returns boolean or Client?
+            return true;
         }
+        return false;
     }
 
     @Override
-    public void remove(Rent elem) {
-        EntityTransaction et = em.getTransaction();
-        et.begin();
-        try {
-            em.lock(elem, LockModeType.OPTIMISTIC);
-            this.em.remove(elem);
-            et.commit();
-        } finally {
-            if(et.isActive()) {
-                et.rollback();
-            }
+    public boolean update(UUID uuid, Rent elem) {
+        if (rentList.containsKey(uuid)) {
+            rentList.put(uuid, elem); //FIXME bool or Rent from here?
+            return true;
         }
-    }
-
-    @Override
-    public boolean update(Rent elem) {
-        EntityTransaction et = em.getTransaction();
-        et.begin();
-        try {
-            em.lock(elem, LockModeType.OPTIMISTIC_FORCE_INCREMENT);
-            em.merge(elem);
-            et.commit();
-        } finally {
-            if(et.isActive()) {
-                et.rollback();
-            }
-        }
+        return false;
     }
 
     @Override
     public int count() {
-        EntityTransaction et = em.getTransaction();
-        et.begin();
-        Long count = em.createQuery("Select count(rent) from Rent rent", Long.class).getSingleResult();
-        et.commit();
-        return count;
+        return rentList.size();
     }
-
+/*
     public List<Rent> getRentByClient(Client clientP) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Rent> cq = cb.createQuery(Rent.class);
@@ -149,7 +100,8 @@ public class RentRepository implements Repository<Rent> {
         }
         return rents;
     }
-
+*/
+    /*
     public List<Rent> getRentByEq(Equipment equipment) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Rent> cq = cb.createQuery(Rent.class);
@@ -166,6 +118,6 @@ public class RentRepository implements Repository<Rent> {
         }
         return rents;
     }
-
+*/
 
 }

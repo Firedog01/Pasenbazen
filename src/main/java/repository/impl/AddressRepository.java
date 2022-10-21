@@ -8,6 +8,7 @@ import model.*;
 import repository.Repository;
 
 import java.util.List;
+import java.util.UUID;
 
 public class AddressRepository implements Repository<Address> {
 
@@ -82,7 +83,7 @@ public class AddressRepository implements Repository<Address> {
     }
 
     @Override
-    public boolean update(Address elem) {
+    public boolean update(UUID uuid, Address elem) {
         EntityTransaction et = em.getTransaction();
         et.begin();
         try {

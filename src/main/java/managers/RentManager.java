@@ -89,7 +89,7 @@ public class RentManager {
 
     public void shipEquipment(Rent rent) {
         rent.setShipped(true);
-        rentRepository.update(rent);
+        rentRepository.update(rent.getUniqueRentId(), rent);
     }
 
     public boolean isAvailable(Equipment equipment) {
@@ -143,7 +143,7 @@ public class RentManager {
     public void returnEquipment(Rent rent, boolean missing) {
         rent.setEqReturned(true);
         rent.getEquipment().setMissing(missing);
-        rentRepository.update(rent);
+        rentRepository.update(rent.getUniqueRentId(), rent);
     }
 
     public double checkClientBalance(Client client) {

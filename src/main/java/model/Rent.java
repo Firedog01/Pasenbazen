@@ -7,49 +7,26 @@ import model.EQ.Equipment;
 import org.joda.time.Days;
 import org.joda.time.LocalDateTime;
 
-@Entity
-@Table(name = "rent")
-@Access(AccessType.FIELD)
+import java.util.UUID;
+
+
 public class Rent {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(initialValue = 0, name = "rent_sequence_generator")
-    @Column(name = "rent_id")
-    private long id;
 
-    @NotNull
-    @JoinColumn(name = "equipment_id")
-    @ManyToOne(fetch = FetchType.EAGER,
-            cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private UUID uniqueRentId;
+
     private Equipment equipment;
 
-    @NotNull
-    @JoinColumn(name = "client_id")
-    @JoinColumn(name = "client_id_type")
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Client client;
 
-    // jako embbedable
-    @NotNull
-    @JoinColumn(name = "address_id")
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Address shippingAddress;
 
-    @NotNull
-    @Column(name = "begin_time")
     private LocalDateTime beginTime;
 
-    @NotNull
-    @Column(name = "end_time")
     private LocalDateTime endTime;
 
-
-    @Column(name = "shipped")
     private boolean shipped;
 
-
-    @Column(name = "eq_returned")
     private boolean eqReturned;
 
 
@@ -64,17 +41,10 @@ public class Rent {
         this.equipment = equipment;
         this.client = client;
         this.shippingAddress = shippingAddress;
+        this.uniqueRentId = UUID.randomUUID();
     }
 
     protected Rent() {}
-
-    public Rent(long id, LocalDateTime beginTime, LocalDateTime endTime,
-                Equipment equipment, Client client, Address shippingAddress) {
-
-        this(beginTime, endTime, equipment, client, shippingAddress);
-        this.id = id;
-    }
-
 
     public double getRentCost() {
         if (!eqReturned) {
@@ -83,8 +53,6 @@ public class Rent {
             return equipment.getBail();
         } else {
             long diffDays= Math.abs(Days.daysBetween(beginTime, endTime).getDays());
-            //FIXME Nie jestem pewien co do tego, ustawiłem sprawdzanie od 1, bo myślę, że gdzieś indziej będzie sprawdzane
-            // Czy data jest w ogóle większa od 0?
             if (diffDays > 1) {
                 return equipment.getFirstDayCost() + equipment.getNextDaysCost() * (diffDays - 1);
             } else {
@@ -95,7 +63,7 @@ public class Rent {
 
     public String toString() {
         final StringBuilder sb = new StringBuilder("Rent{");
-        sb.append("id=").append(id);
+        sb.append("id=").append(uniqueRentId);
         sb.append("Klient=").append(getClient().toString()); //FIXME to string
         sb.append("Sprzęt=").append(getEquipment().toString());
         sb.append("Adres dostawy= ").append(shippingAddress);
@@ -118,6 +86,10 @@ public class Rent {
 
     public LocalDateTime getEndTime() {
         return endTime;
+    }
+
+    public UUID getUniqueRentId() {
+        return uniqueRentId;
     }
 
     public void setEndTime(LocalDateTime endTime) {

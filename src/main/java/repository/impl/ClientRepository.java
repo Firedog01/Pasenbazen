@@ -50,8 +50,12 @@ public class ClientRepository implements Repository<Client> {
     }
 
     @Override
-    public boolean update(Client elem) {
-        return false; //TODO
+    public boolean update(UUID uuid, Client elem) {
+        if (clientList.containsKey(uuid)) {
+            clientList.put(uuid, elem); //FIXME bool or Client from here?
+            return true;
+        }
+        return false;
     }
 
     @Override

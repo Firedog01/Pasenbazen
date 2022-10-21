@@ -10,6 +10,7 @@ import model.UniqueId;
 import repository.Repository;
 
 import java.util.List;
+import java.util.UUID;
 
 
 public class EquipmentRepository implements Repository<Equipment> {
@@ -82,7 +83,7 @@ public class EquipmentRepository implements Repository<Equipment> {
     }
 
     @Override
-    public boolean update(Equipment elem) {
+    public boolean update(UUID uuid, Equipment elem) {
         EntityTransaction et = em.getTransaction();
         et.begin();
         try {

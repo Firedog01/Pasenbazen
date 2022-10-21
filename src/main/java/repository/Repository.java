@@ -1,21 +1,19 @@
 package repository;
 
-
-import model.UniqueId;
-
 import java.util.List;
+import java.util.UUID;
 
 public interface Repository<T> {
 
-    T get(UniqueId id);
+    T get(UUID uuid);
 
     List<T> getAll();
 
-    boolean add(T elem);
+    boolean add(UUID uuid, T elem);
 
-    boolean remove(T elem);
+    boolean remove(UUID uuid);
 
-    boolean update(T elem);
+    boolean update(UUID uuid, T elem);
 
     int count();
 }
