@@ -1,11 +1,5 @@
 package repository.impl;
-
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.EntityNotFoundException;
-import jakarta.persistence.Persistence;
 import model.Address;
-import model.EQ.Equipment;
-import model.UniqueId;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import repository.DataFaker;
@@ -19,27 +13,11 @@ import static org.junit.jupiter.api.Assertions.*;
 class AddressRepositoryTest {
     static AddressRepository ar;
     static RepositoryFactory rf;
-    static EntityManagerFactory emf;
 
     @BeforeAll
     static void beforeAll() {
-        emf = Persistence.createEntityManagerFactory("POSTGRES_DB");
-        rf = new RepositoryFactory(emf);
+        rf = new RepositoryFactory();
         ar = (AddressRepository) rf.getRepository(RepositoryType.AddressRepository);
-    }
-
-    @Test
-    void add_get_remove() {
-        Address a = DataFaker.getAddress();
-        System.out.println(a);
-        ar.add(a);
-        UniqueId uid = a.getEntityId();
-        Address a1 = ar.get(uid);
-        assertEquals(a, a1);
-        ar.remove(a1);
-        assertThrows(EntityNotFoundException.class, () -> {
-            ar.get(uid);
-        });
     }
 
     @Test
@@ -52,9 +30,9 @@ class AddressRepositoryTest {
 
         a1.setCity(a1_city);
 
-        ar.update(a1);
+        ar.update(a1.getUuid(), a1);
 
-        Address a1_ = ar.get(a1.getEntityId());
+        Address a1_ = ar.get(a1.getUuid());
 
         assertEquals(a1_.getCity(), a1_city);
         assertEquals(a1, a1_);
@@ -62,7 +40,7 @@ class AddressRepositoryTest {
         List<Address> addressList = ar.getAll();
         assertEquals(1, addressList.size());
         assertEquals(1, ar.count());
-        ar.remove(a1_);
+        ar.remove(a1_.getUuid());
         assertEquals(0, ar.count());
     }
 }

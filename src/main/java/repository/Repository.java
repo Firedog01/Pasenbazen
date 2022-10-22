@@ -9,7 +9,7 @@ public interface Repository<T> {
 
     List<T> getAll();
 
-    boolean add(UUID uuid, T elem);
+    boolean add(T elem);
 
     boolean remove(UUID uuid);
 

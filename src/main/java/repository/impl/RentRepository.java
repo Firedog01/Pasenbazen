@@ -14,10 +14,18 @@ public class RentRepository implements Repository<Rent> {
 
     private Map<UUID, Rent> rentMap;
 
-    private EntityManager em;
+//    private EntityManager em;
+//
+//    public RentRepository(EntityManager em) {
+//        this.em = em;
+//    }
 
-    public RentRepository(EntityManager em) {
-        this.em = em;
+
+    public RentRepository(Map<UUID, Rent> rentMap) {
+        this.rentMap = rentMap;
+    }
+
+    public RentRepository() {
     }
 
     @Override
@@ -53,9 +61,9 @@ public class RentRepository implements Repository<Rent> {
 //    }
 
     @Override
-    public boolean add(UUID uuid, Rent elem) {
-        if (!rentMap.containsKey(uuid)) {
-            rentMap.put(uuid, elem);
+    public boolean add(Rent elem) {
+        if (!rentMap.containsKey(elem.getUuid())) {
+            rentMap.put(elem.getUuid(), elem);
             return true;
         }
         return false; //FIXME Same client cannot be added twice?
@@ -94,7 +102,7 @@ public class RentRepository implements Repository<Rent> {
 
     public List<Rent> getRentByEq(Equipment eq) {
         List<Rent> result = rentMap.values().stream()
-                .filter(rent -> eq.getEqUUID().equals(rent.getEquipment().getEqUUID())).toList();
+                .filter(rent -> eq.getUuid().equals(rent.getEquipment().getUuid())).toList();
         return result;
     }
 

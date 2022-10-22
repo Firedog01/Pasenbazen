@@ -18,7 +18,7 @@ public class EquipmentManager {
 
     public void unregisterEquipment(Equipment equipment) {
 //        Equipment e = equipmentRepository.get(equipment.getEqUUID());
-        equipmentRepository.remove(equipment.getEqUUID());
+        equipmentRepository.remove(equipment.getUuid());
     }
 
     public List<Equipment> getAllEquipment() {
@@ -38,31 +38,31 @@ public class EquipmentManager {
 
     public Equipment registerCamera(double fDayCost, double nDayCost, double bail, String name, String resolution) throws EquipmentException {
         Camera camera = new Camera(fDayCost, nDayCost, bail, name, resolution);
-        equipmentRepository.add(camera.getEqUUID(), camera);
+        equipmentRepository.add(camera);
         return camera;
     }
 
     public Equipment registerTrivet(double fDayCost, double nDayCost, double bail, String name, double weight) throws EquipmentException {
         Trivet trivet = new Trivet(fDayCost, nDayCost, bail, name, weight);
-        equipmentRepository.add(trivet.getEqUUID(), trivet);
+        equipmentRepository.add(trivet);
         return trivet;
     }
 
     public Equipment registerLens(double fDayCost, double nDayCost, double bail, String name, String length) throws EquipmentException {
         Lens lens = new Lens(fDayCost, nDayCost, bail, name, length);
-        equipmentRepository.add(lens.getEqUUID(), lens);
+        equipmentRepository.add(lens);
         return lens;
     }
 
     public Equipment registerMicrophone(double fDayCost, double nDayCost, double bail, String name, String sensitivity) throws EquipmentException {
         Microphone microphone = new Microphone(fDayCost, nDayCost, bail, name, sensitivity);
-        equipmentRepository.add(microphone.getEqUUID(), microphone);
+        equipmentRepository.add(microphone);
         return microphone;
     }
 
     public Equipment registerLighting(double fDayCost, double nDayCost, double bail, String name, String brightness) throws EquipmentException {
         Lighting lighting = new Lighting(fDayCost, nDayCost, bail, name, brightness);
-        equipmentRepository.add(lighting.getEqUUID(), lighting);
+        equipmentRepository.add(lighting);
         return lighting;
     }
 

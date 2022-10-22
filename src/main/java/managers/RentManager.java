@@ -1,21 +1,15 @@
 package managers;
 
-import jakarta.persistence.EntityNotFoundException;
-import jakarta.persistence.LockModeType;
 import model.Client;
 import model.Address;
 import model.EQ.Equipment;
 import model.Rent;
-import model.UniqueId;
-import org.hibernate.annotations.OptimisticLock;
-import org.hibernate.annotations.OptimisticLocking;
 import org.joda.time.LocalDateTime;
 import repository.impl.RentRepository;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.function.Predicate;
 
 
 public class RentManager {
@@ -78,7 +72,7 @@ public class RentManager {
 
         if (good) {
             Rent rent = new Rent(beginTime, endTime, equipment, client, address);
-            rentRepository.add(rent.getUniqueRentId(), rent);
+            rentRepository.add(rent);
             return rent;
         } else {
             return null;
@@ -91,7 +85,7 @@ public class RentManager {
 
     public void shipEquipment(Rent rent) {
         rent.setShipped(true);
-        rentRepository.update(rent.getUniqueRentId(), rent);
+        rentRepository.update(rent.getUuid(), rent);
     }
 
     public boolean isAvailable(Equipment equipment) {
@@ -139,13 +133,13 @@ public class RentManager {
     }
 
     public void cancelReservation(Rent rent) {
-        rentRepository.remove(rent.getUniqueRentId());
+        rentRepository.remove(rent.getUuid());
     } //FIXME send UUID or get UUID from rent obj?
 
     public void returnEquipment(Rent rent, boolean missing) {
         rent.setEqReturned(true);
         rent.getEquipment().setMissing(missing);
-        rentRepository.update(rent.getUniqueRentId(), rent);
+        rentRepository.update(rent.getUuid(), rent);
     }
 
     public double checkClientBalance(Client client) {

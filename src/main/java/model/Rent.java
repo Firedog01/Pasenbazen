@@ -10,7 +10,7 @@ import java.util.UUID;
 public class Rent {
 
 
-    private UUID uniqueRentId;
+    private UUID uuid;
 
     private Equipment equipment;
 
@@ -38,7 +38,7 @@ public class Rent {
         this.equipment = equipment;
         this.client = client;
         this.shippingAddress = shippingAddress;
-        this.uniqueRentId = UUID.randomUUID();
+        this.uuid = UUID.randomUUID();
     }
 
     protected Rent() {}
@@ -60,7 +60,7 @@ public class Rent {
 
     public String toString() {
         final StringBuilder sb = new StringBuilder("Rent{");
-        sb.append("id=").append(uniqueRentId);
+        sb.append("id=").append(uuid);
         sb.append("Klient=").append(getClient().toString()); //FIXME to string
         sb.append("Sprzęt=").append(getEquipment().toString());
         sb.append("Adres dostawy= ").append(shippingAddress);
@@ -85,8 +85,8 @@ public class Rent {
         return endTime;
     }
 
-    public UUID getUniqueRentId() {
-        return uniqueRentId;
+    public UUID getUuid() {
+        return uuid;
     }
 
     public void setEndTime(LocalDateTime endTime) {

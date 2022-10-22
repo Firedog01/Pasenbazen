@@ -1,31 +1,39 @@
 package repository;
 
 import jakarta.persistence.EntityManagerFactory;
+import model.Address;
+import model.Client;
+import model.EQ.Equipment;
+import model.Rent;
 import repository.impl.AddressRepository;
 import repository.impl.ClientRepository;
 import repository.impl.EquipmentRepository;
 import repository.impl.RentRepository;
 
-public class RepositoryFactory {
-    EntityManagerFactory emf;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
-    public RepositoryFactory(EntityManagerFactory emf) {
-        this.emf = emf;
+public class RepositoryFactory {
+//    EntityManagerFactory emf;
+
+    public RepositoryFactory() {
+
     }
 
     public Repository getRepository(RepositoryType type) {
         switch(type) {
             case RentRepository -> {
-                return new RentRepository(emf.createEntityManager());
+                return new RentRepository(new HashMap<UUID, Rent>());
             }
             case EquipmentRepository -> {
-                return new EquipmentRepository(emf.createEntityManager());
+                return new EquipmentRepository(new HashMap<UUID, Equipment>());
             }
             case ClientRepository -> {
-                return new ClientRepository(emf.createEntityManager());
+                return new ClientRepository(new HashMap<UUID, Client>());
             }
             case AddressRepository -> {
-                return new AddressRepository(emf.createEntityManager());
+                return new AddressRepository(new HashMap<UUID, Address>());
             }
         }
         return null;

@@ -11,7 +11,7 @@ import java.util.UUID;
 public abstract class Equipment {
 
 
-    private UUID eqUUID;
+    private UUID uuid;
 
     private String name;
 
@@ -38,7 +38,7 @@ public abstract class Equipment {
         if(name.length() == 0) {
             throw new EquipmentException("Prosze podac prawidlowa nazwe");
         }
-        this.eqUUID = UUID.randomUUID();
+        this.uuid = UUID.randomUUID();
         this.firstDayCost = firstDayCost;
         this.nextDaysCost = nextDaysCost;
         this.bail = bail;
@@ -53,7 +53,7 @@ public abstract class Equipment {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("-------------------- Equipment{");
-        sb.append("id=").append(eqUUID);
+        sb.append("id=").append(uuid);
         sb.append(", firstDayCost=").append(firstDayCost);
         sb.append(", nextDaysCost=").append(nextDaysCost);
         sb.append(", bail=").append(bail);
@@ -65,8 +65,8 @@ public abstract class Equipment {
         return sb.toString();
     }
 
-    public UUID getEqUUID() {
-        return eqUUID;
+    public UUID getUuid() {
+        return uuid;
     }
 
     public double getFirstDayCost() {

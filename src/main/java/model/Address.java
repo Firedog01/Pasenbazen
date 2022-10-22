@@ -5,7 +5,7 @@ import java.util.UUID;
 
 public class Address {
 
-    private UUID addressUUID;
+    private UUID uuid;
 
     private String city;
 
@@ -15,7 +15,7 @@ public class Address {
     private String streetNr;
 
     public Address(String city, String street, String streetNr) {
-        addressUUID = UUID.randomUUID();
+        uuid = UUID.randomUUID();
         this.city = city;
         this.street = street;
         this.streetNr = streetNr;
@@ -35,8 +35,8 @@ public class Address {
         return streetNr;
     }
 
-    public UUID getAddressUUID() {
-        return addressUUID;
+    public UUID getUuid() {
+        return uuid;
     }
 
     public void setCity(String city) {

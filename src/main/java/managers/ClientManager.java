@@ -22,7 +22,7 @@ public class ClientManager {
                                  String surname, Address address
     ) throws ClientException {
         Client client = new Client(clientId, idtype, name, surname, address);
-        clientRepository.add(client.getUuid(), client);
+        clientRepository.add(client);
         return client;
     }
 

@@ -1,13 +1,8 @@
 package repository.impl;
 
 import jakarta.persistence.*;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Root;
-import model.Client;
-import model.Client_;
+
 import model.EQ.Equipment;
-import model.UniqueId;
 import repository.Repository;
 
 import java.util.List;
@@ -19,10 +14,18 @@ public class EquipmentRepository implements Repository<Equipment> {
 
     private Map<UUID, Equipment> equipmentMap;
 
-    private EntityManager em;
+//    private EntityManager em;
+//
+//    public EquipmentRepository() {
+//        this.em = em;
+//    }
 
-    public EquipmentRepository(EntityManager em) {
-        this.em = em;
+
+    public EquipmentRepository(Map<UUID, Equipment> equipmentMap) {
+        this.equipmentMap = equipmentMap;
+    }
+
+    public EquipmentRepository() {
     }
 
     @Override
@@ -39,9 +42,9 @@ public class EquipmentRepository implements Repository<Equipment> {
     }
 
     @Override
-    public boolean add(UUID uuid, Equipment elem) {
-        if (!equipmentMap.containsKey(uuid)) {
-            equipmentMap.put(uuid, elem);
+    public boolean add(Equipment elem) {
+        if (!equipmentMap.containsKey(elem.getUuid())) {
+            equipmentMap.put(elem.getUuid(), elem);
             return true;
         }
         return false; // FIXME Same eq cannot be added twice?

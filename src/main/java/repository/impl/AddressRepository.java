@@ -14,8 +14,16 @@ public class AddressRepository implements Repository<Address> {
 
     private EntityManager em;
 
-    public AddressRepository(EntityManager em) {
-        this.em = em;
+//    public AddressRepository(EntityManager em) {
+//        this.em = em;
+//    }
+
+
+    public AddressRepository(Map<UUID, Address> addressMap) {
+        this.addressMap = addressMap;
+    }
+
+    public AddressRepository() {
     }
 
     @Override
@@ -32,9 +40,9 @@ public class AddressRepository implements Repository<Address> {
     }
 
     @Override
-    public boolean add(UUID uuid, Address elem) {
-        if (!addressMap.containsKey(uuid)) {
-            addressMap.put(uuid, elem);
+    public boolean add(Address elem) {
+        if (!addressMap.containsKey(elem.getUuid())) {
+            addressMap.put(elem.getUuid(), elem);
             return true;
         }
         return false; //FIXME Same address cannot be added twice?

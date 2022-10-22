@@ -2,11 +2,7 @@ package repository.impl;
 
 import exception.ClientException;
 import jakarta.persistence.*;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Root;
 import model.*;
-import model.EQ.Equipment;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import repository.DataFaker;
@@ -14,7 +10,6 @@ import repository.RepositoryFactory;
 import repository.RepositoryType;
 
 import java.util.List;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -23,31 +18,14 @@ class ClientRepositoryTest {
     static ClientRepository cr;
     static AddressRepository ar;
     static RepositoryFactory rf;
-    static EntityManagerFactory emf;
-
-    static EntityTransaction et;
 
     @BeforeAll
     static void beforeAll() {
-        emf = Persistence.createEntityManagerFactory("POSTGRES_DB");
-        rf = new RepositoryFactory(emf);
+        rf = new RepositoryFactory();
         cr = (ClientRepository) rf.getRepository(RepositoryType.ClientRepository);
         ar = (AddressRepository) rf.getRepository(RepositoryType.AddressRepository);
     }
 
-    @Test
-    void add_get_remove() {
-        Client c = DataFaker.getClient();
-        System.out.println(c);
-        cr.add(c);
-        UniqueId uid = c.getEntityId();
-        Client c1 = cr.get(uid);
-        assertEquals(c, c1);
-        cr.remove(c1);
-        assertThrows(EntityNotFoundException.class, () -> {
-            cr.get(uid);
-        });
-    }
 
     @Test
     void update_remove() {
@@ -71,15 +49,15 @@ class ClientRepositoryTest {
         c2_a1.setFirstName(c2_fname);
         c3_a2.setLastName(c3_lname);
         c4_a3.setAddress(a2);
-        cr.update(c1_a1);
-        cr.update(c2_a1);
-        cr.update(c3_a2);
-        cr.update(c4_a3);
+        cr.update(c1_a1.getUuid(), c1_a1);
+        cr.update(c2_a1.getUuid(), c2_a1);
+        cr.update(c3_a2.getUuid(), c3_a2);
+        cr.update(c4_a3.getUuid(), c4_a3);
 
-        Client c1_ = cr.get(c1_a1.getEntityId());
-        Client c2_ = cr.get(c2_a1.getEntityId());
-        Client c3_ = cr.get(c3_a2.getEntityId());
-        Client c4_ = cr.get(c4_a3.getEntityId());
+        Client c1_ = cr.get(c1_a1.getUuid());
+        Client c2_ = cr.get(c2_a1.getUuid());
+        Client c3_ = cr.get(c3_a2.getUuid());
+        Client c4_ = cr.get(c4_a3.getUuid());
 
         assertEquals(c1_.isArchive(), c1_ar);
         assertEquals(c1_a1, c1_);
@@ -94,14 +72,14 @@ class ClientRepositoryTest {
         assertEquals(4, clientList.size());
 
         // address a1 should not be removed
-        cr.remove(c1_);
+        cr.remove(c1_.getUuid());
         assertDoesNotThrow(() -> {
-            ar.get(a1.getEntityId());
+            ar.get(a1.getUuid());
         });
 
-        cr.remove(c2_);
-        cr.remove(c3_);
-        cr.remove(c4_);
+        cr.remove(c2_.getUuid());
+        cr.remove(c3_.getUuid());
+        cr.remove(c4_.getUuid());
 
         clientList = cr.getAll();
         assertEquals(0, clientList.size());
@@ -124,12 +102,12 @@ class ClientRepositoryTest {
 
         assertEquals(startingCount + 3, cr.count());
 
-        cr.remove(client1);
+        cr.remove(client1.getUuid());
 
         assertEquals( startingCount + 2, cr.count());
 
-        cr.remove(client2);
-        cr.remove(client3);
+        cr.remove(client2.getUuid());
+        cr.remove(client3.getUuid());
     }
 
 
@@ -150,7 +128,6 @@ class ClientRepositoryTest {
         cr.add(c2);
         cr.add(c3);
 
-        assertThrows(EntityExistsException.class, () -> {cr.add(c4);});
 
         Client c1_ = cr.getByClientId(clientId1, idType.DowodOsobisty);
         assertEquals(c1, c1_);
@@ -159,9 +136,9 @@ class ClientRepositoryTest {
         Client c3_ = cr.getByClientId(clientId2, idType.DowodOsobisty);
         assertEquals(c3, c3_);
 
-        cr.remove(c1_);
-        cr.remove(c2_);
-        cr.remove(c3_);
+        cr.remove(c1_.getUuid());
+        cr.remove(c2_.getUuid());
+        cr.remove(c3_.getUuid());
     }
 
 

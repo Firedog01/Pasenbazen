@@ -16,11 +16,18 @@ public class ClientRepository implements Repository<Client> {
 
     private Map<UUID, Client> clientMap;
 
-    private EntityManager em;
+//    private EntityManager em;
+//
+//    public ClientRepository(EntityManager em) {
+//        this.em = em;
+//    }
 
-    public ClientRepository(EntityManager em) {
-        this.em = em;
+
+    public ClientRepository(Map<UUID, Client> clientMap) {
+        this.clientMap = clientMap;
     }
+
+
 
     @Override
     public Client get(UUID uuid) {
@@ -37,12 +44,12 @@ public class ClientRepository implements Repository<Client> {
     }
 
     @Override
-    public boolean add(UUID uuid, Client elem) {
-    if (!clientMap.containsKey(uuid)) {
-        clientMap.put(uuid, elem);
-        return true;
-    }
-    return false; // FIXME Same client cannot be added twice?
+    public boolean add(Client elem) {
+        if (!clientMap.containsKey(elem.getUuid())) {
+            clientMap.put(elem.getUuid(), elem);
+            return true;
+        }
+        return false; // FIXME Same client cannot be added twice?
     }
 
     @Override
