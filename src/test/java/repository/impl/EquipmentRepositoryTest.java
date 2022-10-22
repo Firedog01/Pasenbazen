@@ -8,6 +8,7 @@ import repository.RepositoryFactory;
 import repository.RepositoryType;
 
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -22,19 +23,17 @@ class EquipmentRepositoryTest {
         er = (EquipmentRepository) rf.getRepository(RepositoryType.EquipmentRepository);
     }
 
-//    @Test
-//    void add_get_remove() {
-//        Equipment e = DataFaker.getCamera();
-//        System.out.println(e);
-//        er.add(e);
-//        UniqueId uid = e.getEntityId();
-//        Equipment e1 = er.get(uid);
-//        assertEquals(e, e1);
-//        er.remove(e1);
-//        assertThrows(EntityNotFoundException.class, () -> {
-//            er.get(uid);
-//        });
-//    }
+    @Test
+    void add_get_remove() {
+        Equipment e = DataFaker.getCamera();
+        System.out.println(e);
+        er.add(e);
+        UUID uuid = e.getUuid();
+        Equipment e1 = er.get(e.getUuid());
+        assertEquals(e, e1);
+        er.remove(e1.getUuid());
+        assertEquals(0, er.count());
+    };
 
     @Test
     void update_remove() {

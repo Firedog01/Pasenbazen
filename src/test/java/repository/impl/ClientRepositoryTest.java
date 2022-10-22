@@ -3,6 +3,7 @@ package repository.impl;
 import exception.ClientException;
 import jakarta.persistence.*;
 import model.*;
+import model.EQ.Equipment;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import repository.DataFaker;
@@ -10,6 +11,7 @@ import repository.RepositoryFactory;
 import repository.RepositoryType;
 
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -26,6 +28,17 @@ class ClientRepositoryTest {
         ar = (AddressRepository) rf.getRepository(RepositoryType.AddressRepository);
     }
 
+    @Test
+    void add_get_remove() {
+        Client c = DataFaker.getClient();
+        System.out.println(c);
+        cr.add(c);
+        UUID uuid = c.getUuid();
+        Client c1 = cr.get(c.getUuid());
+        assertEquals(c, c1);
+        cr.remove(c1.getUuid());
+        assertEquals(0, cr.count());
+    };
 
     @Test
     void update_remove() {

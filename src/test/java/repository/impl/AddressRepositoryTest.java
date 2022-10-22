@@ -1,5 +1,6 @@
 package repository.impl;
 import model.Address;
+import model.Client;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import repository.DataFaker;
@@ -7,6 +8,7 @@ import repository.RepositoryFactory;
 import repository.RepositoryType;
 
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -19,6 +21,17 @@ class AddressRepositoryTest {
         rf = new RepositoryFactory();
         ar = (AddressRepository) rf.getRepository(RepositoryType.AddressRepository);
     }
+
+    @Test
+    void add_get_remove() {
+        Address a = DataFaker.getAddress();
+        System.out.println(a);
+        ar.add(a);
+        Address a1 = ar.get(a.getUuid());
+        assertEquals(a, a1);
+        ar.remove(a1.getUuid());
+        assertEquals(ar.count(), 0);
+    };
 
     @Test
     void update_remove() {
