@@ -123,5 +123,9 @@ class RentRepositoryTest {
         rr.remove(r1.getUuid());
 
         assertEquals(startingCount + 2, rr.count());
+
+        rr.remove(r2.getUuid());
+        rr.remove(r3.getUuid());
+
     }
 }

@@ -1,6 +1,7 @@
 package repository.impl;
 
 import model.EQ.Equipment;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import repository.DataFaker;
@@ -26,7 +27,7 @@ class EquipmentRepositoryTest {
     @Test
     void add_get_remove() {
         Equipment e = DataFaker.getCamera();
-        System.out.println(e);
+//        System.out.println(e);
         er.add(e);
         UUID uuid = e.getUuid();
         Equipment e1 = er.get(e.getUuid());
@@ -101,5 +102,9 @@ class EquipmentRepositoryTest {
         er.remove(eq1.getUuid());
 
         assertEquals(er.count(), 2);
+
+        er.remove(eq2.getUuid());
+        er.remove(eq3.getUuid());
+
     }
 }

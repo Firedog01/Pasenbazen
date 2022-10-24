@@ -9,6 +9,7 @@
         <module name="bazy+pas" />
         <module name="PAS_NBD" />
         <module name="NonRelational" />
+        <module name="Pasenbazen" />
         <module name="after pobi" />
       </profile>
     </annotationProcessing>
