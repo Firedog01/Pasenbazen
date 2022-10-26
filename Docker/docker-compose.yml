@@ -3,18 +3,18 @@ version: '3.8'
 services:
   mongo:
     build: .
-    image: mongo
+    image: mongocustom:1
     container_name: mongodb
     hostname: mongodb
     networks:
       - mongonet
     ports:
-      - 5432:5432
+      - 27017:27017
     restart: always
     environment:
       - MONGO_INITDB_ROOT_USERNAME=nbd
       - MONGO_INITDB_ROOT_PASSWORD=nbdpassword
-    command: --config mongod.conf
+    command: --config /etc/mongod.conf
     healthcheck:
       test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')"]
       interval: 10s
@@ -23,7 +23,7 @@ services:
 
   mongoinit:
     build: .
-    image: fedora
+    image: mongocustom:1
     hostname: mongodbinit
     container_name: mongodbinit
     networks:
