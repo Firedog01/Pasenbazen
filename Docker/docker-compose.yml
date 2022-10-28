@@ -16,7 +16,7 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=nbdpassword
     command: --config /etc/mongod.conf
     healthcheck:
-      test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')"]
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
       interval: 10s
       timeout: 2s
       retries: 5
@@ -32,7 +32,7 @@ services:
       mongo:
         condition: service_healthy
     command: >
-      mongo --host mongodb:27017 --username nbd --password nbdpassword --authenticationDatabase nbd --eval
+      mongosh --host mongodb:27017 --username nbd --password nbdpassword --authenticationDatabase admin --eval
       '
       rs.initiate();
       '
