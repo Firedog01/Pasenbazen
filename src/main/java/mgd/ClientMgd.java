@@ -1,12 +1,5 @@
 package mgd;
 
-import exception.ClientException;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import model.Address;
-import model.Client;
-import model.idType;
 import org.bson.codecs.pojo.annotations.BsonCreator;
 import org.bson.codecs.pojo.annotations.BsonProperty;
 
@@ -23,16 +16,21 @@ public class ClientMgd extends AbstractEntityMgd {
                      @BsonProperty("first_name") String firstName,
                      @BsonProperty("last_name") String lastName,
                      @BsonProperty("address") AddressMgd address,
-                     @BsonProperty("archive") String archive
-                     ) {
+                     @BsonProperty("archive") boolean archive) {
         super(entityId);
+        this.clientId = clientId;
+        this.idType = clientIdType;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.address = address;
+        this.archive = archive;
     }
 
     @BsonProperty("client_id")
     private String clientId;
 
     @BsonProperty("client_id_type")
-    private model.idType idType;
+    private idType idType;
 
     @BsonProperty("first_name")
     private String firstName;
@@ -56,7 +54,7 @@ public class ClientMgd extends AbstractEntityMgd {
         return clientId;
     }
 
-    public model.idType getIdType() {
+    public idType getIdType() {
         return idType;
     }
 

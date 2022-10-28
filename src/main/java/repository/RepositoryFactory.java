@@ -23,9 +23,6 @@ public class RepositoryFactory {
             case ClientRepository -> {
                 return new ClientRepository(emf.createEntityManager());
             }
-            case AddressRepository -> {
-                return new AddressRepository(emf.createEntityManager());
-            }
         }
         return null;
     }
