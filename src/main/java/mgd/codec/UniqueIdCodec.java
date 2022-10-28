@@ -1,4 +1,4 @@
-package repository.codec;
+package mgd.codec;
 
 import org.bson.BsonReader;
 import org.bson.BsonWriter;
@@ -6,7 +6,7 @@ import org.bson.codecs.Codec;
 import org.bson.codecs.DecoderContext;
 import org.bson.codecs.EncoderContext;
 import org.bson.codecs.configuration.CodecRegistry;
-import repository.UniqueIdMgd;
+import mgd.UniqueIdMgd;
 
 import java.util.UUID;
 

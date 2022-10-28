@@ -1,4 +1,4 @@
-package repository;
+package mgd;
 
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
@@ -10,11 +10,12 @@ import org.bson.codecs.configuration.CodecRegistries;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.Conventions;
 import org.bson.codecs.pojo.PojoCodecProvider;
-import repository.codec.UniqueIdCodecProvider;
+import mgd.codec.UniqueIdCodecProvider;
+import org.bson.codecs.pojo.annotations.BsonProperty;
 
 import java.util.List;
 
-public abstract class AbstractRepository implements AutoCloseable {
+public abstract class AbstractEntityMgd implements AutoCloseable {
 
     private ConnectionString connectionString = new ConnectionString("mongodb://localhost:27017");
     private MongoCredential credential = MongoCredential.createCredential("nbd", "admin", "nbdpassword".toCharArray());
@@ -24,6 +25,9 @@ public abstract class AbstractRepository implements AutoCloseable {
             .build());
 
     private MongoClient mongoClient;
+
+    @BsonProperty("_id")
+    private final UniqueIdMgd entityId;
 
     private void initConnection() {
         MongoClientSettings settings = MongoClientSettings.builder()
@@ -36,5 +40,13 @@ public abstract class AbstractRepository implements AutoCloseable {
                         pojoCodecRegistry
                 ))
                 .build();
+    }
+
+    public UniqueIdMgd getEntityId() {
+        return entityId;
+    }
+
+    public AbstractEntityMgd(UniqueIdMgd entityId) {
+        this.entityId = entityId;
     }
 }

@@ -1,9 +1,9 @@
-package repository.codec;
+package mgd.codec;
 
 import org.bson.codecs.Codec;
 import org.bson.codecs.configuration.CodecProvider;
 import org.bson.codecs.configuration.CodecRegistry;
-import repository.UniqueIdMgd;
+import mgd.UniqueIdMgd;
 
 public class UniqueIdCodecProvider implements CodecProvider {
     public UniqueIdCodecProvider() {}

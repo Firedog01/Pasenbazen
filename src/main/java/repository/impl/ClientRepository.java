@@ -1,19 +1,18 @@
 package repository.impl;
 
-import exception.ClientException;
 import jakarta.persistence.*;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
-import jakarta.transaction.Transactional;
 import model.*;
-import repository.AbstractRepository;
+import mgd.AbstractEntityMgd;
+import model.EQ.Equipment;
 import repository.Repository;
 
 import java.util.List;
 
 
-public class ClientRepository extends AbstractRepository {
+public class ClientRepository implements Repository<Client> {
     private EntityManager em;
 
     public ClientRepository(EntityManager em) {
@@ -129,10 +128,5 @@ public class ClientRepository extends AbstractRepository {
                 .setLockMode(LockModeType.OPTIMISTIC).getSingleResult();
         et.commit();
         return count;
-    }
-
-    @Override
-    public void close() throws Exception {
-
     }
 }

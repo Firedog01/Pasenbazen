@@ -1,4 +1,4 @@
-package repository;
+package mgd;
 
 import java.util.UUID;
 
