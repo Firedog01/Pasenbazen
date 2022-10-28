@@ -1,7 +1,6 @@
 package repository;
 
 import jakarta.persistence.EntityManagerFactory;
-import repository.impl.AddressRepository;
 import repository.impl.ClientRepository;
 import repository.impl.EquipmentRepository;
 import repository.impl.RentRepository;

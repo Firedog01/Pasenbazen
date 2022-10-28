@@ -6,16 +6,14 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import jakarta.transaction.Transactional;
-import model.Client;
-import model.Client_;
-import model.UniqueId;
-import model.idType;
+import model.*;
+import repository.AbstractRepository;
 import repository.Repository;
 
 import java.util.List;
 
 
-public class ClientRepository implements Repository<Client> {
+public class ClientRepository extends AbstractRepository {
     private EntityManager em;
 
     public ClientRepository(EntityManager em) {
@@ -131,5 +129,10 @@ public class ClientRepository implements Repository<Client> {
                 .setLockMode(LockModeType.OPTIMISTIC).getSingleResult();
         et.commit();
         return count;
+    }
+
+    @Override
+    public void close() throws Exception {
+
     }
 }
