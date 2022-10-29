@@ -20,9 +20,9 @@ public class RepositoryFactory {
             case EquipmentRepository -> {
                 return new EquipmentRepository(emf.createEntityManager());
             }
-            case ClientRepository -> {
-                return new ClientRepository(emf.createEntityManager());
-            }
+//            case ClientRepository -> {
+//                return new ClientRepository(emf.createEntityManager());
+//            }
         }
         return null;
     }

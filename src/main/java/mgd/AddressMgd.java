@@ -6,7 +6,7 @@ import org.bson.codecs.pojo.annotations.BsonProperty;
 public class AddressMgd extends AbstractEntityMgd {
 
     @BsonCreator
-    public AddressMgd(@BsonProperty("city") UniqueIdMgd entityId,
+    public AddressMgd(@BsonProperty("_id") UniqueIdMgd entityId,
                       @BsonProperty("city") String city,
                       @BsonProperty("street") String street,
                       @BsonProperty("street_nr") String streetNr) {

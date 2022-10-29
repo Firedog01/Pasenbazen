@@ -5,6 +5,7 @@ import com.mongodb.MongoClientSettings;
 import com.mongodb.MongoCredential;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoDatabase;
 import repository.codec.UniqueIdCodecProvider;
 import org.bson.UuidRepresentation;
 import org.bson.codecs.configuration.CodecRegistries;
@@ -14,7 +15,7 @@ import org.bson.codecs.pojo.PojoCodecProvider;
 
 import java.util.List;
 
-public class AbstractRepository {
+public class AbstractRepository implements AutoCloseable {
 
     private ConnectionString connectionString = new ConnectionString("mongodb://localhost:27017");
     private MongoCredential credential = MongoCredential.createCredential("nbd", "admin", "nbdpassword".toCharArray());
@@ -24,6 +25,11 @@ public class AbstractRepository {
             .build());
 
     private MongoClient mongoClient;
+    private MongoDatabase db;
+
+    public AbstractRepository() {
+        initConnection();
+    }
 
     private void initConnection() {
         MongoClientSettings settings = MongoClientSettings.builder()
@@ -37,6 +43,15 @@ public class AbstractRepository {
                 ))
                 .build();
         mongoClient = MongoClients.create(settings);
+        db = mongoClient.getDatabase("db1");
     }
 
+    public MongoDatabase getDb() {
+        return db;
+    }
+
+    @Override
+    public void close() throws Exception {
+        mongoClient.close();
+    }
 }
