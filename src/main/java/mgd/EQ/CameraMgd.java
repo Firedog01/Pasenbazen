@@ -1,0 +1,41 @@
+package mgd.EQ;
+
+import mgd.UniqueIdMgd;
+import org.bson.codecs.pojo.annotations.BsonCreator;
+import org.bson.codecs.pojo.annotations.BsonProperty;
+
+public class CameraMgd extends EquipmentMgd {
+
+
+    @BsonProperty("resolution")
+    private String resolution;
+
+    @BsonCreator
+    public CameraMgd(@BsonProperty("_id") UniqueIdMgd entityId,
+                     @BsonProperty("name") String name,
+                     @BsonProperty("bail") double bail,
+                     @BsonProperty("first_day_cost") double firstDayCost,
+                     @BsonProperty("next_day_cost") double nextDaysCost,
+                     @BsonProperty("archive") boolean archive,
+                     @BsonProperty("description") String description,
+                     @BsonProperty("missing") boolean missing,
+                     @BsonProperty("resolution") String resolution
+    ) {
+        super(entityId, name, bail, firstDayCost, nextDaysCost,
+                archive, description, missing);
+        this.resolution = resolution;
+    }
+
+    @Override
+    public void close() throws Exception {
+
+    }
+
+    public String getResolution() {
+        return resolution;
+    }
+
+    public void setResolution(String resolution) {
+        this.resolution = resolution;
+    }
+}

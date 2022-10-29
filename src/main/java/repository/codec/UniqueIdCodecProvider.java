@@ -1,4 +1,4 @@
-package mgd.codec;
+package repository.codec;
 
 import org.bson.codecs.Codec;
 import org.bson.codecs.configuration.CodecProvider;

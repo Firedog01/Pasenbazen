@@ -122,7 +122,6 @@ public abstract class Equipment extends AbstractEntity {
         return equipmentRents;
     }
 
-
     public void setFirstDayCost(double firstDayCost) {
         this.firstDayCost = firstDayCost;
     }

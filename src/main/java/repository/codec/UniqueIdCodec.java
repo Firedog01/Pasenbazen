@@ -1,4 +1,4 @@
-package mgd.codec;
+package repository.codec;
 
 import org.bson.BsonReader;
 import org.bson.BsonWriter;
