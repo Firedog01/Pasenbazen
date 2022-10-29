@@ -2,10 +2,11 @@ package mgd.EQ;
 
 import mgd.UniqueIdMgd;
 import org.bson.codecs.pojo.annotations.BsonCreator;
+import org.bson.codecs.pojo.annotations.BsonDiscriminator;
 import org.bson.codecs.pojo.annotations.BsonProperty;
 
+@BsonDiscriminator(key = "_clazz", value = "camera")
 public class CameraMgd extends EquipmentMgd {
-
 
     @BsonProperty("resolution")
     private String resolution;

@@ -2,7 +2,6 @@ package mgd;
 
 import org.bson.codecs.pojo.annotations.BsonProperty;
 
-
 public abstract class AbstractEntityMgd implements AutoCloseable {
     public AbstractEntityMgd(UniqueIdMgd entityId) {
         this.entityId = entityId;

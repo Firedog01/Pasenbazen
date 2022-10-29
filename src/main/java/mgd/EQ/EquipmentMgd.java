@@ -2,9 +2,10 @@ package mgd.EQ;
 
 import mgd.AbstractEntityMgd;
 import mgd.UniqueIdMgd;
+import org.bson.codecs.pojo.annotations.BsonDiscriminator;
 import org.bson.codecs.pojo.annotations.BsonProperty;
 
-
+@BsonDiscriminator(key = "_clazz")
 public abstract class EquipmentMgd extends AbstractEntityMgd {
 
     @BsonProperty("name")
