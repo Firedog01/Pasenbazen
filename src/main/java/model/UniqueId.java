@@ -18,6 +18,10 @@ public class UniqueId implements Serializable {
         this.uniqueID = UUID.randomUUID();
     }
 
+    public UniqueId(UUID uuid) {
+        this.uniqueID = uuid;
+    }
+
     public String toString() {
         return uniqueID.toString();
     }
