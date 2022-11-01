@@ -50,6 +50,10 @@ public class AbstractRepository implements AutoCloseable {
         return db;
     }
 
+    public MongoClient getMongoClient() {
+        return mongoClient;
+    }
+
     @Override
     public void close() throws Exception {
         mongoClient.close();

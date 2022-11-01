@@ -33,5 +33,5 @@ public class RentMapper {
 //                rentDocument.get(END_TIME, LocalDateTime.class),
 //                Eq
 //        )
-    }
+
 }
