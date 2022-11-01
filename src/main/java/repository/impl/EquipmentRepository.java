@@ -1,109 +1,90 @@
 package repository.impl;
 
+import com.mongodb.MongoCommandException;
+import com.mongodb.TransactionOptions;
+import com.mongodb.WriteConcern;
+import com.mongodb.client.ClientSession;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.Updates;
 import jakarta.persistence.*;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Root;
-import model.Client;
-import model.Client_;
+
+import mgd.ClientMgd;
+import mgd.EQ.EquipmentMgd;
+import mgd.UniqueIdMgd;
 import model.EQ.Equipment;
 import model.UniqueId;
+import org.bson.conversions.Bson;
+import repository.AbstractRepository;
 import repository.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
+import static com.mongodb.client.model.Filters.and;
+import static com.mongodb.client.model.Filters.eq;
 
-public class EquipmentRepository implements Repository<Equipment> {
+public class EquipmentRepository extends AbstractRepository {
 
     private EntityManager em;
 
-    public EquipmentRepository(EntityManager em) {
-        this.em = em;
-    }
-
-    @Override
-    public Equipment get(UniqueId uniqueId) {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Equipment> cq = cb.createQuery(Equipment.class);
-        Root<Equipment> equipment = cq.from(Equipment.class);
-
-        cq.select(equipment);
-        cq.where(cb.equal(equipment.get(Client_.ENTITY_ID), uniqueId));
-
-        EntityTransaction et = em.getTransaction();
-        et.begin();
-        List<Equipment> equipmentList = em.createQuery(cq).setLockMode(LockModeType.OPTIMISTIC).getResultList();
-        et.commit();
-
-
-        if(equipmentList.isEmpty()) {
-            throw new EntityNotFoundException("Equipment not found for uniqueId: " + uniqueId);
-        }
-        return equipmentList.get(0);
-    }
-
-    @Override
-    public List<Equipment> getAll() {
-        EntityTransaction et = em.getTransaction();
-        et.begin();
-        List<Equipment> equipmentList = em.createQuery("Select eq from Equipment eq", Equipment.class)
-                .setLockMode(LockModeType.OPTIMISTIC).getResultList();
-        et.commit();
-        return equipmentList;
-    }
-
-    @Override
-    public void add(Equipment elem) {
-        EntityTransaction et = em.getTransaction();
-        et.begin();
+    //Niby ok ale related problems idk
+    public void add(EquipmentMgd equipmentMgd) {
+        ClientSession session = getMongoClient().startSession();
+        MongoCollection<EquipmentMgd> eqCollection = getDb().getCollection("eq", EquipmentMgd.class);
         try {
-            em.persist(elem);
-            em.lock(elem, LockModeType.OPTIMISTIC_FORCE_INCREMENT);
-            et.commit();
+            session.startTransaction(TransactionOptions.builder().writeConcern(WriteConcern.MAJORITY).build());
+            eqCollection.insertOne(equipmentMgd);
+            session.commitTransaction();
+        } catch (MongoCommandException e) {
+            session.abortTransaction();
+            System.out.println("####### ROLLBACK TRANSACTION #######");
         } finally {
-            if(et.isActive()) {
-                et.rollback();
-            }
+            session.close();
+            System.out.println("####################################\n");
         }
     }
 
-    @Override
-    public void remove(Equipment elem) {
-        EntityTransaction et = em.getTransaction();
-        et.begin();
+    public List<EquipmentMgd> getAllEq() {
+        MongoCollection<EquipmentMgd> eqCollection = getDb().getCollection("eq", EquipmentMgd.class);
+        ArrayList<EquipmentMgd> equipmentMgds = eqCollection.find().into(new ArrayList<>());
+        return equipmentMgds;
+    }
+
+    public EquipmentMgd getById(UniqueIdMgd uniqueIdMgd) {
+        MongoCollection<EquipmentMgd> eqCollection = getDb().getCollection("eq", EquipmentMgd.class);
+        Bson filter = eq("_id", uniqueIdMgd);
+        return eqCollection.find(filter).first();
+    }
+
+    public void update(UniqueIdMgd uniqueIdMgd, String key, String value) {
+        ClientSession session = getMongoClient().startSession();
+        MongoCollection<EquipmentMgd> eqCollection = getDb().getCollection("eq", EquipmentMgd.class);
+        Bson filter = eq("_id", uniqueIdMgd);
+        Bson updateOp = Updates.set(key, value);
+        try {                                                               //FIXME coś innego
+            session.startTransaction(TransactionOptions.builder().writeConcern(WriteConcern.MAJORITY).build());
+            eqCollection.updateOne(filter, updateOp);
+            session.commitTransaction();
+        } catch (MongoCommandException e) {
+            session.abortTransaction();
+            System.out.println("####### ROLLBACK TRANSACTION #######");
+        } finally {
+            session.close();
+            System.out.println("####################################\n");
+        }
+    }
+
+    public void findAndDelete(EquipmentMgd clientMgd, Bson removeBson) {
+        ClientSession session = getMongoClient().startSession();
+        MongoCollection<EquipmentMgd> eqCollection = getDb().getCollection("eq", EquipmentMgd.class);
+        Bson filter = eq("_id", clientMgd.getEntityId().getUuid());
+
         try {
-            em.lock(elem, LockModeType.OPTIMISTIC);
-            this.em.remove(elem);
-            et.commit();
-        } finally {
-            if(et.isActive()) {
-                et.rollback();
-            }
+            //SESJA JEST TUTAJ
+            eqCollection.updateOne(session, filter, removeBson);
+        } catch (MongoCommandException e) {
+            System.out.println("#####   MongoCommandException  #####");
+            System.out.println(e.getMessage());
         }
-    }
-
-    @Override
-    public void update(Equipment elem) {
-        EntityTransaction et = em.getTransaction();
-        et.begin();
-        try {
-            em.lock(elem, LockModeType.OPTIMISTIC_FORCE_INCREMENT);
-            this.em.merge(elem);
-            et.commit();
-        } finally {
-            if(et.isActive()) {
-                et.rollback();
-            }
-        }
-    }
-
-    @Override
-    public Long count() {
-        EntityTransaction et = em.getTransaction();
-        et.begin();
-        Long count =  em.createQuery("Select count(eq) from Equipment eq", Long.class).getSingleResult();
-        et.commit();
-        return count;
     }
 }

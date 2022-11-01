@@ -17,9 +17,9 @@ public class RepositoryFactory {
             case RentRepository -> {
                 return new RentRepository(emf.createEntityManager());
             }
-            case EquipmentRepository -> {
-                return new EquipmentRepository(emf.createEntityManager());
-            }
+//            case EquipmentRepository -> {
+//                return new EquipmentRepository(emf.createEntityManager());
+//            }
 //            case ClientRepository -> {
 //                return new ClientRepository(emf.createEntityManager());
 //            }

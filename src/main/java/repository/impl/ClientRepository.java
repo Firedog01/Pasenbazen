@@ -84,6 +84,7 @@ public class ClientRepository extends AbstractRepository {
         }
 
     }
+
 //TODO to jest wcześniejszy pomysł
 //      h
 //    public void update(ClientMgd clientMgd, String key, Object value) {
@@ -103,7 +104,7 @@ public class ClientRepository extends AbstractRepository {
 //        }
 //    }
 
-    public void findAndDelete(ClientMgd clientMgd, Bson removeBson) throws Exception {
+    public void findAndDelete(ClientMgd clientMgd, Bson removeBson) {
         ClientSession session = getMongoClient().startSession();
         MongoCollection<ClientMgd> clientsCollection = getDb().getCollection("clients", ClientMgd.class);
         Bson filter = eq("_id", clientMgd.getEntityId().getUuid());
