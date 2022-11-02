@@ -3,6 +3,8 @@ package model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.UUID;
+
 @Entity
 @Table(name = "address")
 @Access(AccessType.FIELD)
@@ -26,6 +28,13 @@ public class Address extends AbstractEntity {
     private String streetNr;
 
     public Address(String city, String street, String streetNr) {
+        this.city = city;
+        this.street = street;
+        this.streetNr = streetNr;
+    }
+
+    public Address(UUID uuid, String city, String street, String streetNr) {
+        this.setEntityId(new UniqueId(uuid));
         this.city = city;
         this.street = street;
         this.streetNr = streetNr;

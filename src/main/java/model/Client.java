@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Size;
 import org.hibernate.mapping.Value;
 
 import java.util.Objects;
+import java.util.UUID;
 
 @Entity
 @Table(name = "client")
@@ -40,6 +41,7 @@ public class Client extends AbstractEntity  {
     private boolean archive;
 
     public Client(
+            UUID uuid,
             String clientId,
             idType idType,
             String firstName,
@@ -60,6 +62,7 @@ public class Client extends AbstractEntity  {
             throw new ClientException("Adres nie może być pusty");
         }
 
+        this.setEntityId(new UniqueId(uuid));
         this.clientId = clientId;
         this.idType = idType;
         this.firstName = firstName;

@@ -16,7 +16,6 @@ import java.util.List;
 import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
 
-
 public class ClientRepository extends AbstractRepository {
 
 //FIXME CLIENTMGD OR CLIENTADDRESSMGD???
@@ -45,9 +44,6 @@ public class ClientRepository extends AbstractRepository {
             System.out.println("####################################\n");
         }
     }
-
-
-
 
     public List<ClientMgd> getAllClients() {
         MongoCollection<ClientMgd> clientsCollection = getDb().getCollection("clients", ClientMgd.class);

@@ -2,12 +2,14 @@ package mapper;
 
 import mgd.ClientMgd;
 import mgd.EQ.EquipmentMgd;
-import model.Address_;
+import model.Address;
+import model.Client;
+import model.EQ.Equipment;
 import model.Rent;
 import model.UniqueId;
 import org.bson.Document;
-import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
+
 
 import java.util.UUID;
 
@@ -26,12 +28,7 @@ public class RentMapper {
         return rentDocument;
     }
 
-//    public static Rent fromMongoRent(Document rentDocument, EquipmentMgd equipmentMgd, ClientMgd clientMgd) {
-//        Rent rent = new Rent(
-////                new UniqueId(rentDocument.get(ID, UUID.class))
-//                rentDocument.get(BEGIN_TIME, LocalDateTime.class),
-//                rentDocument.get(END_TIME, LocalDateTime.class),
-//                Eq
-//        )
-
+    public static Rent fromMongoRent(Document rentDocument, EquipmentMgd equipmentMgd, ClientMgd clientMgd) {
+        return null;
+    }
 }
