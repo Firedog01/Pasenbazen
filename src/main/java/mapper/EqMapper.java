@@ -16,6 +16,7 @@ public class EqMapper {
                 .append(ARCHIVE, t.isArchive())
                 .append(MISSING, t.isMissing())
                 .append(DESCRIPTION, t.getDescription()
+//                .append(, t.getUniqueElem()
         );
         return eqDocument;
     }

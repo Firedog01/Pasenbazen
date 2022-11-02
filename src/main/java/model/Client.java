@@ -41,7 +41,6 @@ public class Client extends AbstractEntity  {
     private boolean archive;
 
     public Client(
-            UUID uuid,
             String clientId,
             idType idType,
             String firstName,
@@ -62,7 +61,6 @@ public class Client extends AbstractEntity  {
             throw new ClientException("Adres nie może być pusty");
         }
 
-        this.setEntityId(new UniqueId(uuid));
         this.clientId = clientId;
         this.idType = idType;
         this.firstName = firstName;
@@ -71,8 +69,21 @@ public class Client extends AbstractEntity  {
         this.archive = false;
 
     }
+    public Client(UUID uuid,
+                     String clientId,
+                     idType idType,
+                     String firstName,
+                     String lastName,
+                     Address address
+    ) throws ClientException {
+        this(clientId, idType, firstName, lastName, address);
+        this.setEntityId(new UniqueId(uuid));
 
-    protected Client() {}
+    }
+
+    protected Client() {
+
+    }
 
     public String getClientId() {
         return clientId;

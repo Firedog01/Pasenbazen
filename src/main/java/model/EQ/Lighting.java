@@ -34,6 +34,7 @@ public class Lighting extends Equipment {
         return super.toString() + sb.toString();
     }
 
+
     public String getBrightness() {
         return brightness;
     }

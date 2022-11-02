@@ -105,7 +105,7 @@ class RentManagerTest {
 
         EquipmentRepository er = (EquipmentRepository) rf.getRepository(RepositoryType.EquipmentRepository);
         Camera camera = DataFaker.getCamera();
-        er.add(camera);
+//        er.add(camera);
 
 
         AtomicInteger atomicInteger = new AtomicInteger();

@@ -50,7 +50,6 @@ public abstract class Equipment extends AbstractEntity {
     @OneToMany(mappedBy = "equipment")
     private List<Rent> equipmentRents = new ArrayList<>();
 
-
     public Equipment(double firstDayCost, double nextDaysCost, double bail, String name
     ) throws EquipmentException {
         if(firstDayCost <= 0.0 || nextDaysCost <= 0.0 || bail <= 0.0) {
