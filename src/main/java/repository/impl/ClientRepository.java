@@ -1,19 +1,18 @@
 package repository.impl;
 
 import com.mongodb.MongoCommandException;
-import com.mongodb.TransactionOptions;
-import com.mongodb.WriteConcern;
 import com.mongodb.client.ClientSession;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import mgd.ClientMgd;
+import mgd.UniqueIdMgd;
 import org.bson.conversions.Bson;
 import repository.AbstractRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
 
 public class ClientRepository extends AbstractRepository {
@@ -30,17 +29,17 @@ public class ClientRepository extends AbstractRepository {
 //    }
 
     public void add(ClientMgd clientMgd) {
-        ClientSession session = getMongoClient().startSession();
+//        ClientSession session = getNewSession();
         MongoCollection<ClientMgd> clientsCollection = getDb().getCollection("clients", ClientMgd.class);
         try {
-            session.startTransaction(TransactionOptions.builder().writeConcern(WriteConcern.MAJORITY).build());
+//            session.startTransaction(getTransactionOptions());
             clientsCollection.insertOne(clientMgd);
-            session.commitTransaction();
+//            session.commitTransaction();
         } catch (MongoCommandException e) {
-            session.abortTransaction();
+//            session.abortTransaction();
             System.out.println("####### ROLLBACK TRANSACTION #######");
         } finally {
-            session.close();
+//            session.close();
             System.out.println("####################################\n");
         }
     }
@@ -51,34 +50,49 @@ public class ClientRepository extends AbstractRepository {
         return clientMgds;
     }
 
-    public ClientMgd getById(String clientId, ClientMgd.idType clientIdType) {
+    public List<ClientMgd> getByClientId(String clientId) {
         MongoCollection<ClientMgd> clientsCollection = getDb().getCollection("clients", ClientMgd.class);
-        Bson filter = and(eq("client_id", clientId), eq("client_id_type", clientIdType));
+        Bson filter = eq("client_id", clientId);
+        return clientsCollection.find(filter).into(new ArrayList<>());
+    }
+
+    public ClientMgd getByUniqueId(UniqueIdMgd uniqueIdMgd) {
+        MongoCollection<ClientMgd> clientsCollection = getDb().getCollection("clients", ClientMgd.class);
+        Bson filter = eq("_id", uniqueIdMgd);
         return clientsCollection.find(filter).first();
     }
 
-                                                                        //Bardzo mi się nie podoba ten object,
-                                                                        //Dlaczego tak? Idk są pola różnego rodzaju
-                                                                        //Update dla każdego pola? xD
-//    public void update(String clientId, ClientMgd.idType clientIdType, String key, Object value) {
-    public void update(String clientId, ClientMgd.idType clientIdType, String key, String value) {
-        ClientSession session = getMongoClient().startSession();
+    //    public void update(String clientId, ClientMgd.idType clientIdType, String key, Object value) {
+    //FIXME ten String clientId mi nie pasuje
+    public void update(UniqueIdMgd uniqueIdMgd, String key, String value) {
+//        ClientSession session = getNewSession();
         MongoCollection<ClientMgd> clientsCollection = getDb().getCollection("clients", ClientMgd.class);
-        Bson filter = and(eq("client_id", clientId), eq("client_id_type", clientIdType));
+        Bson filter = eq("_id", uniqueIdMgd);
         Bson updateOp = Updates.set(key, value);
-
-        try {                                                               //FIXME coś innego
-            session.startTransaction(TransactionOptions.builder().writeConcern(WriteConcern.MAJORITY).build());
+        try {
+//            session.startTransaction(getTransactionOptions());
             clientsCollection.updateOne(filter, updateOp);
-            session.commitTransaction();
+//            session.commitTransaction();
         } catch (MongoCommandException e) {
-            session.abortTransaction();
+//            session.abortTransaction();
             System.out.println("####### ROLLBACK TRANSACTION #######");
         } finally {
-            session.close();
+//            session.close();
             System.out.println("####################################\n");
         }
+    }
 
+    public void updateClient(ClientMgd client) {
+        MongoCollection<ClientMgd> clientsCollection =
+                getDb().getCollection("clients", ClientMgd.class);
+        Bson filter = eq("_id", client.getEntityId().getUuid());
+        Bson update = Updates.combine(
+                Updates.set("first_name", client.getFirstName()),
+                Updates.set("last_name", client.getLastName()),
+                Updates.set("address", client.getAddress()),
+                Updates.set("archive", client.isArchive())
+        );
+        clientsCollection.updateOne(filter, update);
     }
 
 //TODO to jest wcześniejszy pomysł
@@ -100,17 +114,22 @@ public class ClientRepository extends AbstractRepository {
 //        }
 //    }
 
-    public void findAndDelete(ClientMgd clientMgd, Bson removeBson) {
-        ClientSession session = getMongoClient().startSession();
+    public void deleteOne(ClientMgd clientMgd) {
+//        ClientSession session = getNewSession();
         MongoCollection<ClientMgd> clientsCollection = getDb().getCollection("clients", ClientMgd.class);
         Bson filter = eq("_id", clientMgd.getEntityId().getUuid());
 
         try {
-            //SESJA JEST TUTAJ
-            clientsCollection.updateOne(session, filter, removeBson);
+//            session.startTransaction(getTransactionOptions());
+            clientsCollection.deleteOne(filter);
+//            session.commitTransaction();
         } catch (MongoCommandException e) {
+//            session.abortTransaction();
             System.out.println("#####   MongoCommandException  #####");
             System.out.println(e.getMessage());
+        } finally {
+//            session.close();
+            System.out.println("####################################\n");
         }
 
     }

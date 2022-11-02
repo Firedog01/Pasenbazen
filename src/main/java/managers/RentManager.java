@@ -1,30 +1,28 @@
 package managers;
 
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.persistence.LockModeType;
+import mgd.AddressMgd;
+import mgd.ClientMgd;
+import mgd.EQ.EquipmentMgd;
 import model.Client;
-import model.Address;
 import model.EQ.Equipment;
 import model.Rent;
 import model.UniqueId;
-import org.hibernate.annotations.OptimisticLock;
-import org.hibernate.annotations.OptimisticLocking;
 import org.joda.time.LocalDateTime;
 import repository.impl.RentRepository;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Predicate;
 
 
 public class RentManager {
-    private RentRepository rentRepository;
+    private final RentRepository rentRepository;
 
     public RentManager(RentRepository rentRepository) {
         this.rentRepository = rentRepository;
     }
 
-    public Rent makeReservation(Client client, Equipment equipment, Address address,
+    public Rent makeReservation(ClientMgd client, EquipmentMgd equipment, AddressMgd address,
                                 LocalDateTime beginTime, LocalDateTime endTime) {
         if (equipment.isMissing() || equipment.isArchive()) {
             return null;
@@ -45,7 +43,7 @@ public class RentManager {
         List<Rent> rentEquipmentList = rentRepository.getEquipmentRents(equipment);
 
         System.out.println(rentEquipmentList);
-        for(Rent r : rentEquipmentList) {
+        for (Rent r : rentEquipmentList) {
             System.out.println(r);
         }
 
@@ -83,9 +81,9 @@ public class RentManager {
         }
     }
 
-    public List<Rent> getClientRents(Client client) {
-        return rentRepository.getRentByClient(client);
-    }
+//    public List<Rent> getClientRents(Client client) {
+//        return rentRepository.getRentByClient(client);
+//    }
 
     public void shipEquipment(Rent rent) {
         rent.setShipped(true);
@@ -137,13 +135,13 @@ public class RentManager {
     }
 
     public void cancelReservation(Rent rent) {
-        rentRepository.remove(rent);
+        rentRepository.deleteOne(rent);
     }
 
     public void returnEquipment(Rent rent, boolean missing) {
         rent.setEqReturned(true);
         rent.getEquipment().setMissing(missing);
-        rentRepository.update(rent);
+        rentRepository.update(rent.getEntityId());
     }
 
     public double checkClientBalance(Client client) {
@@ -164,7 +162,7 @@ public class RentManager {
     public Rent getRent(UniqueId id) {
         try {
             return rentRepository.get(id);
-        } catch(EntityNotFoundException ex) {
+        } catch (EntityNotFoundException ex) {
             return null;
         }
     }

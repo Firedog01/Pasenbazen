@@ -1,4 +1,4 @@
-package repository;
+package model;
 
 import exception.ClientException;
 import exception.EquipmentException;
@@ -59,23 +59,23 @@ public class DataFaker {
         }
     }
 
-    public static Lighting getLighting() {
-        try {
-            return new Lighting(Math.random() * 100, Math.random() * 200,
-                    Math.random() * 1000, randStr(10), randStr(8));
-        } catch (EquipmentException e) {
-            return null;
-        }
-    }
+//    public static Lighting getLighting() {
+//        try {
+//            return new Lighting(Math.random() * 100, Math.random() * 200,
+//                    Math.random() * 1000, randStr(10), randStr(8));
+//        } catch (EquipmentException e) {
+//            return null;
+//        }
+//    }
 
-    public static Microphone getMicrophone() {
-        try {
-            return new Microphone(Math.random() * 100, Math.random() * 200,
-                Math.random() * 1000, randStr(10), randStr(8));
-        } catch (EquipmentException e) {
-            return null;
-        }
-    }
+//    public static Microphone getMicrophone() {
+//        try {
+//            return new Microphone(Math.random() * 100, Math.random() * 200,
+//                Math.random() * 1000, randStr(10), randStr(8));
+//        } catch (EquipmentException e) {
+//            return null;
+//        }
+//    }
 
     public static Trivet getTrivet() {
         try {

@@ -1,177 +1,90 @@
 package repository.impl;
 
-import exception.EquipmentException;
-import jakarta.persistence.*;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Root;
-import model.*;
-import model.EQ.Equipment;
-import repository.Repository;
+import com.mongodb.MongoCommandException;
+import com.mongodb.client.ClientSession;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.Updates;
+import mgd.EQ.EquipmentMgd;
+import mgd.RentMgd;
+import mgd.UniqueIdMgd;
+import org.bson.conversions.Bson;
+import repository.AbstractRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.mongodb.client.model.Filters.eq;
 
-public class RentRepository implements Repository<Rent> {
+public class RentRepository extends AbstractRepository {
 
-    private EntityManager em;
-
-    public RentRepository(EntityManager em) {
-        this.em = em;
-    }
-
-    @Override
-    public Rent get(UniqueId uniqueId) {
-
-
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Rent> cq = cb.createQuery(Rent.class);
-        Root<Rent> rent = cq.from(Rent.class);
-
-        cq.select(rent);
-        cq.where(cb.equal(rent.get(Rent_.ENTITY_ID), uniqueId));
-
-
-        EntityTransaction et = em.getTransaction();
-        et.begin();
-
-        List<Rent> rents = em.createQuery(cq).setLockMode(LockModeType.OPTIMISTIC).getResultList();
-        et.commit();
-
-        if (rents.isEmpty()) {
-            throw new EntityNotFoundException("Rent not found for uniqueId: " + uniqueId);
-        }
-        return rents.get(0);
-    }
-
-    @Override
-    public List<Rent> getAll() {
-        EntityTransaction et = em.getTransaction();
-        et.begin();
-
-        TypedQuery<Rent> rentQuery = em.createQuery("Select r from Rent r", Rent.class)
-                .setLockMode(LockModeType.OPTIMISTIC);
-        List<Rent> rents = rentQuery.getResultList();
-        et.commit();
-        return rents;
-    }
-
-    public List<Rent> getEquipmentRents(Equipment e) {
-        if(e.getId() == null) {
-            return new ArrayList<Rent>();
-        }
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Rent> cq = cb.createQuery(Rent.class);
-        Root<Rent> rent = cq.from(Rent.class);
-
-        cq.select(rent);
-        cq.where(cb.equal(rent.get(Rent_.EQUIPMENT), e));
-        // jakiś błąd z cascade type
-
-        EntityTransaction et = em.getTransaction();
-        et.begin();
-        List<Rent> rents = em.createQuery(cq).
-                setLockMode(LockModeType.OPTIMISTIC).
-                getResultList();
-        et.commit();
-        return rents;
-    }
-
-    @Override
-    public void add(Rent elem) {
-        EntityTransaction et = em.getTransaction();
-        et.begin();
+    public void add(RentMgd rentMgd) {
+        ClientSession session = getNewSession();
+        MongoCollection<RentMgd> equipmentCollection = getDb().getCollection("rents", RentMgd.class);
         try {
-            if(elem.getEquipment().getId() != null) {
-                Equipment e = em.find(Equipment.class, elem.getEquipment().getId()); // tutaj lock!
-                em.lock(e, LockModeType.OPTIMISTIC_FORCE_INCREMENT);
-                elem.setEquipment(e);
-            }
-            em.persist(elem);
-            et.commit();
-//            System.out.println("equipment found: " + e.toString());
-        } catch (RollbackException e) {
-            System.out.println("rollback");
+            session.startTransaction(getTransactionOptions());
+            equipmentCollection.insertOne(session, rentMgd);
+            session.commitTransaction();
+        } catch (MongoCommandException e) {
+            session.abortTransaction();
+            System.out.println("####### ROLLBACK TRANSACTION #######");
         } finally {
-            if (et.isActive()) {
-                et.rollback();
-            }
+            session.close();
+            System.out.println("####################################\n");
         }
     }
 
-    @Override
-    public void remove(Rent elem) {
-        EntityTransaction et = em.getTransaction();
-        et.begin();
+    public List<RentMgd> getAllRents() {
+        MongoCollection<RentMgd> eqCollection = getDb().getCollection("rents", RentMgd.class);
+        ArrayList<RentMgd> rentMgds = eqCollection.find().into(new ArrayList<>());
+        return rentMgds;
+    }
+
+    public RentMgd getById(UniqueIdMgd uniqueIdMgd) {
+        MongoCollection<RentMgd> eqCollection = getDb().getCollection("rents", RentMgd.class);
+        Bson filter = eq("_id", uniqueIdMgd);
+        return eqCollection.find(filter).first();
+    }
+
+    public List<RentMgd> getByName(String name) {
+        MongoCollection<RentMgd> eqCollection = getDb().getCollection("rents", RentMgd.class);
+        Bson filter = eq("name", name);
+        return eqCollection.find(filter).into(new ArrayList<RentMgd>());
+    }
+
+    public void update(UniqueIdMgd uniqueIdMgd, String key, String value) {
+        ClientSession session = getNewSession();
+        MongoCollection<EquipmentMgd> eqCollection = getDb().getCollection("equipment", EquipmentMgd.class);
+        Bson filter = eq("_id", uniqueIdMgd);
+        Bson updateOp = Updates.set(key, value);
         try {
-            em.lock(elem, LockModeType.OPTIMISTIC);
-            this.em.remove(elem);
-            et.commit();
+            session.startTransaction(getTransactionOptions());
+            eqCollection.updateOne(session, filter, updateOp);
+            session.commitTransaction();
+        } catch (MongoCommandException e) {
+            session.abortTransaction();
+            System.out.println("####### ROLLBACK TRANSACTION #######");
         } finally {
-            if(et.isActive()) {
-                et.rollback();
-            }
+            session.close();
+            System.out.println("####################################\n");
         }
     }
 
-    @Override
-    public void update(Rent elem) {
-        EntityTransaction et = em.getTransaction();
-        et.begin();
+    public void deleteOne(RentMgd rentMgd) {
+        ClientSession session = getNewSession();
+        MongoCollection<RentMgd> eqCollection = getDb().getCollection("rents", RentMgd.class);
+        Bson filter = eq("_id", rentMgd.getEntityId().getUuid());
+
         try {
-            em.lock(elem, LockModeType.OPTIMISTIC_FORCE_INCREMENT);
-            em.merge(elem);
-            et.commit();
+            session.startTransaction(getTransactionOptions());
+            eqCollection.deleteOne(session, filter);
+            session.commitTransaction();
+        } catch (MongoCommandException e) {
+            session.abortTransaction();
+            System.out.println("#####   MongoCommandException  #####");
+            System.out.println(e.getMessage());
         } finally {
-            if(et.isActive()) {
-                et.rollback();
-            }
+            session.close();
+            System.out.println("####################################\n");
         }
     }
-
-    @Override
-    public Long count() {
-        EntityTransaction et = em.getTransaction();
-        et.begin();
-        Long count = em.createQuery("Select count(rent) from Rent rent", Long.class).getSingleResult();
-        et.commit();
-        return count;
-    }
-
-    public List<Rent> getRentByClient(Client clientP) {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Rent> cq = cb.createQuery(Rent.class);
-        Root<Rent> rent = cq.from(Rent.class);
-
-        cq.select(rent);
-        cq.where(cb.equal(rent.get(Rent_.CLIENT), clientP));
-
-        TypedQuery<Rent> q = em.createQuery(cq).setLockMode(LockModeType.OPTIMISTIC);
-        List<Rent> rents = q.getResultList();
-
-        if(rents.isEmpty()) {
-            throw new EntityNotFoundException("Rent not found for client: " + clientP);
-        }
-        return rents;
-    }
-
-    public List<Rent> getRentByEq(Equipment equipment) {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Rent> cq = cb.createQuery(Rent.class);
-        Root<Rent> rent = cq.from(Rent.class);
-
-        cq.select(rent);
-        cq.where(cb.equal(rent.get(Rent_.EQUIPMENT), equipment));
-
-        TypedQuery<Rent> q = em.createQuery(cq).setLockMode(LockModeType.OPTIMISTIC);
-        List<Rent> rents = q.getResultList();
-
-        if(rents.isEmpty()) {
-            throw new EntityNotFoundException("Rent not found for equipment: " + equipment);
-        }
-        return rents;
-    }
-
-
 }

@@ -2,57 +2,52 @@ package managers;
 
 import exception.ClientException;
 import jakarta.persistence.EntityNotFoundException;
-import model.Client;
-
-import model.Address;
-import model.idType;
+import mgd.AddressMgd;
+import mgd.ClientMgd;
 import repository.impl.ClientRepository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.function.Predicate;
 
 public class ClientManager {
-//    ClientRepository clientRepository;
-//
-//    public ClientManager(ClientRepository clientRepository) {
-//        this.clientRepository = clientRepository;
-//    }
-//
-//    public Client registerClient(String clientId, idType idtype, String name,
-//                                 String surname, Address address
-//    ) throws ClientException {
-//        Client client = new Client(clientId, idtype, name, surname, address);
-//        clientRepository.add(client);
-//        return client;
-//    }
-//
-//    public void unregisterClient(Client client) {
-//        Client c = clientRepository.get(client.getEntityId());
-//        clientRepository.remove(c);
-//    }
-//
-//    public Client getClient(String clientId, idType idType) {
-//        try {
-//            return clientRepository.getByClientId(clientId, idType);
-//        } catch (EntityNotFoundException ex) {
-//            return null;
-//        }
-//    }
-//
-//    public List<Client> getAllClients() {
-//        return clientRepository.getAll();
-//    }
-//
-//    public List<Client> getAllAvailableClients() {
-//        List<Client> all = getAllClients();
-//        List<Client> available = new ArrayList<>();
-//        for (Client c : all) {
-//            if(!(c.isArchive())) {
-//                available.add(c);
-//            }
-//        }
-//        return available;
-//    }
+    ClientRepository clientRepository;
+
+    public ClientManager(ClientRepository clientRepository) {
+        this.clientRepository = clientRepository;
+    }
+
+    public ClientMgd registerClient(String clientId, String name, String surname, AddressMgd addressMgd, boolean archive
+    ) throws ClientException {
+        ClientMgd clientMgd = new ClientMgd(clientId, name, surname, addressMgd);
+        clientRepository.add(clientMgd);
+        return clientMgd;
+    }
+
+    public void unregisterClient(ClientMgd clientMgd) {
+        ClientMgd c = clientRepository.getByUniqueId(clientMgd.getEntityId());
+        clientRepository.deleteOne(c);
+    }
+
+    public ClientMgd getClient(String clientId) {
+        try {
+            return clientRepository.getByClientId(clientId).get(0); //FIXME to mi się nie podoba xD
+        } catch (EntityNotFoundException ex) {
+            return null;
+        }
+    }
+
+    public List<ClientMgd> getAllClients() {
+        return clientRepository.getAllClients();
+    }
+
+    public List<ClientMgd> getAllAvailableClients() {
+        List<ClientMgd> all = getAllClients();
+        List<ClientMgd> available = new ArrayList<>();
+        for (ClientMgd c : all) {
+            if (!(c.isArchive())) {
+                available.add(c);
+            }
+        }
+        return available;
+    }
 }

@@ -1,8 +1,7 @@
 package repository;
 
-import com.mongodb.ConnectionString;
-import com.mongodb.MongoClientSettings;
-import com.mongodb.MongoCredential;
+import com.mongodb.*;
+import com.mongodb.client.ClientSession;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
@@ -25,7 +24,7 @@ public abstract class AbstractRepository implements AutoCloseable {
             .conventions(List.of(Conventions.ANNOTATION_CONVENTION))
             .build());
 
-    private MongoClient mongoClient;
+    private static MongoClient mongoClient;
     private MongoDatabase db;
 
     public AbstractRepository() {
@@ -45,14 +44,41 @@ public abstract class AbstractRepository implements AutoCloseable {
                 .build();
         mongoClient = MongoClients.create(settings);
         db = mongoClient.getDatabase("db1");
+        if(firstInstance)
+            initDatabase();
+        firstInstance = false;
+    }
+
+    private static boolean firstInstance = true;
+    private void initDatabase() {
+        db.createCollection("clients");
+        db.createCollection("equipment");
+        db.createCollection("rents");
     }
 
     public MongoDatabase getDb() {
         return db;
     }
 
-    public MongoClient getMongoClient() {
+    public static MongoClient getMongoClient() {
         return mongoClient;
+    }
+
+
+    public static ClientSession getNewSession() {
+        return getMongoClient().startSession();
+    }
+
+    public static void stopSession() {
+        getMongoClient().close();
+    }
+
+    public static TransactionOptions getTransactionOptions() {
+        return TransactionOptions.builder()
+                .readPreference(ReadPreference.primary())
+                .readConcern(ReadConcern.LOCAL)
+                .writeConcern(WriteConcern.MAJORITY)
+                .build();
     }
 
 

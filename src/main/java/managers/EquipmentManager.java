@@ -1,78 +1,72 @@
-//package managers;
-//
-//import exception.EquipmentException;
-//import jakarta.persistence.EntityNotFoundException;
-//import model.EQ.*;
-//
-//import model.UniqueId;
-//import repository.impl.EquipmentRepository;
-//
-//import java.util.ArrayList;
-//import java.util.List;
-//import java.util.function.Predicate;
-//
-//public class EquipmentManager {
-//    EquipmentRepository equipmentRepository;
-//
-//    public EquipmentManager(EquipmentRepository equipmentRepository) {
-//        this.equipmentRepository = equipmentRepository;
-//    }
-//
-//    public void unregisterEquipment(Equipment equipment) {
-//        Equipment e = equipmentRepository.get(equipment.getEntityId());
-//        equipmentRepository.remove(e);
-//    }
-//
-//    public List<Equipment> getAllEquipment() {
-//        return equipmentRepository.getAll();
-//    }
-//
-//    public List<Equipment> getAllAvailableEquipment() {
-//        List<Equipment> all = getAllEquipment();
-//        List<Equipment> available = new ArrayList<>();
-//        for (Equipment e : all) {
-//            if(!(e.isArchive() || e.isMissing())) {
-//                available.add(e);
-//            }
-//        }
-//        return available;
-//    }
-//
-//    public Equipment registerCamera(double fDayCost, double nDayCost, double bail, String name, String resolution) throws EquipmentException {
-//        Camera camera = new Camera(fDayCost, nDayCost, bail, name, resolution);
-//        equipmentRepository.add(camera);
-//        return camera;
-//    }
-//
-//    public Equipment registerTrivet(double fDayCost, double nDayCost, double bail, String name, double weight) throws EquipmentException {
-//        Trivet trivet = new Trivet(fDayCost, nDayCost, bail, name, weight);
-//        equipmentRepository.add(trivet);
-//        return trivet;
-//    }
-//
-//    public Equipment registerLens(double fDayCost, double nDayCost, double bail, String name, String length) throws EquipmentException {
-//        Lens lens = new Lens(fDayCost, nDayCost, bail, name, length);
-//        equipmentRepository.add(lens);
-//        return lens;
-//    }
-//
-//    public Equipment registerMicrophone(double fDayCost, double nDayCost, double bail, String name, String sensitivity) throws EquipmentException {
-//        Microphone microphone = new Microphone(fDayCost, nDayCost, bail, name, sensitivity);
-//        equipmentRepository.add(microphone);
-//        return microphone;
-//    }
-//
-//    public Equipment registerLighting(double fDayCost, double nDayCost, double bail, String name, String brightness) throws EquipmentException {
-//        Lighting lighting = new Lighting(fDayCost, nDayCost, bail, name, brightness);
-//        equipmentRepository.add(lighting);
-//        return lighting;
-//    }
-//
-//    public Equipment getEquipment(UniqueId id) {
-//        try {
-//            return equipmentRepository.get(id);
-//        } catch(EntityNotFoundException ex) {
-//            return null;
-//        }
-//    }
-//}
+package managers;
+
+import jakarta.persistence.EntityNotFoundException;
+import mgd.EQ.CameraMgd;
+import mgd.EQ.EquipmentMgd;
+import mgd.EQ.LensMgd;
+import mgd.EQ.TrivetMgd;
+import mgd.UniqueIdMgd;
+
+import repository.impl.EquipmentRepository;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class EquipmentManager {
+    EquipmentRepository equipmentRepository;
+
+    public EquipmentManager(EquipmentRepository equipmentRepository) {
+        this.equipmentRepository = equipmentRepository;
+    }
+
+    public void unregisterEquipment(EquipmentMgd equipmentMgd) {
+        EquipmentMgd e = equipmentRepository.getById(equipmentMgd.getEntityId());
+        equipmentRepository.deleteOne(e);
+    }
+
+    public List<EquipmentMgd> getAllEquipment() {
+        return equipmentRepository.getAllEq();
+    }
+
+    public List<EquipmentMgd> getAllAvailableEquipment() {
+        List<EquipmentMgd> all = getAllEquipment();
+        List<EquipmentMgd> available = new ArrayList<>();
+        for (EquipmentMgd e : all) {
+            if(!(e.isArchive() || e.isMissing())) {
+                available.add(e);
+            }
+        }
+        return available;
+    }
+
+    public EquipmentMgd registerCamera(UniqueIdMgd idMgd, String name, double bail, double fDayCost, double nDayCost,
+                                        String resolution, boolean archive, String desc, boolean missing) {
+
+        CameraMgd camera = new CameraMgd(idMgd, name, bail, fDayCost, nDayCost, archive, desc, missing, resolution);
+        equipmentRepository.add(camera);
+        return camera;
+    }
+
+    public EquipmentMgd registerTrivet(UniqueIdMgd idMgd, String name, double bail, double fDayCost, double nDayCost,
+                                       double weight, boolean archive, String desc, boolean missing) {
+        TrivetMgd trivet = new TrivetMgd(idMgd, name, bail, fDayCost, nDayCost, archive, desc, missing, weight);
+        equipmentRepository.add(trivet);
+        return trivet;
+    }
+
+    public EquipmentMgd registerLens(UniqueIdMgd idMgd, String name, double bail, double fDayCost, double nDayCost,
+                                     String focalLength, boolean archive, String desc, boolean missing) {
+        LensMgd lens = new LensMgd(idMgd, name, bail, fDayCost, nDayCost, archive, desc, missing, focalLength);
+        equipmentRepository.add(lens);
+        return lens;
+    }
+
+
+    public EquipmentMgd getEquipment(UniqueIdMgd id) {
+        try {
+            return equipmentRepository.getById(id);
+        } catch(EntityNotFoundException ex) {
+            return null;
+        }
+    }
+}

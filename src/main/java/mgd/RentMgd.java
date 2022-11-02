@@ -2,6 +2,7 @@ package mgd;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import mgd.EQ.EquipmentMgd;
 import model.Address;
 import model.Client;
 import model.EQ.Equipment;
@@ -17,10 +18,9 @@ public class RentMgd extends AbstractEntityMgd {
     public RentMgd(@BsonProperty("_id") UniqueIdMgd entityId,
                    @BsonProperty("beginTime") LocalDateTime beginTime,
                    @BsonProperty("endTime") LocalDateTime endTime,
-                   @BsonProperty("equipment") Equipment equipment,
-                   @BsonProperty("client") Client client,
-                   @BsonProperty("address") Address address) {
-
+                   @BsonProperty("equipment") EquipmentMgd equipment,
+                   @BsonProperty("client") ClientMgd client,
+                   @BsonProperty("address") AddressMgd address) {
         super(entityId);
         this.equipment = equipment;
         this.client = client;
@@ -32,13 +32,13 @@ public class RentMgd extends AbstractEntityMgd {
     }
 
     @BsonProperty("eq")
-    private Equipment equipment;
+    private EquipmentMgd equipment;
 
     @BsonProperty("client")
-    private Client client;
+    private ClientMgd client;
 
     @BsonProperty("address")
-    private Address address;
+    private AddressMgd address;
 
     @BsonProperty("beginTime")
     private LocalDateTime beginTime;
@@ -53,15 +53,15 @@ public class RentMgd extends AbstractEntityMgd {
     private boolean eqReturned;
 
 
-    public Equipment getEquipment() {
+    public EquipmentMgd getEquipment() {
         return equipment;
     }
 
-    public Client getClient() {
+    public ClientMgd getClient() {
         return client;
     }
 
-    public Address getAddress() {
+    public AddressMgd getAddress() {
         return address;
     }
 

@@ -16,6 +16,13 @@ public class AddressMgd extends AbstractEntityMgd {
         this.streetNr = streetNr;
     }
 
+    public AddressMgd(String city, String street, String streetNr) {
+        super(new UniqueIdMgd());
+        this.city = city;
+        this.street = street;
+        this.streetNr = streetNr;
+    }
+
     @BsonProperty("city")
     private String city;
 
