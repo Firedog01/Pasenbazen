@@ -5,6 +5,7 @@ import com.mongodb.client.ClientSession;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Updates;
 import mgd.EQ.EquipmentMgd;
+import mgd.EquipmentRentMgd;
 import mgd.RentMgd;
 import mgd.UniqueIdMgd;
 import org.bson.conversions.Bson;
@@ -19,7 +20,10 @@ public class RentRepository extends AbstractRepository {
 
     public void add(RentMgd rentMgd) {
         ClientSession session = getNewSession();
+
         MongoCollection<RentMgd> equipmentCollection = getDb().getCollection("rents", RentMgd.class);
+        MongoCollection<EquipmentRentMgd> equipmentRentsCollection =
+                getDb().getCollection("equipment_rent", EquipmentRentMgd.class);
         try {
             session.startTransaction(getTransactionOptions());
             equipmentCollection.insertOne(session, rentMgd);

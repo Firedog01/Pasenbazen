@@ -7,21 +7,28 @@ import org.bson.codecs.pojo.annotations.BsonProperty;
 import java.util.Collections;
 import java.util.List;
 
-public class EquipmentRents extends AbstractEntityMgd {
+// -> EquipmentRentMgd
+public class EquipmentRentMgd extends AbstractEntityMgd {
 
     @BsonProperty("equipment")
     private EquipmentMgd equipment;
 
-    @BsonProperty("rent_list")
-    private List<RentMgd> rentList;
+    @BsonProperty("rent")
+    private RentMgd rent;
 
     @BsonCreator
-    public EquipmentRents(@BsonProperty("_id") UniqueIdMgd entityId,
-                          @BsonProperty("equipment") EquipmentMgd equipment,
-                          @BsonProperty("rent_list") List<RentMgd> rentList) {
+    public EquipmentRentMgd(@BsonProperty("_id") UniqueIdMgd entityId,
+                            @BsonProperty("equipment") EquipmentMgd equipment,
+                            @BsonProperty("rent") RentMgd rent) {
         super(entityId);
         this.equipment = equipment;
-        this.rentList = rentList;
+        this.rent = rent;
+    }
+
+    public EquipmentRentMgd(EquipmentMgd equipment, RentMgd rent) {
+        super(new UniqueIdMgd());
+        this.equipment = equipment;
+        this.rent = rent;
     }
 
     public EquipmentMgd getEquipment() {
@@ -32,14 +39,11 @@ public class EquipmentRents extends AbstractEntityMgd {
         this.equipment = equipment;
     }
 
-    public List<RentMgd> getRentList() {
-        return Collections.unmodifiableList(rentList);
+    public RentMgd getRent() {
+        return rent;
     }
 
-    public void append(RentMgd rent) {
-        this.rentList.add(rent);
-    }
-    
+
     @Override
     public void close() throws Exception {
 

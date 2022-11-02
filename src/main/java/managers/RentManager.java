@@ -4,15 +4,13 @@ import jakarta.persistence.EntityNotFoundException;
 import mgd.AddressMgd;
 import mgd.ClientMgd;
 import mgd.EQ.EquipmentMgd;
-import model.Client;
-import model.EQ.Equipment;
-import model.Rent;
-import model.UniqueId;
+import mgd.RentMgd;
+import mgd.UniqueIdMgd;
 import org.joda.time.LocalDateTime;
 import repository.impl.RentRepository;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 
 public class RentManager {
@@ -22,8 +20,8 @@ public class RentManager {
         this.rentRepository = rentRepository;
     }
 
-    public Rent makeReservation(ClientMgd client, EquipmentMgd equipment, AddressMgd address,
-                                LocalDateTime beginTime, LocalDateTime endTime) {
+    public RentMgd makeReservation(ClientMgd client, EquipmentMgd equipment, AddressMgd address,
+                                   LocalDateTime beginTime, LocalDateTime endTime) {
         if (equipment.isMissing() || equipment.isArchive()) {
             return null;
         }
@@ -40,15 +38,15 @@ public class RentManager {
 
         boolean good = true;
 //        List<Rent> rentEquipmentList = equipment.getEquipmentRents();
-        List<Rent> rentEquipmentList = rentRepository.getEquipmentRents(equipment);
+        List<RentMgd> rentEquipmentList = equipmentRepisitory.getEquipmentRents(equipment);
 
         System.out.println(rentEquipmentList);
-        for (Rent r : rentEquipmentList) {
+        for (RentMgd r : rentEquipmentList) {
             System.out.println(r);
         }
 
         for (int i = 0; i < rentEquipmentList.size(); i++) {
-            Rent curRent = rentEquipmentList.get(i);
+            RentMgd curRent = rentEquipmentList.get(i);
 
             // +----- old rent -----+
             //         +----- new rent -----+
@@ -73,7 +71,7 @@ public class RentManager {
         }
 
         if (good) {
-            Rent rent = new Rent(beginTime, endTime, equipment, client, address);
+            RentMgd rent = new RentMgd(new UniqueIdMgd(), beginTime, endTime, equipment, client, address);
             rentRepository.add(rent);
             return rent;
         } else {
@@ -85,27 +83,31 @@ public class RentManager {
 //        return rentRepository.getRentByClient(client);
 //    }
 
-    public void shipEquipment(Rent rent) {
-        rent.setShipped(true);
-        rentRepository.update(rent);
-    }
+//FIXME
+//    public void shipEquipment(RentMgd rent) {
+//        rent.setShipped(true);
+//        rentRepository.update(rent.getEntityId());
+//    }
+//    public boolean isAvailable(EquipmentMgd equipmentMgd) {
+//        return Objects.equals(whenAvailable(equipment), LocalDateTime.now());
+//    }
 
-    public boolean isAvailable(Equipment equipment) {
-        return Objects.equals(whenAvailable(equipment), LocalDateTime.now());
-    }
+`
 
-
-    public LocalDateTime whenAvailable(Equipment equipment) {
+    public LocalDateTime whenAvailable(EquipmentMgd equipment) {
         // todo
         if (equipment.isArchive() || equipment.isMissing()) {
             return null;
         }
         LocalDateTime when = LocalDateTime.now();
-        List<Rent> equipmentRents = rentRepository.getRentByEq(equipment);
+
+        List<RentMgd> temp = new ArrayList<>();
+//      FIXME
+//        List<RentMgd> equipmentRents = rentRepository.getRentByEq(equipment);
 //        List<Rent> equipmentRents = equipment.getEquipmentRents();
 
-        for (Rent rent :
-                equipmentRents) {
+        for (RentMgd rent :
+                temp) {
             if (when.isAfter(rent.getBeginTime()) && when.isBefore(rent.getEndTime())) {
                 when = rent.getEndTime();
             }
@@ -113,7 +115,7 @@ public class RentManager {
         return when;
     }
 
-    public LocalDateTime untilAvailable(Equipment equipment) {
+    public LocalDateTime untilAvailable(EquipmentMgd equipment) {
         // todo
         LocalDateTime until = null;
 
@@ -122,11 +124,12 @@ public class RentManager {
         }
 
         LocalDateTime when = whenAvailable(equipment);
-        List<Rent> equipmentRents = rentRepository.getRentByEq(equipment);
+//      FIXME: 02.11.2022
+//        List<Rent> equipmentRents = rentRepository.getRentByEq(equipment);
 //        List<Rent> equipmentRents = equipment.getEquipmentRents();
-
-        for (Rent rent :
-                equipmentRents) {
+        List<RentMgd> temp = new ArrayList<>();
+        for (RentMgd rent :
+                temp) {
             if (when.isBefore(rent.getBeginTime())) {
                 until = rent.getEndTime();
             }
@@ -134,34 +137,35 @@ public class RentManager {
         return until;
     }
 
-    public void cancelReservation(Rent rent) {
+    public void cancelReservation(RentMgd rent) {
         rentRepository.deleteOne(rent);
     }
 
-    public void returnEquipment(Rent rent, boolean missing) {
-        rent.setEqReturned(true);
-        rent.getEquipment().setMissing(missing);
-        rentRepository.update(rent.getEntityId());
+//   FIXME: 02.11.2022
+//    public void returnEquipment(RentMgd rent, boolean missing) {
+//        rent.setEqReturned(true);
+//        rent.getEquipment().setMissing(missing);
+//        rentRepository.update(rent.getEntityId());
+//    }
+
+// FIXME: 02.11.2022
+//    public double checkClientBalance(ClientMgd client) {
+//        List<RentMgd> rentList = getClientRents(client);
+//        double balance = 0.0;
+//        for (RentMgd rent :
+//                rentList) {
+//            balance += rent.getRentCost();
+//        }
+//        return balance;
+//    }
+
+    public List<RentMgd> getAllRents() {
+        return rentRepository.getAllRents();
     }
 
-    public double checkClientBalance(Client client) {
-        // todo
-        List<Rent> rentList = getClientRents(client);
-        double balance = 0.0;
-        for (Rent rent :
-                rentList) {
-            balance += rent.getRentCost();
-        }
-        return balance;
-    }
-
-    public List<Rent> getAllRents() {
-        return rentRepository.getAll();
-    }
-
-    public Rent getRent(UniqueId id) {
+    public RentMgd getRent(UniqueIdMgd id) {
         try {
-            return rentRepository.get(id);
+            return rentRepository.getById(id);
         } catch (EntityNotFoundException ex) {
             return null;
         }

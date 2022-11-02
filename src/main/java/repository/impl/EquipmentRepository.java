@@ -5,7 +5,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Updates;
 import mgd.ClientMgd;
 import mgd.EQ.EquipmentMgd;
-import mgd.EquipmentRents;
+import mgd.EquipmentRentMgd;
 import mgd.RentMgd;
 import mgd.UniqueIdMgd;
 import org.bson.conversions.Bson;
@@ -52,10 +52,10 @@ public class EquipmentRepository extends AbstractRepository {
         return eqCollection.find(filter).into(new ArrayList<EquipmentMgd>());
     }
 
-    public List<EquipmentRents> getEquipmentRents(EquipmentMgd equipment) {
-        MongoCollection<EquipmentRents> eqRentsCollection = getDb().getCollection("equipment_rents", EquipmentRents.class);
+    public List<EquipmentRentMgd> getEquipmentRents(EquipmentMgd equipment) {
+        MongoCollection<EquipmentRentMgd> eqRentsCollection = getDb().getCollection("equipment_rent", EquipmentRentMgd.class);
         Bson filter = eq("equipment._id", equipment.getEntityId());
-        return eqRentsCollection.find(filter).into(new ArrayList<EquipmentRents>());
+        return eqRentsCollection.find(filter).into(new ArrayList<>());
     }
 
     /*
