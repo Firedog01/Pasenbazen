@@ -1,6 +1,5 @@
 package repository.impl;
 
-import com.mongodb.MongoCommandException;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Updates;
 import mgd.ClientMgd;
@@ -9,12 +8,9 @@ import mgd.EQ.EquipmentMgd;
 import mgd.EQ.LensMgd;
 import mgd.EQ.TrivetMgd;
 import mgd.UniqueIdMgd;
-import model.EQ.Camera;
-import model.EQ.Lens;
 import org.bson.conversions.Bson;
 import repository.AbstractRepository;
 
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 

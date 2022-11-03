@@ -5,8 +5,8 @@ import com.mongodb.client.ClientSession;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
-import mgd.ClientMgd;
 import repository.codec.EquipmentMgdCodecProvider;
+import repository.codec.LocalDateTimeCodecProvider;
 import repository.codec.UniqueIdCodecProvider;
 import org.bson.UuidRepresentation;
 import org.bson.codecs.configuration.CodecRegistries;
@@ -40,6 +40,7 @@ public abstract class AbstractRepository implements AutoCloseable {
                 .codecRegistry(CodecRegistries.fromRegistries(
                         CodecRegistries.fromProviders(new UniqueIdCodecProvider()),
                         CodecRegistries.fromProviders(new EquipmentMgdCodecProvider()),
+                        CodecRegistries.fromProviders(new LocalDateTimeCodecProvider()),
                         MongoClientSettings.getDefaultCodecRegistry(),
                         pojoCodecRegistry
                 ))
@@ -55,11 +56,20 @@ public abstract class AbstractRepository implements AutoCloseable {
     private void initDatabase() {
         try {
             db.createCollection("clients");
+        } catch(MongoCommandException e) {
+            // already exist
+        }
+        try {
             db.createCollection("equipment");
+        } catch(MongoCommandException e) {
+            // already exist
+        }
+        try {
             db.createCollection("rents");
         } catch(MongoCommandException e) {
             // already exist
         }
+
     }
 
     public MongoDatabase getDb() {
@@ -71,22 +81,17 @@ public abstract class AbstractRepository implements AutoCloseable {
     }
 
 
-    public static ClientSession getNewSession() {
+    public static ClientSession startNewSession() {
         return getMongoClient().startSession();
-    }
-
-    public static void stopSession() {
-        getMongoClient().close();
     }
 
     public static TransactionOptions getTransactionOptions() {
         return TransactionOptions.builder()
-                .readPreference(ReadPreference.primary())
+                .readPreference(ReadPreference.primaryPreferred())
                 .readConcern(ReadConcern.LOCAL)
                 .writeConcern(WriteConcern.MAJORITY)
                 .build();
     }
-
 
     @Override
     public void close() throws Exception {

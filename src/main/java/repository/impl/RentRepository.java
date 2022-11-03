@@ -9,7 +9,6 @@ import mgd.ClientMgd;
 import mgd.EQ.EquipmentMgd;
 import mgd.RentMgd;
 import mgd.UniqueIdMgd;
-import model.Rent;
 import org.bson.conversions.Bson;
 import repository.AbstractRepository;
 
@@ -23,20 +22,21 @@ public class RentRepository extends AbstractRepository {
     // create
 
     public void add(RentMgd rentMgd) {
-        ClientSession session = getNewSession();
+//        ClientSession session = startNewSession();
+        MongoCollection<RentMgd> rentCollection = getDb().getCollection("rents", RentMgd.class);
 
-        MongoCollection<RentMgd> equipmentCollection = getDb().getCollection("rents", RentMgd.class);
 //        MongoCollection<EquipmentRentMgd> equipmentRentsCollection =
 //                getDb().getCollection("equipment_rent", EquipmentRentMgd.class);
+//        session.startTransaction();
         try {
-            session.startTransaction(getTransactionOptions());
-            equipmentCollection.insertOne(session, rentMgd);
-            session.commitTransaction();
+//            rentCollection.insertOne(session, rentMgd);
+            rentCollection.insertOne(rentMgd);
+//            session.commitTransaction();
         } catch (MongoCommandException e) {
-            session.abortTransaction();
+//            session.abortTransaction();
             System.out.println("####### ROLLBACK TRANSACTION #######");
         } finally {
-            session.close();
+//            session.close();
             System.out.println("####################################\n");
         }
     }
@@ -69,7 +69,7 @@ public class RentRepository extends AbstractRepository {
     // update
 
     public void updateByKey(UniqueIdMgd uniqueIdMgd, String key, String value) {
-        ClientSession session = getNewSession();
+        ClientSession session = startNewSession();
         MongoCollection<EquipmentMgd> eqCollection = getDb().getCollection("equipment", EquipmentMgd.class);
         Bson filter = eq("_id", uniqueIdMgd);
         Bson updateOp = Updates.set(key, value);
@@ -87,22 +87,55 @@ public class RentRepository extends AbstractRepository {
     }
 
     public RentMgd updateShipped(RentMgd rent, boolean shipped) {
-        MongoCollection<RentMgd> eqCollection = getDb().getCollection("rents", RentMgd.class);
+        ClientSession session = startNewSession();
+        MongoCollection<RentMgd> rentCollection = getDb().getCollection("rents", RentMgd.class);
         Bson filter = eq("_id", rent.getEntityId());
         Bson updateOp = Updates.set("shipped", shipped);
-        eqCollection.updateOne(filter, updateOp);
+        try {
+            session.startTransaction(getTransactionOptions());
+            rentCollection.updateOne(filter, updateOp);
+            session.commitTransaction();
+        } catch (MongoCommandException e) {
+            session.abortTransaction();
+            System.out.println("#####  MongoCommandException  #####");
+            System.out.println(e.getMessage());
+        } finally {
+            session.close();
+            System.out.println("####################################\n");
+        }
         rent.setShipped(shipped);
         return rent;
     }
 
     public RentMgd updateMissingReturned(RentMgd rent, boolean missing, boolean eqReturned) {
-        MongoCollection<RentMgd> eqCollection = getDb().getCollection("rents", RentMgd.class);
-        Bson filter = eq("_id", rent.getEntityId());
-        Bson updateOp = Updates.combine(
+        ClientSession session = startNewSession();
+
+        // prepare data
+        MongoCollection<RentMgd> rentCollection = getDb().getCollection("rents", RentMgd.class);
+        Bson filterRent = eq("_id", rent.getEntityId());
+        Bson updateRent = Updates.combine(
                 Updates.set("eqReturned", eqReturned),
                 Updates.set("eq.missing", missing)
         );
-        eqCollection.updateOne(filter, updateOp);
+        MongoCollection<EquipmentMgd> equipmentCollection = getDb().getCollection("equipment", EquipmentMgd.class);
+        Bson filterEq = eq("_id", rent.getEquipment().getEntityId());
+        Bson updateEq = Updates.set("missing", missing);
+
+        try {
+            session.startTransaction(getTransactionOptions());
+            rentCollection.updateOne(filterRent, updateRent);
+            equipmentCollection.updateOne(filterEq, updateEq);
+            session.commitTransaction();
+        } catch (MongoCommandException e) {
+            session.abortTransaction();
+            System.out.println("#####  MongoCommandException  #####");
+            System.out.println(e.getMessage());
+        } finally {
+            session.close();
+            System.out.println("####################################\n");
+        }
+
+        // update model
         rent.setEqReturned(eqReturned);
         rent.getEquipment().setMissing(eqReturned);
         return rent;
@@ -111,7 +144,7 @@ public class RentRepository extends AbstractRepository {
     // delete
 
     public void deleteOne(RentMgd rentMgd) {
-        ClientSession session = getNewSession();
+        ClientSession session = startNewSession();
         MongoCollection<RentMgd> eqCollection = getDb().getCollection("rents", RentMgd.class);
         Bson filter = eq("_id", rentMgd.getEntityId().getUuid());
         try {

@@ -81,12 +81,12 @@ public class RentManager {
     public void shipEquipment(RentMgd rent) {
         rentRepository.updateShipped(rent, true);
     }
+
     public boolean isAvailable(EquipmentMgd equipment) {
         return Objects.equals(whenAvailable(equipment), LocalDateTime.now());
     }
 
     public LocalDateTime whenAvailable(EquipmentMgd equipment) {
-        // todo
         if (equipment.isArchive() || equipment.isMissing()) {
             return null;
         }
@@ -94,8 +94,7 @@ public class RentManager {
 
         List<RentMgd> equipmentRents = rentRepository.getEquipmentRents(equipment);
 
-        for (RentMgd rent :
-                equipmentRents) {
+        for (RentMgd rent : equipmentRents) {
             if (when.isAfter(rent.getBeginTime()) && when.isBefore(rent.getEndTime())) {
                 when = rent.getEndTime();
             }
@@ -104,18 +103,16 @@ public class RentManager {
     }
 
     public LocalDateTime untilAvailable(EquipmentMgd equipment) {
-        // todo
         LocalDateTime until = null;
 
         if (equipment.isArchive() || equipment.isMissing()) {
             return null;
         }
 
-        LocalDateTime when = whenAvailable(equipment);
+        LocalDateTime whenAvailable = whenAvailable(equipment);
         List<RentMgd> equipmentRents = rentRepository.getEquipmentRents(equipment);
-        for (RentMgd rent :
-                equipmentRents) {
-            if (when.isBefore(rent.getBeginTime())) {
+        for (RentMgd rent : equipmentRents) {
+            if (whenAvailable.isBefore(rent.getBeginTime())) {
                 until = rent.getEndTime();
             }
         }
@@ -147,6 +144,4 @@ public class RentManager {
     public RentMgd getRent(UniqueIdMgd id) {
         return rentRepository.getById(id);
     }
-
-
 }

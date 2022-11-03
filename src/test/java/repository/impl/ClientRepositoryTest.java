@@ -29,9 +29,11 @@ class ClientRepositoryTest {
 
     @Test
     void GetRemoveTest() {
-        Assertions.assertEquals(3, (long) clientRepository.getAllClients().size());
-        Assertions.assertEquals(clientRepository.getByUniqueId(client1.getEntityId()), client1);
-        clientRepository.deleteOne(client1);
+        ClientMgd client4 = DataFakerMgd.getClientMgd();
+        clientRepository.add(client4);
+        Assertions.assertEquals(4, (long) clientRepository.getAllClients().size());
+        Assertions.assertEquals(clientRepository.getByUniqueId(client4.getEntityId()), client4);
+        clientRepository.deleteOne(client4);
         Assertions.assertEquals(2, (long) clientRepository.getAllClients().size());
         //Assert throws?
     }
@@ -50,5 +52,4 @@ class ClientRepositoryTest {
         Assertions.assertEquals(client1_updated.isArchive(), true);
         Assertions.assertEquals(client1_updated.getAddress(), tempAddr);
     }
-
 }

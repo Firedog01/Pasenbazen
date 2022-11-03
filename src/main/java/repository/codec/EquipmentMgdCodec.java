@@ -1,12 +1,15 @@
 package repository.codec;
 
+import exception.EquipmentException;
 import mgd.EQ.*;
+import mgd.UniqueIdMgd;
 import org.bson.BsonReader;
 import org.bson.BsonType;
 import org.bson.BsonWriter;
 import org.bson.codecs.Codec;
 import org.bson.codecs.DecoderContext;
 import org.bson.codecs.EncoderContext;
+import org.bson.codecs.StringCodec;
 import org.bson.codecs.configuration.CodecRegistry;
 
 
@@ -58,8 +61,46 @@ public class EquipmentMgdCodec implements Codec<EquipmentMgd> {
 
 
     @Override
-    public void encode(BsonWriter writer, EquipmentMgd equipmentMgd, EncoderContext encoderContext) {
-        // not needed
+    public void encode(BsonWriter writer, EquipmentMgd equipmentMgd, EncoderContext encoderContext)  {
+        writer.writeStartDocument();
+        writer.writeName("_id");
+        uuidCodec.encode(writer, equipmentMgd.getEntityId().getUuid(), encoderContext);
+        writer.writeName("_clazz");
+        switch (equipmentMgd) {
+            case CameraMgd camera -> {
+                stringCodec.encode(writer, "camera", encoderContext);
+                writer.writeName("resolution");
+                stringCodec.encode(writer, camera.getResolution(), encoderContext);
+            }
+            case TrivetMgd trivetMgd -> {
+                stringCodec.encode(writer, "trivet", encoderContext);
+                writer.writeName("weight");
+                doubleCodec.encode(writer, trivetMgd.getWeight(), encoderContext);
+            }
+            case LensMgd lens -> {
+                stringCodec.encode(writer, "lens", encoderContext);
+                writer.writeName("focal_length");
+                stringCodec.encode(writer, lens.getFocalLength(), encoderContext);
+            }
+            default -> {
+                throw new RuntimeException("Unhandled type of EquipmentMgd, update codec file");
+            }
+        }
+        writer.writeName("name");
+        stringCodec.encode(writer, equipmentMgd.getName(), encoderContext);
+        writer.writeName("bail");
+        doubleCodec.encode(writer, equipmentMgd.getBail(), encoderContext);
+        writer.writeName("first_day_cost");
+        doubleCodec.encode(writer, equipmentMgd.getFirstDayCost(), encoderContext);
+        writer.writeName("next_day_cost");
+        doubleCodec.encode(writer, equipmentMgd.getNextDaysCost(), encoderContext);
+        writer.writeName("archive");
+        booleanCodec.encode(writer, equipmentMgd.isArchive(), encoderContext);
+        writer.writeName("description");
+        stringCodec.encode(writer, equipmentMgd.getDescription(), encoderContext);
+        writer.writeName("missing");
+        booleanCodec.encode(writer, equipmentMgd.isMissing(), encoderContext);
+        writer.writeEndDocument();
     }
 
     @Override

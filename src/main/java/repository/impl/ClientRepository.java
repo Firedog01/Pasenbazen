@@ -1,9 +1,7 @@
 package repository.impl;
 
-import com.mongodb.MongoCommandException;
-import com.mongodb.client.ClientSession;
+
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import mgd.ClientMgd;
 import mgd.UniqueIdMgd;
