@@ -42,21 +42,21 @@ public class EquipmentManager {
                                         String resolution, boolean archive, String desc, boolean missing) {
 
         CameraMgd camera = new CameraMgd(idMgd, name, bail, fDayCost, nDayCost, archive, desc, missing, resolution);
-        equipmentRepository.add(camera);
+        equipmentRepository.addCamera(camera);
         return camera;
     }
 
     public EquipmentMgd registerTrivet(UniqueIdMgd idMgd, String name, double bail, double fDayCost, double nDayCost,
                                        double weight, boolean archive, String desc, boolean missing) {
         TrivetMgd trivet = new TrivetMgd(idMgd, name, bail, fDayCost, nDayCost, archive, desc, missing, weight);
-        equipmentRepository.add(trivet);
+        equipmentRepository.addTrivet(trivet);
         return trivet;
     }
 
     public EquipmentMgd registerLens(UniqueIdMgd idMgd, String name, double bail, double fDayCost, double nDayCost,
                                      String focalLength, boolean archive, String desc, boolean missing) {
         LensMgd lens = new LensMgd(idMgd, name, bail, fDayCost, nDayCost, archive, desc, missing, focalLength);
-        equipmentRepository.add(lens);
+        equipmentRepository.addLens(lens);
         return lens;
     }
 

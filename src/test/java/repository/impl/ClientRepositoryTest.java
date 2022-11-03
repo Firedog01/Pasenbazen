@@ -39,13 +39,16 @@ class ClientRepositoryTest {
     @Test
     void updateTest() {
         client1.setFirstName("__1__");
+        client1.setFirstName("__2__");
         client1.setArchive(true);
+        AddressMgd tempAddr = DataFakerMgd.getAddressMgd();
+        client1.setAddress(tempAddr);
         clientRepository.updateClient(client1);
         ClientMgd client1_updated = clientRepository.getByUniqueId(client1.getEntityId());
         Assertions.assertEquals(client1_updated.getFirstName(), "__1__");
+        Assertions.assertEquals(client1_updated.getLastName(), "__2__");
         Assertions.assertEquals(client1_updated.isArchive(), true);
+        Assertions.assertEquals(client1_updated.getAddress(), tempAddr);
     }
-
-
 
 }

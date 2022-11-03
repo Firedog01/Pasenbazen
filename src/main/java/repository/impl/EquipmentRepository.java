@@ -9,10 +9,12 @@ import mgd.EQ.EquipmentMgd;
 import mgd.EQ.LensMgd;
 import mgd.EQ.TrivetMgd;
 import mgd.UniqueIdMgd;
+import model.EQ.Camera;
 import model.EQ.Lens;
 import org.bson.conversions.Bson;
 import repository.AbstractRepository;
 
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,9 +23,22 @@ import static com.mongodb.client.model.Filters.eq;
 public class EquipmentRepository extends AbstractRepository {
 
     // create
-    public void add(EquipmentMgd equipmentMgd) {
-        MongoCollection<EquipmentMgd> equipmentCollection = getDb().getCollection("equipment", EquipmentMgd.class);
-        equipmentCollection.insertOne(equipmentMgd);
+    public void addCamera(CameraMgd camera) {
+        MongoCollection<CameraMgd> equipmentCollection =
+                getDb().getCollection("equipment", CameraMgd.class);
+        equipmentCollection.insertOne(camera);
+    }
+
+    public void addLens(LensMgd lens) {
+        MongoCollection<LensMgd> equipmentCollection =
+                getDb().getCollection("equipment", LensMgd.class);
+        equipmentCollection.insertOne(lens);
+    }
+
+    public void addTrivet(TrivetMgd trivet) {
+        MongoCollection<TrivetMgd> equipmentCollection =
+                getDb().getCollection("equipment", TrivetMgd.class);
+        equipmentCollection.insertOne(trivet);
     }
 
     // read

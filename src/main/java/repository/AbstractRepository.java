@@ -6,6 +6,7 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
 import mgd.ClientMgd;
+import repository.codec.EquipmentMgdCodecProvider;
 import repository.codec.UniqueIdCodecProvider;
 import org.bson.UuidRepresentation;
 import org.bson.codecs.configuration.CodecRegistries;
@@ -38,6 +39,7 @@ public abstract class AbstractRepository implements AutoCloseable {
                 .uuidRepresentation(UuidRepresentation.STANDARD)
                 .codecRegistry(CodecRegistries.fromRegistries(
                         CodecRegistries.fromProviders(new UniqueIdCodecProvider()),
+                        CodecRegistries.fromProviders(new EquipmentMgdCodecProvider()),
                         MongoClientSettings.getDefaultCodecRegistry(),
                         pojoCodecRegistry
                 ))
@@ -51,9 +53,13 @@ public abstract class AbstractRepository implements AutoCloseable {
 
     private static boolean firstInstance = true;
     private void initDatabase() {
-        db.createCollection("clients");
-        db.createCollection("equipment");
-        db.createCollection("rents");
+        try {
+            db.createCollection("clients");
+            db.createCollection("equipment");
+            db.createCollection("rents");
+        } catch(MongoCommandException e) {
+            // already exist
+        }
     }
 
     public MongoDatabase getDb() {
