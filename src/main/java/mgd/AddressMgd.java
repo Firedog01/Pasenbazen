@@ -69,4 +69,24 @@ public class AddressMgd extends AbstractEntityMgd {
     public void close() throws Exception {
 
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof AddressMgd)) return false;
+
+        AddressMgd that = (AddressMgd) o;
+
+        if (city != null ? !city.equals(that.city) : that.city != null) return false;
+        if (street != null ? !street.equals(that.street) : that.street != null) return false;
+        return streetNr != null ? streetNr.equals(that.streetNr) : that.streetNr == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = city != null ? city.hashCode() : 0;
+        result = 31 * result + (street != null ? street.hashCode() : 0);
+        result = 31 * result + (streetNr != null ? streetNr.hashCode() : 0);
+        return result;
+    }
 }

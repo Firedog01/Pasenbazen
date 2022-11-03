@@ -144,19 +144,20 @@ public class RentRepository extends AbstractRepository {
     // delete
 
     public void deleteOne(RentMgd rentMgd) {
-        ClientSession session = startNewSession();
-        MongoCollection<RentMgd> eqCollection = getDb().getCollection("rents", RentMgd.class);
+//        ClientSession session = startNewSession();
+        MongoCollection<RentMgd> rentCollection = getDb().getCollection("rents", RentMgd.class);
         Bson filter = eq("_id", rentMgd.getEntityId().getUuid());
         try {
-            session.startTransaction(getTransactionOptions());
-            eqCollection.deleteOne(session, filter);
-            session.commitTransaction();
+//            session.startTransaction(getTransactionOptions());
+//            eqCollection.deleteOne(session, filter);
+            rentCollection.deleteOne(filter);
+//            session.commitTransaction();
         } catch (MongoCommandException e) {
-            session.abortTransaction();
+//            session.abortTransaction();
             System.out.println("#####  MongoCommandException  #####");
             System.out.println(e.getMessage());
         } finally {
-            session.close();
+//            session.close();
             System.out.println("####################################\n");
         }
     }

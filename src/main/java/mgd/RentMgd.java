@@ -143,4 +143,32 @@ public class RentMgd extends AbstractEntityMgd {
     public void close() throws Exception {
 
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof RentMgd)) return false;
+
+        RentMgd rentMgd = (RentMgd) o;
+
+        if (shipped != rentMgd.shipped) return false;
+        if (eqReturned != rentMgd.eqReturned) return false;
+        if (equipment != null ? !equipment.equals(rentMgd.equipment) : rentMgd.equipment != null) return false;
+        if (client != null ? !client.equals(rentMgd.client) : rentMgd.client != null) return false;
+        if (address != null ? !address.equals(rentMgd.address) : rentMgd.address != null) return false;
+        if (beginTime != null ? !beginTime.equals(rentMgd.beginTime) : rentMgd.beginTime != null) return false;
+        return endTime != null ? endTime.equals(rentMgd.endTime) : rentMgd.endTime == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = equipment != null ? equipment.hashCode() : 0;
+        result = 31 * result + (client != null ? client.hashCode() : 0);
+        result = 31 * result + (address != null ? address.hashCode() : 0);
+        result = 31 * result + (beginTime != null ? beginTime.hashCode() : 0);
+        result = 31 * result + (endTime != null ? endTime.hashCode() : 0);
+        result = 31 * result + (shipped ? 1 : 0);
+        result = 31 * result + (eqReturned ? 1 : 0);
+        return result;
+    }
 }

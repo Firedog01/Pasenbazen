@@ -110,13 +110,24 @@ public class ClientMgd extends AbstractEntityMgd {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ClientMgd client = (ClientMgd) o;
-        return clientId.equals(client.clientId);
+        if (!(o instanceof ClientMgd)) return false;
+
+        ClientMgd clientMgd = (ClientMgd) o;
+
+        if (archive != clientMgd.archive) return false;
+        if (clientId != null ? !clientId.equals(clientMgd.clientId) : clientMgd.clientId != null) return false;
+        if (firstName != null ? !firstName.equals(clientMgd.firstName) : clientMgd.firstName != null) return false;
+        if (lastName != null ? !lastName.equals(clientMgd.lastName) : clientMgd.lastName != null) return false;
+        return address != null ? address.equals(clientMgd.address) : clientMgd.address == null;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(clientId);
+        int result = clientId != null ? clientId.hashCode() : 0;
+        result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
+        result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
+        result = 31 * result + (address != null ? address.hashCode() : 0);
+        result = 31 * result + (archive ? 1 : 0);
+        return result;
     }
 }

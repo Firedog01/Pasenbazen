@@ -67,7 +67,8 @@ class RentRepositoryTest {
         assertEquals(updatedRent, rent2);
         assertEquals(updatedRent, rentRepository.getById(updatedRent.getEntityId()));
         // equipment was also updated
-        assertEquals(missing, equipmentRepository.getById(updatedRent.getEntityId())
+
+        assertEquals(missing, equipmentRepository.getById(updatedRent.getEquipment().getEntityId())
                 .isMissing());
 
     }

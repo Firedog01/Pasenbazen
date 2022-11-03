@@ -18,14 +18,12 @@ public class LocalDateTimeCodec implements Codec<LocalDateTime> {
 
     @Override
     public LocalDateTime decode(BsonReader bsonReader, DecoderContext decoderContext) {
-        System.out.println("decde local");
         String dateTimeString = stringCodec.decode(bsonReader, decoderContext);
         return LocalDateTime.parse(dateTimeString);
     }
 
     @Override
     public void encode(BsonWriter bsonWriter, LocalDateTime localDateTime, EncoderContext encoderContext) {
-        System.out.println("encode local " + localDateTime.toString());
         String dateTimeString = localDateTime.toString();
         stringCodec.encode(bsonWriter, dateTimeString, encoderContext);
     }
