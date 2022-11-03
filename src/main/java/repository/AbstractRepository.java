@@ -53,7 +53,6 @@ public abstract class AbstractRepository implements AutoCloseable {
     private void initDatabase() {
         db.createCollection("clients");
         db.createCollection("equipment");
-        db.createCollection("equipment_rent");
         db.createCollection("rents");
     }
 

@@ -8,7 +8,7 @@ import org.bson.codecs.pojo.annotations.BsonProperty;
 @BsonDiscriminator(key = "_clazz", value = "trivet")
 public class TrivetMgd extends EquipmentMgd {
 
-    @BsonProperty("sensitivity")
+    @BsonProperty("weight")
     private double weight;
 
     @BsonCreator

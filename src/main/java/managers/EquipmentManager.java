@@ -20,8 +20,7 @@ public class EquipmentManager {
     }
 
     public void unregisterEquipment(EquipmentMgd equipmentMgd) {
-        EquipmentMgd e = equipmentRepository.getById(equipmentMgd.getEntityId());
-        equipmentRepository.deleteOne(e);
+        equipmentRepository.deleteOne(equipmentMgd);
     }
 
     public List<EquipmentMgd> getAllEquipment() {

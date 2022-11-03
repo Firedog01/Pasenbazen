@@ -16,21 +16,20 @@ public class ClientManager {
         this.clientRepository = clientRepository;
     }
 
-    public ClientMgd registerClient(String clientId, String name, String surname, AddressMgd addressMgd, boolean archive
-    ) throws ClientException {
+    public ClientMgd registerClient(String clientId, String name, String surname,
+                                    AddressMgd addressMgd) {
         ClientMgd clientMgd = new ClientMgd(clientId, name, surname, addressMgd);
         clientRepository.add(clientMgd);
         return clientMgd;
     }
 
     public void unregisterClient(ClientMgd clientMgd) {
-        ClientMgd c = clientRepository.getByUniqueId(clientMgd.getEntityId());
-        clientRepository.deleteOne(c);
+        clientRepository.deleteOne(clientMgd);
     }
 
     public ClientMgd getClient(String clientId) {
         try {
-            return clientRepository.getByClientId(clientId).get(0); //FIXME to mi się nie podoba xD
+            return clientRepository.getByClientId(clientId);
         } catch (EntityNotFoundException ex) {
             return null;
         }

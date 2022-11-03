@@ -3,11 +3,10 @@ package repository.impl;
 import mgd.AddressMgd;
 import mgd.ClientMgd;
 import mgd.DataFakerMgd;
-import mgd.UniqueIdMgd;
 
-import model.Client;
+
 import org.junit.After;
-import org.junit.Before;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -29,12 +28,24 @@ class ClientRepositoryTest {
     }
 
     @Test
+    void GetRemoveTest() {
+        Assertions.assertEquals(3, (long) clientRepository.getAllClients().size());
+        Assertions.assertEquals(clientRepository.getByUniqueId(client1.getEntityId()), client1);
+        clientRepository.deleteOne(client1);
+        Assertions.assertEquals(2, (long) clientRepository.getAllClients().size());
+        //Assert throws?
+    }
+
+    @Test
     void updateTest() {
         client1.setFirstName("__1__");
         client1.setArchive(true);
         clientRepository.updateClient(client1);
         ClientMgd client1_updated = clientRepository.getByUniqueId(client1.getEntityId());
-
+        Assertions.assertEquals(client1_updated.getFirstName(), "__1__");
+        Assertions.assertEquals(client1_updated.isArchive(), true);
     }
+
+
 
 }

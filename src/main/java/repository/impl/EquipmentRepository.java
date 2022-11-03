@@ -4,10 +4,12 @@ import com.mongodb.MongoCommandException;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Updates;
 import mgd.ClientMgd;
+import mgd.EQ.CameraMgd;
 import mgd.EQ.EquipmentMgd;
-import mgd.EquipmentRentMgd;
-import mgd.RentMgd;
+import mgd.EQ.LensMgd;
+import mgd.EQ.TrivetMgd;
 import mgd.UniqueIdMgd;
+import model.EQ.Lens;
 import org.bson.conversions.Bson;
 import repository.AbstractRepository;
 
@@ -18,22 +20,13 @@ import static com.mongodb.client.model.Filters.eq;
 
 public class EquipmentRepository extends AbstractRepository {
 
+    // create
     public void add(EquipmentMgd equipmentMgd) {
-//        ClientSession session = getNewSession();
         MongoCollection<EquipmentMgd> equipmentCollection = getDb().getCollection("equipment", EquipmentMgd.class);
-        try {
-//            session.startTransaction(getTransactionOptions());
-            equipmentCollection.insertOne(equipmentMgd);
-//            session.commitTransaction();
-        } catch (MongoCommandException e) {
-//            session.abortTransaction();
-            System.out.println("####### ROLLBACK TRANSACTION #######");
-        } finally {
-//            session.close();
-            System.out.println("####################################\n");
-        }
+        equipmentCollection.insertOne(equipmentMgd);
     }
 
+    // read
     public List<EquipmentMgd> getAllEq() {
         MongoCollection<EquipmentMgd> eqCollection = getDb().getCollection("equipment", EquipmentMgd.class);
         ArrayList<EquipmentMgd> equipmentMgds = eqCollection.find().into(new ArrayList<>());
@@ -52,37 +45,46 @@ public class EquipmentRepository extends AbstractRepository {
         return eqCollection.find(filter).into(new ArrayList<EquipmentMgd>());
     }
 
-    public List<EquipmentRentMgd> getEquipmentRents(EquipmentMgd equipment) {
-        MongoCollection<EquipmentRentMgd> eqRentsCollection = getDb().getCollection("equipment_rent", EquipmentRentMgd.class);
-        Bson filter = eq("equipment._id", equipment.getEntityId());
-        return eqRentsCollection.find(filter).into(new ArrayList<>());
-    }
+    // update
 
-    /*
-     * to update children fields use this
-     */
-    public void update(UniqueIdMgd uniqueIdMgd, String key, String value) {
-//        ClientSession session = getNewSession();
+    public void updateByKey(UniqueIdMgd uniqueIdMgd, String key, String value) {
         MongoCollection<EquipmentMgd> eqCollection = getDb().getCollection("equipment", EquipmentMgd.class);
         Bson filter = eq("_id", uniqueIdMgd);
         Bson updateOp = Updates.set(key, value);
-        try {
-//            session.startTransaction(getTransactionOptions());
-            eqCollection.updateOne(filter, updateOp);
-//            session.commitTransaction();
-        } catch (MongoCommandException e) {
-//            session.abortTransaction();
-            System.out.println("####### ROLLBACK TRANSACTION #######");
-        } finally {
-//            session.close();
-            System.out.println("####################################\n");
-        }
+        eqCollection.updateOne(filter, updateOp);
+    }
+
+    public LensMgd updateLensFocalLength(LensMgd lens, String focalLength) {
+        MongoCollection<LensMgd> eqCollection = getDb().getCollection("equipment", LensMgd.class);
+        Bson filter = eq("_id", lens.getEntityId());
+        Bson updateOp = Updates.set("focal_length", focalLength);
+        eqCollection.updateOne(filter, updateOp);
+        lens.setFocalLength(focalLength);
+        return lens;
+    }
+
+    public CameraMgd updateCameraResolution(CameraMgd camera, String resolution){
+        MongoCollection<CameraMgd> eqCollection = getDb().getCollection("equipment", CameraMgd.class);
+        Bson filter = eq("_id", camera.getEntityId());
+        Bson updateOp = Updates.set("resolution", resolution);
+        eqCollection.updateOne(filter, updateOp);
+        camera.setResolution(resolution);
+        return camera;
+    }
+
+    public TrivetMgd updateTrivetWeight(TrivetMgd trivet, double weight) {
+        MongoCollection<TrivetMgd> eqCollection = getDb().getCollection("equipment", TrivetMgd.class);
+        Bson filter = eq("_id", trivet.getEntityId());
+        Bson updateOp = Updates.set("resolution", weight);
+        eqCollection.updateOne(filter, updateOp);
+        trivet.setWeight(weight);
+        return trivet;
     }
 
     /*
      * only updates base class, no children
      */
-    public void updateEquipment(EquipmentMgd equipment) {
+    public void updateWholeEquipment(EquipmentMgd equipment) {
         MongoCollection<ClientMgd> clientsCollection =
                 getDb().getCollection("equipment", ClientMgd.class);
         Bson filter = eq("_id", equipment.getEntityId().getUuid());
@@ -98,22 +100,11 @@ public class EquipmentRepository extends AbstractRepository {
         clientsCollection.updateOne(filter, update);
     }
 
+    // delete
+
     public void deleteOne(EquipmentMgd clientMgd) {
-//        ClientSession session = getNewSession();
         MongoCollection<EquipmentMgd> eqCollection = getDb().getCollection("equipment", EquipmentMgd.class);
         Bson filter = eq("_id", clientMgd.getEntityId().getUuid());
-
-        try {
-//            session.startTransaction(getTransactionOptions());
-            eqCollection.deleteOne(filter);
-//            session.commitTransaction();
-        } catch (MongoCommandException e) {
-//            session.abortTransaction();
-            System.out.println("#####   MongoCommandException  #####");
-            System.out.println(e.getMessage());
-        } finally {
-//            session.close();
-            System.out.println("####################################\n");
-        }
+        eqCollection.deleteOne(filter);
     }
 }
