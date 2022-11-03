@@ -1,24 +1,11 @@
 package repository.impl;
 
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.EntityNotFoundException;
-import jakarta.persistence.Persistence;
-import mgd.ClientMgd;
 import mgd.DataFakerMgd;
 import mgd.EQ.CameraMgd;
 import mgd.EQ.EquipmentMgd;
 import mgd.EQ.LensMgd;
-import mgd.EQ.TrivetMgd;
-import model.EQ.Equipment;
-import model.EQ.Lens;
-import model.UniqueId;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import model.DataFaker;
-import repository.RepositoryFactory;
-import repository.RepositoryType;
-
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -53,18 +40,13 @@ class EquipmentRepositoryTest {
     }
 
     @Test
-    void updateTrivetField() {
+    void updateLensFocalLength() {
         String uniqueVal = "21.37";
-        equipmentRepository.updateByKey(camera.getEntityId(), "weight", uniqueVal);
-        trivet = equipmentRepository.getById(trivet.getEntityId());
+        LensMgd updatedLens = equipmentRepository.updateLensFocalLength((LensMgd) lens, uniqueVal);
+        assertEquals(updatedLens, lens);
+        assertEquals(updatedLens, equipmentRepository.getById(updatedLens.getEntityId()));
     }
 
-    @Test
-    void updateLensField() {
-        String uniqueVal = "1337_idk";
-        equipmentRepository.updateByKey(camera.getEntityId(), "focal_length", uniqueVal);
-        lens = equipmentRepository.getById(lens.getEntityId());
-    }
 
     @Test
     void updateWholeTest() {
@@ -74,5 +56,14 @@ class EquipmentRepositoryTest {
         equipmentRepository.updateWholeEquipment(lens);
         LensMgd updatedLens = (LensMgd) equipmentRepository.getById(lens.getEntityId());
         assertEquals(lens, updatedLens);
+    }
+
+    @Test
+    void deleteTest() {
+        CameraMgd otherCamera = DataFakerMgd.getCameraMgd();
+        equipmentRepository.add(otherCamera);
+        assertEquals(otherCamera, equipmentRepository.getById(otherCamera.getEntityId()));
+        equipmentRepository.deleteOne(otherCamera);
+        assertNull(equipmentRepository.getById(otherCamera.getEntityId()));
     }
 }

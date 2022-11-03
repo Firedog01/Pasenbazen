@@ -43,12 +43,6 @@ public class EquipmentRepository extends AbstractRepository {
         return eqCollection.find(filter).first();
     }
 
-    public List<EquipmentMgd> getByName(String name) {
-        MongoCollection<EquipmentMgd> eqCollection = getDb().getCollection("equipment", EquipmentMgd.class);
-        Bson filter = eq("name", name);
-        return eqCollection.find(filter).into(new ArrayList<EquipmentMgd>());
-    }
-
     // update
 
     public void updateByKey(UniqueIdMgd uniqueIdMgd, String key, String value) {
