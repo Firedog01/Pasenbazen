@@ -104,4 +104,36 @@ public abstract class EquipmentMgd extends AbstractEntityMgd {
         this.missing = missing;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof EquipmentMgd)) return false;
+
+        EquipmentMgd that = (EquipmentMgd) o;
+
+        if (Double.compare(that.bail, bail) != 0) return false;
+        if (Double.compare(that.firstDayCost, firstDayCost) != 0) return false;
+        if (Double.compare(that.nextDaysCost, nextDaysCost) != 0) return false;
+        if (archive != that.archive) return false;
+        if (missing != that.missing) return false;
+        if (name != null ? !name.equals(that.name) : that.name != null) return false;
+        return description != null ? description.equals(that.description) : that.description == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = name != null ? name.hashCode() : 0;
+        temp = Double.doubleToLongBits(bail);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(firstDayCost);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(nextDaysCost);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + (archive ? 1 : 0);
+        result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + (missing ? 1 : 0);
+        return result;
+    }
 }

@@ -39,4 +39,22 @@ public class CameraMgd extends EquipmentMgd {
     public void setResolution(String resolution) {
         this.resolution = resolution;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CameraMgd)) return false;
+        if (!super.equals(o)) return false;
+
+        CameraMgd cameraMgd = (CameraMgd) o;
+
+        return resolution != null ? resolution.equals(cameraMgd.resolution) : cameraMgd.resolution == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (resolution != null ? resolution.hashCode() : 0);
+        return result;
+    }
 }

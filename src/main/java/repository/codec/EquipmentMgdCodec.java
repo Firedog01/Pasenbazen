@@ -59,11 +59,7 @@ public class EquipmentMgdCodec implements Codec<EquipmentMgd> {
 
     @Override
     public void encode(BsonWriter writer, EquipmentMgd equipmentMgd, EncoderContext encoderContext) {
-        System.out.println("encode");
-        //        writer.writeStartDocument();
-//        writer.writeName("name");
-//        stringCodec.encode(writer, equipmentMgd.getName(), encoderContext);
-//
+        // not needed
     }
 
     @Override

@@ -39,4 +39,22 @@ public class LensMgd extends EquipmentMgd {
     public void setFocalLength(String focalLength) {
         this.focalLength = focalLength;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof LensMgd)) return false;
+        if (!super.equals(o)) return false;
+
+        LensMgd lensMgd = (LensMgd) o;
+
+        return focalLength != null ? focalLength.equals(lensMgd.focalLength) : lensMgd.focalLength == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (focalLength != null ? focalLength.hashCode() : 0);
+        return result;
+    }
 }

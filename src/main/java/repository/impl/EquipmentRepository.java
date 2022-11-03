@@ -23,22 +23,11 @@ import static com.mongodb.client.model.Filters.eq;
 public class EquipmentRepository extends AbstractRepository {
 
     // create
-    public void addCamera(CameraMgd camera) {
-        MongoCollection<CameraMgd> equipmentCollection =
-                getDb().getCollection("equipment", CameraMgd.class);
-        equipmentCollection.insertOne(camera);
-    }
 
-    public void addLens(LensMgd lens) {
-        MongoCollection<LensMgd> equipmentCollection =
-                getDb().getCollection("equipment", LensMgd.class);
-        equipmentCollection.insertOne(lens);
-    }
-
-    public void addTrivet(TrivetMgd trivet) {
-        MongoCollection<TrivetMgd> equipmentCollection =
-                getDb().getCollection("equipment", TrivetMgd.class);
-        equipmentCollection.insertOne(trivet);
+    public void add(EquipmentMgd equipment) {
+        MongoCollection<EquipmentMgd> equipmentCollection =
+                getDb().getCollection("equipment", EquipmentMgd.class);
+        equipmentCollection.insertOne(equipment);
     }
 
     // read
