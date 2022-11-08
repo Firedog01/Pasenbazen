@@ -32,7 +32,7 @@ public class RentMgd extends AbstractEntityMgd {
         this.eqReturned = false;
     }
 
-    @BsonProperty("eq")
+    @BsonProperty("equipment")
     private EquipmentMgd equipment;
 
     @BsonProperty("client")

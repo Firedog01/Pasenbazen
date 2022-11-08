@@ -73,6 +73,7 @@ class RentRepositoryTest {
 
     }
 
+
     @Test
     void count() {
         int startingCount = rentRepository.getAllRents().size();

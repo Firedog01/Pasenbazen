@@ -1,6 +1,5 @@
 package managers;
 
-import jakarta.persistence.EntityNotFoundException;
 import mgd.AddressMgd;
 import mgd.ClientMgd;
 import mgd.EQ.EquipmentMgd;
@@ -20,6 +19,7 @@ public class RentManager {
         this.rentRepository = rentRepository;
     }
 
+
     public RentMgd makeReservation(ClientMgd client, EquipmentMgd equipment, AddressMgd address,
                                    LocalDateTime beginTime, LocalDateTime endTime) {
         if (equipment.isMissing() || equipment.isArchive()) {
@@ -36,46 +36,38 @@ public class RentManager {
             return null;
         }
 
-        boolean good = true;
         List<RentMgd> rentEquipmentList = rentRepository.getEquipmentRents(equipment);
 
-        System.out.println(rentEquipmentList);
-        for (RentMgd r : rentEquipmentList) {
-            System.out.println(r);
-        }
 
         for (int i = 0; i < rentEquipmentList.size(); i++) {
             RentMgd curRent = rentEquipmentList.get(i);
 
             // +----- old rent -----+
             //         +----- new rent -----+
-            if (beginTime.isBefore(curRent.getEndTime()) && beginTime.isAfter(curRent.getBeginTime())) {
-                good = false;
+            if (beginTime.isBefore(curRent.getEndTime()) &&
+                    beginTime.isAfter(curRent.getEndTime())) {
+                return null;
             }
             //         +----- old rent -----+
             // +----- new rent -----+
             if (endTime.isAfter(curRent.getBeginTime()) && endTime.isBefore(curRent.getEndTime())) {
-                good = false;
+                return null;
             }
             // +----- old rent -----+
             //    +-- new rent --+
             if (beginTime.isAfter(curRent.getBeginTime()) && beginTime.isBefore(curRent.getEndTime())) {
-                good = false;
+                return null;
             }
             //    +-- old rent --+
             // +----- new rent -----+
             if (beginTime.isBefore(curRent.getBeginTime()) && endTime.isAfter(curRent.getEndTime())) {
-                good = false;
+                return null;
             }
         }
 
-        if (good) {
-            RentMgd rent = new RentMgd(new UniqueIdMgd(), beginTime, endTime, equipment, client, address);
-            rentRepository.add(rent);
-            return rent;
-        } else {
-            return null;
-        }
+        RentMgd rent = new RentMgd(new UniqueIdMgd(), beginTime, endTime, equipment, client, address);
+        rentRepository.add(rent);
+        return rent;
     }
 
     public void shipEquipment(RentMgd rent) {
