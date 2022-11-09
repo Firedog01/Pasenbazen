@@ -13,5 +13,8 @@
         <module name="after pobi" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="NonRelational" target="17" />
+    </bytecodeTargetLevel>
   </component>
 </project>
