@@ -1,36 +1,20 @@
 package managers;
 
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
 import mgd.AddressMgd;
 import mgd.ClientMgd;
 import mgd.DataFakerMgd;
 import mgd.EQ.EquipmentMgd;
-import mgd.EQ.TrivetMgd;
 import mgd.RentMgd;
-import model.Address;
-import model.Client;
-import model.EQ.Camera;
-import model.Rent;
 import org.joda.time.LocalDateTime;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import model.DataFaker;
-import repository.RepositoryFactory;
-import repository.RepositoryType;
 import repository.impl.ClientRepository;
 import repository.impl.EquipmentRepository;
 import repository.impl.RentRepository;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.BrokenBarrierException;
-import java.util.concurrent.CyclicBarrier;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.jupiter.api.Assertions.*;
 

@@ -5,7 +5,6 @@ import mgd.ClientMgd;
 import mgd.DataFakerMgd;
 
 
-import org.junit.After;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
