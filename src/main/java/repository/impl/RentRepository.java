@@ -89,7 +89,7 @@ public class RentRepository extends AbstractRepository {
         Bson filterRent = eq("_id", rent.getEntityId());
         Bson updateRent = Updates.combine(
                 Updates.set("eqReturned", eqReturned),
-                Updates.set("eq.missing", missing)
+                Updates.set("equipment.missing", missing)
         );
         MongoCollection<EquipmentMgd> equipmentCollection = getDb().getCollection("equipment", EquipmentMgd.class);
         Bson filterEq = eq("_id", rent.getEquipment().getEntityId());
