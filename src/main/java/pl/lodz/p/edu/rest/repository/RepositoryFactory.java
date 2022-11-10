@@ -10,7 +10,7 @@ public class RepositoryFactory {
         this.emf = emf;
     }
 
-    public Repository getRepository(RepositoryType type) {
+    public static Repository getRepository(RepositoryType type) {
         switch(type) {
             case RentRepository -> {
                 return new RentRepository(emf.createEntityManager());
