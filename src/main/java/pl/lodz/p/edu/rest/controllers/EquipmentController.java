@@ -108,10 +108,7 @@ public class EquipmentController {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{uuid}")
     public Response getEquipment(@PathParam("uuid") UUID uuid) {
-        UniqueId uniqueId = new UniqueId();
-        uniqueId.setUniqueID(uuid);
-
-        Equipment equipment = equipmentManager.get(uniqueId);
+        Equipment equipment = equipmentManager.get(new UniqueId(uuid));
         if (equipment != null) {
             return Response.status(Response.Status.OK).entity(equipment).build();
         } else {

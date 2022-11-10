@@ -8,6 +8,7 @@ import pl.lodz.p.edu.rest.model.*;
 import pl.lodz.p.edu.rest.repository.Repository;
 
 import java.util.List;
+import java.util.UUID;
 
 
 public class ClientRepository implements Repository<Client> {
@@ -88,23 +89,28 @@ public class ClientRepository implements Repository<Client> {
         } finally {
             if(et.isActive()) {
                 et.rollback();
+                return false;
             }
         }
+        return true;
     }
 
-    @Override
-    public boolean remove(Client elem) { //Fixme archive not remove for clients
+
+    public boolean remove(UUID uuid) { //Fixme archive not remove for clients
         EntityTransaction et = em.getTransaction();
         et.begin();
         try {
+            Client elem = getClientByUuid(new UniqueId(uuid)); //Fixme co za syf
             em.lock(elem, LockModeType.OPTIMISTIC);
             this.em.remove(elem);
             et.commit();
         } finally {
             if(et.isActive()) {
                 et.rollback();
+                return false;
             }
         }
+        return true;
     }
 
     @Override

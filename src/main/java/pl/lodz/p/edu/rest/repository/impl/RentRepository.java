@@ -13,6 +13,7 @@ import pl.lodz.p.edu.rest.repository.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 
 public class RentRepository implements Repository<Rent> {
@@ -98,14 +99,18 @@ public class RentRepository implements Repository<Rent> {
         } finally {
             if (et.isActive()) {
                 et.rollback();
+                return false;
             }
         }
+        return true;
     }
 
     @Override
-    public boolean remove(Rent elem) {
+    public boolean remove(UUID uuid) {
         EntityTransaction et = em.getTransaction();
         et.begin();
+
+        Rent elem = get(new UniqueId(uuid)); //Fixme syf
         try {
             em.lock(elem, LockModeType.OPTIMISTIC);
             this.em.remove(elem);
@@ -113,8 +118,10 @@ public class RentRepository implements Repository<Rent> {
         } finally {
             if(et.isActive()) {
                 et.rollback();
+                return false;
             }
         }
+        return true;
     }
 
     @Override

@@ -32,9 +32,8 @@ public class ClientManager {
     }
 
 
-    public void unregisterClient(UUID uuid) {
-        clientRepository.remove(uuid); //TODO
-
+    public boolean unregisterClient(UUID uuid) {
+        return clientRepository.remove(uuid);
     }
 
     public Client getByClientId(String id, idType idType) {

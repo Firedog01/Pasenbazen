@@ -69,9 +69,7 @@ public class ClientController {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{uuid}")
     public Response getClientByUuid(@PathParam("uuid") UUID uuid) {
-        UniqueId uniqueId = new UniqueId();
-        uniqueId.setUniqueID(uuid);
-        Client client = clientManager.getClientByUuid(uniqueId);
+        Client client = clientManager.getClientByUuid(new UniqueId(uuid));
         if(client != null) {
             return Response.status(Response.Status.OK).entity(client).build();
         } else {

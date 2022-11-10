@@ -8,6 +8,7 @@ import jakarta.validation.constraints.Size;
 import java.util.Objects;
 
 @Entity
+//@Table(name = "client", uniqueConstraints = {@UniqueConstraint(columnNames = "client_id")}) //TODO example of unique
 @Table(name = "client")
 @Access(AccessType.FIELD)
 public class Client extends AbstractEntity  {

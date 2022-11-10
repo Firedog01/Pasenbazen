@@ -62,8 +62,10 @@ public class AddressRepository implements Repository<Address> {
         } finally {
             if(et.isActive()) {
                 et.rollback();
+                return false;
             }
         }
+        return true;
     }
 
     @Override
@@ -77,8 +79,10 @@ public class AddressRepository implements Repository<Address> {
         } finally {
             if(et.isActive()) {
                 et.rollback();
+                return false;
             }
         }
+        return true;
     }
 
     @Override
