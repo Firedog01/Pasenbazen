@@ -52,7 +52,7 @@ public class EquipmentRepository implements Repository<Equipment> {
     }
 
     @Override
-    public void add(Equipment elem) {
+    public boolean add(Equipment elem) {
         EntityTransaction et = em.getTransaction();
         et.begin();
         try {
@@ -62,12 +62,14 @@ public class EquipmentRepository implements Repository<Equipment> {
         } finally {
             if(et.isActive()) {
                 et.rollback();
+                return false;
             }
         }
+        return true;
     }
 
     @Override
-    public void remove(Equipment elem) {
+    public boolean remove(Equipment elem) {
         EntityTransaction et = em.getTransaction();
         et.begin();
         try {
@@ -77,8 +79,10 @@ public class EquipmentRepository implements Repository<Equipment> {
         } finally {
             if(et.isActive()) {
                 et.rollback();
+                return false;
             }
         }
+        return true;
     }
 
     @Override

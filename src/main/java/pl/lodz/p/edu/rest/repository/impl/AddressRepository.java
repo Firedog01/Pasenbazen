@@ -52,7 +52,7 @@ public class AddressRepository implements Repository<Address> {
     }
 
     @Override
-    public void add(Address elem) {
+    public boolean add(Address elem) {
         EntityTransaction et = em.getTransaction();
         et.begin();
         try {
@@ -67,7 +67,7 @@ public class AddressRepository implements Repository<Address> {
     }
 
     @Override
-    public void remove(Address elem) {
+    public boolean remove(Address elem) {
         EntityTransaction et = em.getTransaction();
         et.begin();
         try {

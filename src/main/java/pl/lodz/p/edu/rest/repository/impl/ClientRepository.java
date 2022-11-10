@@ -78,7 +78,7 @@ public class ClientRepository implements Repository<Client> {
     }
 
     @Override
-    public void add(Client elem) {
+    public boolean add(Client elem) {
         EntityTransaction et = em.getTransaction();
         et.begin();
         try {
@@ -93,7 +93,7 @@ public class ClientRepository implements Repository<Client> {
     }
 
     @Override
-    public void remove(Client elem) { //Fixme archive not remove for clients
+    public boolean remove(Client elem) { //Fixme archive not remove for clients
         EntityTransaction et = em.getTransaction();
         et.begin();
         try {

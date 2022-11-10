@@ -81,7 +81,7 @@ public class RentRepository implements Repository<Rent> {
     }
 
     @Override
-    public void add(Rent elem) {
+    public boolean add(Rent elem) {
         EntityTransaction et = em.getTransaction();
         et.begin();
         try {
@@ -103,7 +103,7 @@ public class RentRepository implements Repository<Rent> {
     }
 
     @Override
-    public void remove(Rent elem) {
+    public boolean remove(Rent elem) {
         EntityTransaction et = em.getTransaction();
         et.begin();
         try {
