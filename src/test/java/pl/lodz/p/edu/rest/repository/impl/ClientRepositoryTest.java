@@ -147,11 +147,11 @@ class ClientRepositoryTest {
 
         assertThrows(EntityExistsException.class, () -> {cr.add(c4);});
 
-        Client c1_ = cr.getByClientId(clientId1, idType.DowodOsobisty);
+        Client c1_ = cr.getClientByIdName(clientId1, idType.DowodOsobisty);
         assertEquals(c1, c1_);
-        Client c2_ = cr.getByClientId(clientId1, idType.Passport);
+        Client c2_ = cr.getClientByIdName(clientId1, idType.Passport);
         assertEquals(c2, c2_);
-        Client c3_ = cr.getByClientId(clientId2, idType.DowodOsobisty);
+        Client c3_ = cr.getClientByIdName(clientId2, idType.DowodOsobisty);
         assertEquals(c3, c3_);
 
         cr.remove(c1_);

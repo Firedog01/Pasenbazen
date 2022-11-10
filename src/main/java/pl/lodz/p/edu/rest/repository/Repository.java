@@ -1,5 +1,6 @@
 package pl.lodz.p.edu.rest.repository;
 
+import pl.lodz.p.edu.rest.model.Client;
 import pl.lodz.p.edu.rest.model.UniqueId;
 import java.util.List;
 

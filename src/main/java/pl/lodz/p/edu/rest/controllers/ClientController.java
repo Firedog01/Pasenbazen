@@ -8,10 +8,14 @@ import pl.lodz.p.edu.rest.exception.ClientException;
 import pl.lodz.p.edu.rest.managers.ClientManager;
 import pl.lodz.p.edu.rest.model.Address;
 import pl.lodz.p.edu.rest.model.Client;
+import pl.lodz.p.edu.rest.model.UniqueId;
 import pl.lodz.p.edu.rest.model.idType;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
+@Path("/clients")
 public class ClientController {
 
     @Inject
@@ -22,19 +26,22 @@ public class ClientController {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Client registerClient(String clientId, idType idtype, String name,
+    @Path(("/"))
+    //FIXME BODY CLIENT OR PARTICLES?
+    public Response registerClient(String clientId, idType idtype, String name,
                                  String surname, Address address
     ) throws ClientException {
 
         Client client = new Client(clientId, idtype, name, surname, address);
 // FIXME TRY CATCH? CHANGES REPOSITORY
-        if(clientManager.registerClient(client);) {
+        try {
+            clientManager.registerClient(client);
             return Response.status(Response.Status.CREATED).entity(client).build();
-        } else {
+        } catch (RuntimeException e) { //FIXME TEMP
+            System.out.println(e.getMessage()); //FIXME TEMP
+        }
             return Response.status(Response.Status.NOT_ACCEPTABLE).entity(client).build();
         }
-
-    }
 
     @DELETE
     @Path("/{id}")
@@ -49,7 +56,7 @@ public class ClientController {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{id}/{type}")
-    public Response getClient(@PathParam("id") String clientId, @PathParam("type") idType idType) {
+    public Response getClientByClientId(@PathParam("id") String clientId, @PathParam("type") idType idType) {
         Client client = clientManager.getByClientId(clientId, idType);
         if(client != null) {
             return Response.status(Response.Status.OK).entity(client).build();
@@ -58,4 +65,38 @@ public class ClientController {
         }
     }
 
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/{uuid}")
+    public Response getClientByUuid(@PathParam("uuid") UUID uuid) {
+        UniqueId uniqueId = new UniqueId();
+        uniqueId.setUniqueID(uuid);
+        Client client = clientManager.getClientByUuid(uniqueId);
+        if(client != null) {
+            return Response.status(Response.Status.OK).entity(client).build();
+        } else {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAllClients() {
+        List<Client> clients = clientManager.getAllClients();
+        return Response.status(Response.Status.OK).entity(clients).build();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/available")
+    public Response getAllAvailableClients() {
+        List<Client> all = clientManager.getAllClients();
+        List<Client> available = new ArrayList<>();
+        for (Client c : all) {
+            if(!(c.isArchive())) {
+                available.add(c);
+            }
+        }
+        return Response.status(Response.Status.OK).entity(available).build();
+    }
 }

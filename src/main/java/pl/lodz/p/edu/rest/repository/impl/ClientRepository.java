@@ -18,7 +18,11 @@ public class ClientRepository implements Repository<Client> {
     }
 
     @Override
-    public Client get(UniqueId uniqueId) {
+    public Client get(UniqueId id) {
+        return null;  //FIXME TEMP
+    }
+
+    public Client getClientByUuid(UniqueId uniqueId) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Client> cq = cb.createQuery(Client.class);
         Root<Client> client = cq.from(Client.class);
@@ -37,7 +41,7 @@ public class ClientRepository implements Repository<Client> {
         return clients.get(0);
     }
 
-    public Client getByClientId(String clientId, idType clientIdType) {
+    public Client getClientByIdName(String clientId, idType clientIdType) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Client> cq = cb.createQuery(Client.class);
         Root<Client> clientRoot = cq.from(Client.class);
@@ -89,7 +93,7 @@ public class ClientRepository implements Repository<Client> {
     }
 
     @Override
-    public void remove(Client elem) {
+    public void remove(Client elem) { //Fixme archive not remove for clients
         EntityTransaction et = em.getTransaction();
         et.begin();
         try {
