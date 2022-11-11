@@ -1,5 +1,6 @@
 package pl.lodz.p.edu.rest.controllers;
 
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
@@ -20,9 +21,9 @@ import java.util.UUID;
 @Path("/clients")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-//@Transactional(Transactional.TxType.REQUIRED) //db connection? idk
-@RequestScoped
+@ApplicationScoped
 public class ClientController {
+//@Transactional(Transactional.TxType.REQUIRED) //db connection? idk
 
     @Inject
     private ClientManager clientManager;
@@ -99,6 +100,7 @@ public class ClientController {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @Path("/")
     public Response getAllClients() {
         List<Client> clients = clientManager.getAllClients();
         return Response.status(Response.Status.OK).entity(clients).build();

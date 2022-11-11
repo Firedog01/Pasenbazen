@@ -106,6 +106,7 @@ public class RentController {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @Path("/")
     public Response getAllRents() {
         List<Rent> rents = rentManager.getAll();
         return Response.status(Response.Status.OK).entity(rents).build();
@@ -141,7 +142,7 @@ public class RentController {
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     @Path("/available/{equipmentUuid}")
-    public boolean isAvailable( UUID equipmentUuid) {
+    public boolean isAvailable(@PathParam("equipmentUuid") UUID equipmentUuid) {
         Equipment equipment = equipmentManager.get(equipmentUuid);
         return Objects.equals(whenAvailable(equipment), LocalDateTime.now());
     }

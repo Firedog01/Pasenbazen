@@ -36,6 +36,8 @@
           <element id="library" level="project" name="Maven: jakarta.validation:jakarta.validation-api:3.0.2" />
           <element id="library" level="project" name="Maven: org.glassfish:jakarta.el:4.0.2" />
           <element id="library" level="project" name="Maven: jakarta.el:jakarta.el-api:4.0.0" />
+          <element id="library" level="project" name="Maven: org.postgresql:postgresql:42.5.0" />
+          <element id="library" level="project" name="Maven: org.checkerframework:checker-qual:3.5.0" />
           <element id="library" level="project" name="Maven: joda-time:joda-time:2.11.2" />
         </element>
       </element>

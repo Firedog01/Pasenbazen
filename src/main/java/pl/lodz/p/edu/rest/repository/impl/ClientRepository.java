@@ -67,12 +67,13 @@ public class ClientRepository implements Repository<Client> {
 
     @Override
     public List<Client> getAll() {
-
         EntityTransaction et = em.getTransaction();
         et.begin();
-        List<Client> clientList = em.createQuery("Select Client from Client client", Client.class)
+        List<Client> clientList = em.createQuery("Select client from Client client", Client.class)
                 .setLockMode(LockModeType.OPTIMISTIC).getResultList();
         et.commit();
+        em.flush(); //FIXME IDK I'VE TRIED
+        em.close();
         return clientList;
     }
 

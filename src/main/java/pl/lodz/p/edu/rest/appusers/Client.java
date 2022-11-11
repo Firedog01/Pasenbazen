@@ -7,8 +7,8 @@ import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "client")
-@DiscriminatorValue("client")
+@Table(name = "ClientUser")
+@DiscriminatorValue("clientuser")
 @PrimaryKeyJoinColumn(name = "login")
 public class Client extends User { //fixme not sure about that
     public Client(String login) {
