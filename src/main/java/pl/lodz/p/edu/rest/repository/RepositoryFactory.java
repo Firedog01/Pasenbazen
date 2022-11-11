@@ -4,7 +4,7 @@ import jakarta.persistence.EntityManagerFactory;
 import pl.lodz.p.edu.rest.repository.impl.*;
 
 public class RepositoryFactory {
-    EntityManagerFactory emf;
+    static EntityManagerFactory emf;
 
     public RepositoryFactory(EntityManagerFactory emf) {
         this.emf = emf;

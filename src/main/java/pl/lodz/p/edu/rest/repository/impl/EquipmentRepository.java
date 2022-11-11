@@ -10,6 +10,7 @@ import pl.lodz.p.edu.rest.model.EQ.Equipment;
 import pl.lodz.p.edu.rest.repository.Repository;
 
 import java.util.List;
+import java.util.UUID;
 
 
 public class EquipmentRepository implements Repository<Equipment> {
@@ -69,12 +70,13 @@ public class EquipmentRepository implements Repository<Equipment> {
     }
 
     @Override
-    public boolean remove(Equipment elem) {
+    public boolean remove(UUID uuid) {
         EntityTransaction et = em.getTransaction();
         et.begin();
+        Equipment equipment = get(new UniqueId(uuid)); //FIXME i don't like it
         try {
-            em.lock(elem, LockModeType.OPTIMISTIC);
-            this.em.remove(elem);
+            em.lock(equipment, LockModeType.OPTIMISTIC);
+            this.em.remove(equipment);
             et.commit();
         } finally {
             if(et.isActive()) {
@@ -86,7 +88,7 @@ public class EquipmentRepository implements Repository<Equipment> {
     }
 
     @Override
-    public void update(Equipment elem) {
+    public boolean update(Equipment elem) { //TODO UUID?
         EntityTransaction et = em.getTransaction();
         et.begin();
         try {
@@ -96,8 +98,10 @@ public class EquipmentRepository implements Repository<Equipment> {
         } finally {
             if(et.isActive()) {
                 et.rollback();
+                return false;
             }
         }
+        return true;
     }
 
     @Override

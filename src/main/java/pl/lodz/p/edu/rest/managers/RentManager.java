@@ -20,7 +20,8 @@ public class RentManager {
         return rentRepository.getRentByEq(equipment);
     }
     public List<Rent> getRentsByClient(UUID uuid) {
-        return rentRepository.getRentByClient(uuid);
+
+        return rentRepository.getRentByClient(get(new UniqueId(uuid)).getClient()); //What a joke
     } //???
 
     public boolean add(Rent rent) {

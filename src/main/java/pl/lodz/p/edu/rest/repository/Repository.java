@@ -14,7 +14,7 @@ public interface Repository<T> {
 
     boolean remove(UUID uuid);
 
-    void update(T elem);
+    boolean update(T elem);
 
     Long count();
 }

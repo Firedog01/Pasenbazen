@@ -125,7 +125,7 @@ public class RentRepository implements Repository<Rent> {
     }
 
     @Override
-    public void update(Rent elem) {
+    public boolean update(Rent elem) {
         EntityTransaction et = em.getTransaction();
         et.begin();
         try {
@@ -135,8 +135,10 @@ public class RentRepository implements Repository<Rent> {
         } finally {
             if(et.isActive()) {
                 et.rollback();
+                return false;
             }
         }
+        return true;
     }
 
     @Override

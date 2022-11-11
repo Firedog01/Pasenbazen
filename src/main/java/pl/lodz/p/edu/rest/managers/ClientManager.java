@@ -47,4 +47,8 @@ public class ClientManager {
     public List<Client> getAllClients() {
         return clientRepository.getAll();
     }
+
+    public boolean updateClient(Client client) {
+        return clientRepository.update(client);
+    }
 }

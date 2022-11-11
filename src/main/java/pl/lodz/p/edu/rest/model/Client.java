@@ -15,7 +15,7 @@ public class Client extends AbstractEntity  {
 
     @Id
     @Size(min = 1)
-    @Column(name = "client_id")
+    @Column(name = "client_id", nullable = false)
     private String clientId;
 
     @Id
@@ -24,10 +24,12 @@ public class Client extends AbstractEntity  {
     private idType idType;
 
     @Size(min = 1)
+    @NotNull
     @Column(name = "first_name")
     private String firstName;
 
     @Size(min = 1)
+    @NotNull
     @Column(name = "last_name")
     private String lastName;
 

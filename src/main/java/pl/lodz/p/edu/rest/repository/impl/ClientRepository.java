@@ -114,7 +114,7 @@ public class ClientRepository implements Repository<Client> {
     }
 
     @Override
-    public void update(Client elem) {
+    public boolean update(Client elem) {
         EntityTransaction et = em.getTransaction();
         et.begin();
         try {
@@ -124,8 +124,10 @@ public class ClientRepository implements Repository<Client> {
         } finally {
             if(et.isActive()) {
                 et.rollback();
+                return false;
             }
         }
+        return true;
     }
 
     @Override

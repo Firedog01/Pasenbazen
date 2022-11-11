@@ -5,9 +5,11 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import pl.lodz.p.edu.rest.model.*;
+import pl.lodz.p.edu.rest.model.EQ.Equipment;
 import pl.lodz.p.edu.rest.repository.Repository;
 
 import java.util.List;
+import java.util.UUID;
 
 public class AddressRepository implements Repository<Address> {
 
@@ -69,6 +71,23 @@ public class AddressRepository implements Repository<Address> {
     }
 
     @Override
+    public boolean remove(UUID uuid) {
+        EntityTransaction et = em.getTransaction();
+        et.begin();
+        Address address = get(new UniqueId(uuid));
+        try {
+            em.lock(address, LockModeType.OPTIMISTIC_FORCE_INCREMENT);
+            this.em.remove(address);
+            et.commit();
+        } finally {
+            if(et.isActive()) {
+                et.rollback();
+                return false;
+            }
+        }
+        return true;
+    }
+
     public boolean remove(Address elem) {
         EntityTransaction et = em.getTransaction();
         et.begin();
@@ -86,7 +105,7 @@ public class AddressRepository implements Repository<Address> {
     }
 
     @Override
-    public void update(Address elem) {
+    public boolean update(Address elem) {
         EntityTransaction et = em.getTransaction();
         et.begin();
         try {
@@ -96,8 +115,10 @@ public class AddressRepository implements Repository<Address> {
         } finally {
             if(et.isActive()) {
                 et.rollback();
+                return false;
             }
         }
+        return true;
     }
 
     @Override
