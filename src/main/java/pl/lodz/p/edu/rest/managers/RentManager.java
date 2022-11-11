@@ -4,7 +4,8 @@ import jakarta.inject.Inject;
 
 import pl.lodz.p.edu.rest.model.EQ.Equipment;
 import pl.lodz.p.edu.rest.model.Rent;
-import pl.lodz.p.edu.rest.model.UniqueId;
+import pl.lodz.p.edu.rest.repository.RepositoryFactory;
+import pl.lodz.p.edu.rest.repository.RepositoryType;
 import pl.lodz.p.edu.rest.repository.impl.RentRepository;
 
 import java.util.List;
@@ -13,16 +14,20 @@ import java.util.UUID;
 
 public class RentManager {
 
-    @Inject
-    RentRepository rentRepository;
+    private final RentRepository rentRepository;
+
+    protected RentManager() {
+        rentRepository = (RentRepository) RepositoryFactory
+                .getRepository(RepositoryType.RentRepository);
+    }
 
     public List<Rent> getRentByEq(Equipment equipment) {
         return rentRepository.getRentByEq(equipment);
     }
     public List<Rent> getRentsByClient(UUID uuid) {
 
-        return rentRepository.getRentByClient(get(new UniqueId(uuid)).getClient()); //What a joke
-    } //???
+        return rentRepository.getRentByClient(get(uuid).getClient());
+    }
 
     public boolean add(Rent rent) {
         return rentRepository.add(rent);
@@ -35,14 +40,13 @@ public class RentManager {
         return rentRepository.remove(uuid);
     }
 
-    public Rent get(UniqueId uniqueId) {
-        return rentRepository.get(uniqueId);
+    public Rent get(UUID uuid) {
+        return rentRepository.get(uuid);
     }
 
     public List<Rent> getAll() {
         return rentRepository.getAll();
     }
-
 }
 
 //    private final static RentRepository rentRepository =

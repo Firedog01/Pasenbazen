@@ -12,7 +12,6 @@ import pl.lodz.p.edu.rest.managers.RentManager;
 import pl.lodz.p.edu.rest.model.Client;
 import pl.lodz.p.edu.rest.model.EQ.Equipment;
 import pl.lodz.p.edu.rest.model.Rent;
-import pl.lodz.p.edu.rest.model.UniqueId;
 
 import java.util.List;
 import java.util.Objects;
@@ -34,14 +33,14 @@ public class RentController {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response makeReservation(RentDTO rentDTO) { //FIXME idk about that RentDTO :weary:
+    public Response makeReservation(RentDTO rentDTO) {
 //        ClientRepository clientRepository =
 //                (ClientRepository) RepositoryFactory.getRepository(RepositoryType.ClientRepository);
 //        EquipmentRepository equipmentRepository =
 //                (EquipmentRepository) RepositoryFactory.getRepository(RepositoryType.EquipmentRepository);
 
-        Client client = clientManager.getClientByUuid(new UniqueId(rentDTO.getClientUUID()));
-        Equipment equipment = equipmentManager.get(new UniqueId(rentDTO.getEquipmentUUID()));
+        Client client = clientManager.getClientByUuid(rentDTO.getClientUUID());
+        Equipment equipment = equipmentManager.get(rentDTO.getEquipmentUUID());
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime beginTime = LocalDateTime.parse(rentDTO.getBeginTime());
         LocalDateTime endTime = LocalDateTime.parse(rentDTO.getEndTime());
@@ -116,7 +115,7 @@ public class RentController {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{uuid}")
     public Response getRent(@PathParam("uuid") UUID uuid) {
-        Rent rent = rentManager.get(new UniqueId(uuid));
+        Rent rent = rentManager.get(uuid);
         if (rent != null) {
             return Response.status(Response.Status.OK).entity(rent).build();
         } else {
@@ -143,7 +142,7 @@ public class RentController {
     @Produces(MediaType.TEXT_PLAIN)
     @Path("/available/{equipmentUuid}")
     public boolean isAvailable( UUID equipmentUuid) {
-        Equipment equipment = equipmentManager.get(new UniqueId(equipmentUuid));
+        Equipment equipment = equipmentManager.get(equipmentUuid);
         return Objects.equals(whenAvailable(equipment), LocalDateTime.now());
     }
 

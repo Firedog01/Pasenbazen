@@ -7,7 +7,6 @@ import jakarta.persistence.criteria.Root;
 import pl.lodz.p.edu.rest.model.Client;
 import pl.lodz.p.edu.rest.model.EQ.Equipment;
 import pl.lodz.p.edu.rest.model.Rent;
-import pl.lodz.p.edu.rest.model.UniqueId;
 import pl.lodz.p.edu.rest.model.Rent_;
 import pl.lodz.p.edu.rest.repository.Repository;
 
@@ -25,7 +24,7 @@ public class RentRepository implements Repository<Rent> {
     }
 
     @Override
-    public Rent get(UniqueId uniqueId) {
+    public Rent get(UUID uuid) {
 
 
         CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -33,7 +32,7 @@ public class RentRepository implements Repository<Rent> {
         Root<Rent> rent = cq.from(Rent.class);
 
         cq.select(rent);
-        cq.where(cb.equal(rent.get(Rent_.ENTITY_ID), uniqueId));
+        cq.where(cb.equal(rent.get(Rent_.UUID), uuid));
 
 
         EntityTransaction et = em.getTransaction();
@@ -43,7 +42,7 @@ public class RentRepository implements Repository<Rent> {
         et.commit();
 
         if (rents.isEmpty()) {
-            throw new EntityNotFoundException("Rent not found for uniqueId: " + uniqueId);
+            throw new EntityNotFoundException("Rent not found for uniqueId: " + uuid);
         }
         return rents.get(0);
     }
@@ -110,7 +109,7 @@ public class RentRepository implements Repository<Rent> {
         EntityTransaction et = em.getTransaction();
         et.begin();
 
-        Rent elem = get(new UniqueId(uuid)); //Fixme syf
+        Rent elem = get(uuid);
         try {
             em.lock(elem, LockModeType.OPTIMISTIC);
             this.em.remove(elem);

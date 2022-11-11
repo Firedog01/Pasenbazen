@@ -3,9 +3,10 @@ package pl.lodz.p.edu.rest.managers;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import pl.lodz.p.edu.rest.model.Client;
-import pl.lodz.p.edu.rest.model.UniqueId;
 import pl.lodz.p.edu.rest.model.idType;
 
+import pl.lodz.p.edu.rest.repository.RepositoryFactory;
+import pl.lodz.p.edu.rest.repository.RepositoryType;
 import pl.lodz.p.edu.rest.repository.impl.ClientRepository;
 
 import java.util.List;
@@ -17,20 +18,16 @@ import java.util.UUID;
 //@RequestScoped
 //@WebService FIXME ?
 public class ClientManager {
+    private final ClientRepository clientRepository;
 
-    @Inject
-    ClientRepository clientRepository;
-
-//    private ClientRepository clientRepository = (ClientRepository) RepositoryFactory.getRepository(RepositoryType.ClientRepository);
-
-//    public ClientManager(ClientRepository clientRepository) {
-//        this.clientRepository = clientRepository;
-//    }
-
-    public void registerClient(Client client) {
-        clientRepository.add(client);
+    protected ClientManager() {
+        clientRepository = (ClientRepository) RepositoryFactory
+                .getRepository(RepositoryType.ClientRepository);
     }
 
+    public boolean registerClient(Client client) {
+        return clientRepository.add(client);
+    }
 
     public boolean unregisterClient(UUID uuid) {
         return clientRepository.remove(uuid);
@@ -40,8 +37,8 @@ public class ClientManager {
         return clientRepository.getClientByIdName(id, idType);
     }
 
-    public Client getClientByUuid(UniqueId uniqueId) {
-        return clientRepository.getClientByUuid(uniqueId);
+    public Client getClientByUuid(UUID uuid) {
+        return clientRepository.get(uuid);
     }
 
     public List<Client> getAllClients() {

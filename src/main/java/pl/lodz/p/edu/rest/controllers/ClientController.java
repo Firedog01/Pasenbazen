@@ -5,21 +5,14 @@ import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
-import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.UriInfo;
-import pl.lodz.p.edu.rest.DTO.ClientCreationRequest;
 import pl.lodz.p.edu.rest.exception.ClientException;
 import pl.lodz.p.edu.rest.managers.ClientManager;
-import pl.lodz.p.edu.rest.model.Address;
 import pl.lodz.p.edu.rest.model.Client;
-import pl.lodz.p.edu.rest.model.UniqueId;
 import pl.lodz.p.edu.rest.model.idType;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -27,35 +20,22 @@ import java.util.UUID;
 @Path("/clients")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-@Transactional(Transactional.TxType.REQUIRED) //db connection? idk
+//@Transactional(Transactional.TxType.REQUIRED) //db connection? idk
 @RequestScoped
 public class ClientController {
 
     @Inject
     private ClientManager clientManager;
 
-    @PersistenceContext
-    private EntityManager entityManager;
-
-
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Path(("/"))
-    //FIXME BODY CLIENT OR PARTICLES?
-    public Response registerClient(String clientId, idType idtype, String name,
-                                   String surname, Address address
-    ) throws ClientException {
-
-        Client client = new Client(clientId, idtype, name, surname, address);
-// FIXME TRY CATCH? CHANGES REPOSITORY
-        try {
-            clientManager.registerClient(client);
+    public Response registerClient(Client client) {
+        if (clientManager.registerClient(client)) {
             return Response.status(Response.Status.CREATED).entity(client).build();
-        } catch (RuntimeException e) { //FIXME TEMP
-            System.out.println(e.getMessage()); //FIXME TEMP
         }
-        return Response.status(Response.Status.NOT_ACCEPTABLE).entity(client).build();
+        return Response.status(Response.Status.NOT_ACCEPTABLE).build();
     }
 
 
@@ -109,7 +89,7 @@ public class ClientController {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{uuid}")
     public Response getClientByUuid(@PathParam("uuid") UUID uuid) {
-        Client client = clientManager.getClientByUuid(new UniqueId(uuid));
+        Client client = clientManager.getClientByUuid(uuid);
         if(client != null) {
             return Response.status(Response.Status.OK).entity(client).build();
         } else {
@@ -137,8 +117,4 @@ public class ClientController {
         }
         return Response.status(Response.Status.OK).entity(available).build();
     }
-
-
-
-
 }

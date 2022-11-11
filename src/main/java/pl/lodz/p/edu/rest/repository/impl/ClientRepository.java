@@ -18,18 +18,16 @@ public class ClientRepository implements Repository<Client> {
         this.em = em;
     }
 
-    @Override
-    public Client get(UniqueId id) {
-        return null;  //FIXME TEMP
-    }
 
-    public Client getClientByUuid(UniqueId uniqueId) {
+
+    @Override
+    public Client get(UUID uuid) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Client> cq = cb.createQuery(Client.class);
         Root<Client> client = cq.from(Client.class);
 
         cq.select(client);
-        cq.where(cb.equal(client.get(Client_.ENTITY_ID), uniqueId));
+        cq.where(cb.equal(client.get(Client_.UUID), uuid));
 
         EntityTransaction et = em.getTransaction();
         et.begin();
@@ -37,7 +35,7 @@ public class ClientRepository implements Repository<Client> {
         et.commit();
 
         if(clients.isEmpty()) {
-            throw new EntityNotFoundException("Client not found for uniqueId: " + uniqueId);
+            throw new EntityNotFoundException("Client not found for uniqueId: " + uuid);
         }
         return clients.get(0);
     }
@@ -100,7 +98,7 @@ public class ClientRepository implements Repository<Client> {
         EntityTransaction et = em.getTransaction();
         et.begin();
         try {
-            Client elem = getClientByUuid(new UniqueId(uuid)); //Fixme co za syf
+            Client elem = get(uuid);
             em.lock(elem, LockModeType.OPTIMISTIC);
             this.em.remove(elem);
             et.commit();

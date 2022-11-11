@@ -34,8 +34,7 @@ public class Client extends AbstractEntity  {
     private String lastName;
 
     @NotNull
-    @JoinColumn(name = "address_id")
-    @ManyToOne(fetch =  FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @Embedded
     private Address address;
 
     @Column(name = "archive")

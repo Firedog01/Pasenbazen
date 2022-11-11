@@ -6,7 +6,6 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import pl.lodz.p.edu.rest.managers.EquipmentManager;
 import pl.lodz.p.edu.rest.model.EQ.*;
-import pl.lodz.p.edu.rest.model.UniqueId;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -108,7 +107,7 @@ public class EquipmentController {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{uuid}")
     public Response getEquipment(@PathParam("uuid") UUID uuid) {
-        Equipment equipment = equipmentManager.get(new UniqueId(uuid));
+        Equipment equipment = equipmentManager.get(uuid);
         if (equipment != null) {
             return Response.status(Response.Status.OK).entity(equipment).build();
         } else {

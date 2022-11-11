@@ -1,31 +1,33 @@
 package pl.lodz.p.edu.rest.repository;
 
+import jakarta.inject.Inject;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
 import pl.lodz.p.edu.rest.repository.impl.*;
 
-public class RepositoryFactory {
-    static EntityManagerFactory emf;
+public final class RepositoryFactory {
+    private static final EntityManagerFactory emf =
+            Persistence.createEntityManagerFactory("POSTGRES_DB");
 
-    public RepositoryFactory(EntityManagerFactory emf) {
-        this.emf = emf;
-    }
+    private static final RentRepository rentRepository = new RentRepository(emf.createEntityManager());
+    private static final ClientRepository clientRepository = new ClientRepository(emf.createEntityManager());
+    private static final EquipmentRepository equipmentRepository = new EquipmentRepository(emf.createEntityManager());
+
+
+    private RepositoryFactory() {}
 
     public static Repository getRepository(RepositoryType type) {
         switch(type) {
             case RentRepository -> {
-                return new RentRepository(emf.createEntityManager());
+                return rentRepository;
             }
             case EquipmentRepository -> {
-                return new EquipmentRepository(emf.createEntityManager());
+                return equipmentRepository;
             }
             case ClientRepository -> {
-                return new ClientRepository(emf.createEntityManager());
-            }
-            case AddressRepository -> {
-                return new AddressRepository(emf.createEntityManager());
+                return clientRepository;
             }
         }
         return null;
     }
-
 }

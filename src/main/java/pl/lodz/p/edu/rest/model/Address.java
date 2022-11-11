@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 @Entity
 @Table(name = "address")
 @Access(AccessType.FIELD)
+@Embeddable
 public class Address extends AbstractEntity {
 
     @Id
@@ -24,6 +25,8 @@ public class Address extends AbstractEntity {
     @Column(name = "street_nr")
     @NotNull
     private String streetNr;
+
+
 
     public Address(String city, String street, String streetNr) {
         this.city = city;

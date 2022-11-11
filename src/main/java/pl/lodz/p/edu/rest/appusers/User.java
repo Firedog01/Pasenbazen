@@ -3,7 +3,7 @@ package pl.lodz.p.edu.rest.appusers;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import pl.lodz.p.edu.rest.model.UniqueId;
+import pl.lodz.p.edu.rest.model.AbstractEntity;
 
 
 @Entity
@@ -11,7 +11,7 @@ import pl.lodz.p.edu.rest.model.UniqueId;
 //@Table(name = "User", uniqueConstraints = {@UniqueConstraint(columnNames = {"login"})})
 @Inheritance(strategy = InheritanceType.JOINED)
 @Access(AccessType.FIELD)
-public abstract class User extends UniqueId {
+public abstract class User extends AbstractEntity {
     private boolean isActive = false;
 
     @Id

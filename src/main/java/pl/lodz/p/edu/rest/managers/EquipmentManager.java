@@ -1,31 +1,25 @@
 package pl.lodz.p.edu.rest.managers;
 
 import jakarta.inject.Inject;
-import jakarta.ws.rs.*;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
-import pl.lodz.p.edu.rest.exception.EquipmentException;
-import jakarta.persistence.EntityNotFoundException;
-import pl.lodz.p.edu.rest.model.Client;
 import pl.lodz.p.edu.rest.model.EQ.*;
 
-import pl.lodz.p.edu.rest.model.UniqueId;
 import pl.lodz.p.edu.rest.repository.RepositoryFactory;
 import pl.lodz.p.edu.rest.repository.RepositoryType;
 import pl.lodz.p.edu.rest.repository.impl.ClientRepository;
 import pl.lodz.p.edu.rest.repository.impl.EquipmentRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 
 
 public class EquipmentManager {
-//    private EquipmentRepository equipmentRepository = (EquipmentRepository) RepositoryFactory.getRepository(RepositoryType.EquipmentRepository);
+    private final EquipmentRepository equipmentRepository;
 
-    @Inject
-    EquipmentRepository equipmentRepository;
+    protected EquipmentManager() {
+        equipmentRepository = (EquipmentRepository) RepositoryFactory
+                .getRepository(RepositoryType.EquipmentRepository);
+    }
 
     public boolean remove(UUID uuid) {
         return equipmentRepository.remove(uuid); //TODO
@@ -39,8 +33,8 @@ public class EquipmentManager {
         return equipmentRepository.add(equipment);
     }
 
-    public Equipment get(UniqueId uniqueId) {
-        return equipmentRepository.get(uniqueId);
+    public Equipment get(UUID uuid) {
+        return equipmentRepository.get(uuid);
     }
 
 }

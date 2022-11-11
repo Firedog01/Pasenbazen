@@ -15,6 +15,7 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="NonRelational" target="17" />
+      <module name="Pasenbazen" target="17" />
     </bytecodeTargetLevel>
   </component>
 </project>

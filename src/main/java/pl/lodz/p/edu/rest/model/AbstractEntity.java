@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 @MappedSuperclass
 @Embeddable
@@ -11,25 +12,22 @@ public abstract class AbstractEntity implements Serializable {
 
     @Embedded
     @NotNull
-//    @Column(name = "entity_ID")
-    private UniqueId entityId;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "uuid")
+    private UUID uuid;
 
     @Version
     @NotNull
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long version;
 
-//    protected AbstractEntity() {}
-
     protected AbstractEntity() {
-        this.entityId = new UniqueId();
     }
 
-    public UniqueId getEntityId() {
-        return entityId;
+    public UUID getUuidId() {
+        return uuid;
     }
 
-    public void setEntityId(UniqueId entityId) {
-        this.entityId = entityId;
+    public void setEntityId(UUID uuid) {
+        this.uuid = uuid;
     }
 }

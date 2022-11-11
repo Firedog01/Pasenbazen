@@ -5,7 +5,6 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import pl.lodz.p.edu.rest.model.Client_;
-import pl.lodz.p.edu.rest.model.UniqueId;
 import pl.lodz.p.edu.rest.model.EQ.Equipment;
 import pl.lodz.p.edu.rest.repository.Repository;
 
@@ -22,13 +21,13 @@ public class EquipmentRepository implements Repository<Equipment> {
     }
 
     @Override
-    public Equipment get(UniqueId uniqueId) {
+    public Equipment get(UUID uuid) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Equipment> cq = cb.createQuery(Equipment.class);
         Root<Equipment> equipment = cq.from(Equipment.class);
 
         cq.select(equipment);
-        cq.where(cb.equal(equipment.get(Client_.ENTITY_ID), uniqueId));
+        cq.where(cb.equal(equipment.get(Client_.CLIENT_ID), uuid));
 
         EntityTransaction et = em.getTransaction();
         et.begin();
@@ -37,7 +36,7 @@ public class EquipmentRepository implements Repository<Equipment> {
 
 
         if(equipmentList.isEmpty()) {
-            throw new EntityNotFoundException("Equipment not found for uniqueId: " + uniqueId);
+            throw new EntityNotFoundException("Equipment not found for uniqueId: " + uuid);
         }
         return equipmentList.get(0);
     }
@@ -73,7 +72,7 @@ public class EquipmentRepository implements Repository<Equipment> {
     public boolean remove(UUID uuid) {
         EntityTransaction et = em.getTransaction();
         et.begin();
-        Equipment equipment = get(new UniqueId(uuid)); //FIXME i don't like it
+        Equipment equipment = get(uuid);
         try {
             em.lock(equipment, LockModeType.OPTIMISTIC);
             this.em.remove(equipment);
