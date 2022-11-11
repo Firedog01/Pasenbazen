@@ -51,8 +51,8 @@ public class RentManager {
 //    private final static EquipmentRepository equipmentRepository =
 //            (EquipmentRepository) RepositoryFactory.getRepository(RepositoryType.EquipmentRepository);
 
-//    public double checkClientBalance(Client client) {
-//        List<Rent> rentList = getClientRents(client.getUuid());
+//    public double checkClientBalance(Client Client) {
+//        List<Rent> rentList = getClientRents(Client.getUuid());
 //        double balance = 0.0;
 //        for (Rent rent :
 //                rentList) {
@@ -71,12 +71,12 @@ public class RentManager {
         this.rentRepository = rentRepository;
     }
 
-    public Rent makeReservation(Client client, Equipment equipment, Address address,
+    public Rent makeReservation(Client Client, Equipment equipment, Address address,
                                 LocalDateTime beginTime, LocalDateTime endTime) {
         if (equipment.isMissing() || equipment.isArchive()) {
             return null;
         }
-        if (client.isArchive()) {
+        if (Client.isArchive()) {
             return null;
         }
         LocalDateTime now = LocalDateTime.now();
@@ -122,7 +122,7 @@ public class RentManager {
         }
 
         if (good) {
-            Rent rent = new Rent(beginTime, endTime, equipment, client, address);
+            Rent rent = new Rent(beginTime, endTime, equipment, Client, address);
             rentRepository.add(rent);
             return rent;
         } else {
@@ -130,8 +130,8 @@ public class RentManager {
         }
     }
 
-    public List<Rent> getClientRents(Client client) {
-        return rentRepository.getRentByClient(client);
+    public List<Rent> getClientRents(Client Client) {
+        return rentRepository.getRentByClient(Client);
     }
 
     public void shipEquipment(Rent rent) {
@@ -193,9 +193,9 @@ public class RentManager {
         rentRepository.update(rent);
     }
 
-    public double checkClientBalance(Client client) {
+    public double checkClientBalance(Client Client) {
         // todo
-        List<Rent> rentList = getClientRents(client);
+        List<Rent> rentList = getClientRents(Client);
         double balance = 0.0;
         for (Rent rent :
                 rentList) {

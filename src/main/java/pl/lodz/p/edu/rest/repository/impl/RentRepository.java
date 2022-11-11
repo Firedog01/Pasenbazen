@@ -160,7 +160,7 @@ public class RentRepository implements Repository<Rent> {
         List<Rent> rents = q.getResultList();
 
         if(rents.isEmpty()) {
-            throw new EntityNotFoundException("Rent not found for client: " + clientP);
+            throw new EntityNotFoundException("Rent not found for Client: " + clientP);
         }
         return rents;
     }

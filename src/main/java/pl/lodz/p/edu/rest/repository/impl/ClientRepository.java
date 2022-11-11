@@ -72,7 +72,7 @@ public class ClientRepository implements Repository<Client> {
 
         EntityTransaction et = em.getTransaction();
         et.begin();
-        List<Client> clientList = em.createQuery("Select client from Client client", Client.class)
+        List<Client> clientList = em.createQuery("Select Client from Client client", Client.class)
                 .setLockMode(LockModeType.OPTIMISTIC).getResultList();
         et.commit();
         return clientList;
@@ -132,7 +132,7 @@ public class ClientRepository implements Repository<Client> {
     public Long count() {
         EntityTransaction et = em.getTransaction();
         et.begin();
-        Long count =  em.createQuery("Select count(client) from Client client", Long.class)
+        Long count =  em.createQuery("Select count(Client) from Client client", Long.class)
                 .setLockMode(LockModeType.OPTIMISTIC).getSingleResult();
         et.commit();
         return count;
