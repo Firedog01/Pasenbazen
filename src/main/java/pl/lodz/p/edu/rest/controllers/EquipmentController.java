@@ -25,12 +25,12 @@ public class EquipmentController {
             return Response.status(Response.Status.NO_CONTENT).build();
         } else {
             return Response.status(Response.Status.NOT_FOUND).build();
-            //not sure what response status
         }
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @Path("/")
     public Response getAllEquipment() {
         List<Equipment> equipment = equipmentManager.getAll();
         return Response.status(Response.Status.OK).entity(equipment).build();

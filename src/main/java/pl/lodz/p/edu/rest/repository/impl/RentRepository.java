@@ -14,23 +14,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-
 public class RentRepository implements Repository<Rent> {
 
     @PersistenceContext(unitName = "app")
     private EntityManager em;
-
-//    public RentRepository(EntityManager em) {
-//        this.em = em;
-//    }
-
 
     public RentRepository() {
     }
 
     @Override
     public Rent get(UUID uuid) {
-
 
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Rent> cq = cb.createQuery(Rent.class);

@@ -1,20 +1,19 @@
 package pl.lodz.p.edu.rest.managers;
 
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import pl.lodz.p.edu.rest.model.EQ.*;
 
-import pl.lodz.p.edu.rest.repository.RepositoryFactory;
-import pl.lodz.p.edu.rest.repository.RepositoryType;
-import pl.lodz.p.edu.rest.repository.impl.ClientRepository;
 import pl.lodz.p.edu.rest.repository.impl.EquipmentRepository;
 
 import java.util.List;
 import java.util.UUID;
 
-
-
+@Transactional
 public class EquipmentManager {
-    private static final EquipmentRepository equipmentRepository = new EquipmentRepository();
+
+    @Inject
+    private EquipmentRepository equipmentRepository;
 
     protected EquipmentManager() {
 //        equipmentRepository = (EquipmentRepository) RepositoryFactory

@@ -8,6 +8,7 @@ import jakarta.transaction.UserTransaction;
 import pl.lodz.p.edu.rest.model.*;
 import pl.lodz.p.edu.rest.repository.Repository;
 
+import java.io.UncheckedIOException;
 import java.util.List;
 import java.util.UUID;
 
@@ -78,7 +79,7 @@ public class ClientRepository implements Repository<Client> {
                 .setLockMode(LockModeType.OPTIMISTIC).getResultList();
 
         et.commit();
-//        em.flush(); //FIXME IDK I'VE TRIED
+
         return clientList;
     }
 

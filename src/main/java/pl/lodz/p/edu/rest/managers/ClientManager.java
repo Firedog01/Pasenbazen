@@ -1,6 +1,5 @@
 package pl.lodz.p.edu.rest.managers;
 
-import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import pl.lodz.p.edu.rest.model.Client;
@@ -12,12 +11,11 @@ import pl.lodz.p.edu.rest.repository.impl.ClientRepository;
 import java.util.List;
 import java.util.UUID;
 
-//@Transactional
-//@RequestScoped
-//@WebService FIXME ?
+@Transactional
 public class ClientManager {
 
-    private static final ClientRepository clientRepository = new ClientRepository();
+    @Inject
+    private ClientRepository clientRepository;
 
     protected ClientManager() {
 //        clientRepository = (ClientRepository) RepositoryFactory

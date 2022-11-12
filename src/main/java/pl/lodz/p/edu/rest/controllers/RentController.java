@@ -17,10 +17,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-
 @Path("/rents")
 public class RentController {
-
 
     @Inject
     private RentManager rentManager;
@@ -33,11 +31,8 @@ public class RentController {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
+    @Path("/")
     public Response makeReservation(RentDTO rentDTO) {
-//        ClientRepository clientRepository =
-//                (ClientRepository) RepositoryFactory.getRepository(RepositoryType.ClientRepository);
-//        EquipmentRepository equipmentRepository =
-//                (EquipmentRepository) RepositoryFactory.getRepository(RepositoryType.EquipmentRepository);
 
         Client client = clientManager.getClientByUuid(rentDTO.getClientUUID());
         Equipment equipment = equipmentManager.get(rentDTO.getEquipmentUUID());
@@ -91,6 +86,7 @@ public class RentController {
         }
     }
 
+    //TODO Client UUID?
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/client/{uuid}")
@@ -147,6 +143,7 @@ public class RentController {
         return Objects.equals(whenAvailable(equipment), LocalDateTime.now());
     }
 
+    //TODO PLANTEXT?
     public LocalDateTime whenAvailable(Equipment equipment) {
         // todo
         if (equipment.isArchive() || equipment.isMissing()) {
@@ -165,6 +162,7 @@ public class RentController {
         return when;
     }
 
+    //TODO PLANTEXT?
     public LocalDateTime untilAvailable(Equipment equipment) {
         // todo
         LocalDateTime until = null;
