@@ -1,5 +1,6 @@
 package pl.lodz.p.edu.rest.model;
 
+import jakarta.transaction.Transactional;
 import pl.lodz.p.edu.rest.exception.ClientException;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -8,8 +9,15 @@ import jakarta.validation.constraints.Size;
 import java.util.Objects;
 
 //@Table(name = "Client", uniqueConstraints = {@UniqueConstraint(columnNames = "client_id")}) //TODO example of unique
-@Entity(name = "Client")
+@Entity
 @Table(name = "clients")
+@NamedQueries({
+        @NamedQuery(name = "Client.getAll", query = "SELECT c FROM Client c"),
+        @NamedQuery(name = "Client.getByUuid", query = "SELECT n FROM Client n WHERE n.uuid = :uuid"),
+        @NamedQuery(name = "Client.getByIdString", query = "SELECT n FROM Client n WHERE n.clientId = :clientId"),
+        @NamedQuery(name = "Client.count", query = "SELECT count(c) FROM Client c"),
+})
+@Transactional
 @Access(AccessType.FIELD)
 public class Client extends AbstractEntity  {
 

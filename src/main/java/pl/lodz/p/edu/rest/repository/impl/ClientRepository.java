@@ -12,13 +12,16 @@ import java.util.UUID;
 
 
 public class ClientRepository implements Repository<Client> {
+
+    @PersistenceContext(unitName = "RENT")
     private EntityManager em;
 
-    public ClientRepository(EntityManager em) {
-        this.em = em;
+//    public ClientRepository(EntityManager em) {
+//        this.em = em;
+//    }
+
+    public ClientRepository() {
     }
-
-
 
     @Override
     public Client get(UUID uuid) {
@@ -69,11 +72,12 @@ public class ClientRepository implements Repository<Client> {
     public List<Client> getAll() {
         EntityTransaction et = em.getTransaction();
         et.begin();
-        List<Client> clientList = em.createQuery("Select client from Client client", Client.class)
+
+        List<Client> clientList = em.createNamedQuery("Client.getAll")
                 .setLockMode(LockModeType.OPTIMISTIC).getResultList();
+
         et.commit();
         em.flush(); //FIXME IDK I'VE TRIED
-        em.close();
         return clientList;
     }
 

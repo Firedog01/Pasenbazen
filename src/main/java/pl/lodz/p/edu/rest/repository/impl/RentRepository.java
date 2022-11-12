@@ -17,10 +17,15 @@ import java.util.UUID;
 
 public class RentRepository implements Repository<Rent> {
 
+    @PersistenceContext(unitName = "RENT")
     private EntityManager em;
 
-    public RentRepository(EntityManager em) {
-        this.em = em;
+//    public RentRepository(EntityManager em) {
+//        this.em = em;
+//    }
+
+
+    public RentRepository() {
     }
 
     @Override

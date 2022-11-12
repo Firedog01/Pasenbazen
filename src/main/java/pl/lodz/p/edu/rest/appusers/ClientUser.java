@@ -10,12 +10,12 @@ import jakarta.persistence.Table;
 @Table(name = "ClientUser")
 @DiscriminatorValue("clientuser")
 @PrimaryKeyJoinColumn(name = "login")
-public class Client extends User { //fixme not sure about that
-    public Client(String login) {
+public class ClientUser extends User { //fixme not sure about that
+    public ClientUser(String login) {
         super(login);
     }
 
-    protected Client() {
+    protected ClientUser() {
 
     }
 }

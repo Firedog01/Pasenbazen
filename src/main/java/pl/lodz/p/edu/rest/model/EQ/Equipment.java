@@ -1,6 +1,7 @@
 package pl.lodz.p.edu.rest.model.EQ;
 
 import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotNull;
 import pl.lodz.p.edu.rest.model.AbstractEntity;
 import pl.lodz.p.edu.rest.model.Rent;
@@ -13,6 +14,7 @@ import java.util.List;
 @Table(name = "equipment")
 @Inheritance(strategy = InheritanceType.JOINED)
 //@DiscriminatorColumn(name = "type")
+@Transactional
 @Access(AccessType.FIELD)
 public abstract class Equipment extends AbstractEntity {
 

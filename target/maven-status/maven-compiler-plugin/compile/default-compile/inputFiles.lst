@@ -2,6 +2,7 @@ D:\Studia\Semestr V\PAS\PAS_REST\Pasenbazen\src\main\java\pl\lodz\p\edu\rest\rep
 D:\Studia\Semestr V\PAS\PAS_REST\Pasenbazen\src\main\java\pl\lodz\p\edu\rest\managers\ClientManager.java
 D:\Studia\Semestr V\PAS\PAS_REST\Pasenbazen\src\main\java\pl\lodz\p\edu\rest\managers\RentManager.java
 D:\Studia\Semestr V\PAS\PAS_REST\Pasenbazen\src\main\java\pl\lodz\p\edu\rest\model\AbstractEntity.java
+D:\Studia\Semestr V\PAS\PAS_REST\Pasenbazen\src\main\java\pl\lodz\p\edu\rest\appusers\ClientUser.java
 D:\Studia\Semestr V\PAS\PAS_REST\Pasenbazen\src\main\java\pl\lodz\p\edu\rest\controllers\EquipmentController.java
 D:\Studia\Semestr V\PAS\PAS_REST\Pasenbazen\src\main\java\pl\lodz\p\edu\rest\model\EQ\Equipment.java
 D:\Studia\Semestr V\PAS\PAS_REST\Pasenbazen\src\main\java\pl\lodz\p\edu\rest\model\EQ\Microphone.java
@@ -21,7 +22,6 @@ D:\Studia\Semestr V\PAS\PAS_REST\Pasenbazen\src\main\java\pl\lodz\p\edu\rest\rep
 D:\Studia\Semestr V\PAS\PAS_REST\Pasenbazen\src\main\java\pl\lodz\p\edu\rest\repository\impl\RentRepository.java
 D:\Studia\Semestr V\PAS\PAS_REST\Pasenbazen\src\main\java\pl\lodz\p\edu\rest\controllers\ClientController.java
 D:\Studia\Semestr V\PAS\PAS_REST\Pasenbazen\src\main\java\pl\lodz\p\edu\rest\model\EQ\Trivet.java
-D:\Studia\Semestr V\PAS\PAS_REST\Pasenbazen\src\main\java\pl\lodz\p\edu\rest\appusers\Client.java
 D:\Studia\Semestr V\PAS\PAS_REST\Pasenbazen\src\main\java\pl\lodz\p\edu\rest\managers\LogicContainer.java
 D:\Studia\Semestr V\PAS\PAS_REST\Pasenbazen\src\main\java\pl\lodz\p\edu\rest\model\Rent.java
 D:\Studia\Semestr V\PAS\PAS_REST\Pasenbazen\src\main\java\pl\lodz\p\edu\rest\managers\EquipmentManager.java

@@ -56,8 +56,8 @@ public class RentManager {
 //    private final static EquipmentRepository equipmentRepository =
 //            (EquipmentRepository) RepositoryFactory.getRepository(RepositoryType.EquipmentRepository);
 
-//    public double checkClientBalance(Client Client) {
-//        List<Rent> rentList = getClientRents(Client.getUuid());
+//    public double checkClientBalance(ClientUser ClientUser) {
+//        List<Rent> rentList = getClientRents(ClientUser.getUuid());
 //        double balance = 0.0;
 //        for (Rent rent :
 //                rentList) {
@@ -76,12 +76,12 @@ public class RentManager {
         this.rentRepository = rentRepository;
     }
 
-    public Rent makeReservation(Client Client, Equipment equipment, Address address,
+    public Rent makeReservation(ClientUser ClientUser, Equipment equipment, Address address,
                                 LocalDateTime beginTime, LocalDateTime endTime) {
         if (equipment.isMissing() || equipment.isArchive()) {
             return null;
         }
-        if (Client.isArchive()) {
+        if (ClientUser.isArchive()) {
             return null;
         }
         LocalDateTime now = LocalDateTime.now();
@@ -127,7 +127,7 @@ public class RentManager {
         }
 
         if (good) {
-            Rent rent = new Rent(beginTime, endTime, equipment, Client, address);
+            Rent rent = new Rent(beginTime, endTime, equipment, ClientUser, address);
             rentRepository.add(rent);
             return rent;
         } else {
@@ -135,8 +135,8 @@ public class RentManager {
         }
     }
 
-    public List<Rent> getClientRents(Client Client) {
-        return rentRepository.getRentByClient(Client);
+    public List<Rent> getClientRents(ClientUser ClientUser) {
+        return rentRepository.getRentByClient(ClientUser);
     }
 
     public void shipEquipment(Rent rent) {
@@ -198,9 +198,9 @@ public class RentManager {
         rentRepository.update(rent);
     }
 
-    public double checkClientBalance(Client Client) {
+    public double checkClientBalance(ClientUser ClientUser) {
         // todo
-        List<Rent> rentList = getClientRents(Client);
+        List<Rent> rentList = getClientRents(ClientUser);
         double balance = 0.0;
         for (Rent rent :
                 rentList) {

@@ -1,6 +1,7 @@
 package pl.lodz.p.edu.rest.model;
 
 import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotNull;
 import pl.lodz.p.edu.rest.model.EQ.Equipment;
 import org.joda.time.Days;
@@ -8,6 +9,7 @@ import org.joda.time.LocalDateTime;
 
 @Entity
 @Table(name = "rent")
+@Transactional
 @Access(AccessType.FIELD)
 public class Rent extends AbstractEntity {
 
@@ -29,10 +31,10 @@ public class Rent extends AbstractEntity {
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Client client;
 
-    // jako embbedable
+//    @JoinColumn(name = "address_id")
+//    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @NotNull
-    @JoinColumn(name = "address_id")
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @Embedded
     private Address shippingAddress;
 
     @NotNull

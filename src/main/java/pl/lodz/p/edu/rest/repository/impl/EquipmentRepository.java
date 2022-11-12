@@ -14,10 +14,15 @@ import java.util.UUID;
 
 public class EquipmentRepository implements Repository<Equipment> {
 
+    @PersistenceContext(unitName = "RENT")
     private EntityManager em;
 
-    public EquipmentRepository(EntityManager em) {
-        this.em = em;
+//    public EquipmentRepository(EntityManager em) {
+//        this.em = em;
+//    }
+
+
+    public EquipmentRepository() {
     }
 
     @Override

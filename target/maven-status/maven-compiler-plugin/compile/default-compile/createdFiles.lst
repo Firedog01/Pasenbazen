@@ -1,5 +1,4 @@
 pl\lodz\p\edu\rest\model\EQ\Trivet_.class
-pl\lodz\p\edu\rest\appusers\Client_.class
 pl\lodz\p\edu\rest\exception\RentException.class
 pl\lodz\p\edu\rest\model\EQ\Camera.class
 pl\lodz\p\edu\rest\managers\RentManager.class
@@ -10,6 +9,7 @@ pl\lodz\p\edu\rest\model\EQ\Camera_.class
 pl\lodz\p\edu\rest\controllers\ClientController.class
 pl\lodz\p\edu\rest\appusers\ResourceManager_.class
 pl\lodz\p\edu\rest\controllers\RentController.class
+pl\lodz\p\edu\rest\appusers\ClientUser.class
 pl\lodz\p\edu\rest\model\Address.class
 pl\lodz\p\edu\rest\managers\ClientManager.class
 pl\lodz\p\edu\rest\appusers\Admin_.class
@@ -24,7 +24,6 @@ pl\lodz\p\edu\rest\model\Rent.class
 pl\lodz\p\edu\rest\RentalApplication.class
 pl\lodz\p\edu\rest\model\EQ\Equipment_.class
 pl\lodz\p\edu\rest\model\EQ\Lens.class
-pl\lodz\p\edu\rest\appusers\Client.class
 pl\lodz\p\edu\rest\repository\RepositoryFactory$1.class
 pl\lodz\p\edu\rest\appusers\Admin.class
 pl\lodz\p\edu\rest\model\EQ\Lighting_.class
@@ -34,6 +33,7 @@ pl\lodz\p\edu\rest\repository\impl\RentRepository.class
 pl\lodz\p\edu\rest\model\EQ\Trivet.class
 pl\lodz\p\edu\rest\repository\impl\ClientRepository.class
 pl\lodz\p\edu\rest\exception\ClientException.class
+pl\lodz\p\edu\rest\appusers\ClientUser_.class
 pl\lodz\p\edu\rest\appusers\User.class
 pl\lodz\p\edu\rest\model\Address_.class
 pl\lodz\p\edu\rest\model\EQ\Microphone.class
