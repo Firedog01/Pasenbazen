@@ -1,28 +1,28 @@
 package pl.lodz.p.edu.rest.managers;
 
+import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import pl.lodz.p.edu.rest.model.Client;
 import pl.lodz.p.edu.rest.model.idType;
 
-import pl.lodz.p.edu.rest.repository.RepositoryFactory;
-import pl.lodz.p.edu.rest.repository.RepositoryType;
+
 import pl.lodz.p.edu.rest.repository.impl.ClientRepository;
 
 import java.util.List;
 import java.util.UUID;
 
-//TODO Managers are like services?
-
-@Transactional
+//@Transactional
 //@RequestScoped
 //@WebService FIXME ?
 public class ClientManager {
-    private final ClientRepository clientRepository;
+
+    private static final ClientRepository clientRepository = new ClientRepository();
 
     protected ClientManager() {
-        clientRepository = (ClientRepository) RepositoryFactory
-                .getRepository(RepositoryType.ClientRepository);
+//        clientRepository = (ClientRepository) RepositoryFactory
+//                .getRepository(RepositoryType.ClientRepository);
+
     }
 
     public boolean registerClient(Client client) {

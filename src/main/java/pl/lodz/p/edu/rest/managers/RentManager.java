@@ -6,6 +6,7 @@ import pl.lodz.p.edu.rest.model.EQ.Equipment;
 import pl.lodz.p.edu.rest.model.Rent;
 import pl.lodz.p.edu.rest.repository.RepositoryFactory;
 import pl.lodz.p.edu.rest.repository.RepositoryType;
+import pl.lodz.p.edu.rest.repository.impl.ClientRepository;
 import pl.lodz.p.edu.rest.repository.impl.RentRepository;
 
 import java.util.List;
@@ -14,11 +15,11 @@ import java.util.UUID;
 
 public class RentManager {
 
-    private final RentRepository rentRepository;
+    private static final RentRepository rentRepository = new RentRepository();
 
     protected RentManager() {
-        rentRepository = (RentRepository) RepositoryFactory
-                .getRepository(RepositoryType.RentRepository);
+//        rentRepository = (RentRepository) RepositoryFactory
+//                .getRepository(RepositoryType.RentRepository);
     }
 
     public List<Rent> getRentByEq(Equipment equipment) {

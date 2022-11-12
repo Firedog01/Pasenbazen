@@ -17,7 +17,7 @@ import java.util.UUID;
 
 public class RentRepository implements Repository<Rent> {
 
-    @PersistenceContext(unitName = "RENT")
+    @PersistenceContext(unitName = "app")
     private EntityManager em;
 
 //    public RentRepository(EntityManager em) {

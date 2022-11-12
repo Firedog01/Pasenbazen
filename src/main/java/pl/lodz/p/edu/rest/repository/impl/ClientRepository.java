@@ -4,17 +4,18 @@ import jakarta.persistence.*;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
+import jakarta.transaction.UserTransaction;
 import pl.lodz.p.edu.rest.model.*;
 import pl.lodz.p.edu.rest.repository.Repository;
 
 import java.util.List;
 import java.util.UUID;
 
-
 public class ClientRepository implements Repository<Client> {
 
-    @PersistenceContext(unitName = "RENT")
-    private EntityManager em;
+//    @Produces
+    @PersistenceContext(name = "app")
+    protected EntityManager em;
 
 //    public ClientRepository(EntityManager em) {
 //        this.em = em;
@@ -77,7 +78,7 @@ public class ClientRepository implements Repository<Client> {
                 .setLockMode(LockModeType.OPTIMISTIC).getResultList();
 
         et.commit();
-        em.flush(); //FIXME IDK I'VE TRIED
+//        em.flush(); //FIXME IDK I'VE TRIED
         return clientList;
     }
 

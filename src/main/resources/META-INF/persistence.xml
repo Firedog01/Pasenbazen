@@ -1,27 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<persistence xmlns="https://jakarta.ee/xml/ns/persistence"
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd"
-             version="3.0">
-<!--    <persistence-unit name="default">-->
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
+                  http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+             version="2.0">
 
-<!--    </persistence-unit>-->
-
-<!--    <persistence-unit name="POSTGRES_DB" transaction-type="RESOURCE_LOCAL">-->
-<!--        <properties>-->
-<!--            <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>-->
-<!--            <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/nbddb"/>-->
-<!--            <property name="jakarta.persistence.jdbc.user" value="nbd"/>-->
-<!--            <property name="jakarta.persistence.jdbc.password" value="nbdpassword"/>-->
-
-<!--            <property name="eclipselink.logging.level" value="FINE"/>-->
-<!--            <property name="hibernate.show_sql" value="true"/>-->
-<!--            <property name="hibernate.connection.TRANSACTION_READ_COMMITTED" value="true"/>-->
-<!--            <property name="jakarta.persistence.schema-generation.database.action" value="drop-and-create"/>-->
-<!--        </properties>-->
-<!--    </persistence-unit>-->
-
-    <persistence-unit name="RENT" transaction-type="JTA" >
+    <persistence-unit name="app" transaction-type="JTA" >
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <jta-data-source>java:global/PgDataSource</jta-data-source>
         <properties>
@@ -38,3 +22,24 @@
         </properties>
     </persistence-unit>
 </persistence>
+
+<!--        https://jakarta.ee/xml/ns/persistence-->
+
+
+        <!--    <persistence-unit name="default">-->
+
+        <!--    </persistence-unit>-->
+
+        <!--    <persistence-unit name="POSTGRES_DB" transaction-type="RESOURCE_LOCAL">-->
+        <!--        <properties>-->
+        <!--            <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>-->
+        <!--            <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/nbddb"/>-->
+        <!--            <property name="jakarta.persistence.jdbc.user" value="nbd"/>-->
+        <!--            <property name="jakarta.persistence.jdbc.password" value="nbdpassword"/>-->
+
+        <!--            <property name="eclipselink.logging.level" value="FINE"/>-->
+        <!--            <property name="hibernate.show_sql" value="true"/>-->
+        <!--            <property name="hibernate.connection.TRANSACTION_READ_COMMITTED" value="true"/>-->
+        <!--            <property name="jakarta.persistence.schema-generation.database.action" value="drop-and-create"/>-->
+        <!--        </properties>-->
+        <!--    </persistence-unit>-->

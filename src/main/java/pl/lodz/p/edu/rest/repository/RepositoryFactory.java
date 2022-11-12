@@ -6,7 +6,7 @@ import jakarta.persistence.Persistence;
 import pl.lodz.p.edu.rest.repository.impl.*;
 
 public final class RepositoryFactory {
-    private static final EntityManagerFactory emf =
+    private static EntityManagerFactory emf =
             Persistence.createEntityManagerFactory("POSTGRES_DB");
 
 //    private static final RentRepository rentRepository = new RentRepository(emf.createEntityManager());
@@ -17,7 +17,9 @@ public final class RepositoryFactory {
     private static final EquipmentRepository equipmentRepository = new EquipmentRepository();
 
 
-    private RepositoryFactory() {}
+//    public RepositoryFactory() {
+//
+//    }
 
     public static Repository getRepository(RepositoryType type) {
         switch(type) {

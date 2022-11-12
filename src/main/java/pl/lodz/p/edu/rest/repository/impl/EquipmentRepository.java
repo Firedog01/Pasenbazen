@@ -14,7 +14,7 @@ import java.util.UUID;
 
 public class EquipmentRepository implements Repository<Equipment> {
 
-    @PersistenceContext(unitName = "RENT")
+    @PersistenceContext(unitName = "app")
     private EntityManager em;
 
 //    public EquipmentRepository(EntityManager em) {

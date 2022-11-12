@@ -14,11 +14,11 @@ import java.util.UUID;
 
 
 public class EquipmentManager {
-    private final EquipmentRepository equipmentRepository;
+    private static final EquipmentRepository equipmentRepository = new EquipmentRepository();
 
     protected EquipmentManager() {
-        equipmentRepository = (EquipmentRepository) RepositoryFactory
-                .getRepository(RepositoryType.EquipmentRepository);
+//        equipmentRepository = (EquipmentRepository) RepositoryFactory
+//                .getRepository(RepositoryType.EquipmentRepository);
     }
 
     public boolean remove(UUID uuid) {
