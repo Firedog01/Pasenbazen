@@ -1,6 +1,8 @@
 package pl.lodz.p.edu.rest.model;
 
-public enum idType {
+import java.io.Serializable;
+
+public enum idType implements Serializable {
     DowodOsobisty(0),
     Passport(1);
 

@@ -22,6 +22,7 @@
         <datasource-mapping>
           <factory-entry name="POSTGRES_DB" />
           <factory-entry name="POSTGRES_DB_PERSIST" />
+          <factory-entry name="app" />
           <factory-entry name="default" />
         </datasource-mapping>
         <naming-strategy-map />
@@ -67,6 +68,7 @@
     <orderEntry type="library" scope="RUNTIME" name="Maven: org.checkerframework:checker-qual:3.5.0" level="project" />
     <orderEntry type="library" name="Maven: joda-time:joda-time:2.11.2" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: jakarta.platform:jakarta.jakartaee-api:9.1.0" level="project" />
+    <orderEntry type="library" name="Maven: org.wso2.orbit.com.fasterxml.jackson.core:jackson-databind:2.11.0.wso2v1" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.junit.jupiter:junit-jupiter-api:5.8.2" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.opentest4j:opentest4j:1.2.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.junit.platform:junit-platform-commons:1.8.2" level="project" />

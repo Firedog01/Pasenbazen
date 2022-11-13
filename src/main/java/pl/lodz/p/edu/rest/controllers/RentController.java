@@ -86,7 +86,6 @@ public class RentController {
         }
     }
 
-    //TODO Client UUID?
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/client/{uuid}")

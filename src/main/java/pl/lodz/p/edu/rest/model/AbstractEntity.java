@@ -1,5 +1,6 @@
 package pl.lodz.p.edu.rest.model;
 
+import jakarta.annotation.Generated;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
@@ -7,14 +8,13 @@ import java.io.Serializable;
 import java.util.UUID;
 
 @MappedSuperclass
-@Embeddable
 public abstract class AbstractEntity implements Serializable {
 
-    @Embedded
+//    @GeneratedValue(strategy = GenerationType.UUID)
     @NotNull
-    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "uuid")
-    private UUID uuid;
+//    private UUID uuid;
+    private UUID uuid = UUID.randomUUID();
 
     @Version
     @NotNull

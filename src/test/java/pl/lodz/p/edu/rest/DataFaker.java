@@ -19,7 +19,7 @@ public class DataFaker {
 
     public static Client getClient(Address a) {
         try {
-            return new Client(randStr(7), idType.values()[(int)(Math.random() * 2) % 2],
+            return new Client(randStr(7), // idType.values()[(int)(Math.random() * 2) % 2],
                     randStr(10), randStr(10), a);
         } catch(ClientException e) {
             return null; // will never happen
@@ -29,7 +29,7 @@ public class DataFaker {
     public static Client getClient() {
         try {
             Address a = getAddress();
-            return new Client(randStr(7), idType.values()[(int)(Math.random() * 2) % 2],
+            return new Client(randStr(7), // idType.values()[(int)(Math.random() * 2) % 2],
                     randStr(10), randStr(10), a);
         } catch(ClientException e) {
             return null; // will never happen

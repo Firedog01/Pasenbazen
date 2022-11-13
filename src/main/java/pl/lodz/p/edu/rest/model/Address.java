@@ -4,11 +4,8 @@ import jakarta.persistence.*;
 import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotNull;
 
-//@Entity
-//@Table(name = "address")
-@Access(AccessType.FIELD)
 @Embeddable
-@Transactional
+@Access(AccessType.FIELD)
 public class Address {
 
 //    @Id
@@ -18,11 +15,14 @@ public class Address {
 //    private long id;
 
     @NotNull
+    @Column(name = "city")
     private String city;
 
+    @Column(name = "street")
     private String street;
 
     @NotNull
+    @Column(name = "streetNr")
     private String streetNr;
 
     public Address(String city, String street, String streetNr) {

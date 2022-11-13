@@ -31,8 +31,8 @@ public class ClientManager {
         return clientRepository.remove(uuid);
     }
 
-    public Client getByClientId(String id, idType idType) {
-        return clientRepository.getClientByIdName(id, idType);
+    public Client getByClientId(String id) {
+        return clientRepository.getClientByIdName(id);
     }
 
     public Client getClientByUuid(UUID uuid) {

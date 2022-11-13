@@ -1,0 +1,44 @@
+GET http://localhost:8080/rest/api/clients/
+Accept: application/json
+
+###
+POST http://localhost:8080/rest/api/clients/addClient
+Accept: application/json
+Content-Type: application/json
+
+{
+  "clientId":"id",
+  "firstName":"Ligma",
+  "lastName":"Doe",
+  "address": {
+    "city":"Berlin",
+    "street":"street",
+    "streetNr":353
+  }
+
+}
+
+###
+POST http://localhost:8080/rest/api/clients/addClient
+Accept: application/json
+Content-Type: application/json
+
+{
+    "clientId":"niewiadomo",
+    "firstName":"123",
+    "lastName":"Doe",
+    "address": {
+      "city":"Łupinki Łużyckie",
+      "street":"łączna",
+      "streetNr":53
+    }
+}
+
+
+###
+
+
+
+
+
+

@@ -3,6 +3,7 @@ D:\Studia\Semestr V\PAS\PAS_REST\Pasenbazen\src\main\java\pl\lodz\p\edu\rest\man
 D:\Studia\Semestr V\PAS\PAS_REST\Pasenbazen\src\main\java\pl\lodz\p\edu\rest\managers\RentManager.java
 D:\Studia\Semestr V\PAS\PAS_REST\Pasenbazen\src\main\java\pl\lodz\p\edu\rest\model\AbstractEntity.java
 D:\Studia\Semestr V\PAS\PAS_REST\Pasenbazen\src\main\java\pl\lodz\p\edu\rest\controllers\EquipmentController.java
+D:\Studia\Semestr V\PAS\PAS_REST\Pasenbazen\src\main\java\pl\lodz\p\edu\rest\DTO\ClientDTO.java
 D:\Studia\Semestr V\PAS\PAS_REST\Pasenbazen\src\main\java\pl\lodz\p\edu\rest\model\EQ\Equipment.java
 D:\Studia\Semestr V\PAS\PAS_REST\Pasenbazen\src\main\java\pl\lodz\p\edu\rest\model\EQ\Microphone.java
 D:\Studia\Semestr V\PAS\PAS_REST\Pasenbazen\src\main\java\pl\lodz\p\edu\rest\exception\ClientException.java

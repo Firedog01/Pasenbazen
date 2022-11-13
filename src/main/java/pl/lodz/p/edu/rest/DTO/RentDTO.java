@@ -18,39 +18,20 @@ public class RentDTO {
         return equipmentUUID;
     }
 
-    public void setEquipmentUUID(UUID equipmentUUID) {
-        this.equipmentUUID = equipmentUUID;
-    }
-
     public UUID getClientUUID() {
         return clientUUID;
     }
 
-    public void setClientUUID(UUID clientUUID) {
-        this.clientUUID = clientUUID;
-    }
 
     public Address getShippingAddress() {
         return shippingAddress;
-    }
-
-    public void setShippingAddress(Address shippingAddress) {
-        this.shippingAddress = shippingAddress;
     }
 
     public String getBeginTime() {
         return beginTime;
     }
 
-    public void setBeginTime(String beginTime) {
-        this.beginTime = beginTime;
-    }
-
     public String getEndTime() {
         return endTime;
-    }
-
-    public void setEndTime(String endTime) {
-        this.endTime = endTime;
     }
 }

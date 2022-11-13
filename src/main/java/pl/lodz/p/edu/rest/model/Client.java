@@ -25,10 +25,12 @@ public class Client extends AbstractEntity  {
     @Size(min = 1)
     @Column(name = "client_id", nullable = false)
     private String clientId;
-    @Id
-    @NotNull
-    @Column(name = "client_id_type")
-    private idType idType;
+
+//    @Id
+//    @NotNull
+//    @Enumerated(EnumType.STRING)
+//    @Column(name = "client_id_type")
+//    private idType idType;
 
     @Size(min = 1)
     @NotNull
@@ -49,7 +51,7 @@ public class Client extends AbstractEntity  {
 
     public Client(
             String clientId,
-            idType idType,
+//            idType idType,
             String firstName,
             String lastName,
             Address address
@@ -69,7 +71,7 @@ public class Client extends AbstractEntity  {
         }
 
         this.clientId = clientId;
-        this.idType = idType;
+//        this.idType = idType;
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
@@ -83,9 +85,9 @@ public class Client extends AbstractEntity  {
         return clientId;
     }
 
-    public idType getIdType() {
-        return idType;
-    }
+//    public idType getIdType() {
+//        return idType;
+//    }
 
     public String getFirstName() {
         return firstName;
@@ -135,12 +137,14 @@ public class Client extends AbstractEntity  {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Client client = (Client) o;
-        return clientId.equals(client.clientId) && idType == client.idType;
+//        return clientId.equals(client.clientId) && idType == client.idType;
+        return clientId.equals(client.clientId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(clientId, idType);
+//        return Objects.hash(clientId, idType);
+        return Objects.hash(clientId);
     }
 
 

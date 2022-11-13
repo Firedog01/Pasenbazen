@@ -5,6 +5,7 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import jakarta.transaction.UserTransaction;
+import pl.lodz.p.edu.rest.exception.ClientException;
 import pl.lodz.p.edu.rest.model.*;
 import pl.lodz.p.edu.rest.repository.Repository;
 
@@ -45,16 +46,16 @@ public class ClientRepository implements Repository<Client> {
         return clients.get(0);
     }
 
-    public Client getClientByIdName(String clientId, idType clientIdType) {
+    public Client getClientByIdName(String clientId) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Client> cq = cb.createQuery(Client.class);
         Root<Client> clientRoot = cq.from(Client.class);
 
         cq.select(clientRoot);
-        cq.where(cb.and(
-                cb.equal(clientRoot.get(Client_.CLIENT_ID), clientId),
-                cb.equal(clientRoot.get(Client_.ID_TYPE), clientIdType)
-        ));
+        cq.where(
+                cb.equal(clientRoot.get(Client_.CLIENT_ID), clientId)
+//                cb.equal(clientRoot.get(Client_.ID_TYPE), clientIdType)
+        );
 
         EntityTransaction et = em.getTransaction();
         et.begin();
@@ -65,13 +66,13 @@ public class ClientRepository implements Repository<Client> {
             et.commit();
             return client;
         } catch (NoResultException e) {
-            throw new EntityNotFoundException("Client not found for clientId and clientIdType:" +
-                    " " + clientId + " " + clientIdType.toString());
+            throw new EntityNotFoundException("Client not found for clientId:" +
+                    " " + clientId);
         }
     }
 
     @Override
-    public List<Client> getAll() {
+    public List<Client> getAll()  {
         EntityTransaction et = em.getTransaction();
         et.begin();
 
@@ -92,14 +93,13 @@ public class ClientRepository implements Repository<Client> {
             em.lock(elem, LockModeType.OPTIMISTIC_FORCE_INCREMENT);
             et.commit();
         } finally {
-            if(et.isActive()) {
-                et.rollback();
-                return false;
-            }
+//            if(et.isActive()) {
+//                et.rollback();
+//                return false;
+//            }
         }
         return true;
     }
-
 
     public boolean remove(UUID uuid) { //Fixme archive not remove for clients
         EntityTransaction et = em.getTransaction();

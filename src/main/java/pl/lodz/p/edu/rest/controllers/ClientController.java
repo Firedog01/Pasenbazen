@@ -1,14 +1,16 @@
 package pl.lodz.p.edu.rest.controllers;
 
-import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
+import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import pl.lodz.p.edu.rest.DTO.ClientDTO;
+import pl.lodz.p.edu.rest.exception.ClientException;
 import pl.lodz.p.edu.rest.managers.ClientManager;
+import pl.lodz.p.edu.rest.model.Address;
 import pl.lodz.p.edu.rest.model.Client;
-import pl.lodz.p.edu.rest.model.idType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,15 +22,44 @@ public class ClientController {
     @Inject
     private ClientManager clientManager;
 
+    protected ClientController() {
+    }
+
     @POST
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Path(("/addClient"))
     @Produces(MediaType.APPLICATION_JSON)
-    @Path(("/"))
-    public Response registerClient(Client client) {
-        if (clientManager.registerClient(client)) {
-            return Response.status(Response.Status.CREATED).entity(client).build();
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response registerClient(@Valid ClientDTO clientDTO) {
+
+        String clientId = clientDTO.getClientId();
+        String firstName = clientDTO.getFirstName();
+        String lastName = clientDTO.getLastName();
+        Address address = clientDTO.getAddress();
+
+        if (address == null) {
+            return Response.status(Response.Status.NOT_ACCEPTABLE).build();
         }
-        return Response.status(Response.Status.NOT_ACCEPTABLE).build();
+
+        Client client = null;
+
+        try {
+            client = new Client(clientId, firstName, lastName, address);
+        } catch (ClientException e) {
+            System.out.println(e.getMessage());
+        }
+
+        Client mock = null;
+        try {
+            mock = new Client("test", "123", "324",
+                    new Address("twoja", "stara", "awd"));
+        } catch (ClientException e) {
+            throw new RuntimeException(e);
+        }
+
+        if (clientManager.registerClient(mock)) {
+            return Response.status(Response.Status.CREATED).entity(mock).build();
+        }
+        return Response.status(Response.Status.FORBIDDEN).build();
     }
 
 
@@ -54,8 +85,8 @@ public class ClientController {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{id}/{type}")
-    public Response getClientByClientId(@PathParam("id") String clientId, @PathParam("type") idType idType) {
-        Client client = clientManager.getByClientId(clientId, idType);
+    public Response getClientByClientId(@PathParam("id") String clientId) {
+        Client client = clientManager.getByClientId(clientId);
         if(client != null) {
             return Response.status(Response.Status.OK).entity(client).build();
         } else {
