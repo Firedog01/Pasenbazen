@@ -86,6 +86,10 @@ public class Client extends AbstractEntity  {
         return clientId;
     }
 
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
+    }
+
 //    public idType getIdType() {
 //        return idType;
 //    }
@@ -127,8 +131,10 @@ public class Client extends AbstractEntity  {
         final StringBuilder sb = new StringBuilder("model.Client{");
         sb.append("firstName='").append(firstName).append('\'');
         sb.append(", lastName='").append(lastName).append('\'');
-        sb.append(", ID='").append(clientId).append('\'');
+        sb.append(", clientId='").append(clientId).append('\'');
         sb.append(", archive=").append(archive);
+        sb.append(", uuid=").append(getUuidId());
+        sb.append(", address=").append(address);
         sb.append('}');
         return sb.toString();
     }

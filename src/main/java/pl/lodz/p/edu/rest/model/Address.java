@@ -65,4 +65,13 @@ public class Address {
 
         return sb.toString();
     }
+
+    @Override
+    public String toString() {
+        return "Address{" +
+                "city='" + city + '\'' +
+                ", street='" + street + '\'' +
+                ", streetNr='" + streetNr + '\'' +
+                '}';
+    }
 }

@@ -1,4 +1,4 @@
-package pl.lodz.p.edu.rest;
+package pl.lodz.p.edu.rest.repository;
 
 import pl.lodz.p.edu.rest.exception.ClientException;
 import pl.lodz.p.edu.rest.exception.EquipmentException;

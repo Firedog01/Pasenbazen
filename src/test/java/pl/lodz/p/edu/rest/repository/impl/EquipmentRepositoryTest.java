@@ -7,7 +7,7 @@
 //import pl.lodz.p.edu.rest.model.UniqueId;
 //import org.junit.jupiter.api.BeforeAll;
 //import org.junit.jupiter.api.Test;
-//import pl.lodz.p.edu.rest.DataFaker;
+//import pl.lodz.p.edu.rest.repository.DataFaker;
 //import pl.lodz.p.edu.rest.repository.RepositoryFactory;
 //import pl.lodz.p.edu.rest.repository.RepositoryType;
 //

@@ -8,15 +8,20 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+
+import org.hibernate.exception.ConstraintViolationException;
 import pl.lodz.p.edu.rest.DTO.ClientDTO;
 import pl.lodz.p.edu.rest.exception.ClientException;
 import pl.lodz.p.edu.rest.managers.ClientManager;
 import pl.lodz.p.edu.rest.model.Address;
 import pl.lodz.p.edu.rest.model.Client;
+import pl.lodz.p.edu.rest.repository.DataFaker;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import static jakarta.ws.rs.core.Response.Status.*;
 
 @Path("/clients")
 @RequestScoped
@@ -28,12 +33,68 @@ public class ClientController {
     protected ClientController() {
     }
 
+    @POST
+    @Path("/addFakeClient")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Client addFakeClient() {
+        Client c = DataFaker.getClient();
+        clientManager.registerClient(c);
+        return c;
+    }
+
+    // create
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response addClient(Client client) {
+        System.out.println(client);
+        if (client.getAddress() == null) {
+            return Response.status(NOT_ACCEPTABLE).build();
+        }
+        boolean success;
+        try {
+            success = clientManager.registerClient(client);
+        } catch(ConstraintViolationException e) {
+            return Response.status(CONFLICT).build();
+        } catch(Exception e) {
+            System.out.println(e.getClass());
+            return Response.status(CONFLICT).build();
+        }
+        if(success) {
+            return Response.status(CREATED).entity(client).build();
+        }
+        return Response.status(CONFLICT).build();
+    }
+
+    // read
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/")
+    public List<Client> getAllClients() {
+        List<Client> clients = clientManager.getAllClients();
+        return clients;
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/{uuid}")
+    public Response getClientByUuid(@PathParam("uuid") UUID uuid) {
+        Client client = clientManager.getClientByUuid(uuid);
+        if(client != null) {
+            return Response.status(OK).entity(client).build();
+        } else {
+            return Response.status(NOT_FOUND).build();
+        }
+    }
+
+
+
 //    @Produces({MediaType.APPLICATION_JSON, MediaType.TEXT_PLAIN})
     @POST
     @Path(("/addClient"))
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response registerClient(@Valid ClientDTO clientDTO) {
+    public Response registerClient(ClientDTO clientDTO) {
 
         String clientId = clientDTO.getClientId();
         String firstName = clientDTO.getFirstName();
@@ -41,7 +102,7 @@ public class ClientController {
         Address address = clientDTO.getAddress();
 
         if (address == null) {
-            return Response.status(Response.Status.NOT_ACCEPTABLE).build();
+            return Response.status(NOT_ACCEPTABLE).build();
         }
 
         Client client = null;
@@ -61,11 +122,11 @@ public class ClientController {
 //        }
 
         if (clientManager.registerClient(client)) {
-            return Response.status(Response.Status.CREATED).entity(client).build();
+            return Response.status(CREATED).entity(client).build();
             //Może tu jest błąd?
         }
-        return Response.status(Response.Status.FORBIDDEN).build();
-        }
+        return Response.status(FORBIDDEN).build();
+    }
 
 
 
@@ -73,9 +134,9 @@ public class ClientController {
     @Path("/{id}")
     public Response unregisterClient(@PathParam("id") UUID uuid) {
         if (clientManager.unregisterClient(uuid)) {
-            return Response.status(Response.Status.NO_CONTENT).build();
+            return Response.status(NO_CONTENT).build();
         } else {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            return Response.status(NOT_FOUND).build();
         }
     }
 
@@ -94,31 +155,13 @@ public class ClientController {
     public Response getClientByClientId(@PathParam("id") String clientId) {
         Client client = clientManager.getByClientId(clientId);
         if(client != null) {
-            return Response.status(Response.Status.OK).entity(client).build();
+            return Response.status(OK).entity(client).build();
         } else {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            return Response.status(NOT_FOUND).build();
         }
     }
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/{uuid}")
-    public Response getClientByUuid(@PathParam("uuid") UUID uuid) {
-        Client client = clientManager.getClientByUuid(uuid);
-        if(client != null) {
-            return Response.status(Response.Status.OK).entity(client).build();
-        } else {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
-    }
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/")
-    public Response getAllClients() {
-        List<Client> clients = clientManager.getAllClients();
-        return Response.status(Response.Status.OK).entity(clients).build();
-    }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -131,6 +174,6 @@ public class ClientController {
                 available.add(c);
             }
         }
-        return Response.status(Response.Status.OK).entity(available).build();
+        return Response.status(OK).entity(available).build();
     }
 }

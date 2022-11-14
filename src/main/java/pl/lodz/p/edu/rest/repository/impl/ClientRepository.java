@@ -16,7 +16,7 @@ import java.util.UUID;
 public class ClientRepository implements Repository<Client> {
 
 //    @Produces
-    @PersistenceContext(name = "app")
+    @PersistenceContext(name = "request")
     protected EntityManager em;
 
 //    public ClientRepository(EntityManager em) {
@@ -89,14 +89,13 @@ public class ClientRepository implements Repository<Client> {
         EntityTransaction et = em.getTransaction();
         et.begin();
         try {
-            this.em.persist(elem);
+            em.persist(elem);
             em.lock(elem, LockModeType.OPTIMISTIC_FORCE_INCREMENT);
             et.commit();
         } finally {
-//            if(et.isActive()) {
-//                et.rollback();
-//                return false;
-//            }
+            if(et.isActive()) {
+                et.rollback();
+            }
         }
         return true;
     }

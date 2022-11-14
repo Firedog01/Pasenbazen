@@ -9,6 +9,7 @@
         <module name="bazy+pas" />
         <module name="PAS_NBD" />
         <module name="NonRelational" />
+        <module name="rest_test" />
         <module name="Pasenbazen" />
         <module name="after pobi" />
       </profile>
@@ -16,6 +17,7 @@
     <bytecodeTargetLevel>
       <module name="NonRelational" target="17" />
       <module name="Pasenbazen" target="17" />
+      <module name="rest_test" target="17" />
     </bytecodeTargetLevel>
   </component>
 </project>
