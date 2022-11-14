@@ -1,5 +1,6 @@
 package pl.lodz.p.edu.rest.repository.impl;
 
+import jakarta.enterprise.context.RequestScoped;
 import jakarta.persistence.*;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -13,9 +14,9 @@ import java.io.UncheckedIOException;
 import java.util.List;
 import java.util.UUID;
 
+@RequestScoped
 public class ClientRepository implements Repository<Client> {
 
-//    @Produces
     @PersistenceContext(name = "request")
     protected EntityManager em;
 

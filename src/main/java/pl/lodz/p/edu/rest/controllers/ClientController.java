@@ -33,37 +33,6 @@ public class ClientController {
 
     protected ClientController() {}
 
-    @POST
-    @Path("/addFakeClient")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Client addFakeClient() {
-        Client c = DataFaker.getClient();
-        clientManager.registerClient(c);
-        return c;
-    }
-
-    // create
-    @POST
-    @Path("/")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response addClient(Client client) {
-
-        if (client.getFirstName() == null
-                || client.getLastName() == null
-                || !client.getAddress().verify()
-        ) {
-            return Response.status(NOT_ACCEPTABLE).build();
-        }
-
-        try {
-            clientManager.registerClient(client);
-            return Response.status(CREATED).entity(client).build();
-        } catch(RollbackException e) {
-            return Response.status(CONFLICT).build();
-        }
-    }
-
     // read
     @GET
     @Path("/")
@@ -88,6 +57,34 @@ public class ClientController {
         return Response.status(OK).entity(available).build();
     }
 
+    // create
+    @POST
+    @Path("/")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response addClient(Client client) {
+
+        if (client == null) {
+            return Response.status(BAD_REQUEST).build();
+        }
+
+        if (client.getFirstName() == null
+                || client.getLastName() == null
+                || !client.getAddress().verify()
+        ) {
+            return Response.status(NOT_ACCEPTABLE).build();
+        }
+
+        try {
+            clientManager.registerClient(client);
+            return Response.status(CREATED).entity(client).build();
+        } catch(RollbackException e) {
+            return Response.status(CONFLICT).build();
+        }
+    }
+
+
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{uuid}")
@@ -100,46 +97,57 @@ public class ClientController {
         }
     }
 
+    // ========= other
+
+    @POST
+    @Path("/addFakeClient")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Client addFakeClient() {
+        Client c = DataFaker.getClient();
+        clientManager.registerClient(c);
+        return c;
+    }
+
 
 
 //    @Produces({MediaType.APPLICATION_JSON, MediaType.TEXT_PLAIN})
-    @POST
-    @Path(("/addClient"))
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response registerClient(ClientDTO clientDTO) {
-
-        String clientId = clientDTO.getClientId();
-        String firstName = clientDTO.getFirstName();
-        String lastName = clientDTO.getLastName();
-        Address address = clientDTO.getAddress();
-
-        if (address == null) {
-            return Response.status(NOT_ACCEPTABLE).build();
-        }
-
-        Client client = null;
-
-        try {
-            client = new Client(clientId, firstName, lastName, address);
-        } catch (ClientException e) {
-            System.out.println(e.getMessage());
-        }
-
-//        Client mock = null;
-//        try {
-//            mock = new Client("test", "123", "324",
-//                    new Address("twoja", "stara", "awd"));
-//        } catch (ClientException e) {
-//            throw new RuntimeException(e);
+//    @POST
+//    @Path(("/addClient"))
+//    @Consumes(MediaType.APPLICATION_JSON)
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public Response registerClient(ClientDTO clientDTO) {
+//
+//        String clientId = clientDTO.getClientId();
+//        String firstName = clientDTO.getFirstName();
+//        String lastName = clientDTO.getLastName();
+//        Address address = clientDTO.getAddress();
+//
+//        if (address == null) {
+//            return Response.status(NOT_ACCEPTABLE).build();
 //        }
-
-        if (clientManager.registerClient(client)) {
-            return Response.status(CREATED).entity(client).build();
-            //Może tu jest błąd?
-        }
-        return Response.status(FORBIDDEN).build();
-    }
+//
+//        Client client = null;
+//
+//        try {
+//            client = new Client(clientId, firstName, lastName, address);
+//        } catch (ClientException e) {
+//            System.out.println(e.getMessage());
+//        }
+//
+////        Client mock = null;
+////        try {
+////            mock = new Client("test", "123", "324",
+////                    new Address("twoja", "stara", "awd"));
+////        } catch (ClientException e) {
+////            throw new RuntimeException(e);
+////        }
+//
+//        if (clientManager.registerClient(client)) {
+//            return Response.status(CREATED).entity(client).build();
+//            //Może tu jest błąd?
+//        }
+//        return Response.status(FORBIDDEN).build();
+//    }
 
 
 
@@ -173,8 +181,4 @@ public class ClientController {
             return Response.status(NOT_FOUND).build();
         }
     }
-
-
-
-
 }

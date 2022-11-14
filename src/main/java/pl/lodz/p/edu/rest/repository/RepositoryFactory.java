@@ -7,7 +7,7 @@ import pl.lodz.p.edu.rest.repository.impl.*;
 
 public final class RepositoryFactory {
     private static EntityManagerFactory emf =
-            Persistence.createEntityManagerFactory("POSTGRES_DB");
+            Persistence.createEntityManagerFactory("app");
 
 //    private static final RentRepository rentRepository = new RentRepository(emf.createEntityManager());
 //    private static final ClientRepository clientRepository = new ClientRepository(emf.createEntityManager());

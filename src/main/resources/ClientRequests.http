@@ -1,8 +1,8 @@
 GET http://localhost:8080/rest/api/clients
 Accept: application/json
 
-###
-POST http://localhost:8080/rest/api/clients/addClient
+### nie działa
+POST http://localhost:8080/rest/api/clients
 Accept: application/json
 
 ###
@@ -32,14 +32,18 @@ Content-Type: application/json
     "firstName":"123",
     "lastName":"Doe",
     "address": {
-      "city":"Łupinki Łużyckie",
-      "street":"łączna",
-      "streetNr":53
+      "city":"Lipinki Łużyckie",
+      "street":"Łączna",
+      "streetNr":"43"
     }
 }
 
 
 ###
+
+POST http://localhost:8080/rest/api/clients/addFakeClient
+Accept: application/json
+Content-Type: application/json
 
 
 
