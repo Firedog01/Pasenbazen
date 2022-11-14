@@ -44,6 +44,7 @@
       <option name="customHeaders">
         <set>
           <option value="*/*" />
+          <option value="  &quot;clientId&quot;" />
         </set>
       </option>
     </inspection_tool>

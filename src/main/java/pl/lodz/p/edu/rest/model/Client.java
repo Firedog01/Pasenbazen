@@ -1,6 +1,7 @@
 package pl.lodz.p.edu.rest.model;
 
 import jakarta.transaction.Transactional;
+import jakarta.validation.constraints.NotEmpty;
 import pl.lodz.p.edu.rest.exception.ClientException;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -33,12 +34,12 @@ public class Client extends AbstractEntity  {
 //    private idType idType;
 
     @Size(min = 1)
-    @NotNull
+    @NotEmpty
     @Column(name = "first_name")
     private String firstName;
 
     @Size(min = 1)
-    @NotNull
+    @NotEmpty
     @Column(name = "last_name")
     private String lastName;
 

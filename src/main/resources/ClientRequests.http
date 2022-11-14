@@ -1,4 +1,8 @@
-GET http://localhost:8080/rest/api/clients/
+GET http://localhost:8080/rest/api/clients
+Accept: application/json
+
+###
+POST http://localhost:8080/rest/api/clients/addClient
 Accept: application/json
 
 ###
@@ -7,16 +11,16 @@ Accept: application/json
 Content-Type: application/json
 
 {
-  "clientId":"id",
-  "firstName":"Ligma",
-  "lastName":"Doe",
-  "address": {
-    "city":"Berlin",
-    "street":"street",
-    "streetNr":353
+  "clientId":"testId",
+  "firstName":"TestFirstName",
+  "lastName":"TestLastName",
+  "address":{
+    "city":"TestCity",
+    "street":"TestStreet",
+    "streetNr":"2137"
   }
-
 }
+
 
 ###
 POST http://localhost:8080/rest/api/clients/addClient
