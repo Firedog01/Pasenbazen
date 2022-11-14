@@ -25,14 +25,13 @@ import java.util.UUID;
 import static jakarta.ws.rs.core.Response.Status.*;
 
 @Path("/clients")
-@RequestScoped
+//@RequestScoped
 public class ClientController {
 
     @Inject
     private ClientManager clientManager;
 
-    protected ClientController() {
-    }
+    protected ClientController() {}
 
     @POST
     @Path("/addFakeClient")
@@ -45,6 +44,7 @@ public class ClientController {
 
     // create
     @POST
+    @Path("/")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response addClient(Client client) {
@@ -66,11 +66,26 @@ public class ClientController {
 
     // read
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("/")
+    @Produces(MediaType.APPLICATION_JSON)
     public List<Client> getAllClients() {
+        System.out.println(clientManager);
         List<Client> clients = clientManager.getAllClients();
         return clients;
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/available")
+    public Response getAllAvailableClients() {
+        List<Client> all = clientManager.getAllClients();
+        List<Client> available = new ArrayList<>();
+        for (Client c : all) {
+            if(!(c.isArchive())) {
+                available.add(c);
+            }
+        }
+        return Response.status(OK).entity(available).build();
     }
 
     @GET
@@ -161,17 +176,5 @@ public class ClientController {
 
 
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/available")
-    public Response getAllAvailableClients() {
-        List<Client> all = clientManager.getAllClients();
-        List<Client> available = new ArrayList<>();
-        for (Client c : all) {
-            if(!(c.isArchive())) {
-                available.add(c);
-            }
-        }
-        return Response.status(OK).entity(available).build();
-    }
+
 }
