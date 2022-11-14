@@ -3,6 +3,7 @@ package pl.lodz.p.edu.rest.controllers;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 
+import jakarta.persistence.RollbackException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.*;
@@ -47,23 +48,20 @@ public class ClientController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response addClient(Client client) {
-        System.out.println(client);
-        if (client.getAddress() == null) {
+
+        if (client.getFirstName() == null
+                || client.getLastName() == null
+                || !client.getAddress().verify()
+        ) {
             return Response.status(NOT_ACCEPTABLE).build();
         }
-        boolean success;
+
         try {
-            success = clientManager.registerClient(client);
-        } catch(ConstraintViolationException e) {
-            return Response.status(CONFLICT).build();
-        } catch(Exception e) {
-            System.out.println(e.getClass());
-            return Response.status(CONFLICT).build();
-        }
-        if(success) {
+            clientManager.registerClient(client);
             return Response.status(CREATED).entity(client).build();
+        } catch(RollbackException e) {
+            return Response.status(CONFLICT).build();
         }
-        return Response.status(CONFLICT).build();
     }
 
     // read

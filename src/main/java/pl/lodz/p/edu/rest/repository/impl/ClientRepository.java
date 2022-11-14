@@ -93,9 +93,9 @@ public class ClientRepository implements Repository<Client> {
             em.lock(elem, LockModeType.OPTIMISTIC_FORCE_INCREMENT);
             et.commit();
         } finally {
-            if(et.isActive()) {
-                et.rollback();
-            }
+//            if(et.isActive()) {
+//                et.rollback();
+//            }
         }
         return true;
     }
