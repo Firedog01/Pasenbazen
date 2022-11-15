@@ -19,8 +19,7 @@ public class RentRepository implements Repository<Rent> {
     @PersistenceContext(unitName = "app")
     private EntityManager em;
 
-    public RentRepository() {
-    }
+    public RentRepository() {}
 
     @Override
     public Rent get(UUID uuid) {

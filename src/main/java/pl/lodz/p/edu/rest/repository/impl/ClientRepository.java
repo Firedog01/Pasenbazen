@@ -5,12 +5,9 @@ import jakarta.persistence.*;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
-import jakarta.transaction.UserTransaction;
-import pl.lodz.p.edu.rest.exception.ClientException;
 import pl.lodz.p.edu.rest.model.*;
 import pl.lodz.p.edu.rest.repository.Repository;
 
-import java.io.UncheckedIOException;
 import java.util.List;
 import java.util.UUID;
 

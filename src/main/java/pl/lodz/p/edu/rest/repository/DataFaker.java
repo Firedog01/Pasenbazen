@@ -1,6 +1,6 @@
 package pl.lodz.p.edu.rest.repository;
 
-import pl.lodz.p.edu.rest.exception.ClientException;
+import pl.lodz.p.edu.rest.exception.UserException;
 import pl.lodz.p.edu.rest.exception.EquipmentException;
 import pl.lodz.p.edu.rest.model.Address;
 import pl.lodz.p.edu.rest.model.Client;
@@ -21,7 +21,7 @@ public class DataFaker {
         try {
             return new Client(randStr(7), // idType.values()[(int)(Math.random() * 2) % 2],
                     randStr(10), randStr(10), a);
-        } catch(ClientException e) {
+        } catch(UserException e) {
             return null; // will never happen
         }
     }
@@ -31,65 +31,27 @@ public class DataFaker {
             Address a = getAddress();
             return new Client(randStr(7), // idType.values()[(int)(Math.random() * 2) % 2],
                     randStr(10), randStr(10), a);
-        } catch(ClientException e) {
+        } catch(UserException e) {
             return null; // will never happen
         }
     }
 
-    public static Camera getCamera() {
+
+    public static Equipment getEquipment() {
         try {
-            return new Camera(Math.random() * 100, Math.random() * 200,
-                    Math.random() * 1000, randStr(10), randStr(8));
+            return new Equipment(Math.random() * 100, Math.random() * 200,
+                Math.random() * 1000, randStr(10));
         } catch (EquipmentException e) {
             return null;
         }
     }
 
-    public static Lens getLens() {
-        try {
-            return new Lens(Math.random() * 100, Math.random() * 200,
-                    Math.random() * 1000, randStr(10), randStr(8));
-        } catch (EquipmentException e) {
-            return null;
-        }
-    }
-
-    public static Lighting getLighting() {
-        try {
-            return new Lighting(Math.random() * 100, Math.random() * 200,
-                    Math.random() * 1000, randStr(10), randStr(8));
-        } catch (EquipmentException e) {
-            return null;
-        }
-    }
-
-    public static Microphone getMicrophone() {
-        try {
-            return new Microphone(Math.random() * 100, Math.random() * 200,
-                Math.random() * 1000, randStr(10), randStr(8));
-        } catch (EquipmentException e) {
-            return null;
-        }
-    }
-
-    public static Trivet getTrivet() {
-        try {
-            return new Trivet(Math.random() * 100, Math.random() * 200,
-                Math.random() * 1000, randStr(10), Math.random() * 10);
-        } catch (EquipmentException e) {
-            return null;
-        }
-    }
-
-    public static Rent getRent(Equipment e, Client c, Address a) {
+    public static Rent getRent(Equipment e, Client c) {
         if(e == null) {
-            e = getCamera();
+            e = getEquipment();
         }
         if(c == null) {
             c = getClient();
-        }
-        if(a == null) {
-            a = getAddress();
         }
         LocalDateTime nowLocal = LocalDateTime.now();
         DateTime now = nowLocal.toDateTime();
@@ -98,11 +60,11 @@ public class DataFaker {
         long endUnix = beginUnix + (long) (Math.random() * 10000000);
         LocalDateTime begin = Instant.ofEpochMilli(beginUnix).toDateTime().toLocalDateTime();
         LocalDateTime end = Instant.ofEpochMilli(endUnix).toDateTime().toLocalDateTime();
-        return new Rent(begin, end, e, c, a);
+        return new Rent(begin, end, e, c);
     }
 
     public static Rent getRent() {
-        return getRent(null, null, null);
+        return getRent(null, null);
     }
 
 

@@ -12,11 +12,9 @@ import java.util.List;
 
 @Entity
 @Table(name = "equipment")
-@Inheritance(strategy = InheritanceType.JOINED)
-//@DiscriminatorColumn(name = "type")
 @Transactional
 @Access(AccessType.FIELD)
-public abstract class Equipment extends AbstractEntity {
+public class Equipment extends AbstractEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

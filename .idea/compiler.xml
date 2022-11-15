@@ -6,16 +6,18 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="bazy+pas" />
-        <module name="PAS_NBD" />
         <module name="NonRelational" />
         <module name="rest_test" />
+        <module name="pas" />
+        <module name="bazy+pas" />
+        <module name="PAS_NBD" />
         <module name="Pasenbazen" />
         <module name="after pobi" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="NonRelational" target="17" />
+      <module name="pas" target="17" />
       <module name="Pasenbazen" target="17" />
       <module name="rest_test" target="17" />
     </bytecodeTargetLevel>

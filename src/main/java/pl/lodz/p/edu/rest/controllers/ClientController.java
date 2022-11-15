@@ -1,20 +1,13 @@
 package pl.lodz.p.edu.rest.controllers;
 
-import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 
 import jakarta.persistence.RollbackException;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-import org.hibernate.exception.ConstraintViolationException;
-import pl.lodz.p.edu.rest.DTO.ClientDTO;
-import pl.lodz.p.edu.rest.exception.ClientException;
 import pl.lodz.p.edu.rest.managers.ClientManager;
-import pl.lodz.p.edu.rest.model.Address;
 import pl.lodz.p.edu.rest.model.Client;
 import pl.lodz.p.edu.rest.repository.DataFaker;
 

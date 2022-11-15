@@ -2,7 +2,7 @@ package pl.lodz.p.edu.rest.model;
 
 import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotEmpty;
-import pl.lodz.p.edu.rest.exception.ClientException;
+import pl.lodz.p.edu.rest.exception.UserException;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -52,27 +52,25 @@ public class Client extends AbstractEntity  {
 
     public Client(
             String clientId,
-//            idType idType,
             String firstName,
             String lastName,
             Address address
-    ) throws ClientException {
+    ) throws UserException {
         super();
         if (firstName.isEmpty()) {
-            throw new ClientException("Imię nie może być puste");
+            throw new UserException("Imię nie może być puste");
         }
         if (lastName.isEmpty()) {
-            throw new ClientException("Nazwisko nie może być puste");
+            throw new UserException("Nazwisko nie może być puste");
         }
         if (clientId.isEmpty()) {
-            throw new ClientException("Identyfikator klienta nie może być pusty");
+            throw new UserException("Identyfikator klienta nie może być pusty");
         }
         if (address == null) {
-            throw new ClientException("Adres nie może być pusty");
+            throw new UserException("Adres nie może być pusty");
         }
 
         this.clientId = clientId;
-//        this.idType = idType;
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;

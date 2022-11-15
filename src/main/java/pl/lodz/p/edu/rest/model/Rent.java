@@ -25,17 +25,10 @@ public class Rent extends AbstractEntity {
             cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Equipment equipment;
 
-//    @JoinColumn(name = "client_id_type")
     @NotNull
     @JoinColumn(name = "client_id")
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Client client;
-
-//    @JoinColumn(name = "address_id")
-//    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @NotNull
-    @Embedded
-    private Address shippingAddress;
 
     @NotNull
     @Column(name = "begin_time")
@@ -55,7 +48,7 @@ public class Rent extends AbstractEntity {
 
 
     public Rent(LocalDateTime beginTime, LocalDateTime endTime,
-                Equipment equipment, Client client, Address shippingAddress) {
+                Equipment equipment, Client client) {
         super();
 
         this.beginTime = beginTime;
@@ -64,15 +57,14 @@ public class Rent extends AbstractEntity {
         this.eqReturned = false;
         this.equipment = equipment;
         this.client = client;
-        this.shippingAddress = shippingAddress;
     }
 
     protected Rent() {}
 
     public Rent(long id, LocalDateTime beginTime, LocalDateTime endTime,
-                Equipment equipment, Client client, Address shippingAddress) {
+                Equipment equipment, Client client) {
 
-        this(beginTime, endTime, equipment, client, shippingAddress);
+        this(beginTime, endTime, equipment, client);
         this.id = id;
     }
 
@@ -99,7 +91,6 @@ public class Rent extends AbstractEntity {
         sb.append("id=").append(id);
         sb.append("Klient=").append(getClient().toString()); //FIXME to string
         sb.append("Sprzęt=").append(getEquipment().toString());
-        sb.append("Adres dostawy= ").append(shippingAddress);
         sb.append("Czas wypożyczenia=");
         sb.append("Początek=").append(beginTime);
         sb.append(" do ");
@@ -156,13 +147,4 @@ public class Rent extends AbstractEntity {
     public void setClient(Client client) {
         this.client = client;
     }
-
-    public Address getShippingAddress() {
-        return shippingAddress;
-    }
-
-    public void setShippingAddress(Address shippingAddress) {
-        this.shippingAddress = shippingAddress;
-    }
-
 }
