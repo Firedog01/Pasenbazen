@@ -7,10 +7,10 @@ import java.util.UUID;
 
 public interface Repository<T> {
 
-    T get(UniqueId entityId);
+    T get(UUID entityId);
     List<T> getAll();
     void add(T elem);
-    void remove(UniqueId entityId);
+    void remove(UUID entityId);
     void update(T elem);
     Long count();
 }

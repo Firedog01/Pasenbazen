@@ -9,6 +9,8 @@ import org.joda.time.DateTime;
 import org.joda.time.Instant;
 import org.joda.time.LocalDateTime;
 import pl.lodz.p.edu.rest.model.users.Client;
+import pl.lodz.p.edu.rest.model.users.ResourceAdmin;
+import pl.lodz.p.edu.rest.model.users.UserAdmin;
 
 public class DataFaker {
 
@@ -28,11 +30,23 @@ public class DataFaker {
     public static Client getClient() {
         try {
             Address a = getAddress();
-            return new Client(randStr(7), // idType.values()[(int)(Math.random() * 2) % 2],
+            return new Client(randStr(7),
                     randStr(10), randStr(10), a);
         } catch(UserException e) {
             return null; // will never happen
         }
+    }
+
+    public static UserAdmin getUserAdmin() {
+        try {
+            return new UserAdmin(randStr(10));
+        } catch (UserException e) {
+            return null; // will never happen
+        }
+    }
+
+    public static ResourceAdmin getResourceAdmin() {
+        return new ResourceAdmin();
     }
 
 

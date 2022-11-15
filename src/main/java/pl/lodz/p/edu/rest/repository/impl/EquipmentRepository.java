@@ -22,13 +22,13 @@ public class EquipmentRepository implements Repository<Equipment> {
     public EquipmentRepository() {}
 
     @Override
-    public Equipment get(UniqueId entityId) {
+    public Equipment get(UUID entityId) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Equipment> cq = cb.createQuery(Equipment.class);
         Root<Equipment> equipment = cq.from(Equipment.class);
 
         cq.select(equipment);
-        cq.where(cb.equal(equipment.get(Equipment_.ENTITY_ID), entityId.getUniqueID()));
+        cq.where(cb.equal(equipment.get(Equipment_.ENTITY_ID), entityId));
 
         EntityTransaction et = em.getTransaction();
         et.begin();
@@ -61,7 +61,7 @@ public class EquipmentRepository implements Repository<Equipment> {
 
     @Override
     @Transactional
-    public void remove(UniqueId entityId) {
+    public void remove(UUID entityId) {
         Equipment equipment = get(entityId);
         em.lock(equipment, LockModeType.OPTIMISTIC);
         em.remove(equipment);

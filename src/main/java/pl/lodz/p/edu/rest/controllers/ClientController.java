@@ -7,10 +7,11 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-import pl.lodz.p.edu.rest.managers.ClientManager;
+import pl.lodz.p.edu.rest.managers.UserManager;
 import pl.lodz.p.edu.rest.model.UniqueId;
 import pl.lodz.p.edu.rest.model.users.Client;
 import pl.lodz.p.edu.rest.model.users.User;
+import pl.lodz.p.edu.rest.model.users.UserAdmin;
 import pl.lodz.p.edu.rest.repository.DataFaker;
 
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ import static jakarta.ws.rs.core.Response.Status.*;
 public class ClientController {
 
     @Inject
-    private ClientManager clientManager;
+    private UserManager userManager;
 
     protected ClientController() {}
 
@@ -47,7 +48,7 @@ public class ClientController {
         }
 
         try {
-            clientManager.registerClient(client);
+            userManager.registerClient(client);
             return Response.status(CREATED).entity(client).build();
         } catch(RollbackException e) {
             return Response.status(CONFLICT).build();
@@ -59,8 +60,8 @@ public class ClientController {
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
     public List<User> getAllClients() {
-        System.out.println(clientManager);
-        List<User> users = clientManager.getAllUsers();
+        System.out.println(userManager);
+        List<User> users = userManager.getAllUsers();
         return users;
     }
 
@@ -68,7 +69,7 @@ public class ClientController {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/available")
     public Response getAllActiveClients() {
-        List<User> all = clientManager.getAllUsers();
+        List<User> all = userManager.getAllUsers();
         List<User> available = new ArrayList<>();
         for (User c : all) {
             if(!(c.isActive())) {
@@ -81,8 +82,8 @@ public class ClientController {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{uuid}")
-    public Response getUserByUuid(@PathParam("uuid") UniqueId entityId) {
-        User user = clientManager.getUserByUuid(entityId);
+    public Response getUserByUuid(@PathParam("uuid") UUID entityId) {
+        User user = userManager.getUserByUuid(entityId);
         if(user != null) {
             return Response.status(OK).entity(user).build();
         } else {
@@ -96,7 +97,7 @@ public class ClientController {
     @PUT
     @Path("/")
     public Response updateClient(Client client) {
-        clientManager.updateClient(client);
+        userManager.updateClient(client);
         return Response.status(OK).entity(client).build();
     }
 
@@ -109,7 +110,16 @@ public class ClientController {
     @Produces(MediaType.APPLICATION_JSON)
     public Client addFakeClient() {
         Client c = DataFaker.getClient();
-        clientManager.registerClient(c);
+        userManager.registerClient(c);
+        return c;
+    }
+
+    @POST
+    @Path("/addFakeAdmin")
+    @Produces(MediaType.APPLICATION_JSON)
+    public UserAdmin addFakeUserAdmin() {
+        UserAdmin c = DataFaker.getUserAdmin();
+        userManager.registerUserAdmin(c);
         return c;
     }
 
@@ -158,8 +168,8 @@ public class ClientController {
 
     @DELETE
     @Path("/{entityId}")
-    public Response unregisterClient(@PathParam("entityId") UniqueId entityId) {
-        clientManager.unregisterClient(entityId);
+    public Response unregisterClient(@PathParam("entityId") UUID entityId) {
+        userManager.unregisterClient(entityId);
         return Response.status(NO_CONTENT).build();
     }
 

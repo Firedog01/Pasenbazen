@@ -7,13 +7,12 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import jakarta.transaction.Transactional;
 import pl.lodz.p.edu.rest.model.*;
-import pl.lodz.p.edu.rest.model.users.Client;
-import pl.lodz.p.edu.rest.model.users.Client_;
 import pl.lodz.p.edu.rest.model.users.User;
 import pl.lodz.p.edu.rest.model.users.User_;
 import pl.lodz.p.edu.rest.repository.Repository;
 
 import java.util.List;
+import java.util.UUID;
 
 @RequestScoped
 public class UserRepository implements Repository<User> {
@@ -29,7 +28,7 @@ public class UserRepository implements Repository<User> {
 
     @Override
     @Transactional
-    public User get(UniqueId entityId) {
+    public User get(UUID entityId) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<User> cq = cb.createQuery(User.class);
         Root<User> user = cq.from(User.class);
@@ -85,7 +84,7 @@ public class UserRepository implements Repository<User> {
 
     @Override
     @Transactional
-    public void remove(UniqueId entityId) {
+    public void remove(UUID entityId) {
         User elem = get(entityId);
         em.lock(elem, LockModeType.OPTIMISTIC);
         em.remove(elem);

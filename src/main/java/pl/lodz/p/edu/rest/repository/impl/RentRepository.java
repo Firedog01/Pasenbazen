@@ -24,14 +24,14 @@ public class RentRepository implements Repository<Rent> {
     public RentRepository() {}
 
     @Override
-    public Rent get(UniqueId entityId) {
+    public Rent get(UUID entityId) {
 
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Rent> cq = cb.createQuery(Rent.class);
         Root<Rent> rent = cq.from(Rent.class);
 
         cq.select(rent);
-        cq.where(cb.equal(rent.get(Rent_.ENTITY_ID), entityId.getUniqueID()));
+        cq.where(cb.equal(rent.get(Rent_.ENTITY_ID), entityId));
 
 
         EntityTransaction et = em.getTransaction();
@@ -89,7 +89,7 @@ public class RentRepository implements Repository<Rent> {
 
     @Override
     @Transactional
-    public void remove(UniqueId entityId) {
+    public void remove(UUID entityId) {
         Rent elem = get(entityId);
         em.lock(elem, LockModeType.OPTIMISTIC);
         em.remove(elem);

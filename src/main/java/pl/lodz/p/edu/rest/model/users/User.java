@@ -6,9 +6,9 @@ import pl.lodz.p.edu.rest.exception.UserException;
 import pl.lodz.p.edu.rest.model.AbstractEntity;
 
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Table(name = "tuser")
-//@DiscriminatorColumn(name = "user_type")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "user_type", discriminatorType = DiscriminatorType.STRING)
 public abstract class User extends AbstractEntity {
     @Id
     @Column(name = "login")
