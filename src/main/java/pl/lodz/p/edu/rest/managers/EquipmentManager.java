@@ -11,30 +11,28 @@ import java.util.UUID;
 
 @Transactional
 public class EquipmentManager {
-
-    @Inject
-    private EquipmentRepository equipmentRepository;
-
-    protected EquipmentManager() {
-//        equipmentRepository = (EquipmentRepository) RepositoryFactory
-//                .getRepository(RepositoryType.EquipmentRepository);
-    }
-
-    public boolean remove(UUID uuid) {
-        return equipmentRepository.remove(uuid); //TODO
-    }
-
-    public List<Equipment> getAll() {
-        return equipmentRepository.getAll();
-    }
-
-    public boolean add(Equipment equipment) { //TODO Boolean?
-        return equipmentRepository.add(equipment);
-    }
-
-    public Equipment get(UUID uuid) {
-        return equipmentRepository.get(uuid);
-    }
+//
+//    @Inject
+//    private EquipmentRepository equipmentRepository;
+//
+//    protected EquipmentManager() {
+//    }
+//
+//    public boolean remove(UUID uuid) {
+//        return equipmentRepository.remove(uuid); //TODO
+//    }
+//
+//    public List<Equipment> getAll() {
+//        return equipmentRepository.getAll();
+//    }
+//
+//    public boolean add(Equipment equipment) { //TODO Boolean?
+//        return equipmentRepository.add(equipment);
+//    }
+//
+//    public Equipment get(UUID uuid) {
+//        return equipmentRepository.get(uuid);
+//    }
 
 }
 

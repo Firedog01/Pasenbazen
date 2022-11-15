@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import static io.restassured.RestAssured.*;
 import io.restassured.matcher.RestAssuredMatchers.*;
-import pl.lodz.p.edu.rest.model.Client;
+import pl.lodz.p.edu.rest.model.users.Client;
 import pl.lodz.p.edu.rest.repository.DataFaker;
 
 import javax.xml.crypto.Data;
@@ -43,7 +43,7 @@ class ClientControllerTest {
                 .post("/clients")
         .then()
                 .statusCode(201)
-                .body("clientId", equalTo(validClient.getClientId()))
+                .body("login", equalTo(validClient.getLogin()))
                 .body("entityId", not(validClient.getEntityId()));
     }
 }

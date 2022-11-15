@@ -8,7 +8,9 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import pl.lodz.p.edu.rest.managers.ClientManager;
+import pl.lodz.p.edu.rest.model.UniqueId;
 import pl.lodz.p.edu.rest.model.users.Client;
+import pl.lodz.p.edu.rest.model.users.User;
 import pl.lodz.p.edu.rest.repository.DataFaker;
 
 import java.util.ArrayList;
@@ -56,20 +58,20 @@ public class ClientController {
     @GET
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Client> getAllClients() {
+    public List<User> getAllClients() {
         System.out.println(clientManager);
-        List<Client> clients = clientManager.getAllClients();
-        return clients;
+        List<User> users = clientManager.getAllUsers();
+        return users;
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/available")
-    public Response getAllAvailableClients() {
-        List<Client> all = clientManager.getAllClients();
-        List<Client> available = new ArrayList<>();
-        for (Client c : all) {
-            if(!(c.isArchive())) {
+    public Response getAllActiveClients() {
+        List<User> all = clientManager.getAllUsers();
+        List<User> available = new ArrayList<>();
+        for (User c : all) {
+            if(!(c.isActive())) {
                 available.add(c);
             }
         }
@@ -79,10 +81,10 @@ public class ClientController {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{uuid}")
-    public Response getClientByUuid(@PathParam("uuid") UUID uuid) {
-        Client client = clientManager.getClientByUuid(uuid);
-        if(client != null) {
-            return Response.status(OK).entity(client).build();
+    public Response getUserByUuid(@PathParam("uuid") UniqueId entityId) {
+        User user = clientManager.getUserByUuid(entityId);
+        if(user != null) {
+            return Response.status(OK).entity(user).build();
         } else {
             return Response.status(NOT_FOUND).build();
         }
@@ -155,13 +157,10 @@ public class ClientController {
 
 
     @DELETE
-    @Path("/{id}")
-    public Response unregisterClient(@PathParam("id") UUID uuid) {
-        if (clientManager.unregisterClient(uuid)) {
-            return Response.status(NO_CONTENT).build();
-        } else {
-            return Response.status(NOT_FOUND).build();
-        }
+    @Path("/{entityId}")
+    public Response unregisterClient(@PathParam("entityId") UniqueId entityId) {
+        clientManager.unregisterClient(entityId);
+        return Response.status(NO_CONTENT).build();
     }
 
 //    @PUT
@@ -172,16 +171,16 @@ public class ClientController {
 //        return null;
 //
 //    }
-
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/{id}/{type}")
-    public Response getClientByClientId(@PathParam("id") String clientId) {
-        Client client = clientManager.getByClientId(clientId);
-        if(client != null) {
-            return Response.status(OK).entity(client).build();
-        } else {
-            return Response.status(NOT_FOUND).build();
-        }
-    }
+//
+//    @GET
+//    @Produces(MediaType.APPLICATION_JSON)
+//    @Path("/{id}")
+//    public Response getClientByClientId(@PathParam("id") String clientId) {
+//        Client client = clientManager.getByClientId(clientId);
+//        if(client != null) {
+//            return Response.status(OK).entity(client).build();
+//        } else {
+//            return Response.status(NOT_FOUND).build();
+//        }
+//    }
 }

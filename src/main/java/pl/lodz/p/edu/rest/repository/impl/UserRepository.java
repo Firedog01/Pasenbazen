@@ -8,7 +8,9 @@ import jakarta.persistence.criteria.Root;
 import jakarta.transaction.Transactional;
 import pl.lodz.p.edu.rest.model.*;
 import pl.lodz.p.edu.rest.model.users.Client;
+import pl.lodz.p.edu.rest.model.users.Client_;
 import pl.lodz.p.edu.rest.model.users.User;
+import pl.lodz.p.edu.rest.model.users.User_;
 import pl.lodz.p.edu.rest.repository.Repository;
 
 import java.util.List;
@@ -29,7 +31,7 @@ public class UserRepository implements Repository<User> {
         Root<User> client = cq.from(User.class);
 
         cq.select(client);
-        cq.where(cb.equal(client.get(Client_.ENTITY_ID), entityId.getUniqueID()));
+        cq.where(cb.equal(client.get(User_.ENTITY_ID), entityId.getUniqueID()));
 
         List<User> clients = em.createQuery(cq).setLockMode(LockModeType.OPTIMISTIC).getResultList();
 
@@ -39,27 +41,27 @@ public class UserRepository implements Repository<User> {
         return clients.get(0);
     }
 
-    public Client getClientByIdName(String clientId) {
+    public User getUserByLogin(String login) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Client> cq = cb.createQuery(Client.class);
-        Root<Client> clientRoot = cq.from(Client.class);
+        CriteriaQuery<User> cq = cb.createQuery(User.class);
+        Root<User> clientRoot = cq.from(User.class);
 
         cq.select(clientRoot);
         cq.where(
-                cb.equal(clientRoot.get(Client_.CLIENT_ID), clientId)
+                cb.equal(clientRoot.get(User_.LOGIN), login)
         );
 
         EntityTransaction et = em.getTransaction();
         et.begin();
-        TypedQuery<Client> q = em.createQuery(cq).setLockMode(LockModeType.OPTIMISTIC);
+        TypedQuery<User> q = em.createQuery(cq).setLockMode(LockModeType.OPTIMISTIC);
 
         try {
-            Client client = q.getSingleResult(); //Transaction is not ending so commit is needed.
+            User client = q.getSingleResult(); //Transaction is not ending so commit is needed.
             et.commit();
             return client;
         } catch (NoResultException e) {
             throw new EntityNotFoundException("Client not found for clientId:" +
-                    " " + clientId);
+                    " " + login);
         }
     }
 

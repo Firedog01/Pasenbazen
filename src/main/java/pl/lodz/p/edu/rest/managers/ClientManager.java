@@ -28,10 +28,6 @@ public class ClientManager {
         userRepository.remove(entityId);
     }
 
-    public Client getByClientId(String id) {
-        return userRepository.getClientByIdName(id);
-    }
-
     public User getUserByUuid(UniqueId entityId) {
         return userRepository.get(entityId);
     }

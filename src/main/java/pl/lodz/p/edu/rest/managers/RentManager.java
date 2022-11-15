@@ -14,39 +14,39 @@ import java.util.UUID;
 
 @Transactional
 public class RentManager {
-
-    @Inject
-    private RentRepository rentRepository;
-
-    protected RentManager() {}
-
-    public List<Rent> getRentByEq(Equipment equipment) {
-        return rentRepository.getRentByEq(equipment);
-    }
-
-    public List<Rent> getRentsByClient(UUID uuid) {
-        return rentRepository.getRentByClient(get(uuid).getClient());
-    }
-
-    public Rent get(UUID uuid) {
-        return rentRepository.get(uuid);
-    }
-
-    public List<Rent> getAll() {
-        return rentRepository.getAll();
-    }
-
-    public boolean add(Rent rent) {
-        return rentRepository.add(rent);
-    }
-
-    public void update(Rent rent) {
-        rentRepository.update(rent);
-    }
-
-    public boolean remove(UUID uuid) {
-        return rentRepository.remove(uuid);
-    }
+//
+//    @Inject
+//    private RentRepository rentRepository;
+//
+//    protected RentManager() {}
+//
+//    public List<Rent> getRentByEq(Equipment equipment) {
+//        return rentRepository.getRentByEq(equipment);
+//    }
+//
+//    public List<Rent> getRentsByClient(UUID uuid) {
+//        return rentRepository.getRentByClient(get(uuid).getClient());
+//    }
+//
+//    public Rent get(UUID uuid) {
+//        return rentRepository.get(uuid);
+//    }
+//
+//    public List<Rent> getAll() {
+//        return rentRepository.getAll();
+//    }
+//
+//    public boolean add(Rent rent) {
+//        return rentRepository.add(rent);
+//    }
+//
+//    public void update(Rent rent) {
+//        rentRepository.update(rent);
+//    }
+//
+//    public boolean remove(UUID uuid) {
+//        return rentRepository.remove(uuid);
+//    }
 
 
 }

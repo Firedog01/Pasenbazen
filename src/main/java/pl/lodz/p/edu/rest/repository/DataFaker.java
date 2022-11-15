@@ -3,12 +3,12 @@ package pl.lodz.p.edu.rest.repository;
 import pl.lodz.p.edu.rest.exception.UserException;
 import pl.lodz.p.edu.rest.exception.EquipmentException;
 import pl.lodz.p.edu.rest.model.Address;
-import pl.lodz.p.edu.rest.model.Client;
 import pl.lodz.p.edu.rest.model.Equipment;
 import pl.lodz.p.edu.rest.model.Rent;
 import org.joda.time.DateTime;
 import org.joda.time.Instant;
 import org.joda.time.LocalDateTime;
+import pl.lodz.p.edu.rest.model.users.Client;
 
 public class DataFaker {
 
