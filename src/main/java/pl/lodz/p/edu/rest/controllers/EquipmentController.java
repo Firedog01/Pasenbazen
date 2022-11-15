@@ -5,7 +5,7 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import pl.lodz.p.edu.rest.managers.EquipmentManager;
-import pl.lodz.p.edu.rest.model.EQ.*;
+import pl.lodz.p.edu.rest.model.Equipment;
 
 import java.util.ArrayList;
 import java.util.List;

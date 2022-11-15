@@ -1,4 +1,4 @@
-package pl.lodz.p.edu.rest.model.EQ;
+package pl.lodz.p.edu.rest.model;
 
 import jakarta.persistence.*;
 import jakarta.transaction.Transactional;
@@ -12,7 +12,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "equipment")
-@Transactional
+//@Transactional
 @Access(AccessType.FIELD)
 public class Equipment extends AbstractEntity {
 

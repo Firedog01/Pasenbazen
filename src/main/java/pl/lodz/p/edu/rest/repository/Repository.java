@@ -1,14 +1,16 @@
 package pl.lodz.p.edu.rest.repository;
 
+import pl.lodz.p.edu.rest.model.UniqueId;
+
 import java.util.List;
 import java.util.UUID;
 
 public interface Repository<T> {
 
-    T get(UUID id);
+    T get(UniqueId entityId);
     List<T> getAll();
-    boolean add(T elem);
-    boolean remove(UUID uuid);
-    boolean update(T elem);
+    void add(T elem);
+    void remove(UniqueId entityId);
+    void update(T elem);
     Long count();
 }

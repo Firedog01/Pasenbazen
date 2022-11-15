@@ -4,8 +4,7 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import pl.lodz.p.edu.rest.model.Client;
-import pl.lodz.p.edu.rest.repository.RepositoryType;
-import pl.lodz.p.edu.rest.repository.impl.ClientRepository;
+import pl.lodz.p.edu.rest.repository.impl.UserRepository;
 
 import java.util.List;
 import java.util.UUID;
@@ -15,31 +14,31 @@ import java.util.UUID;
 public class ClientManager {
 
     @Inject
-    private ClientRepository clientRepository;
+    private UserRepository userRepository;
 
     protected ClientManager() {}
 
     public boolean registerClient(Client client) {
-        return clientRepository.add(client);
+        return userRepository.add(client);
     }
 
     public boolean unregisterClient(UUID uuid) {
-        return clientRepository.remove(uuid);
+        return userRepository.remove(uuid);
     }
 
     public Client getByClientId(String id) {
-        return clientRepository.getClientByIdName(id);
+        return userRepository.getClientByIdName(id);
     }
 
     public Client getClientByUuid(UUID uuid) {
-        return clientRepository.get(uuid);
+        return userRepository.get(uuid);
     }
 
     public List<Client> getAllClients() {
-        return clientRepository.getAll();
+        return userRepository.getAll();
     }
 
     public boolean updateClient(Client client) {
-        return clientRepository.update(client);
+        return userRepository.update(client);
     }
 }

@@ -3,7 +3,7 @@
 //import jakarta.persistence.EntityManagerFactory;
 //import jakarta.persistence.EntityNotFoundException;
 //import jakarta.persistence.Persistence;
-//import pl.lodz.p.edu.rest.model.EQ.Equipment;
+//import pl.lodz.p.edu.rest.model.Equipment;
 //import pl.lodz.p.edu.rest.model.UniqueId;
 //import org.junit.jupiter.api.BeforeAll;
 //import org.junit.jupiter.api.Test;

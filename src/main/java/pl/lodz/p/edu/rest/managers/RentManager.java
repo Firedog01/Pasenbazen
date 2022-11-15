@@ -3,7 +3,7 @@ package pl.lodz.p.edu.rest.managers;
 import jakarta.inject.Inject;
 
 import jakarta.transaction.Transactional;
-import pl.lodz.p.edu.rest.model.EQ.Equipment;
+import pl.lodz.p.edu.rest.model.Equipment;
 import pl.lodz.p.edu.rest.model.Rent;
 
 import pl.lodz.p.edu.rest.repository.impl.RentRepository;

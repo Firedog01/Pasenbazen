@@ -5,7 +5,7 @@
 //import pl.lodz.p.edu.rest.model.Address;
 //import pl.lodz.p.edu.rest.model.Client;
 //import pl.lodz.p.edu.rest.model.EQ.Camera;
-//import pl.lodz.p.edu.rest.model.EQ.Equipment;
+//import pl.lodz.p.edu.rest.model.Equipment;
 //import pl.lodz.p.edu.rest.model.Rent;
 //import org.joda.time.LocalDateTime;
 //import org.junit.jupiter.api.BeforeAll;

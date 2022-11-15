@@ -3,7 +3,6 @@ package pl.lodz.p.edu.rest.model;
 import jakarta.persistence.*;
 import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotNull;
-import pl.lodz.p.edu.rest.model.EQ.Equipment;
 import org.joda.time.Days;
 import org.joda.time.LocalDateTime;
 

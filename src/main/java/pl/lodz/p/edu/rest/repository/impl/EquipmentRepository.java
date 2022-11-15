@@ -5,7 +5,7 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import pl.lodz.p.edu.rest.model.Client_;
-import pl.lodz.p.edu.rest.model.EQ.Equipment;
+import pl.lodz.p.edu.rest.model.Equipment;
 import pl.lodz.p.edu.rest.repository.Repository;
 
 import java.util.List;

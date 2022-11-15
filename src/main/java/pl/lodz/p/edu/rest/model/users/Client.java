@@ -1,12 +1,13 @@
 package pl.lodz.p.edu.rest.model.users;
 
-import jakarta.persistence.Id;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
 import pl.lodz.p.edu.rest.exception.UserException;
-import pl.lodz.p.edu.rest.model.AbstractEntity;
 import pl.lodz.p.edu.rest.model.Address;
 
-public class Client_ extends AbstractUser {
-
+@Entity
+@DiscriminatorValue("client")
+public class Client extends User {
 
     private String firstName;
 
@@ -14,12 +15,14 @@ public class Client_ extends AbstractUser {
 
     private Address address;
 
-    public Client_(String login, String firstName, String lastName, Address address) throws UserException {
+    public Client(String login, String firstName, String lastName, Address address) throws UserException {
         super(login);
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
     }
+
+    public Client() {}
 
     public String getFirstName() {
         return firstName;

@@ -10,7 +10,7 @@ import pl.lodz.p.edu.rest.managers.ClientManager;
 import pl.lodz.p.edu.rest.managers.EquipmentManager;
 import pl.lodz.p.edu.rest.managers.RentManager;
 import pl.lodz.p.edu.rest.model.Client;
-import pl.lodz.p.edu.rest.model.EQ.Equipment;
+import pl.lodz.p.edu.rest.model.Equipment;
 import pl.lodz.p.edu.rest.model.Rent;
 
 import java.util.List;

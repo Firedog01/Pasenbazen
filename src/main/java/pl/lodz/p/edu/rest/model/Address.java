@@ -8,12 +8,6 @@ import jakarta.validation.constraints.NotNull;
 @Access(AccessType.FIELD)
 public class Address {
 
-//    @Id
-//    @Column(name = "address_id")
-//    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-//    @SequenceGenerator(initialValue = 0, name = "address_sequence_generator")
-//    private long id;
-
     @NotNull
     @Column(name = "city")
     private String city;

@@ -1,4 +1,10 @@
 package pl.lodz.p.edu.rest.model.users;
 
-public class ResourceAdmin {
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+
+@Entity
+@DiscriminatorValue("resource_admin")
+public class ResourceAdmin extends User {
+
 }
