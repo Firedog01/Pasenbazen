@@ -40,6 +40,9 @@
           <element id="library" level="project" name="Maven: org.checkerframework:checker-qual:3.5.0" />
           <element id="library" level="project" name="Maven: joda-time:joda-time:2.11.2" />
           <element id="library" level="project" name="Maven: org.wso2.orbit.com.fasterxml.jackson.core:jackson-databind:2.11.0.wso2v1" />
+          <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.14.0" />
+          <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.14.0" />
+          <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-core:2.14.0" />
         </element>
       </element>
       <element id="directory" name="META-INF">

@@ -33,30 +33,6 @@ public class ClientController {
 
     protected ClientController() {}
 
-    // read
-    @GET
-    @Path("/")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Client> getAllClients() {
-        System.out.println(clientManager);
-        List<Client> clients = clientManager.getAllClients();
-        return clients;
-    }
-
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/available")
-    public Response getAllAvailableClients() {
-        List<Client> all = clientManager.getAllClients();
-        List<Client> available = new ArrayList<>();
-        for (Client c : all) {
-            if(!(c.isArchive())) {
-                available.add(c);
-            }
-        }
-        return Response.status(OK).entity(available).build();
-    }
-
     // create
     @POST
     @Path("/")
@@ -83,7 +59,29 @@ public class ClientController {
         }
     }
 
+    // read
+    @GET
+    @Path("/")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Client> getAllClients() {
+        System.out.println(clientManager);
+        List<Client> clients = clientManager.getAllClients();
+        return clients;
+    }
 
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/available")
+    public Response getAllAvailableClients() {
+        List<Client> all = clientManager.getAllClients();
+        List<Client> available = new ArrayList<>();
+        for (Client c : all) {
+            if(!(c.isArchive())) {
+                available.add(c);
+            }
+        }
+        return Response.status(OK).entity(available).build();
+    }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -96,6 +94,18 @@ public class ClientController {
             return Response.status(NOT_FOUND).build();
         }
     }
+
+
+
+    // update
+    @PUT
+    @Path("/")
+    public Response updateClient(Client client) {
+        clientManager.updateClient(client);
+        return Response.status(OK).entity(client).build();
+    }
+
+
 
     // ========= other
 

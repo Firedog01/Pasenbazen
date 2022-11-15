@@ -20,12 +20,7 @@ public class ClientRepository implements Repository<Client> {
     @PersistenceContext(name = "request")
     protected EntityManager em;
 
-//    public ClientRepository(EntityManager em) {
-//        this.em = em;
-//    }
-
-    public ClientRepository() {
-    }
+    public ClientRepository() {}
 
     @Override
     public Client get(UUID uuid) {
@@ -94,9 +89,9 @@ public class ClientRepository implements Repository<Client> {
             em.lock(elem, LockModeType.OPTIMISTIC_FORCE_INCREMENT);
             et.commit();
         } finally {
-//            if(et.isActive()) {
-//                et.rollback();
-//            }
+            if(et.isActive()) {
+                et.rollback();
+            }
         }
         return true;
     }
@@ -112,7 +107,6 @@ public class ClientRepository implements Repository<Client> {
         } finally {
             if(et.isActive()) {
                 et.rollback();
-                return false;
             }
         }
         return true;
