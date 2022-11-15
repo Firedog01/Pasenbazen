@@ -34,6 +34,7 @@ class ClientControllerTest {
         validClientStr = obj.writeValueAsString(validClient);
         System.out.println(validClientStr);
     }
+
     @Test
     void readWriteClient_correct() {
         given()

@@ -1,17 +1,20 @@
 package pl.lodz.p.edu.rest.model.users;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import pl.lodz.p.edu.rest.exception.UserException;
 import pl.lodz.p.edu.rest.model.AbstractEntity;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@Table(name = "user")
-@DiscriminatorColumn(name = "user_type")
+@Table(name = "tuser")
+//@DiscriminatorColumn(name = "user_type")
 public abstract class User extends AbstractEntity {
     @Id
+    @Column(name = "login")
     private String login;
 
+    @Column(name = "archive")
     private boolean active;
 
     public User(String login) throws UserException {
@@ -38,5 +41,14 @@ public abstract class User extends AbstractEntity {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "login='" + login + '\'' +
+                ", active=" + active +
+                ", abstractEntity=" + super.toString() +
+                '}';
     }
 }

@@ -7,4 +7,6 @@ import jakarta.persistence.Entity;
 @DiscriminatorValue("user_admin")
 public class UserAdmin extends User {
 
+    public UserAdmin() {
+    }
 }

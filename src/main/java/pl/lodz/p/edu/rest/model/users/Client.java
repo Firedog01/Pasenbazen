@@ -1,7 +1,10 @@
 package pl.lodz.p.edu.rest.model.users;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.validation.constraints.NotNull;
 import pl.lodz.p.edu.rest.exception.UserException;
 import pl.lodz.p.edu.rest.model.Address;
 
@@ -9,10 +12,14 @@ import pl.lodz.p.edu.rest.model.Address;
 @DiscriminatorValue("client")
 public class Client extends User {
 
+    @Column(name = "first_name")
     private String firstName;
 
+    @Column(name = "last_name")
     private String lastName;
 
+    @NotNull
+    @Embedded
     private Address address;
 
     public Client(String login, String firstName, String lastName, Address address) throws UserException {
@@ -46,5 +53,14 @@ public class Client extends User {
 
     public void setAddress(Address address) {
         this.address = address;
+    }
+
+    @Override
+    public String toString() {
+        return "Client{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", address=" + address +
+                "} " + super.toString();
     }
 }

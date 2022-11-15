@@ -1,49 +1,42 @@
-//package pl.lodz.p.edu.rest.repository.impl;
-//
-//import pl.lodz.p.edu.rest.exception.ClientException;
-//import jakarta.persistence.*;
-//import pl.lodz.p.edu.rest.model.*;
-//import org.junit.jupiter.api.BeforeAll;
-//import org.junit.jupiter.api.Test;
-//import pl.lodz.p.edu.rest.repository.DataFaker;
-//import pl.lodz.p.edu.rest.repository.RepositoryFactory;
-//import pl.lodz.p.edu.rest.repository.RepositoryType;
-//
-//import java.util.List;
-//
-//import static org.junit.jupiter.api.Assertions.*;
-//
-//class ClientRepositoryTest {
-//
-//    static ClientRepository cr;
-//    static AddressRepository ar;
-//    static RepositoryFactory rf;
-//    static EntityManagerFactory emf;
-//
-//    static EntityTransaction et;
-//
-//    @BeforeAll
-//    static void beforeAll() {
-//        emf = Persistence.createEntityManagerFactory("POSTGRES_DB");
-//        rf = new RepositoryFactory(emf);
-//        cr = (ClientRepository) rf.getRepository(RepositoryType.ClientRepository);
-//        ar = (AddressRepository) rf.getRepository(RepositoryType.AddressRepository);
-//    }
-//
-//    @Test
-//    void add_get_remove() {
-//        Client c = DataFaker.getClient();
-//        System.out.println(c);
-//        cr.add(c);
-//        UniqueId uid = c.getEntityId();
-//        Client c1 = cr.get(uid);
-//        assertEquals(c, c1);
-//        cr.remove(c1);
-//        assertThrows(EntityNotFoundException.class, () -> {
-//            cr.get(uid);
-//        });
-//    }
-//
+package pl.lodz.p.edu.rest.repository.impl;
+
+import jakarta.persistence.*;
+import pl.lodz.p.edu.rest.model.*;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import pl.lodz.p.edu.rest.model.users.Client;
+import pl.lodz.p.edu.rest.repository.DataFaker;
+
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class UserRepositoryTest {
+
+    static UserRepository cr;
+    static EntityManagerFactory emf;
+
+    static EntityTransaction et;
+
+    @BeforeAll
+    static void beforeAll() {
+        emf = Persistence.createEntityManagerFactory("POSTGRES_DB");
+        cr = new UserRepository(emf.createEntityManager());
+    }
+
+    @Test
+    void add_get_remove() {
+        Client c = DataFaker.getClient();
+        System.out.println(c);
+        cr.add(c);
+        UniqueId entityId = c.getEntityId();
+        Client c1 = (Client) cr.get(entityId);
+        assertEquals(c, c1);
+        cr.remove(c1.getEntityId());
+        assertThrows(EntityNotFoundException.class, () -> {
+            cr.get(entityId);
+        });
+    }
+
 //    @Test
 //    void update_remove() {
 //        Address a1 = DataFaker.getAddress();
@@ -158,6 +151,6 @@
 //        cr.remove(c2_);
 //        cr.remove(c3_);
 //    }
-//
-//
-//}
+
+
+}

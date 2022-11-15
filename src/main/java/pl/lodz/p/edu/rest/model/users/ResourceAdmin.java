@@ -7,4 +7,7 @@ import jakarta.persistence.Entity;
 @DiscriminatorValue("resource_admin")
 public class ResourceAdmin extends User {
 
+
+    public ResourceAdmin() {
+    }
 }

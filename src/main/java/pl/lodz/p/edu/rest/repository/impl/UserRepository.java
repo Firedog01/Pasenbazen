@@ -23,22 +23,26 @@ public class UserRepository implements Repository<User> {
 
     public UserRepository() {}
 
+    public UserRepository(EntityManager em) {
+        this.em = em;
+    }
+
     @Override
     @Transactional
     public User get(UniqueId entityId) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<User> cq = cb.createQuery(User.class);
-        Root<User> client = cq.from(User.class);
+        Root<User> user = cq.from(User.class);
 
-        cq.select(client);
-        cq.where(cb.equal(client.get(User_.ENTITY_ID), entityId.getUniqueID()));
+        cq.select(user);
+        cq.where(cb.equal(user.get(User_.ENTITY_ID), entityId));
 
-        List<User> clients = em.createQuery(cq).setLockMode(LockModeType.OPTIMISTIC).getResultList();
+        List<User> users = em.createQuery(cq).getResultList();
 
-        if(clients.isEmpty()) {
+        if(users.isEmpty()) {
             throw new EntityNotFoundException("Client not found for uniqueId: " + entityId);
         }
-        return clients.get(0);
+        return users.get(0);
     }
 
     public User getUserByLogin(String login) {
@@ -76,7 +80,7 @@ public class UserRepository implements Repository<User> {
     @Transactional
     public void add(User elem) {
         em.persist(elem);
-        em.lock(elem, LockModeType.OPTIMISTIC_FORCE_INCREMENT);
+//        em.lock(elem, LockModeType.OPTIMISTIC_FORCE_INCREMENT);
     }
 
     @Override

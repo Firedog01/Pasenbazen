@@ -11,6 +11,7 @@ public abstract class AbstractEntity implements Serializable {
 
     @NotNull
     @Embedded
+    @Column(name = "entity_id")
     private UniqueId entityId;
 
     @Version
@@ -28,5 +29,13 @@ public abstract class AbstractEntity implements Serializable {
 
     public void setEntityId(UniqueId entityId) {
         this.entityId = entityId;
+    }
+
+    @Override
+    public String toString() {
+        return "AbstractEntity{" +
+                "entityId=" + entityId +
+                ", version=" + version +
+                '}';
     }
 }

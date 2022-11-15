@@ -5,8 +5,8 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import jakarta.transaction.Transactional;
-import pl.lodz.p.edu.rest.model.Client_;
 import pl.lodz.p.edu.rest.model.Equipment;
+import pl.lodz.p.edu.rest.model.Equipment_;
 import pl.lodz.p.edu.rest.model.UniqueId;
 import pl.lodz.p.edu.rest.repository.Repository;
 
@@ -28,7 +28,7 @@ public class EquipmentRepository implements Repository<Equipment> {
         Root<Equipment> equipment = cq.from(Equipment.class);
 
         cq.select(equipment);
-        cq.where(cb.equal(equipment.get(Client_.CLIENT_ID), entityId.getUniqueID()));
+        cq.where(cb.equal(equipment.get(Equipment_.ENTITY_ID), entityId.getUniqueID()));
 
         EntityTransaction et = em.getTransaction();
         et.begin();

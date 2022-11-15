@@ -79,8 +79,9 @@ public class RentRepository implements Repository<Rent> {
     @Transactional
     public void add(Rent elem) {
         if(elem.getEquipment().getId() != null) {
-            Equipment e = em.find(Equipment.class, elem.getEquipment().getId(),
-                    LockModeType.OPTIMISTIC_FORCE_INCREMENT);
+//            Equipment e = em.find(Equipment.class, elem.getEquipment().getId(),
+//                    LockModeType.OPTIMISTIC_FORCE_INCREMENT);
+            Equipment e = em.find(Equipment.class, elem.getEquipment().getId());
             elem.setEquipment(e);
         }
         em.persist(elem);
