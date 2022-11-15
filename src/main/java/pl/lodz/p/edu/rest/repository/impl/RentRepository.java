@@ -29,7 +29,7 @@ public class RentRepository implements Repository<Rent> {
         Root<Rent> rent = cq.from(Rent.class);
 
         cq.select(rent);
-        cq.where(cb.equal(rent.get(Rent_.UUID), uuid));
+        cq.where(cb.equal(rent.get(Rent_.ENTITY_ID), uuid));
 
 
         EntityTransaction et = em.getTransaction();

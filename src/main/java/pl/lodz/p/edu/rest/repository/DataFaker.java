@@ -6,7 +6,6 @@ import pl.lodz.p.edu.rest.model.Address;
 import pl.lodz.p.edu.rest.model.Client;
 import pl.lodz.p.edu.rest.model.EQ.*;
 import pl.lodz.p.edu.rest.model.Rent;
-import pl.lodz.p.edu.rest.model.idType;
 import org.joda.time.DateTime;
 import org.joda.time.Instant;
 import org.joda.time.LocalDateTime;

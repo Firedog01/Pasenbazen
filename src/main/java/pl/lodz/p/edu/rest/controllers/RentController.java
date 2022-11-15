@@ -77,7 +77,7 @@ public class RentController {
 
         Rent rent = new Rent(LocalDateTime.parse(rentDTO.getBeginTime()),
                 LocalDateTime.parse(rentDTO.getEndTime()),
-                equipment, client, rentDTO.getShippingAddress());
+                equipment, client);
 
         if(rentManager.add(rent)) {
             return Response.status(Response.Status.CREATED).entity(rent).build();

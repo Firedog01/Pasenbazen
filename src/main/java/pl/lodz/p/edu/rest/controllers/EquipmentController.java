@@ -49,59 +49,6 @@ public class EquipmentController {
         }
         return Response.status(Response.Status.OK).entity(available).build();
     }
-    @POST
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Path("/camera")
-    public Response registerCamera(Camera camera) {
-        if(equipmentManager.add(camera)) {
-            return Response.status(Response.Status.CREATED).entity(camera).build();
-        }
-        return Response.status(Response.Status.NOT_ACCEPTABLE).build();
-    }
-
-    @POST
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Path("/trivet")
-    public Response registerTrivet(Trivet trivet) {
-        if(equipmentManager.add(trivet)) {
-            return Response.status(Response.Status.CREATED).entity(trivet).build();
-        }
-        return Response.status(Response.Status.NOT_ACCEPTABLE).build();
-    }
-
-    @POST
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Path("/lens")
-    public Response registerLens(Lens lens) {
-        if(equipmentManager.add(lens)) {
-            return Response.status(Response.Status.CREATED).entity(lens).build();
-        }
-        return Response.status(Response.Status.NOT_ACCEPTABLE).build();
-    }
-
-    @POST
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Path("/microphone")
-    public Response registerMicrophone(Microphone microphone) {
-        if(equipmentManager.add(microphone)) {
-            return Response.status(Response.Status.CREATED).entity(microphone).build();
-        }
-        return Response.status(Response.Status.NOT_ACCEPTABLE).build();
-    }
-    @POST
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Path("/lighting")
-    public Response registerLighting(Lighting lighting) {
-        if(equipmentManager.add(lighting)) {
-            return Response.status(Response.Status.CREATED).entity(lighting).build();
-        }
-        return Response.status(Response.Status.NOT_ACCEPTABLE).build();
-    }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)

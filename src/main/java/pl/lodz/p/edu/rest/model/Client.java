@@ -14,7 +14,7 @@ import java.util.Objects;
 @Table(name = "clients")
 @NamedQueries({
         @NamedQuery(name = "Client.getAll", query = "SELECT c FROM Client c"),
-        @NamedQuery(name = "Client.getByUuid", query = "SELECT n FROM Client n WHERE n.uuid = :uuid"),
+        @NamedQuery(name = "Client.getByUuid", query = "SELECT n FROM Client n WHERE n.entityId = :entityId"),
         @NamedQuery(name = "Client.getByIdString", query = "SELECT n FROM Client n WHERE n.clientId = :clientId"),
         @NamedQuery(name = "Client.count", query = "SELECT count(c) FROM Client c"),
 })
@@ -88,10 +88,6 @@ public class Client extends AbstractEntity  {
         this.clientId = clientId;
     }
 
-//    public idType getIdType() {
-//        return idType;
-//    }
-
     public String getFirstName() {
         return firstName;
     }
@@ -131,7 +127,7 @@ public class Client extends AbstractEntity  {
         sb.append(", lastName='").append(lastName).append('\'');
         sb.append(", clientId='").append(clientId).append('\'');
         sb.append(", archive=").append(archive);
-        sb.append(", uuid=").append(getUuidId());
+        sb.append(", entityId=").append(getEntityId());
         sb.append(", address=").append(address);
         sb.append('}');
         return sb.toString();

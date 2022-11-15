@@ -26,7 +26,7 @@ public class ClientRepository implements Repository<Client> {
         Root<Client> client = cq.from(Client.class);
 
         cq.select(client);
-        cq.where(cb.equal(client.get(Client_.UUID), uuid));
+        cq.where(cb.equal(client.get(Client_.ENTITY_ID), uuid));
 
         EntityTransaction et = em.getTransaction();
         et.begin();
@@ -47,7 +47,6 @@ public class ClientRepository implements Repository<Client> {
         cq.select(clientRoot);
         cq.where(
                 cb.equal(clientRoot.get(Client_.CLIENT_ID), clientId)
-//                cb.equal(clientRoot.get(Client_.ID_TYPE), clientIdType)
         );
 
         EntityTransaction et = em.getTransaction();
@@ -83,7 +82,7 @@ public class ClientRepository implements Repository<Client> {
         et.begin();
         try {
             em.persist(elem);
-            em.lock(elem, LockModeType.OPTIMISTIC_FORCE_INCREMENT);
+//            em.lock(elem, LockModeType.OPTIMISTIC_FORCE_INCREMENT);
             et.commit();
         } finally {
             if(et.isActive()) {

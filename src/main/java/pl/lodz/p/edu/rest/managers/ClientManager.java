@@ -4,10 +4,6 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import pl.lodz.p.edu.rest.model.Client;
-import pl.lodz.p.edu.rest.model.idType;
-
-
-import pl.lodz.p.edu.rest.repository.RepositoryFactory;
 import pl.lodz.p.edu.rest.repository.RepositoryType;
 import pl.lodz.p.edu.rest.repository.impl.ClientRepository;
 
@@ -21,11 +17,7 @@ public class ClientManager {
     @Inject
     private ClientRepository clientRepository;
 
-    protected ClientManager() {
-        clientRepository = (ClientRepository) RepositoryFactory
-                .getRepository(RepositoryType.ClientRepository);
-
-    }
+    protected ClientManager() {}
 
     public boolean registerClient(Client client) {
         return clientRepository.add(client);

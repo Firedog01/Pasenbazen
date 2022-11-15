@@ -44,6 +44,6 @@ class ClientControllerTest {
         .then()
                 .statusCode(201)
                 .body("clientId", equalTo(validClient.getClientId()))
-                .body("uuid", not(validClient.getUuidId()));
+                .body("entityId", not(validClient.getEntityId()));
     }
 }

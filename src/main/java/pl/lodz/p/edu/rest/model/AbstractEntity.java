@@ -1,33 +1,32 @@
 package pl.lodz.p.edu.rest.model;
 
-import jakarta.annotation.Generated;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
 import java.io.Serializable;
-import java.util.UUID;
 
 @MappedSuperclass
+@Embeddable
 public abstract class AbstractEntity implements Serializable {
 
-//    @GeneratedValue(strategy = GenerationType.UUID)
     @NotNull
-    @Column(name = "uuid")
-//    private UUID uuid;
-    private UUID uuid = UUID.randomUUID();
+    @Embedded
+    private UniqueId entityId;
 
     @Version
     @NotNull
+    @Column(name = "version")
     private long version;
 
     protected AbstractEntity() {
+        entityId = new UniqueId();
     }
 
-    public UUID getUuidId() {
-        return uuid;
+    public UniqueId getEntityId() {
+        return entityId;
     }
 
-    public void setEntityId(UUID uuid) {
-        this.uuid = uuid;
+    public void setEntityId(UniqueId entityId) {
+        this.entityId = entityId;
     }
 }
