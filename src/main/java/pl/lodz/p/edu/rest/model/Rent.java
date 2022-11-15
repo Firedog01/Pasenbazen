@@ -5,6 +5,7 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotNull;
 import org.joda.time.Days;
 import org.joda.time.LocalDateTime;
+import pl.lodz.p.edu.rest.model.users.Client;
 
 @Entity
 @Table(name = "rent")

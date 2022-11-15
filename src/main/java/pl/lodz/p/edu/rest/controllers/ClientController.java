@@ -8,7 +8,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import pl.lodz.p.edu.rest.managers.ClientManager;
-import pl.lodz.p.edu.rest.model.Client;
+import pl.lodz.p.edu.rest.model.users.Client;
 import pl.lodz.p.edu.rest.repository.DataFaker;
 
 import java.util.ArrayList;

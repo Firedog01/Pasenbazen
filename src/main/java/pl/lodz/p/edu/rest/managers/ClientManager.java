@@ -3,7 +3,9 @@ package pl.lodz.p.edu.rest.managers;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
-import pl.lodz.p.edu.rest.model.Client;
+import pl.lodz.p.edu.rest.model.UniqueId;
+import pl.lodz.p.edu.rest.model.users.Client;
+import pl.lodz.p.edu.rest.model.users.User;
 import pl.lodz.p.edu.rest.repository.impl.UserRepository;
 
 import java.util.List;
@@ -18,27 +20,27 @@ public class ClientManager {
 
     protected ClientManager() {}
 
-    public boolean registerClient(Client client) {
-        return userRepository.add(client);
+    public void registerClient(Client client) {
+        userRepository.add(client);
     }
 
-    public boolean unregisterClient(UUID uuid) {
-        return userRepository.remove(uuid);
+    public void unregisterClient(UniqueId entityId) {
+        userRepository.remove(entityId);
     }
 
     public Client getByClientId(String id) {
         return userRepository.getClientByIdName(id);
     }
 
-    public Client getClientByUuid(UUID uuid) {
-        return userRepository.get(uuid);
+    public User getUserByUuid(UniqueId entityId) {
+        return userRepository.get(entityId);
     }
 
-    public List<Client> getAllClients() {
+    public List<User> getAllUsers() {
         return userRepository.getAll();
     }
 
-    public boolean updateClient(Client client) {
-        return userRepository.update(client);
+    public void updateClient(Client client) {
+        userRepository.update(client);
     }
 }

@@ -4,10 +4,12 @@ import jakarta.persistence.*;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
-import pl.lodz.p.edu.rest.model.Client;
+import jakarta.transaction.Transactional;
 import pl.lodz.p.edu.rest.model.Equipment;
 import pl.lodz.p.edu.rest.model.Rent;
 import pl.lodz.p.edu.rest.model.Rent_;
+import pl.lodz.p.edu.rest.model.UniqueId;
+import pl.lodz.p.edu.rest.model.users.Client;
 import pl.lodz.p.edu.rest.repository.Repository;
 
 import java.util.ArrayList;
@@ -22,14 +24,14 @@ public class RentRepository implements Repository<Rent> {
     public RentRepository() {}
 
     @Override
-    public Rent get(UUID uuid) {
+    public Rent get(UniqueId entityId) {
 
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Rent> cq = cb.createQuery(Rent.class);
         Root<Rent> rent = cq.from(Rent.class);
 
         cq.select(rent);
-        cq.where(cb.equal(rent.get(Rent_.ENTITY_ID), uuid));
+        cq.where(cb.equal(rent.get(Rent_.ENTITY_ID), entityId.getUniqueID()));
 
 
         EntityTransaction et = em.getTransaction();
@@ -39,21 +41,17 @@ public class RentRepository implements Repository<Rent> {
         et.commit();
 
         if (rents.isEmpty()) {
-            throw new EntityNotFoundException("Rent not found for uniqueId: " + uuid);
+            throw new EntityNotFoundException("Rent not found for uniqueId: " + entityId);
         }
         return rents.get(0);
     }
 
     @Override
+    @Transactional
     public List<Rent> getAll() {
-        EntityTransaction et = em.getTransaction();
-        et.begin();
-
         TypedQuery<Rent> rentQuery = em.createQuery("Select r from Rent r", Rent.class)
                 .setLockMode(LockModeType.OPTIMISTIC);
-        List<Rent> rents = rentQuery.getResultList();
-        et.commit();
-        return rents;
+        return rentQuery.getResultList();
     }
 
     public List<Rent> getEquipmentRents(Equipment e) {
@@ -78,63 +76,29 @@ public class RentRepository implements Repository<Rent> {
     }
 
     @Override
-    public boolean add(Rent elem) {
-        EntityTransaction et = em.getTransaction();
-        et.begin();
-        try {
-            if(elem.getEquipment().getId() != null) {
-                Equipment e = em.find(Equipment.class, elem.getEquipment().getId()); // tutaj lock!
-                em.lock(e, LockModeType.OPTIMISTIC_FORCE_INCREMENT);
-                elem.setEquipment(e);
-            }
-            em.persist(elem);
-            et.commit();
-//            System.out.println("equipment found: " + e.toString());
-        } catch (RollbackException e) {
-            System.out.println("rollback");
-        } finally {
-            if (et.isActive()) {
-                et.rollback();
-                return false;
-            }
+    @Transactional
+    public void add(Rent elem) {
+        if(elem.getEquipment().getId() != null) {
+            Equipment e = em.find(Equipment.class, elem.getEquipment().getId(),
+                    LockModeType.OPTIMISTIC_FORCE_INCREMENT);
+            elem.setEquipment(e);
         }
-        return true;
+        em.persist(elem);
     }
 
     @Override
-    public boolean remove(UUID uuid) {
-        EntityTransaction et = em.getTransaction();
-        et.begin();
-
-        Rent elem = get(uuid);
-        try {
-            em.lock(elem, LockModeType.OPTIMISTIC);
-            this.em.remove(elem);
-            et.commit();
-        } finally {
-            if(et.isActive()) {
-                et.rollback();
-                return false;
-            }
-        }
-        return true;
+    @Transactional
+    public void remove(UniqueId entityId) {
+        Rent elem = get(entityId);
+        em.lock(elem, LockModeType.OPTIMISTIC);
+        em.remove(elem);
     }
 
     @Override
-    public boolean update(Rent elem) {
-        EntityTransaction et = em.getTransaction();
-        et.begin();
-        try {
-            em.lock(elem, LockModeType.OPTIMISTIC_FORCE_INCREMENT);
-            em.merge(elem);
-            et.commit();
-        } finally {
-            if(et.isActive()) {
-                et.rollback();
-                return false;
-            }
-        }
-        return true;
+    @Transactional
+    public void update(Rent elem) {
+        em.lock(elem, LockModeType.OPTIMISTIC_FORCE_INCREMENT);
+        em.merge(elem);
     }
 
     @Override
