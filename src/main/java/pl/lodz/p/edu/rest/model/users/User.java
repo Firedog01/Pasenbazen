@@ -43,6 +43,11 @@ public abstract class User extends AbstractEntity {
         this.active = active;
     }
 
+    public void merge(User user) {
+        this.login = user.login;
+        this.active = user.active;
+    }
+
     @Override
     public String toString() {
         return "User{" +

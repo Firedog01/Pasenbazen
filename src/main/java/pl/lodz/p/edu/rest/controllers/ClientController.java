@@ -27,6 +27,9 @@ public class ClientController {
     @Inject
     private UserManager userManager;
 
+    @Inject
+    private UserControllerMethods userControllerMethods;
+
     protected ClientController() {}
 
 
@@ -62,69 +65,35 @@ public class ClientController {
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
     public Response searchClients(@QueryParam("login") String login) {
-        if(login != null) {
-            List<User> searchResult = userManager.search(login);
-            if(searchResult.size() == 1) {
-                return Response.status(OK).entity(searchResult.get(0)).build();
-            } else {
-                return Response.status(OK).entity(searchResult).build();
-            }
-        }
-        List<User> users = userManager.getAllUsers();
-        return Response.status(OK).entity(users).build();
-    }
-
-    @GET
-    @Path("/available")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getAllActiveClients() {
-        List<User> all = userManager.getAllUsers();
-        List<User> available = new ArrayList<>();
-        for (User c : all) {
-            if(!(c.isActive())) {
-                available.add(c);
-            }
-        }
-        return Response.status(OK).entity(available).build();
+        return userControllerMethods.searchUser(login);
     }
 
     @GET
     @Path("/{uuid}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUserByUuid(@PathParam("uuid") UUID entityId) {
-        User user = userManager.getUserByUuid(entityId);
-        if(user != null) {
-            return Response.status(OK).entity(user).build();
-        } else {
-            return Response.status(NOT_FOUND).build();
-        }
+        return userControllerMethods.getSingleUser(entityId);
     }
 
     // update
     @PUT
-    @Path("/")
+    @Path("/{entityId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateClient(Client client) {
-        userManager.updateClient(client);
+    public Response updateClient(@PathParam("entityId") UUID entityId, Client client) {
+        userManager.updateClient(entityId, client);
         return Response.status(OK).entity(client).build();
     }
 
     @PUT
     @Path("/{entityId}/activate")
     public Response activateUser(@PathParam("entityId") UUID entityId) {
-        User user = userManager.getUserByUuid(entityId);
-        user.setActive(true);
-        userManager.updateUser(user);
-        return Response.status(NO_CONTENT).build();
+        return userControllerMethods.activateUser(entityId);
     }
 
     @PUT
     @Path("/{entityId}/deactivate")
     public Response deactivateUser(@PathParam("entityId") UUID entityId) {
-        User user = userManager.getUserByUuid(entityId);
-        user.setActive(false);
-        userManager.updateUser(user);
-        return Response.status(NO_CONTENT).build();
+        return userControllerMethods.deactivateUser(entityId);
     }
 
 
@@ -140,14 +109,7 @@ public class ClientController {
         return c;
     }
 
-    @POST
-    @Path("/addFakeAdmin")
-    @Produces(MediaType.APPLICATION_JSON)
-    public UserAdmin addFakeUserAdmin() {
-        UserAdmin c = DataFaker.getUserAdmin();
-        userManager.registerUserAdmin(c);
-        return c;
-    }
+
 
 
 

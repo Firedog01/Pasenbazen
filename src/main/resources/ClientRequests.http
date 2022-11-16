@@ -1,52 +1,58 @@
-GET http://localhost:8080/rest/api/clients
-Accept: application/json
-
-### nie działa
+### niepoprawny zapis
 POST http://localhost:8080/rest/api/clients
 Accept: application/json
 
-###
-POST http://localhost:8080/rest/api/clients/addClient
+### dodanie jednego
+POST http://localhost:8080/rest/api/clients/
 Accept: application/json
 Content-Type: application/json
 
 {
-  "clientId":"testId",
+  "login":"test_2login",
   "firstName":"TestFirstName",
   "lastName":"TestLastName",
-  "address":{
-    "city":"TestCity",
-    "street":"TestStreet",
-    "streetNr":"2137"
+  "address": {
+    "city":"Lipinki Łużyckie",
+    "street":"Łączna",
+    "streetNr":"43"
   }
 }
 
 
-###
-POST http://localhost:8080/rest/api/clients/addClient
+
+### dodanie fake client
+POST http://localhost:8080/rest/api/clients/addFakeClient
+Accept: application/json
+
+
+### get all clients
+GET http://localhost:8080/rest/api/clients/
+Accept: application/json
+
+### get clients by login
+GET http://localhost:8080/rest/api/clients?login=test_2
+Accept: application/json
+
+### get one client
+GET http://localhost:8080/rest/api/clients/49924281-b792-4317-928e-f75d2d3f9710
+Accept: application/json
+
+
+
+### update one client
+PUT http://localhost:8080/rest/api/clients
 Accept: application/json
 Content-Type: application/json
 
 {
-    "clientId":"niewiadomo",
-    "firstName":"123",
-    "lastName":"Doe",
-    "address": {
-      "city":"Lipinki Łużyckie",
-      "street":"Łączna",
-      "streetNr":"43"
-    }
+  "entityId": "49924281-b792-4317-928e-f75d2d3f9710",
+  "active": false,
+  "login": "test_2login",
+  "address": {
+    "city": "Lipinki Łużyckie",
+    "street": "Łączna",
+    "streetNr": "43"
+  },
+  "firstName": "otherFname",
+  "lastName": "TestLastName"
 }
-
-
-###
-
-POST http://localhost:8080/rest/api/clients/addFakeClient
-Accept: application/json
-Content-Type: application/json
-
-
-
-
-
-

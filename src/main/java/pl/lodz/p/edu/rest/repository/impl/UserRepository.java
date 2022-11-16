@@ -44,6 +44,7 @@ public class UserRepository implements Repository<User> {
         return users.get(0);
     }
 
+    @Transactional
     public List<User> getUsersByLogin(String login) {
         Query q = em.createQuery("SELECT user FROM User user WHERE user.login like :login", User.class);
         q.setParameter("login", login + "%");
@@ -77,6 +78,15 @@ public class UserRepository implements Repository<User> {
     public void update(User elem) {
         em.lock(elem, LockModeType.OPTIMISTIC_FORCE_INCREMENT);
         em.merge(elem);
+    }
+
+    @Transactional
+    public void updateUuid(UUID entityId, User elem) {
+        Query q = em.createQuery("SELECT user FROM User user WHERE user.entityId = :entityId", User.class);
+        q.setParameter("entityId", entityId);
+        User existing = (User) q.getSingleResult();
+        existing.merge(elem);
+
     }
 
     @Override
