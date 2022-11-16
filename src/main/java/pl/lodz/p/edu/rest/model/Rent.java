@@ -49,8 +49,6 @@ public class Rent extends AbstractEntity {
 
     public Rent(LocalDateTime beginTime, LocalDateTime endTime,
                 Equipment equipment, Client client) {
-        super();
-
         this.beginTime = beginTime;
         this.endTime = endTime;
         this.shipped = false;

@@ -12,7 +12,6 @@ import java.util.List;
 
 @Entity
 @Table(name = "equipment")
-//@Transactional
 @Access(AccessType.FIELD)
 public class Equipment extends AbstractEntity {
 
@@ -46,12 +45,8 @@ public class Equipment extends AbstractEntity {
     @Column(name = "missing")
     private boolean missing;
 
-    @OneToMany(mappedBy = "equipment")
-    private List<Rent> equipmentRents = new ArrayList<>();
 
-
-    public Equipment(double firstDayCost, double nextDaysCost, double bail, String name
-    ) throws EquipmentException {
+    public Equipment(double firstDayCost, double nextDaysCost, double bail, String name) throws EquipmentException {
         if(firstDayCost <= 0.0 || nextDaysCost <= 0.0 || bail <= 0.0) {
             throw new EquipmentException("Prosze podac prawidlowy koszt wypozyczenia");
         }
@@ -83,6 +78,10 @@ public class Equipment extends AbstractEntity {
         sb.append(", missing=").append(missing);
         sb.append('}');
         return sb.toString();
+    }
+
+    public void merge(Equipment equipment) {
+
     }
 
     public Long getId() {
@@ -117,10 +116,6 @@ public class Equipment extends AbstractEntity {
         return missing;
     }
 
-    public List<Rent> getEquipmentRents() {
-        return equipmentRents;
-    }
-
 
     public void setFirstDayCost(double firstDayCost) {
         this.firstDayCost = firstDayCost;
@@ -150,7 +145,4 @@ public class Equipment extends AbstractEntity {
         this.missing = missing;
     }
 
-    public void setEquipmentRents(List<Rent> equipmentRents) {
-        this.equipmentRents = equipmentRents;
-    }
 }
