@@ -7,7 +7,9 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
+import pl.lodz.p.edu.rest.DTO.ClientDTO;
 import pl.lodz.p.edu.rest.exception.NoObjectException;
+import pl.lodz.p.edu.rest.exception.UserException;
 import pl.lodz.p.edu.rest.exception.user.MalformedUserException;
 import pl.lodz.p.edu.rest.exception.user.UserConflictException;
 import pl.lodz.p.edu.rest.managers.UserManager;
@@ -35,9 +37,11 @@ public class ClientController {
     @Path("/")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response addClient(Client client) {
+    public Response addClient(ClientDTO client) {
         try {
-            userManager.registerClient(client);
+            Client c = new Client(client.getLogin(), client.getFirstName(),
+                    client.getLastName(), client.getAddress());
+            userManager.registerClient(c);
             return Response.status(CREATED).entity(client).build();
         } catch(UserConflictException e) {
             return Response.status(CONFLICT).build();
@@ -45,6 +49,8 @@ public class ClientController {
             return Response.status(BAD_REQUEST).build();
         } catch(MalformedUserException e) {
             return Response.status(NOT_ACCEPTABLE).build();
+        } catch (UserException e) {
+            throw new RuntimeException(e);
         }
     }
 
