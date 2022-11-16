@@ -29,6 +29,8 @@ public class ClientController {
 
     protected ClientController() {}
 
+
+
     // create
     @POST
     @Path("/")
@@ -66,8 +68,8 @@ public class ClientController {
     }
 
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("/available")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response getAllActiveClients() {
         List<User> all = userManager.getAllUsers();
         List<User> available = new ArrayList<>();
@@ -80,8 +82,8 @@ public class ClientController {
     }
 
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("/{uuid}")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response getUserByUuid(@PathParam("uuid") UUID entityId) {
         User user = userManager.getUserByUuid(entityId);
         if(user != null) {
@@ -91,14 +93,45 @@ public class ClientController {
         }
     }
 
+    @GET
+    @Path("/{login}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response findUsers(@PathParam("login") String login) {
+        List<User> searchResult = userManager.search(login);
+        if(searchResult.size() == 1) {
+            return Response.status(OK).entity(searchResult.get(0)).build();
+        } else {
+            return Response.status(OK).entity(searchResult).build();
+        }
+    }
+
 
 
     // update
     @PUT
     @Path("/")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response updateClient(Client client) {
         userManager.updateClient(client);
         return Response.status(OK).entity(client).build();
+    }
+
+    @PUT
+    @Path("/{entityId}/activate")
+    public Response activateUser(@PathParam("entityId") UUID entityId) {
+        User user = userManager.getUserByUuid(entityId);
+        user.setActive(true);
+        userManager.updateUser(user);
+        return Response.status(NO_CONTENT).build();
+    }
+
+    @PUT
+    @Path("/{entityId}/deactivate")
+    public Response deactivateUser(@PathParam("entityId") UUID entityId) {
+        User user = userManager.getUserByUuid(entityId);
+        user.setActive(false);
+        userManager.updateUser(user);
+        return Response.status(NO_CONTENT).build();
     }
 
 
@@ -166,31 +199,5 @@ public class ClientController {
 
 
 
-    @DELETE
-    @Path("/{entityId}")
-    public Response unregisterClient(@PathParam("entityId") UUID entityId) {
-        userManager.unregisterClient(entityId);
-        return Response.status(NO_CONTENT).build();
-    }
 
-//    @PUT
-//    @Consumes(MediaType.APPLICATION_JSON)
-//    @Produces(MediaType.APPLICATION_JSON)
-//    @Path(("/{id}"))
-//    public Response updateClient(@PathParam("id") UUID uuid) {
-//        return null;
-//
-//    }
-//
-//    @GET
-//    @Produces(MediaType.APPLICATION_JSON)
-//    @Path("/{id}")
-//    public Response getClientByClientId(@PathParam("id") String clientId) {
-//        Client client = clientManager.getByClientId(clientId);
-//        if(client != null) {
-//            return Response.status(OK).entity(client).build();
-//        } else {
-//            return Response.status(NOT_FOUND).build();
-//        }
-//    }
 }

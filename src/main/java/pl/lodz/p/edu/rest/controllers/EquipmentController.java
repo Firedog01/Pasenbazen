@@ -20,25 +20,25 @@ public class EquipmentController {
     private EquipmentManager equipmentManager;
 
     @POST
+    @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Path("/")
     public Response createEquipment(Equipment equipment) {
         equipmentManager.add(equipment);
         return Response.status(Response.Status.OK).entity(equipment).build();
     }
 
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("/")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response getAllEquipment() {
         List<Equipment> equipment = equipmentManager.getAll();
         return Response.status(Response.Status.OK).entity(equipment).build();
     }
 
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("/{uuid}")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response getEquipment(@PathParam("uuid") UUID uuid) {
         Equipment equipment = equipmentManager.get(uuid);
         if (equipment != null) {
@@ -77,8 +77,8 @@ public class EquipmentController {
     }
 
     @DELETE
-    @Path("/{id}")
-    public Response unregisterEquipment(@PathParam("id") UUID uuid) {
+    @Path("/{uuid}")
+    public Response unregisterEquipment(@PathParam("uuid") UUID uuid) {
         equipmentManager.remove(uuid);
         return Response.status(Response.Status.NO_CONTENT).build();
     }
@@ -86,8 +86,8 @@ public class EquipmentController {
     //===============================================
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("/addFakeEq")
+    @Produces(MediaType.APPLICATION_JSON)
     public Equipment addFakeEquipment() {
         Equipment e = DataFaker.getEquipment();
         System.out.println(e);

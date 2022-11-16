@@ -44,28 +44,10 @@ public class UserRepository implements Repository<User> {
         return users.get(0);
     }
 
-    public User getUserByLogin(String login) {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<User> cq = cb.createQuery(User.class);
-        Root<User> clientRoot = cq.from(User.class);
-
-        cq.select(clientRoot);
-        cq.where(
-                cb.equal(clientRoot.get(User_.LOGIN), login)
-        );
-
-        EntityTransaction et = em.getTransaction();
-        et.begin();
-        TypedQuery<User> q = em.createQuery(cq).setLockMode(LockModeType.OPTIMISTIC);
-
-        try {
-            User client = q.getSingleResult(); //Transaction is not ending so commit is needed.
-            et.commit();
-            return client;
-        } catch (NoResultException e) {
-            throw new EntityNotFoundException("Client not found for clientId:" +
-                    " " + login);
-        }
+    public List<User> getUsersByLogin(String login) {
+        Query q = em.createQuery("SELECT user FROM User user WHERE user.login=:login", User.class);
+        q.setParameter("login", login + "%");
+        return q.getResultList();
     }
 
     @Override

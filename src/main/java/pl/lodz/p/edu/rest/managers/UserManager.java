@@ -40,7 +40,15 @@ public class UserManager {
         return userRepository.getAll();
     }
 
+    public List<User> search(String login) {
+        return userRepository.getUsersByLogin(login);
+    }
+
     public void updateClient(Client client) {
         userRepository.update(client);
+    }
+
+    public void updateUser(User user) {
+        userRepository.update(user);
     }
 }

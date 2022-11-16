@@ -6,11 +6,13 @@
 //import jakarta.ws.rs.core.Response;
 //import org.joda.time.LocalDateTime;
 //import pl.lodz.p.edu.rest.DTO.RentDTO;
-//import pl.lodz.p.edu.rest.managers.ClientManager;
 //import pl.lodz.p.edu.rest.managers.EquipmentManager;
 //import pl.lodz.p.edu.rest.managers.RentManager;
+//import pl.lodz.p.edu.rest.managers.UserManager;
 //import pl.lodz.p.edu.rest.model.Equipment;
 //import pl.lodz.p.edu.rest.model.Rent;
+//import pl.lodz.p.edu.rest.model.users.Client;
+//import pl.lodz.p.edu.rest.model.users.User;
 //
 //import java.util.List;
 //import java.util.Objects;
@@ -23,7 +25,7 @@
 //    private RentManager rentManager;
 //
 //    @Inject
-//    private ClientManager clientManager;
+//    private UserManager userManager;
 //
 //    @Inject
 //    private EquipmentManager equipmentManager;
@@ -33,7 +35,9 @@
 //    @Path("/")
 //    public Response makeReservation(RentDTO rentDTO) {
 //
-//        Client client = clientManager.getClientByUuid(rentDTO.getClientUUID());
+//        User user = userManager.getUserByUuid(rentDTO.getClientUUID());
+//        Client client = (Client) user; // may throw
+//
 //        Equipment equipment = equipmentManager.get(rentDTO.getEquipmentUUID());
 //        LocalDateTime now = LocalDateTime.now();
 //        LocalDateTime beginTime = LocalDateTime.parse(rentDTO.getBeginTime());
@@ -42,7 +46,7 @@
 //
 //        if (client == null || equipment == null) {
 //            return Response.status(Response.Status.FORBIDDEN).build();
-//        } else if (equipment.isArchive() || equipment.isMissing() || client.isArchive()
+//        } else if (equipment.isArchive() || equipment.isMissing() || client.isActive()
 //                || beginTime.isEqual(now) || beginTime.isBefore(now) || beginTime.isAfter(endTime)) {
 //            return Response.status(Response.Status.NOT_ACCEPTABLE).build();
 //        }
@@ -78,11 +82,8 @@
 //                LocalDateTime.parse(rentDTO.getEndTime()),
 //                equipment, client);
 //
-//        if(rentManager.add(rent)) {
-//            return Response.status(Response.Status.CREATED).entity(rent).build();
-//        } else {
-//            return Response.status(Response.Status.NOT_ACCEPTABLE).build();
-//        }
+//        rentManager.add(rent);
+//        return Response.status(Response.Status.CREATED).entity(rent).build();
 //    }
 //
 //    @GET
@@ -121,11 +122,8 @@
 //    @DELETE
 //    @Path("/{uuid}")
 //    public Response cancelReservation(@PathParam("uuid") UUID rentUuid) {
-//        if (rentManager.remove(rentUuid)) {
-//            return Response.status(Response.Status.NO_CONTENT).build();
-//        } else {
-//            return Response.status(Response.Status.NOT_FOUND).build();
-//        }
+//        rentManager.remove(rentUuid);
+//        return Response.status(Response.Status.NO_CONTENT).build();
 //    } //FIXME send UUID or get UUID from rent obj?
 //
 //    public void returnEquipment(Rent rent, boolean missing) {
