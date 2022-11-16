@@ -8,7 +8,6 @@ import jakarta.ws.rs.core.Response;
 import pl.lodz.p.edu.rest.managers.UserManager;
 import pl.lodz.p.edu.rest.model.users.Client;
 import pl.lodz.p.edu.rest.model.users.ResourceAdmin;
-import pl.lodz.p.edu.rest.model.users.UserAdmin;
 import pl.lodz.p.edu.rest.repository.DataFaker;
 
 import java.util.UUID;
@@ -86,9 +85,9 @@ public class ResourceAdminController {
     @POST
     @Path("/addFake")
     @Produces(MediaType.APPLICATION_JSON)
-    public UserAdmin addFakeUserAdmin() {
-        UserAdmin c = DataFaker.getUserAdmin();
-        userManager.registerUserAdmin(c);
+    public ResourceAdmin addFakeUserAdmin() {
+        ResourceAdmin c = DataFaker.getResourceAdmin();
+        userManager.registerResourceAdmin(c);
         return c;
     }
 }

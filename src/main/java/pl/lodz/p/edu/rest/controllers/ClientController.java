@@ -7,15 +7,13 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
+import pl.lodz.p.edu.rest.exception.NoObjectException;
+import pl.lodz.p.edu.rest.exception.user.MalformedUserException;
+import pl.lodz.p.edu.rest.exception.user.UserConflictException;
 import pl.lodz.p.edu.rest.managers.UserManager;
-import pl.lodz.p.edu.rest.model.UniqueId;
 import pl.lodz.p.edu.rest.model.users.Client;
-import pl.lodz.p.edu.rest.model.users.User;
-import pl.lodz.p.edu.rest.model.users.UserAdmin;
 import pl.lodz.p.edu.rest.repository.DataFaker;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 import static jakarta.ws.rs.core.Response.Status.*;
@@ -32,31 +30,21 @@ public class ClientController {
 
     protected ClientController() {}
 
-
-
     // create
     @POST
     @Path("/")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response addClient(Client client) {
-
-        if (client == null) {
-            return Response.status(BAD_REQUEST).build();
-        }
-
-        if (client.getFirstName() == null
-                || client.getLastName() == null
-                || !client.getAddress().verify()
-        ) {
-            return Response.status(NOT_ACCEPTABLE).build();
-        }
-
         try {
             userManager.registerClient(client);
             return Response.status(CREATED).entity(client).build();
-        } catch(RollbackException e) {
+        } catch(UserConflictException e) {
             return Response.status(CONFLICT).build();
+        } catch(NoObjectException e) {
+            return Response.status(BAD_REQUEST).build();
+        } catch(MalformedUserException e) {
+            return Response.status(NOT_ACCEPTABLE).build();
         }
     }
 
@@ -73,6 +61,13 @@ public class ClientController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUserByUuid(@PathParam("uuid") UUID entityId) {
         return userControllerMethods.getSingleUser(entityId);
+    }
+
+    @GET
+    @Path("/login/{login}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getUserByLogin(@PathParam("login") String login) {
+        return userControllerMethods.getSingleUser(login);
     }
 
     // update
@@ -101,11 +96,15 @@ public class ClientController {
     // ========= other
 
     @POST
-    @Path("/addFakeClient")
+    @Path("/addFake")
     @Produces(MediaType.APPLICATION_JSON)
     public Client addFakeClient() {
         Client c = DataFaker.getClient();
-        userManager.registerClient(c);
+        try {
+            userManager.registerClient(c);
+        } catch(Exception e) {
+            return null;
+        }
         return c;
     }
 

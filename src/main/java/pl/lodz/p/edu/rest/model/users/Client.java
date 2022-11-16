@@ -29,6 +29,11 @@ public class Client extends User {
         this.address = address;
     }
 
+    public boolean verify() {
+        return super.verify() && !firstName.isEmpty()
+                && !lastName.isEmpty() && address.verify();
+    }
+
     public Client() {}
 
     public String getFirstName() {

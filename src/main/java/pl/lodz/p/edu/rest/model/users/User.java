@@ -48,6 +48,10 @@ public abstract class User extends AbstractEntity {
         this.active = user.active;
     }
 
+    public boolean verify() {
+        return !login.isEmpty();
+    }
+
     @Override
     public String toString() {
         return "User{" +

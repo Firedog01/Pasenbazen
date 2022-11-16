@@ -44,6 +44,15 @@ public class UserControllerMethods {
         }
     }
 
+    public Response getSingleUser(String login) {
+        User user = userManager.getUserByLogin(login);
+        if(user != null) {
+            return Response.status(OK).entity(user).build();
+        } else {
+            return Response.status(NOT_FOUND).build();
+        }
+    }
+
     public Response activateUser(UUID entityId) {
         User user = userManager.getUserByUuid(entityId);
         user.setActive(true);

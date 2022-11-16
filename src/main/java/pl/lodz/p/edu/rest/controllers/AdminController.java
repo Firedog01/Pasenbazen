@@ -1,23 +1,23 @@
 package pl.lodz.p.edu.rest.controllers;
 
 import jakarta.inject.Inject;
-import jakarta.persistence.RollbackException;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import pl.lodz.p.edu.rest.exception.NoObjectException;
+import pl.lodz.p.edu.rest.exception.user.MalformedUserException;
+import pl.lodz.p.edu.rest.exception.user.UserConflictException;
 import pl.lodz.p.edu.rest.managers.UserManager;
 import pl.lodz.p.edu.rest.model.users.*;
 import pl.lodz.p.edu.rest.repository.DataFaker;
 
-import java.util.List;
 import java.util.UUID;
 
 import static jakarta.ws.rs.core.Response.Status.*;
 import static jakarta.ws.rs.core.Response.Status.CONFLICT;
-import static pl.lodz.p.edu.rest.model.Rent_.client;
 
 @Path("/admins")
-public class UserAdminController {
+public class AdminController {
 
     @Inject
     private UserManager userManager;
@@ -25,23 +25,24 @@ public class UserAdminController {
     @Inject
     private UserControllerMethods userControllerMethods;
 
-    protected UserAdminController() {}
+    protected AdminController() {}
+
+    // create
 
     @POST
     @Path("/")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response addUserAdmin(UserAdmin uadmin) {
-
-        if (uadmin == null) {
-            return Response.status(BAD_REQUEST).build();
-        }
-
+    public Response addAdmin(Admin admin) {
         try {
-            userManager.registerUserAdmin(uadmin);
-            return Response.status(CREATED).entity(uadmin).build();
-        } catch(RollbackException e) {
+            userManager.registerUserAdmin(admin);
+            return Response.status(CREATED).entity(admin).build();
+        } catch(NoObjectException e) {
+            return Response.status(BAD_REQUEST).build();
+        } catch(UserConflictException e) {
             return Response.status(CONFLICT).build();
+        } catch(MalformedUserException e) {
+            return Response.status(NOT_ACCEPTABLE).build();
         }
     }
 
@@ -87,9 +88,13 @@ public class UserAdminController {
     @POST
     @Path("/addFake")
     @Produces(MediaType.APPLICATION_JSON)
-    public UserAdmin addFakeUserAdmin() {
-        UserAdmin c = DataFaker.getUserAdmin();
-        userManager.registerUserAdmin(c);
+    public Admin addFakeUserAdmin() {
+        Admin c = DataFaker.getUserAdmin();
+        try {
+            userManager.registerUserAdmin(c);
+        } catch(Exception e) {
+            return null;
+        }
         return c;
     }
 }

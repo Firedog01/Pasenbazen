@@ -6,7 +6,7 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import jakarta.transaction.Transactional;
-import pl.lodz.p.edu.rest.model.*;
+import pl.lodz.p.edu.rest.model.users.UserType;
 import pl.lodz.p.edu.rest.model.users.User;
 import pl.lodz.p.edu.rest.model.users.User_;
 import pl.lodz.p.edu.rest.repository.Repository;
@@ -44,8 +44,31 @@ public class UserRepository implements Repository<User> {
         return users.get(0);
     }
 
+    public User get(UserType type, UUID entityId) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<User> cq = cb.createQuery(User.class);
+        Root<User> user = cq.from(User.class);
+
+        cq.select(user);
+        cq.where(cb.equal(user.get(User_.ENTITY_ID), entityId));
+
+        List<User> users = em.createQuery(cq).getResultList();
+
+        if(users.isEmpty()) {
+            throw new EntityNotFoundException("Client not found for uniqueId: " + entityId);
+        }
+        return users.get(0);
+    }
+
     @Transactional
-    public List<User> getUsersByLogin(String login) {
+    public User getByLogin(String login) {
+        Query q = em.createQuery("SELECT user FROM User user WHERE user.login = :login", User.class);
+        q.setParameter("login", login);
+        return (User) q.getSingleResult();
+    }
+
+    @Transactional
+    public List<User> getAllWithLogin(String login) {
         Query q = em.createQuery("SELECT user FROM User user WHERE user.login like :login", User.class);
         q.setParameter("login", login + "%");
         return q.getResultList();

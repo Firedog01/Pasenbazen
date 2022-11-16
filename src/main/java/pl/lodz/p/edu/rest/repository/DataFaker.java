@@ -8,9 +8,9 @@ import pl.lodz.p.edu.rest.model.Rent;
 import org.joda.time.DateTime;
 import org.joda.time.Instant;
 import org.joda.time.LocalDateTime;
+import pl.lodz.p.edu.rest.model.users.Admin;
 import pl.lodz.p.edu.rest.model.users.Client;
 import pl.lodz.p.edu.rest.model.users.ResourceAdmin;
-import pl.lodz.p.edu.rest.model.users.UserAdmin;
 
 public class DataFaker {
 
@@ -37,9 +37,9 @@ public class DataFaker {
         }
     }
 
-    public static UserAdmin getUserAdmin() {
+    public static Admin getUserAdmin() {
         try {
-            return new UserAdmin(randStr(10));
+            return new Admin(randStr(10));
         } catch (UserException e) {
             return null; // will never happen
         }
