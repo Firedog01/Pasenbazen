@@ -45,7 +45,7 @@ public class UserRepository implements Repository<User> {
     }
 
     public List<User> getUsersByLogin(String login) {
-        Query q = em.createQuery("SELECT user FROM User user WHERE user.login=:login", User.class);
+        Query q = em.createQuery("SELECT user FROM User user WHERE user.login like :login", User.class);
         q.setParameter("login", login + "%");
         return q.getResultList();
     }

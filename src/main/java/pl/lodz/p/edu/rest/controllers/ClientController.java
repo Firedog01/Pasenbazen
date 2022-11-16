@@ -61,10 +61,17 @@ public class ClientController {
     @GET
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<User> getAllClients() {
-        System.out.println(userManager);
+    public Response searchClients(@QueryParam("login") String login) {
+        if(login != null) {
+            List<User> searchResult = userManager.search(login);
+            if(searchResult.size() == 1) {
+                return Response.status(OK).entity(searchResult.get(0)).build();
+            } else {
+                return Response.status(OK).entity(searchResult).build();
+            }
+        }
         List<User> users = userManager.getAllUsers();
-        return users;
+        return Response.status(OK).entity(users).build();
     }
 
     @GET
@@ -92,20 +99,6 @@ public class ClientController {
             return Response.status(NOT_FOUND).build();
         }
     }
-
-    @GET
-    @Path("/{login}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response findUsers(@PathParam("login") String login) {
-        List<User> searchResult = userManager.search(login);
-        if(searchResult.size() == 1) {
-            return Response.status(OK).entity(searchResult.get(0)).build();
-        } else {
-            return Response.status(OK).entity(searchResult).build();
-        }
-    }
-
-
 
     // update
     @PUT
