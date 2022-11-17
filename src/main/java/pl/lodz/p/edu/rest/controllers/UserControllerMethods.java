@@ -2,6 +2,7 @@ package pl.lodz.p.edu.rest.controllers;
 
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
+import jakarta.persistence.NoResultException;
 import jakarta.ws.rs.core.Response;
 import pl.lodz.p.edu.rest.managers.UserManager;
 import pl.lodz.p.edu.rest.model.users.User;
@@ -27,19 +28,19 @@ public class UserControllerMethods {
     }
 
     public Response getSingleUser(String type, UUID entityId) {
-        User user = userManager.getUserByUuidOfType(type, entityId);
-        if(user != null) {
+        try {
+            User user = userManager.getUserByUuidOfType(type, entityId);
             return Response.status(OK).entity(user).build();
-        } else {
+        } catch(NoResultException e) {
             return Response.status(NOT_FOUND).build();
         }
     }
 
     public Response getSingleUser(String type, String login) {
-        User user = userManager.getUserByLoginOfType(type, login);
-        if(user != null) {
+        try {
+            User user = userManager.getUserByLoginOfType(type, login);
             return Response.status(OK).entity(user).build();
-        } else {
+        } catch(NoResultException e) {
             return Response.status(NOT_FOUND).build();
         }
     }

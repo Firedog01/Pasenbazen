@@ -35,8 +35,9 @@ public class AdminController {
     @Path("/")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response addAdmin(Admin admin) {
+    public Response addAdmin(AdminDTO adminDTO) {
         try {
+            Admin admin = new Admin(adminDTO);
             userManager.registerAdmin(admin);
             return Response.status(CREATED).entity(admin).build();
         } catch(NullPointerException e) {

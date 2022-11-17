@@ -5,6 +5,7 @@ import jakarta.inject.Inject;
 import jakarta.persistence.PersistenceException;
 import jakarta.persistence.RollbackException;
 import jakarta.transaction.Transactional;
+import jakarta.transaction.TransactionalException;
 import pl.lodz.p.edu.rest.DTO.AdminDTO;
 import pl.lodz.p.edu.rest.DTO.ClientDTO;
 import pl.lodz.p.edu.rest.DTO.EmployeeDTO;
@@ -40,7 +41,12 @@ public class UserManager {
         }
         try {
             userRepository.add(client);
+        } catch(TransactionalException e) {
+            throw new UserConflictException("Already exists user with given login");
         } catch(RollbackException e) {
+            throw new UserConflictException("Already exists user with given login");
+        } catch(Throwable e) {
+            logger.info("aaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
             throw new UserConflictException("Already exists user with given login");
         }
     }
@@ -51,8 +57,10 @@ public class UserManager {
         }
         try {
             userRepository.add(admin);
-        } catch(RollbackException e) {
+        } catch(PersistenceException e) {
             throw new UserConflictException("Already exists user with given login");
+        } catch(Exception e) {
+            System.out.println(e.getClass());
         }
     }
 
@@ -62,7 +70,7 @@ public class UserManager {
         }
         try {
             userRepository.add(employee);
-        } catch(RollbackException e) {
+        } catch(PersistenceException e) {
             throw new UserConflictException("Already exists user with given login");
         }
     }

@@ -3,6 +3,7 @@ package pl.lodz.p.edu.rest.controllers;
 import jakarta.inject.Inject;
 
 import jakarta.persistence.RollbackException;
+import jakarta.transaction.TransactionalException;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -46,13 +47,15 @@ public class ClientController {
         try {
             Client client = new Client(clientDTO);
             userManager.registerClient(client);
-            return Response.status(CREATED).entity(clientDTO).build();
+            return Response.status(CREATED).entity(client).build();
         } catch(UserConflictException e) {
+            return Response.status(CONFLICT).build();
+        } catch(TransactionalException e) {
             return Response.status(CONFLICT).build();
         } catch(NullPointerException e) {
             return Response.status(BAD_REQUEST).build();
         } catch(MalformedUserException e) {
-            return Response.status(NOT_ACCEPTABLE).build();
+            return Response.status(BAD_REQUEST).build();
         }
     }
 
@@ -61,6 +64,7 @@ public class ClientController {
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
     public Response searchClients(@QueryParam("login") String login) {
+        logger.info(login);
         return userControllerMethods.searchUser("Client", login);
     }
 
@@ -86,11 +90,7 @@ public class ClientController {
         try {
             userManager.updateClient(entityId, clientDTO);
             return Response.status(OK).entity(clientDTO).build();
-        } catch (MalformedUserException e) {
-            return Response.status(NOT_ACCEPTABLE).build();
-        } catch(IllegalModificationException e) {
-            return Response.status(NOT_ACCEPTABLE).build();
-        } catch(NullPointerException e) {
+        } catch (MalformedUserException | IllegalModificationException | NullPointerException e) {
             return Response.status(BAD_REQUEST).build();
         }
     }

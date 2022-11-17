@@ -20,12 +20,16 @@ Content-Type: application/json
 
 
 
-### dodanie fake client
+### add fake client
 POST http://localhost:8080/rest/api/clients/addFake
 Accept: application/json
 
 
-### dodanie fake admin
+### add fake admin
+POST http://localhost:8080/rest/api/admins/addFake
+Accept: application/json
+
+### add fake employee
 POST http://localhost:8080/rest/api/admins/addFake
 Accept: application/json
 
@@ -33,7 +37,7 @@ Accept: application/json
 
 
 ### get all clients
-GET http://localhost:8080/rest/api/clients/
+GET http://localhost:8080/rest/api/clients?login=MkZsS6vH1KLHLB5BVlGujqT32HB6RW
 Accept: application/json
 
 ### get clients by login
@@ -44,10 +48,15 @@ Accept: application/json
 GET http://localhost:8080/rest/api/clients/2d527738-aeaa-4865-af15-019d4da0b4ad
 Accept: application/json
 
+### get one client by login
+GET http://localhost:8080/rest/api/clients/SpAIAcC
+Accept: application/json
+
+
 
 
 ### update one client
-PUT http://localhost:8080/rest/api/clients/def76eab-75cf-46f9-87b4-660055677324
+PUT http://localhost:8080/rest/api/clients/deff6eab-75cf-46f9-87b4-660055677324
 Accept: application/json
 Content-Type: application/json
 

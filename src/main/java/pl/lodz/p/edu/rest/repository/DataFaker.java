@@ -83,7 +83,7 @@ public class DataFaker {
 
 
     // source: https://www.geeksforgeeks.org/generate-random-string-of-given-size-in-java/
-    static String randStr(int size)
+    public static String randStr(int size)
     {
         String AlphaNumericString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                 + "0123456789"
