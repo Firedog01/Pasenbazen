@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
-import pl.lodz.p.edu.rest.DTO.RentDTO;
+import pl.lodz.p.edu.rest.model.DTO.RentDTO;
 import pl.lodz.p.edu.rest.model.users.Client;
 
 @Entity
@@ -74,6 +74,12 @@ public class Rent extends AbstractEntity {
 
         this(beginTime, endTime, equipment, client);
         this.id = id;
+    }
+
+    public boolean verify() {
+        return beginTime.isBefore(endTime)
+                && client.verify() && equipment.verify()
+                && !equipment.isArchive() && !equipment.isMissing();
     }
 
 

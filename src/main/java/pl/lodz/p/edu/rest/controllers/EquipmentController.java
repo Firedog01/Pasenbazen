@@ -84,9 +84,11 @@ public class EquipmentController {
             return Response.status(OK).entity(equipmentDTO).build();
         } catch (ObjectNotValidException | IllegalModificationException e) {
             return Response.status(BAD_REQUEST).build();
-        } catch(TransactionalException e) { // login modification
-            return Response.status(BAD_REQUEST).build();
-        } catch(NullPointerException e) {
+        }
+//        catch(TransactionalException e) { // login modification
+//            return Response.status(BAD_REQUEST).build();
+//        }
+        catch(NullPointerException e) {
             return Response.status(NOT_FOUND).build();
         } catch(EntityNotFoundException e) {
             return Response.status(NOT_FOUND).build();

@@ -39,7 +39,7 @@ public class RentDTO {
         return UUID.fromString(clientUUID);
     }
 
-    public UUID getEquipmentFromString() {
+    public UUID getEquipmentUUIDFromString() {
         return UUID.fromString(equipmentUUID);
     }
 

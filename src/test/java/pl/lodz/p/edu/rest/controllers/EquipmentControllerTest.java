@@ -218,4 +218,17 @@ class EquipmentControllerTest {
                 .statusCode(404);
 
     }
+
+    @Test
+    void deleteOneEquipment_notExist() {
+        String uuid = UUID.randomUUID().toString();
+        // delete
+        given()
+                .header("Content-Type", "application/json")
+                .when()
+                .delete("/equipment/" + uuid)
+                .then()
+                .statusCode(204);
+
+    }
 }

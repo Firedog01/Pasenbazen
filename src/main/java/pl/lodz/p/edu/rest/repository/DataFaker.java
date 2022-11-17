@@ -4,12 +4,11 @@ import pl.lodz.p.edu.rest.exception.ObjectNotValidException;
 import pl.lodz.p.edu.rest.model.Address;
 import pl.lodz.p.edu.rest.model.Equipment;
 import pl.lodz.p.edu.rest.model.Rent;
-import org.joda.time.DateTime;
-import org.joda.time.Instant;
-import org.joda.time.LocalDateTime;
 import pl.lodz.p.edu.rest.model.users.Admin;
 import pl.lodz.p.edu.rest.model.users.Client;
 import pl.lodz.p.edu.rest.model.users.Employee;
+
+import java.time.LocalDateTime;
 
 public class DataFaker {
 
@@ -56,27 +55,6 @@ public class DataFaker {
     public static Equipment getEquipment() {
         return new Equipment(Math.random() * 100, Math.random() * 200,
                 Math.random() * 1000, randStr(10));
-    }
-
-    public static Rent getRent(Equipment e, Client c) {
-        if(e == null) {
-            e = getEquipment();
-        }
-        if(c == null) {
-            c = getClient();
-        }
-        LocalDateTime nowLocal = LocalDateTime.now();
-        DateTime now = nowLocal.toDateTime();
-        long sinceEpoch = now.getMillis();
-        long beginUnix = sinceEpoch + (long) (Math.random() * 10000000);
-        long endUnix = beginUnix + (long) (Math.random() * 10000000);
-        LocalDateTime begin = Instant.ofEpochMilli(beginUnix).toDateTime().toLocalDateTime();
-        LocalDateTime end = Instant.ofEpochMilli(endUnix).toDateTime().toLocalDateTime();
-        return new Rent(begin, end, e, c);
-    }
-
-    public static Rent getRent() {
-        return getRent(null, null);
     }
 
 
