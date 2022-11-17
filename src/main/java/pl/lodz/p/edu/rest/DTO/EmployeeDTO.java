@@ -1,11 +1,11 @@
 package pl.lodz.p.edu.rest.DTO;
 
-import pl.lodz.p.edu.rest.model.users.ResourceAdmin;
+import pl.lodz.p.edu.rest.model.users.Employee;
 
 public class EmployeeDTO extends UserDTO {
     public EmployeeDTO() {}
 
-    public EmployeeDTO(ResourceAdmin e) {
+    public EmployeeDTO(Employee e) {
         super(e);
     }
 }

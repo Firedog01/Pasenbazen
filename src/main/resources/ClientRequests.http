@@ -21,8 +21,15 @@ Content-Type: application/json
 
 
 ### dodanie fake client
-POST http://localhost:8080/rest/api/clients/addFakeClient
+POST http://localhost:8080/rest/api/clients/addFake
 Accept: application/json
+
+
+### dodanie fake admin
+POST http://localhost:8080/rest/api/admins/addFake
+Accept: application/json
+
+
 
 
 ### get all clients
@@ -34,19 +41,17 @@ GET http://localhost:8080/rest/api/clients?login=test_2
 Accept: application/json
 
 ### get one client
-GET http://localhost:8080/rest/api/clients/49924281-b792-4317-928e-f75d2d3f9710
+GET http://localhost:8080/rest/api/clients/2d527738-aeaa-4865-af15-019d4da0b4ad
 Accept: application/json
 
 
 
 ### update one client
-PUT http://localhost:8080/rest/api/clients
+PUT http://localhost:8080/rest/api/clients/3c4bfceb-23ec-4e82-9b1b-a5e358af1f6a
 Accept: application/json
 Content-Type: application/json
 
 {
-  "entityId": "49924281-b792-4317-928e-f75d2d3f9710",
-  "active": false,
   "login": "test_2login",
   "address": {
     "city": "Lipinki Łużyckie",

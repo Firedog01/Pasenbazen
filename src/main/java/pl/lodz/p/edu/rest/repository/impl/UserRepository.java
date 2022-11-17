@@ -6,9 +6,7 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import jakarta.transaction.Transactional;
-import pl.lodz.p.edu.rest.model.users.UserType;
-import pl.lodz.p.edu.rest.model.users.User;
-import pl.lodz.p.edu.rest.model.users.User_;
+import pl.lodz.p.edu.rest.model.users.*;
 import pl.lodz.p.edu.rest.repository.Repository;
 
 import java.util.List;
@@ -22,10 +20,7 @@ public class UserRepository implements Repository<User> {
 
     public UserRepository() {}
 
-    public UserRepository(EntityManager em) {
-        this.em = em;
-    }
-
+    // get user of any type
     @Override
     @Transactional
     public User get(UUID entityId) {
@@ -44,20 +39,28 @@ public class UserRepository implements Repository<User> {
         return users.get(0);
     }
 
-    public User get(UserType type, UUID entityId) {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<User> cq = cb.createQuery(User.class);
-        Root<User> user = cq.from(User.class);
+    public User getOfType(String type, UUID entityId) {
+        Query q = em.createQuery("SELECT user FROM User user WHERE user.entityId = :login and type(user) = " + type, User.class);
+        q.setParameter("entityId", entityId);
+        return (User) q.getSingleResult();
+    }
 
-        cq.select(user);
-        cq.where(cb.equal(user.get(User_.ENTITY_ID), entityId));
+    public Client getClient(UUID entityId) {
+        Query q = em.createQuery("SELECT user FROM User user WHERE user.entityId = :login and type(user) = Client", User.class);
+        q.setParameter("entityId", entityId);
+        return (Client) q.getSingleResult();
+    }
 
-        List<User> users = em.createQuery(cq).getResultList();
+    public Admin getAdmin(UUID entityId) {
+        Query q = em.createQuery("SELECT user FROM User user WHERE user.entityId = :login and type(user) = Admin", User.class);
+        q.setParameter("entityId", entityId);
+        return (Admin) q.getSingleResult();
+    }
 
-        if(users.isEmpty()) {
-            throw new EntityNotFoundException("Client not found for uniqueId: " + entityId);
-        }
-        return users.get(0);
+    public Employee getEmployee(UUID entityId) {
+        Query q = em.createQuery("SELECT user FROM User user WHERE user.entityId = :login and type(user) = Employee", User.class);
+        q.setParameter("entityId", entityId);
+        return (Employee) q.getSingleResult();
     }
 
     @Transactional

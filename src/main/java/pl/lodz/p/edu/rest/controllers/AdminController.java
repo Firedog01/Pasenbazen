@@ -4,6 +4,7 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import pl.lodz.p.edu.rest.DTO.AdminDTO;
 import pl.lodz.p.edu.rest.exception.NoObjectException;
 import pl.lodz.p.edu.rest.exception.user.MalformedUserException;
 import pl.lodz.p.edu.rest.exception.user.UserConflictException;
@@ -35,9 +36,9 @@ public class AdminController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response addAdmin(Admin admin) {
         try {
-            userManager.registerUserAdmin(admin);
+            userManager.registerAdmin(admin);
             return Response.status(CREATED).entity(admin).build();
-        } catch(NoObjectException e) {
+        } catch(NullPointerException e) {
             return Response.status(BAD_REQUEST).build();
         } catch(UserConflictException e) {
             return Response.status(CONFLICT).build();
@@ -66,9 +67,9 @@ public class AdminController {
     @PUT
     @Path("/{entityId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateEmployee(@PathParam("entityId") UUID entityId, ResourceAdmin resourceAdmin) {
-        userManager.updateResourceAdmin(entityId, resourceAdmin);
-        return Response.status(OK).entity(resourceAdmin).build();
+    public Response updateAdmin(@PathParam("entityId") UUID entityId, AdminDTO adminDTO) {
+        userManager.updateAdmin(entityId, adminDTO);
+        return Response.status(OK).entity(adminDTO).build();
     }
 
     @PUT
@@ -91,7 +92,7 @@ public class AdminController {
     public Admin addFakeUserAdmin() {
         Admin c = DataFaker.getUserAdmin();
         try {
-            userManager.registerUserAdmin(c);
+            userManager.registerAdmin(c);
         } catch(Exception e) {
             return null;
         }

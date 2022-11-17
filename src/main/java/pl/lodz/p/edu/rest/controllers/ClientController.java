@@ -17,12 +17,16 @@ import pl.lodz.p.edu.rest.model.users.Client;
 import pl.lodz.p.edu.rest.repository.DataFaker;
 
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static jakarta.ws.rs.core.Response.Status.*;
 
 @Path("/clients")
 //@RequestScoped
 public class ClientController {
+
+    Logger logger = Logger.getLogger(ClientController.class.getName());
 
     @Inject
     private UserManager userManager;
@@ -37,20 +41,17 @@ public class ClientController {
     @Path("/")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response addClient(ClientDTO client) {
+    public Response addClient(ClientDTO clientDTO) {
         try {
-            Client c = new Client(client.getLogin(), client.getFirstName(),
-                    client.getLastName(), client.getAddress());
-            userManager.registerClient(c);
-            return Response.status(CREATED).entity(client).build();
+            Client client = new Client(clientDTO);
+            userManager.registerClient(client);
+            return Response.status(CREATED).entity(clientDTO).build();
         } catch(UserConflictException e) {
             return Response.status(CONFLICT).build();
-        } catch(NoObjectException e) {
+        } catch(NullPointerException e) {
             return Response.status(BAD_REQUEST).build();
         } catch(MalformedUserException e) {
             return Response.status(NOT_ACCEPTABLE).build();
-        } catch (UserException e) {
-            throw new RuntimeException(e);
         }
     }
 
@@ -80,9 +81,17 @@ public class ClientController {
     @PUT
     @Path("/{entityId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateClient(@PathParam("entityId") UUID entityId, Client client) {
-        userManager.updateClient(entityId, client);
-        return Response.status(OK).entity(client).build();
+    public Response updateClient(@PathParam("entityId") UUID entityId, ClientDTO clientDTO) {
+        try {
+            logger.log(Level.INFO, clientDTO.toString());
+            userManager.updateClient(entityId, clientDTO);
+            return Response.status(OK).entity(clientDTO).build();
+        } catch (MalformedUserException e) {
+            logger.info(e.getMessage());
+            return Response.status(NOT_ACCEPTABLE).entity(clientDTO).build();
+        } catch(NullPointerException e) {
+            return Response.status(BAD_REQUEST).build();
+        }
     }
 
     @PUT
@@ -106,9 +115,11 @@ public class ClientController {
     @Produces(MediaType.APPLICATION_JSON)
     public Client addFakeClient() {
         Client c = DataFaker.getClient();
+        logger.log(Level.INFO, c.toString());
         try {
             userManager.registerClient(c);
         } catch(Exception e) {
+            System.out.println(e.getMessage());
             return null;
         }
         return c;

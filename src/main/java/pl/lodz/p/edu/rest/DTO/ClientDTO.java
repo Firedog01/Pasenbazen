@@ -9,9 +9,6 @@ public class ClientDTO extends UserDTO {
 
     @NotNull
     @NotEmpty
-    private String clientId;
-    @NotNull
-    @NotEmpty
     private String firstName;
     @NotNull
     @NotEmpty
@@ -29,10 +26,6 @@ public class ClientDTO extends UserDTO {
         this.address = c.getAddress();
     }
 
-    public String getClientId() {
-        return clientId;
-    }
-
     public String getFirstName() {
         return firstName;
     }
@@ -43,10 +36,6 @@ public class ClientDTO extends UserDTO {
 
     public Address getAddress() {
         return address;
-    }
-
-    public void setClientId(String clientId) {
-        this.clientId = clientId;
     }
 
     public void setFirstName(String firstName) {
@@ -61,4 +50,12 @@ public class ClientDTO extends UserDTO {
         this.address = address;
     }
 
+    @Override
+    public String toString() {
+        return "ClientDTO{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", address=" + address +
+                '}';
+    }
 }

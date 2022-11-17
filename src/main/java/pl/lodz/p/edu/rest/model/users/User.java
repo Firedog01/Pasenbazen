@@ -3,6 +3,7 @@ package pl.lodz.p.edu.rest.model.users;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import pl.lodz.p.edu.rest.exception.UserException;
+import pl.lodz.p.edu.rest.exception.user.MalformedUserException;
 import pl.lodz.p.edu.rest.model.AbstractEntity;
 
 @Entity
@@ -17,9 +18,9 @@ public abstract class User extends AbstractEntity {
     @Column(name = "archive")
     private boolean active;
 
-    public User(String login) throws UserException {
+    public User(String login) throws MalformedUserException {
         if(login == null || login.isEmpty()) {
-            throw new UserException("Client login cannot be null nor empty");
+            throw new MalformedUserException("Client login cannot be null nor empty");
         }
         this.login = login;
         this.active = true;

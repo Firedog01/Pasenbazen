@@ -2,6 +2,7 @@ package pl.lodz.p.edu.rest.repository;
 
 import pl.lodz.p.edu.rest.exception.UserException;
 import pl.lodz.p.edu.rest.exception.EquipmentException;
+import pl.lodz.p.edu.rest.exception.user.MalformedUserException;
 import pl.lodz.p.edu.rest.model.Address;
 import pl.lodz.p.edu.rest.model.Equipment;
 import pl.lodz.p.edu.rest.model.Rent;
@@ -10,7 +11,7 @@ import org.joda.time.Instant;
 import org.joda.time.LocalDateTime;
 import pl.lodz.p.edu.rest.model.users.Admin;
 import pl.lodz.p.edu.rest.model.users.Client;
-import pl.lodz.p.edu.rest.model.users.ResourceAdmin;
+import pl.lodz.p.edu.rest.model.users.Employee;
 
 public class DataFaker {
 
@@ -22,7 +23,7 @@ public class DataFaker {
         try {
             return new Client(randStr(7), // idType.values()[(int)(Math.random() * 2) % 2],
                     randStr(10), randStr(10), a);
-        } catch(UserException e) {
+        } catch(MalformedUserException e) {
             return null; // will never happen
         }
     }
@@ -32,7 +33,7 @@ public class DataFaker {
             Address a = getAddress();
             return new Client(randStr(7),
                     randStr(10), randStr(10), a);
-        } catch(UserException e) {
+        } catch(MalformedUserException e) {
             return null; // will never happen
         }
     }
@@ -40,13 +41,13 @@ public class DataFaker {
     public static Admin getUserAdmin() {
         try {
             return new Admin(randStr(10));
-        } catch (UserException e) {
+        } catch (MalformedUserException e) {
             return null; // will never happen
         }
     }
 
-    public static ResourceAdmin getResourceAdmin() {
-        return new ResourceAdmin();
+    public static Employee getResourceAdmin() {
+        return new Employee();
     }
 
 
