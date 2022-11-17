@@ -3,8 +3,10 @@ package pl.lodz.p.edu.rest.model;
 import jakarta.persistence.*;
 import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotNull;
-import org.joda.time.Days;
-import org.joda.time.LocalDateTime;
+
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+
 import pl.lodz.p.edu.rest.model.users.Client;
 
 @Entity
@@ -73,7 +75,7 @@ public class Rent extends AbstractEntity {
         } else if (equipment.isMissing()) {
             return equipment.getBail();
         } else {
-            long diffDays= Math.abs(Days.daysBetween(beginTime, endTime).getDays());
+            long diffDays = Math.abs( ChronoUnit.DAYS.between(beginTime, endTime));
             //FIXME Nie jestem pewien co do tego, ustawiłem sprawdzanie od 1, bo myślę, że gdzieś indziej będzie sprawdzane
             // Czy data jest w ogóle większa od 0?
             if (diffDays > 1) {

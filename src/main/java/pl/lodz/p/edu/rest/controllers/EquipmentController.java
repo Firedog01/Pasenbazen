@@ -6,7 +6,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import pl.lodz.p.edu.rest.managers.EquipmentManager;
 import pl.lodz.p.edu.rest.model.Equipment;
-import pl.lodz.p.edu.rest.repository.DataFaker;
+//import pl.lodz.p.edu.rest.repository.DataFaker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,13 +85,13 @@ public class EquipmentController {
 
     //===============================================
 
-    @POST
-    @Path("/addFakeEq")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Equipment addFakeEquipment() {
-        Equipment e = DataFaker.getEquipment();
-        System.out.println(e);
-        equipmentManager.add(e);
-        return e;
-    }
+//    @POST
+//    @Path("/addFakeEq")
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public Equipment addFakeEquipment() {
+//        Equipment e = DataFaker.getEquipment();
+//        System.out.println(e);
+//        equipmentManager.add(e);
+//        return e;
+//    }
 }

@@ -5,7 +5,6 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.joda.time.LocalDateTime;
 import pl.lodz.p.edu.rest.DTO.RentDTO;
 import pl.lodz.p.edu.rest.managers.EquipmentManager;
 import pl.lodz.p.edu.rest.managers.RentManager;
@@ -15,6 +14,7 @@ import pl.lodz.p.edu.rest.model.Rent;
 import pl.lodz.p.edu.rest.model.users.Client;
 import pl.lodz.p.edu.rest.model.users.User;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -54,21 +54,25 @@ public class RentController {
 
         try {
             List<Rent> rentEquipmentList = rentManager.getRentByEq(equipment);
-            if(validateTime(rentEquipmentList, beginTime, endTime)) {
+            if(!rentEquipmentList.isEmpty() && validateTime(rentEquipmentList, beginTime, endTime)) {
+                Rent rent = new Rent(LocalDateTime.parse(rentDTO.getBeginTime()),
+                        LocalDateTime.parse(rentDTO.getEndTime()),
+                        equipment, client);
 
+                rentManager.add(rent);
+                return Response.status(Response.Status.CREATED).entity(rent).build();
+            } else {
+                return Response.status(Response.Status.NOT_ACCEPTABLE).build();
             }
 
-        } catch ()
+        } catch (EntityNotFoundException e) {
+            Rent rent = new Rent(LocalDateTime.parse(rentDTO.getBeginTime()),
+                    LocalDateTime.parse(rentDTO.getEndTime()),
+                    equipment, client);
 
-
-
-
-        Rent rent = new Rent(LocalDateTime.parse(rentDTO.getBeginTime()),
-                LocalDateTime.parse(rentDTO.getEndTime()),
-                equipment, client);
-
-        rentManager.add(rent);
-        return Response.status(Response.Status.CREATED).entity(rent).build();
+            rentManager.add(rent);
+            return Response.status(Response.Status.CREATED).entity(rent).build();
+        }
     }
 
     @GET

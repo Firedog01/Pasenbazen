@@ -14,7 +14,7 @@ import pl.lodz.p.edu.rest.exception.user.MalformedUserException;
 import pl.lodz.p.edu.rest.exception.user.UserConflictException;
 import pl.lodz.p.edu.rest.managers.UserManager;
 import pl.lodz.p.edu.rest.model.users.Client;
-import pl.lodz.p.edu.rest.repository.DataFaker;
+//import pl.lodz.p.edu.rest.repository.DataFaker;
 
 import java.util.UUID;
 
@@ -102,17 +102,17 @@ public class ClientController {
 
 
     // ========= other
-
-    @POST
-    @Path("/addFake")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Client addFakeClient() {
-        Client c = DataFaker.getClient();
-        try {
-            userManager.registerClient(c);
-        } catch(Exception e) {
-            return null;
-        }
-        return c;
-    }
+//
+//    @POST
+//    @Path("/addFake")
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public Client addFakeClient() {
+//        Client c = DataFaker.getClient();
+//        try {
+//            userManager.registerClient(c);
+//        } catch(Exception e) {
+//            return null;
+//        }
+//        return c;
+//    }
 }

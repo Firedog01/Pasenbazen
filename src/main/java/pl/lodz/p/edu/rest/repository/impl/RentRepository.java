@@ -78,13 +78,16 @@ public class RentRepository implements Repository<Rent> {
     @Override
     @Transactional
     public void add(Rent elem) {
-        if(elem.getEquipment().getId() != null) {
-//            Equipment e = em.find(Equipment.class, elem.getEquipment().getId(),
-//                    LockModeType.OPTIMISTIC_FORCE_INCREMENT);
-            Equipment e = em.find(Equipment.class, elem.getEquipment().getId());
-            elem.setEquipment(e);
-        }
-        em.persist(elem);
+//        if(elem.getEquipment().getId() != null) {
+////            Equipment e = em.find(Equipment.class, elem.getEquipment().getId(),
+////                    LockModeType.OPTIMISTIC_FORCE_INCREMENT);
+//            Equipment e = em.find(Equipment.class, elem.getEquipment().getId());
+//            elem.setEquipment(e);
+//        }
+        EntityTransaction transaction = em.getTransaction();
+        transaction.begin();
+        em.merge(elem);
+        transaction.commit();
     }
 
     @Override

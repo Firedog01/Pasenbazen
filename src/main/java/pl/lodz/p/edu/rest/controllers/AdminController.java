@@ -9,7 +9,6 @@ import pl.lodz.p.edu.rest.exception.user.MalformedUserException;
 import pl.lodz.p.edu.rest.exception.user.UserConflictException;
 import pl.lodz.p.edu.rest.managers.UserManager;
 import pl.lodz.p.edu.rest.model.users.*;
-import pl.lodz.p.edu.rest.repository.DataFaker;
 
 import java.util.UUID;
 
@@ -85,16 +84,16 @@ public class AdminController {
 
     // other
 
-    @POST
-    @Path("/addFake")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Admin addFakeUserAdmin() {
-        Admin c = DataFaker.getUserAdmin();
-        try {
-            userManager.registerUserAdmin(c);
-        } catch(Exception e) {
-            return null;
-        }
-        return c;
-    }
+//    @POST
+//    @Path("/addFake")
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public Admin addFakeUserAdmin() {
+//        Admin c = DataFaker.getUserAdmin();
+//        try {
+//            userManager.registerUserAdmin(c);
+//        } catch(Exception e) {
+//            return null;
+//        }
+//        return c;
+//    }
 }
