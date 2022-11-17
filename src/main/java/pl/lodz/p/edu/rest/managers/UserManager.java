@@ -100,10 +100,15 @@ public class UserManager {
     // ========================================= update
 
     public void updateClient(UUID entityId, ClientDTO clientDTO) throws MalformedUserException, IllegalModificationException {
-        Client clientVerify = new Client(clientDTO);
-        if (!clientVerify.verify()) {
-            throw new MalformedUserException("Clients fields have illegal values");
+        try {
+            Client clientVerify = new Client(clientDTO);
+            if (!clientVerify.verify()) {
+                throw new MalformedUserException("Clients fields have illegal values");
+            }
+        } catch(NullPointerException e) {
+            throw new MalformedUserException("Client address cannot be null");
         }
+
         Client client = (Client) userRepository.getOfType("Client", entityId);
         client.merge(clientDTO);
 

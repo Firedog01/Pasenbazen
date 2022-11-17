@@ -2,6 +2,7 @@ package pl.lodz.p.edu.rest.controllers;
 
 import jakarta.inject.Inject;
 
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.RollbackException;
 import jakarta.transaction.TransactionalException;
 import jakarta.ws.rs.*;
@@ -92,8 +93,16 @@ public class ClientController {
             return Response.status(OK).entity(clientDTO).build();
         } catch (MalformedUserException | IllegalModificationException e) {
             return Response.status(BAD_REQUEST).build();
+        } catch(TransactionalException e) { // login modification
+            return Response.status(BAD_REQUEST).build();
         } catch(NullPointerException e) {
             return Response.status(NOT_FOUND).build();
+        } catch(NoResultException e) {
+            return Response.status(NOT_FOUND).build();
+        } catch (Exception e) {
+            logger.info(e.getClass().getName());
+            logger.info(e.getMessage());
+            return Response.status(BAD_GATEWAY).build();
         }
     }
 

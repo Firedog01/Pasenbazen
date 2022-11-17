@@ -282,5 +282,4 @@ class ClientControllerTest {
                 .then()
                 .statusCode(400);
     }
-
 }
