@@ -5,8 +5,7 @@ import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.validation.constraints.NotNull;
-import pl.lodz.p.edu.rest.DTO.ClientDTO;
-import pl.lodz.p.edu.rest.exception.UserException;
+import pl.lodz.p.edu.rest.model.users.DTO.ClientDTO;
 import pl.lodz.p.edu.rest.exception.user.MalformedUserException;
 import pl.lodz.p.edu.rest.model.Address;
 

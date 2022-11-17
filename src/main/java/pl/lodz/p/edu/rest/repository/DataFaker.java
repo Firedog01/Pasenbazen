@@ -1,6 +1,5 @@
 package pl.lodz.p.edu.rest.repository;
 
-import pl.lodz.p.edu.rest.exception.UserException;
 import pl.lodz.p.edu.rest.exception.EquipmentException;
 import pl.lodz.p.edu.rest.exception.user.MalformedUserException;
 import pl.lodz.p.edu.rest.model.Address;
@@ -38,9 +37,9 @@ public class DataFaker {
         }
     }
 
-    public static Admin getUserAdmin() {
+    public static Admin getAdmin() {
         try {
-            return new Admin(randStr(10));
+            return new Admin(randStr(10), randStr(20));
         } catch (MalformedUserException e) {
             return null; // will never happen
         }

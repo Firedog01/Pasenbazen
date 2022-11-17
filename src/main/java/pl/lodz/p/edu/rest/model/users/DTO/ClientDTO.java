@@ -1,4 +1,4 @@
-package pl.lodz.p.edu.rest.DTO;
+package pl.lodz.p.edu.rest.model.users.DTO;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;

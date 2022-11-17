@@ -2,8 +2,7 @@ package pl.lodz.p.edu.rest.model.users;
 
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
-import pl.lodz.p.edu.rest.DTO.EmployeeDTO;
-import pl.lodz.p.edu.rest.exception.UserException;
+import pl.lodz.p.edu.rest.model.users.DTO.EmployeeDTO;
 import pl.lodz.p.edu.rest.exception.user.MalformedUserException;
 
 @Entity

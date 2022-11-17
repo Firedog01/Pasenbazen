@@ -7,16 +7,16 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 import static io.restassured.RestAssured.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import pl.lodz.p.edu.rest.model.users.DTO.ClientDTO;
+import pl.lodz.p.edu.rest.model.users.DTO.AdminDTO;
 import pl.lodz.p.edu.rest.repository.DataFaker;
 
 import java.util.UUID;
 
-class ClientControllerTest {
+class AdminControllerTest {
 
     @BeforeAll
     static void beforeAll() {
@@ -24,162 +24,162 @@ class ClientControllerTest {
     }
 
     ObjectMapper obj = new ObjectMapper();
-    ClientDTO validClient;
-    String validClientStr;
+    AdminDTO validAdmin;
+    String validAdminStr;
 
     @BeforeEach
     void beforeEach() throws JsonProcessingException {
-        validClient = new ClientDTO(DataFaker.getClient());
-        validClientStr = obj.writeValueAsString(validClient);
+        validAdmin = new AdminDTO(DataFaker.getAdmin());
+        validAdminStr = obj.writeValueAsString(validAdmin);
     }
 
     // create
 
     @Test
-    void createClient_correct() {
+    void createAdmin_correct() {
         given()
                 .header("Content-Type", "application/json")
-                .body(validClientStr)
+                .body(validAdminStr)
                 .when()
-                .post("/clients")
+                .post("/admins")
                 .then()
                 .statusCode(201)
-                .body("login", equalTo(validClient.getLogin()));
+                .body("login", equalTo(validAdmin.getLogin()));
     }
 
     @Test
-    void createClient_noBody() {
+    void createAdmin_noBody() {
         given()
                 .header("Content-Type", "application/json")
                 .body("")
                 .when()
-                .post("/clients")
+                .post("/admins")
                 .then()
                 .statusCode(400);
     }
 
     @Test
-    void createClient_illegalValue() throws JsonProcessingException {
-        validClient.setAddress(null);
-        String notValidClientStr = obj.writeValueAsString(validClient);
-        System.out.println(notValidClientStr);
+    void createAdmin_illegalValue() throws JsonProcessingException {
+        validAdmin.setFavouriteIceCream("");
+        String notValidAdminStr = obj.writeValueAsString(validAdmin);
+        System.out.println(notValidAdminStr);
         given()
                 .header("Content-Type", "application/json")
-                .body(notValidClientStr)
+                .body(notValidAdminStr)
                 .when()
-                .post("/clients")
+                .post("/admins")
                 .then()
                 .statusCode(400);
     }
 
     @Test
-    void createClient_conflict() {
+    void createAdmin_conflict() {
         given()
                 .header("Content-Type", "application/json")
-                .body(validClientStr)
+                .body(validAdminStr)
                 .when()
-                .post("/clients")
+                .post("/admins")
                 .then()
                 .statusCode(201);
         given()
                 .header("Content-Type", "application/json")
-                .body(validClientStr)
+                .body(validAdminStr)
                 .when()
-                .post("/clients")
+                .post("/admins")
                 .then()
                 .statusCode(409);
     }
 
     // read
     @Test
-    void getAllClients_correct()  {
+    void getAllAdmins_correct()  {
         given()
                 .header("Content-Type", "application/json")
                 .when()
-                .get("/clients")
+                .get("/admins")
                 .then()
                 .statusCode(200);
     }
 
     @Test
-    void getOneClient_byUUID_correct()  {
+    void getOneAdmin_byUUID_correct()  {
         String uuid = given()
                 .header("Content-Type", "application/json")
-                .body(validClientStr)
+                .body(validAdminStr)
                 .when()
-                .post("/clients")
+                .post("/admins")
                 .then()
                 .extract().path("entityId");
         given()
                 .header("Content-Type", "application/json")
                 .when()
-                .get("/clients/" + uuid)
+                .get("/admins/" + uuid)
                 .then()
                 .statusCode(200)
                 .body("entityId", equalTo(uuid));
     }
 
     @Test
-    void getOneClient_byUUID_noSuchUUID()  {
+    void getOneAdmin_byUUID_noSuchUUID()  {
         String uuid = UUID.randomUUID().toString();
         given()
                 .header("Content-Type", "application/json")
                 .when()
-                .get("/clients/" + uuid)
+                .get("/admins/" + uuid)
                 .then()
                 .statusCode(404);
     }
 
     @Test
-    void getOneClient_byLogin_correct()  {
+    void getOneAdmin_byLogin_correct()  {
         String login = given()
                 .header("Content-Type", "application/json")
-                .body(validClientStr)
+                .body(validAdminStr)
                 .when()
-                .post("/clients")
+                .post("/admins")
                 .then()
                 .extract().path("login");
 
         given()
                 .header("Content-Type", "application/json")
                 .when()
-                .get("/clients/login/" + login)
+                .get("/admins/login/" + login)
                 .then()
                 .statusCode(200)
                 .body("login", equalTo(login));
     }
 
     @Test
-    void getOneClient_byLogin_noSuchLogin()  {
+    void getOneAdmin_byLogin_noSuchLogin()  {
         String login = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
         given()
                 .header("Content-Type", "application/json")
                 .when()
-                .get("/clients/login/" + login)
+                .get("/admins/login/" + login)
                 .then()
                 .statusCode(404);
     }
 
     @Test
-    void getManyClientsByLogin_correct() throws JsonProcessingException {
+    void getManyAdminsByLogin_correct() throws JsonProcessingException {
         String uniqueLogin = DataFaker.randStr(30);
-        validClient.setLogin(uniqueLogin);
-        String str1 = obj.writeValueAsString(validClient);
+        validAdmin.setLogin(uniqueLogin);
+        String str1 = obj.writeValueAsString(validAdmin);
         given()
                 .header("Content-Type", "application/json")
                 .body(str1)
                 .when()
-                .post("/clients")
+                .post("/admins")
                 .then()
                 .statusCode(201);
 
-        validClient.setLogin(uniqueLogin + "1");
-        String str2 = obj.writeValueAsString(validClient);
+        validAdmin.setLogin(uniqueLogin + "1");
+        String str2 = obj.writeValueAsString(validAdmin);
         given()
                 .header("Content-Type", "application/json")
                 .body(str2)
                 .when()
-                .post("/clients")
+                .post("/admins")
                 .then()
                 .statusCode(201);
 
@@ -187,7 +187,7 @@ class ClientControllerTest {
         given()
                 .header("Content-Type", "application/json")
                 .when()
-                .get("/clients?login=" + uniqueLogin)
+                .get("/admins?login=" + uniqueLogin)
                 .then()
                 .statusCode(200)
                 .body("size()", is(2));
@@ -195,86 +195,86 @@ class ClientControllerTest {
 
     // update
     @Test
-    void updateOneClient_correct() throws JsonProcessingException {
+    void updateOneAdmin_correct() throws JsonProcessingException {
         String uuid = given()
                 .header("Content-Type", "application/json")
-                .body(validClientStr)
+                .body(validAdminStr)
                 .when()
-                .post("/clients")
+                .post("/admins")
                 .then()
                 .statusCode(201)
                 .extract().path("entityId");
 
-        String newFirstName = "___other_first_name___";
-        validClient.setFirstName(newFirstName);
-        String updatedClientStr = obj.writeValueAsString(validClient);
+        String newFavouriteIceCream = "___other_favourite_ice_cream___";
+        validAdmin.setFavouriteIceCream(newFavouriteIceCream);
+        String updatedAdminStr = obj.writeValueAsString(validAdmin);
         given()
                 .header("Content-Type", "application/json")
-                .body(updatedClientStr)
+                .body(updatedAdminStr)
                 .when()
-                .put("/clients/" + uuid)
+                .put("/admins/" + uuid)
                 .then()
                 .statusCode(200);
-        String firstName = given()
+        String favouriteIceCream = given()
                 .header("Content-Type", "application/json")
                 .when()
-                .get("/clients/" + uuid)
+                .get("/admins/" + uuid)
                 .then()
                 .statusCode(200)
-                .extract().path("firstName");
-        assertEquals(newFirstName, firstName);
+                .extract().path("favouriteIceCream");
+        assertEquals(newFavouriteIceCream, favouriteIceCream);
     }
 
     @Test
-    void updateOneClient_noClient() throws JsonProcessingException {
+    void updateOneAdmin_noAdmin() throws JsonProcessingException {
         String uuid = UUID.randomUUID().toString();
         given()
                 .header("Content-Type", "application/json")
-                .body(validClientStr)
+                .body(validAdminStr)
                 .when()
-                .put("/clients/" + uuid)
+                .put("/admins/" + uuid)
                 .then()
                 .statusCode(404);
     }
 
     @Test
-    void updateOneClient_updateLogin() throws JsonProcessingException {
+    void updateOneAdmin_updateLogin() throws JsonProcessingException {
         String uuid = given()
                 .header("Content-Type", "application/json")
-                .body(validClientStr)
+                .body(validAdminStr)
                 .when()
-                .post("/clients")
+                .post("/admins")
                 .then()
                 .statusCode(201)
                 .extract().path("entityId");
-        validClient.setLogin("__other_login__");
-        String updatedLogin = obj.writeValueAsString(validClient);
+        validAdmin.setLogin("__other_login__");
+        String updatedLogin = obj.writeValueAsString(validAdmin);
         given()
                 .header("Content-Type", "application/json")
                 .body(updatedLogin)
                 .when()
-                .put("/clients/" + uuid)
+                .put("/admins/" + uuid)
                 .then()
                 .statusCode(400);
     }
 
     @Test
-    void updateOneClient_illegalValues() throws JsonProcessingException {
+    void updateOneAdmin_illegalValues() throws JsonProcessingException {
         String uuid = given()
                 .header("Content-Type", "application/json")
-                .body(validClientStr)
+                .body(validAdminStr)
                 .when()
-                .post("/clients")
+                .post("/admins")
                 .then()
                 .statusCode(201)
                 .extract().path("entityId");
-        validClient.setAddress(null);
-        String updatedLogin = obj.writeValueAsString(validClient);
+        validAdmin.setFavouriteIceCream("");
+        String updatedLogin = obj.writeValueAsString(validAdmin);
         given()
                 .header("Content-Type", "application/json")
                 .body(updatedLogin)
                 .when()
-                .put("/clients/" + uuid)
+                .put("/admins/" + uuid)
                 .then()
                 .statusCode(400);
     }

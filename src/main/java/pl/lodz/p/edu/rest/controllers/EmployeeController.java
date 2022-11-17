@@ -1,17 +1,16 @@
 package pl.lodz.p.edu.rest.controllers;
 
 import jakarta.inject.Inject;
-import jakarta.persistence.RollbackException;
+import jakarta.persistence.NoResultException;
+import jakarta.transaction.TransactionalException;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import pl.lodz.p.edu.rest.DTO.EmployeeDTO;
-import pl.lodz.p.edu.rest.exception.NoObjectException;
+import pl.lodz.p.edu.rest.model.users.DTO.EmployeeDTO;
 import pl.lodz.p.edu.rest.exception.user.IllegalModificationException;
 import pl.lodz.p.edu.rest.exception.user.MalformedUserException;
 import pl.lodz.p.edu.rest.exception.user.UserConflictException;
 import pl.lodz.p.edu.rest.managers.UserManager;
-import pl.lodz.p.edu.rest.model.users.Client;
 import pl.lodz.p.edu.rest.model.users.Employee;
 import pl.lodz.p.edu.rest.repository.DataFaker;
 
@@ -34,17 +33,19 @@ public class EmployeeController {
     @Path("/")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response addResourceAdmin(EmployeeDTO employeeDTO) {
+    public Response addEmployee(EmployeeDTO employeeDTO) {
         try {
             Employee employee = new Employee(employeeDTO);
             userManager.registerEmployee(employee);
             return Response.status(CREATED).entity(employeeDTO).build();
         } catch(UserConflictException e) {
             return Response.status(CONFLICT).build();
+        } catch(TransactionalException e) {
+            return Response.status(CONFLICT).build();
         } catch(NullPointerException e) {
             return Response.status(BAD_REQUEST).build();
         } catch(MalformedUserException e) {
-            return Response.status(NOT_ACCEPTABLE).build();
+            return Response.status(BAD_REQUEST).build();
         }
     }
 
@@ -64,6 +65,13 @@ public class EmployeeController {
         return userControllerMethods.getSingleUser("Employee", entityId);
     }
 
+    @GET
+    @Path("/login/{login}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getUserByLogin(@PathParam("login") String login) {
+        return userControllerMethods.getSingleUser("Employee", login);
+    }
+
     // update
     @PUT
     @Path("/{entityId}")
@@ -72,12 +80,14 @@ public class EmployeeController {
         try {
             userManager.updateEmployee(entityId, employeeDTO);
             return Response.status(OK).entity(employeeDTO).build();
-        } catch (MalformedUserException e) {
-            return Response.status(NOT_ACCEPTABLE).build();
-        } catch(IllegalModificationException e) {
-            return Response.status(NOT_ACCEPTABLE).build();
-        } catch(NullPointerException e) {
+        } catch (MalformedUserException | IllegalModificationException e) {
             return Response.status(BAD_REQUEST).build();
+        } catch(TransactionalException e) { // login modification
+            return Response.status(BAD_REQUEST).build();
+        } catch(NullPointerException e) {
+            return Response.status(NOT_FOUND).build();
+        } catch(NoResultException e) {
+            return Response.status(NOT_FOUND).build();
         }
     }
 

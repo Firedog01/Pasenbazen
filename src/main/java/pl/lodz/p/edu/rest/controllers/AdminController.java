@@ -1,11 +1,12 @@
 package pl.lodz.p.edu.rest.controllers;
 
 import jakarta.inject.Inject;
+import jakarta.persistence.NoResultException;
+import jakarta.transaction.TransactionalException;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import pl.lodz.p.edu.rest.DTO.AdminDTO;
-import pl.lodz.p.edu.rest.exception.NoObjectException;
+import pl.lodz.p.edu.rest.model.users.DTO.AdminDTO;
 import pl.lodz.p.edu.rest.exception.user.IllegalModificationException;
 import pl.lodz.p.edu.rest.exception.user.MalformedUserException;
 import pl.lodz.p.edu.rest.exception.user.UserConflictException;
@@ -14,6 +15,7 @@ import pl.lodz.p.edu.rest.model.users.*;
 import pl.lodz.p.edu.rest.repository.DataFaker;
 
 import java.util.UUID;
+import java.util.logging.Logger;
 
 import static jakarta.ws.rs.core.Response.Status.*;
 import static jakarta.ws.rs.core.Response.Status.CONFLICT;
@@ -21,6 +23,7 @@ import static jakarta.ws.rs.core.Response.Status.CONFLICT;
 @Path("/admins")
 public class AdminController {
 
+    Logger logger = Logger.getLogger(AdminController.class.getName());
     @Inject
     private UserManager userManager;
 
@@ -40,12 +43,14 @@ public class AdminController {
             Admin admin = new Admin(adminDTO);
             userManager.registerAdmin(admin);
             return Response.status(CREATED).entity(admin).build();
-        } catch(NullPointerException e) {
-            return Response.status(BAD_REQUEST).build();
         } catch(UserConflictException e) {
             return Response.status(CONFLICT).build();
+        } catch(TransactionalException e) {
+            return Response.status(CONFLICT).build();
+        } catch(NullPointerException e) {
+            return Response.status(BAD_REQUEST).build();
         } catch(MalformedUserException e) {
-            return Response.status(NOT_ACCEPTABLE).build();
+            return Response.status(BAD_REQUEST).build();
         }
     }
 
@@ -65,6 +70,13 @@ public class AdminController {
         return userControllerMethods.getSingleUser("Admin", entityId);
     }
 
+    @GET
+    @Path("/login/{login}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getUserByLogin(@PathParam("login") String login) {
+        return userControllerMethods.getSingleUser("Admin", login);
+    }
+
     // update
     @PUT
     @Path("/{entityId}")
@@ -73,12 +85,14 @@ public class AdminController {
         try {
             userManager.updateAdmin(entityId, adminDTO);
             return Response.status(OK).entity(adminDTO).build();
-        } catch (MalformedUserException e) {
-            return Response.status(NOT_ACCEPTABLE).build();
-        } catch(IllegalModificationException e) {
-            return Response.status(NOT_ACCEPTABLE).build();
-        } catch(NullPointerException e) {
+        } catch (MalformedUserException | IllegalModificationException e) {
             return Response.status(BAD_REQUEST).build();
+        } catch(TransactionalException e) { // login modification
+            return Response.status(BAD_REQUEST).build();
+        } catch(NullPointerException e) {
+            return Response.status(NOT_FOUND).build();
+        } catch(NoResultException e) {
+            return Response.status(NOT_FOUND).build();
         }
     }
 
@@ -100,7 +114,7 @@ public class AdminController {
     @Path("/addFake")
     @Produces(MediaType.APPLICATION_JSON)
     public Admin addFakeUserAdmin() {
-        Admin c = DataFaker.getUserAdmin();
+        Admin c = DataFaker.getAdmin();
         try {
             userManager.registerAdmin(c);
         } catch(Exception e) {

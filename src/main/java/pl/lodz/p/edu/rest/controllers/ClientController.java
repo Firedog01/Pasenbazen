@@ -3,15 +3,12 @@ package pl.lodz.p.edu.rest.controllers;
 import jakarta.inject.Inject;
 
 import jakarta.persistence.NoResultException;
-import jakarta.persistence.RollbackException;
 import jakarta.transaction.TransactionalException;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-import pl.lodz.p.edu.rest.DTO.ClientDTO;
-import pl.lodz.p.edu.rest.exception.NoObjectException;
-import pl.lodz.p.edu.rest.exception.UserException;
+import pl.lodz.p.edu.rest.model.users.DTO.ClientDTO;
 import pl.lodz.p.edu.rest.exception.user.IllegalModificationException;
 import pl.lodz.p.edu.rest.exception.user.MalformedUserException;
 import pl.lodz.p.edu.rest.exception.user.UserConflictException;
@@ -99,10 +96,6 @@ public class ClientController {
             return Response.status(NOT_FOUND).build();
         } catch(NoResultException e) {
             return Response.status(NOT_FOUND).build();
-        } catch (Exception e) {
-            logger.info(e.getClass().getName());
-            logger.info(e.getMessage());
-            return Response.status(BAD_GATEWAY).build();
         }
     }
 

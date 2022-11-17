@@ -1,4 +1,4 @@
-package pl.lodz.p.edu.rest.DTO;
+package pl.lodz.p.edu.rest.model.users.DTO;
 
 import pl.lodz.p.edu.rest.model.Address;
 
