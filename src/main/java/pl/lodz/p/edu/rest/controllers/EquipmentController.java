@@ -1,16 +1,25 @@
 package pl.lodz.p.edu.rest.controllers;
 
 import jakarta.inject.Inject;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.NoResultException;
+import jakarta.transaction.TransactionalException;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import pl.lodz.p.edu.rest.exception.IllegalModificationException;
+import pl.lodz.p.edu.rest.exception.ObjectNotValidException;
+import pl.lodz.p.edu.rest.exception.ConflictException;
 import pl.lodz.p.edu.rest.managers.EquipmentManager;
+import pl.lodz.p.edu.rest.model.DTO.EquipmentDTO;
 import pl.lodz.p.edu.rest.model.Equipment;
 import pl.lodz.p.edu.rest.repository.DataFaker;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import static jakarta.ws.rs.core.Response.Status.*;
+import static jakarta.ws.rs.core.Response.Status.BAD_REQUEST;
 
 
 @Path("/equipment")
@@ -19,14 +28,30 @@ public class EquipmentController {
     @Inject
     private EquipmentManager equipmentManager;
 
+    // create
+
     @POST
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createEquipment(Equipment equipment) {
-        equipmentManager.add(equipment);
-        return Response.status(Response.Status.OK).entity(equipment).build();
+    public Response createEquipment(EquipmentDTO equipmentDTO) {
+        try {
+            Equipment equipment = new Equipment(equipmentDTO);
+            equipmentManager.add(equipment);
+            return Response.status(CREATED).entity(equipment).build();
+        } catch(ConflictException e) {
+            return Response.status(CONFLICT).build();
+        } catch(TransactionalException e) {
+            return Response.status(CONFLICT).build();
+        } catch(NullPointerException e) {
+            return Response.status(BAD_REQUEST).build();
+        } catch(ObjectNotValidException e) {
+            return Response.status(BAD_REQUEST).build();
+        }
+        
     }
+
+    // read
 
     @GET
     @Path("/")
@@ -48,33 +73,27 @@ public class EquipmentController {
         }
     }
 
-//    @GET
-//    @Produces(MediaType.APPLICATION_JSON)
-//    @Path("/available")
-//    public Response getAllAvailableEquipment() {
-//        List<Equipment> all = equipmentManager.getAll();
-//        List<Equipment> available = new ArrayList<>();
-//        for (Equipment e : all) {
-//            if (!(e.isArchive() || e.isMissing())) {
-//                available.add(e);
-//            }
-//        }
-//        return Response.status(Response.Status.OK).entity(available).build();
-//    }
+    // update
 
     @PUT
-    @Path("/{uuid}")
+    @Path("/{entityId}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateEquipment(@PathParam("uuid") UUID uuid, Equipment equipment) {
-        Equipment current = equipmentManager.get(uuid);
-        if(current == null) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+    public Response updateEquipment(@PathParam("entityId") UUID entityId, EquipmentDTO equipmentDTO) {
+        try {
+            equipmentManager.update(entityId, equipmentDTO);
+            return Response.status(OK).entity(equipmentDTO).build();
+        } catch (ObjectNotValidException | IllegalModificationException e) {
+            return Response.status(BAD_REQUEST).build();
+        } catch(TransactionalException e) { // login modification
+            return Response.status(BAD_REQUEST).build();
+        } catch(NullPointerException e) {
+            return Response.status(NOT_FOUND).build();
+        } catch(EntityNotFoundException e) {
+            return Response.status(NOT_FOUND).build();
         }
-        current.merge(equipment);
-        equipmentManager.update(current);
-
-        return Response.status(Response.Status.OK).entity(equipment).build();
     }
+
+    // delete
 
     @DELETE
     @Path("/{uuid}")
@@ -86,12 +105,15 @@ public class EquipmentController {
     //===============================================
 
     @POST
-    @Path("/addFakeEq")
+    @Path("/addFake")
     @Produces(MediaType.APPLICATION_JSON)
     public Equipment addFakeEquipment() {
         Equipment e = DataFaker.getEquipment();
-        System.out.println(e);
-        equipmentManager.add(e);
+        try {
+            equipmentManager.add(e);
+        } catch(Exception ex) {
+            return null;
+        }
         return e;
     }
 }

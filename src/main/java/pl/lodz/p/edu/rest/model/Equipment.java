@@ -1,14 +1,8 @@
 package pl.lodz.p.edu.rest.model;
 
 import jakarta.persistence.*;
-import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotNull;
-import pl.lodz.p.edu.rest.model.AbstractEntity;
-import pl.lodz.p.edu.rest.model.Rent;
-import pl.lodz.p.edu.rest.exception.EquipmentException;
-
-import java.util.ArrayList;
-import java.util.List;
+import pl.lodz.p.edu.rest.model.DTO.EquipmentDTO;
 
 @Entity
 @Table(name = "equipment")
@@ -34,25 +28,17 @@ public class Equipment extends AbstractEntity {
     @Column(name = "next_day_cost")
     private double nextDaysCost;
 
-    @NotNull
     @Column(name = "archive")
     private boolean archive;
 
     @Column(name = "description")
     private String description;
 
-    @NotNull
     @Column(name = "missing")
     private boolean missing;
 
 
-    public Equipment(double firstDayCost, double nextDaysCost, double bail, String name) throws EquipmentException {
-        if(firstDayCost <= 0.0 || nextDaysCost <= 0.0 || bail <= 0.0) {
-            throw new EquipmentException("Prosze podac prawidlowy koszt wypozyczenia");
-        }
-        if(name.length() == 0) {
-            throw new EquipmentException("Prosze podac prawidlowa nazwe");
-        }
+    public Equipment(double firstDayCost, double nextDaysCost, double bail, String name) {
         this.firstDayCost = firstDayCost;
         this.nextDaysCost = nextDaysCost;
         this.bail = bail;
@@ -60,6 +46,25 @@ public class Equipment extends AbstractEntity {
         this.archive = false;
         this.description = null;
         this.missing = false;
+    }
+
+    public Equipment(EquipmentDTO equipmentDTO) {
+        this.merge(equipmentDTO);
+    }
+
+    public boolean verify() {
+        return !(firstDayCost <= 0.0 || nextDaysCost <= 0.0 || bail <= 0.0)
+                && !name.isEmpty();
+    }
+
+    public void merge(EquipmentDTO equipmentDTO) {
+        this.name = equipmentDTO.getName();
+        this.bail = equipmentDTO.getBail();
+        this.firstDayCost = equipmentDTO.getFirstDayCost();
+        this.nextDaysCost = equipmentDTO.getNextDaysCost();
+        this.archive = equipmentDTO.isArchive();
+        this.description = equipmentDTO.getDescription();
+        this.missing = equipmentDTO.isMissing();
     }
 
     protected Equipment() {}
@@ -80,9 +85,7 @@ public class Equipment extends AbstractEntity {
         return sb.toString();
     }
 
-    public void merge(Equipment equipment) {
 
-    }
 
     public Long getId() {
         return id;

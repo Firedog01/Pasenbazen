@@ -1,7 +1,6 @@
 package pl.lodz.p.edu.rest.repository;
 
-import pl.lodz.p.edu.rest.exception.EquipmentException;
-import pl.lodz.p.edu.rest.exception.user.MalformedUserException;
+import pl.lodz.p.edu.rest.exception.ObjectNotValidException;
 import pl.lodz.p.edu.rest.model.Address;
 import pl.lodz.p.edu.rest.model.Equipment;
 import pl.lodz.p.edu.rest.model.Rent;
@@ -22,7 +21,7 @@ public class DataFaker {
         try {
             return new Client(randStr(7), // idType.values()[(int)(Math.random() * 2) % 2],
                     randStr(10), randStr(10), a);
-        } catch(MalformedUserException e) {
+        } catch(ObjectNotValidException e) {
             return null; // will never happen
         }
     }
@@ -32,7 +31,7 @@ public class DataFaker {
             Address a = getAddress();
             return new Client(randStr(7),
                     randStr(10), randStr(10), a);
-        } catch(MalformedUserException e) {
+        } catch(ObjectNotValidException e) {
             return null; // will never happen
         }
     }
@@ -40,7 +39,7 @@ public class DataFaker {
     public static Admin getAdmin() {
         try {
             return new Admin(randStr(10), randStr(20));
-        } catch (MalformedUserException e) {
+        } catch (ObjectNotValidException e) {
             return null; // will never happen
         }
     }
@@ -48,19 +47,15 @@ public class DataFaker {
     public static Employee getEmployee() {
         try {
             return new Employee(randStr(10), randStr(20));
-        } catch (MalformedUserException e) {
+        } catch (ObjectNotValidException e) {
             return null; // will never happen
         }
     }
 
 
     public static Equipment getEquipment() {
-        try {
-            return new Equipment(Math.random() * 100, Math.random() * 200,
+        return new Equipment(Math.random() * 100, Math.random() * 200,
                 Math.random() * 1000, randStr(10));
-        } catch (EquipmentException e) {
-            return null;
-        }
     }
 
     public static Rent getRent(Equipment e, Client c) {

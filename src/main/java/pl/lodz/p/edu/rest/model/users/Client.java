@@ -5,8 +5,8 @@ import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.validation.constraints.NotNull;
-import pl.lodz.p.edu.rest.model.users.DTO.ClientDTO;
-import pl.lodz.p.edu.rest.exception.user.MalformedUserException;
+import pl.lodz.p.edu.rest.model.DTO.users.ClientDTO;
+import pl.lodz.p.edu.rest.exception.ObjectNotValidException;
 import pl.lodz.p.edu.rest.model.Address;
 
 @Entity
@@ -23,14 +23,14 @@ public class Client extends User {
     @Embedded
     private Address address;
 
-    public Client(String login, String firstName, String lastName, Address address) throws MalformedUserException {
+    public Client(String login, String firstName, String lastName, Address address) throws ObjectNotValidException {
         super(login);
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
     }
 
-    public Client(ClientDTO clientDTO) throws MalformedUserException {
+    public Client(ClientDTO clientDTO) throws ObjectNotValidException {
         super(clientDTO.getLogin());
         this.firstName = clientDTO.getFirstName();
         this.lastName = clientDTO.getLastName();

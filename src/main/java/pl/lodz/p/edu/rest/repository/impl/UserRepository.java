@@ -6,7 +6,6 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import jakarta.transaction.Transactional;
-import pl.lodz.p.edu.rest.exception.user.IllegalModificationException;
 import pl.lodz.p.edu.rest.model.users.*;
 import pl.lodz.p.edu.rest.repository.Repository;
 

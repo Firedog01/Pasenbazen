@@ -1,7 +1,6 @@
 package pl.lodz.p.edu.rest.repository;
 
-import pl.lodz.p.edu.rest.exception.user.IllegalModificationException;
-import pl.lodz.p.edu.rest.model.UniqueId;
+import pl.lodz.p.edu.rest.exception.IllegalModificationException;
 
 import java.util.List;
 import java.util.UUID;

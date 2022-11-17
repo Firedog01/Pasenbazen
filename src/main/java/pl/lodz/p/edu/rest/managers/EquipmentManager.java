@@ -1,8 +1,11 @@
 package pl.lodz.p.edu.rest.managers;
 
 import jakarta.inject.Inject;
+import jakarta.persistence.PersistenceException;
 import jakarta.transaction.Transactional;
 
+import pl.lodz.p.edu.rest.exception.*;
+import pl.lodz.p.edu.rest.model.DTO.EquipmentDTO;
 import pl.lodz.p.edu.rest.model.Equipment;
 import pl.lodz.p.edu.rest.repository.impl.EquipmentRepository;
 
@@ -20,8 +23,16 @@ public class EquipmentManager {
 
 
 
-    public void add(Equipment equipment) {
-        equipmentRepository.add(equipment);
+    public void add(Equipment equipment) throws ObjectNotValidException, ConflictException {
+        if (!equipment.verify()) {
+            throw new ObjectNotValidException("Equipment fields have illegal values");
+        }
+        try {
+            equipmentRepository.add(equipment);
+        } catch(PersistenceException e) {
+            throw new ConflictException("Already exists user with given login");
+        }
+
     }
 
     public Equipment get(UUID uuid) {
@@ -32,7 +43,15 @@ public class EquipmentManager {
         return equipmentRepository.getAll();
     }
 
-    public void update(Equipment equipment) {
+    public void update(UUID entityId, EquipmentDTO equipmentDTO) throws IllegalModificationException, ObjectNotValidException {
+        Equipment equipmentVerify = new Equipment(equipmentDTO);
+        if (!equipmentVerify.verify()) {
+            throw new ObjectNotValidException("Clients fields have illegal values");
+        }
+
+        Equipment equipment = equipmentRepository.get(entityId);
+        equipment.merge(equipmentDTO);
+
         equipmentRepository.update(equipment);
     }
 

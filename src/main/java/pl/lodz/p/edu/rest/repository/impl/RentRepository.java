@@ -8,7 +8,6 @@ import jakarta.transaction.Transactional;
 import pl.lodz.p.edu.rest.model.Equipment;
 import pl.lodz.p.edu.rest.model.Rent;
 import pl.lodz.p.edu.rest.model.Rent_;
-import pl.lodz.p.edu.rest.model.UniqueId;
 import pl.lodz.p.edu.rest.model.users.Client;
 import pl.lodz.p.edu.rest.repository.Repository;
 

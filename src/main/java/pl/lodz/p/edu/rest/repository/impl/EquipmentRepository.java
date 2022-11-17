@@ -7,7 +7,6 @@ import jakarta.persistence.criteria.Root;
 import jakarta.transaction.Transactional;
 import pl.lodz.p.edu.rest.model.Equipment;
 import pl.lodz.p.edu.rest.model.Equipment_;
-import pl.lodz.p.edu.rest.model.UniqueId;
 import pl.lodz.p.edu.rest.repository.Repository;
 
 import java.util.List;

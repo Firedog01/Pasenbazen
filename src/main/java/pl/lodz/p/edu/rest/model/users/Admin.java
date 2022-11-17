@@ -3,8 +3,8 @@ package pl.lodz.p.edu.rest.model.users;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
-import pl.lodz.p.edu.rest.model.users.DTO.AdminDTO;
-import pl.lodz.p.edu.rest.exception.user.MalformedUserException;
+import pl.lodz.p.edu.rest.model.DTO.users.AdminDTO;
+import pl.lodz.p.edu.rest.exception.ObjectNotValidException;
 
 @Entity
 @DiscriminatorValue("admin")
@@ -15,11 +15,11 @@ public class Admin extends User {
     public Admin() {
     }
 
-    public Admin(AdminDTO adminDTO) throws MalformedUserException {
+    public Admin(AdminDTO adminDTO) throws ObjectNotValidException {
         this.merge(adminDTO);
     }
 
-    public Admin(String login, String favouriteIceCream) throws MalformedUserException {
+    public Admin(String login, String favouriteIceCream) throws ObjectNotValidException {
         super(login);
         this.favouriteIceCream = favouriteIceCream;
     }

@@ -6,10 +6,10 @@ import jakarta.transaction.TransactionalException;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import pl.lodz.p.edu.rest.model.users.DTO.EmployeeDTO;
-import pl.lodz.p.edu.rest.exception.user.IllegalModificationException;
-import pl.lodz.p.edu.rest.exception.user.MalformedUserException;
-import pl.lodz.p.edu.rest.exception.user.UserConflictException;
+import pl.lodz.p.edu.rest.model.DTO.users.EmployeeDTO;
+import pl.lodz.p.edu.rest.exception.IllegalModificationException;
+import pl.lodz.p.edu.rest.exception.ObjectNotValidException;
+import pl.lodz.p.edu.rest.exception.ConflictException;
 import pl.lodz.p.edu.rest.managers.UserManager;
 import pl.lodz.p.edu.rest.model.users.Employee;
 import pl.lodz.p.edu.rest.repository.DataFaker;
@@ -42,13 +42,13 @@ public class EmployeeController {
             Employee employee = new Employee(employeeDTO);
             userManager.registerEmployee(employee);
             return Response.status(CREATED).entity(employee).build();
-        } catch(UserConflictException e) {
+        } catch(ConflictException e) {
             return Response.status(CONFLICT).build();
         } catch(TransactionalException e) {
             return Response.status(CONFLICT).build();
         } catch(NullPointerException e) {
             return Response.status(BAD_REQUEST).build();
-        } catch(MalformedUserException e) {
+        } catch(ObjectNotValidException e) {
             return Response.status(BAD_REQUEST).build();
         }
     }
@@ -84,7 +84,7 @@ public class EmployeeController {
         try {
             userManager.updateEmployee(entityId, employeeDTO);
             return Response.status(OK).entity(employeeDTO).build();
-        } catch (MalformedUserException | IllegalModificationException e) {
+        } catch (ObjectNotValidException | IllegalModificationException e) {
             return Response.status(BAD_REQUEST).build();
         } catch(TransactionalException e) { // login modification
             return Response.status(BAD_REQUEST).build();
