@@ -3,8 +3,11 @@ package pl.lodz.p.edu.rest.model;
 import jakarta.persistence.*;
 import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotNull;
-import org.joda.time.Days;
-import org.joda.time.LocalDateTime;
+
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+
+import pl.lodz.p.edu.rest.DTO.RentDTO;
 import pl.lodz.p.edu.rest.model.users.Client;
 
 @Entity
@@ -27,7 +30,7 @@ public class Rent extends AbstractEntity {
 
     @NotNull
     @JoinColumn(name = "client_id")
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Client client;
 
     @NotNull
@@ -59,6 +62,13 @@ public class Rent extends AbstractEntity {
 
     protected Rent() {}
 
+    public Rent(RentDTO rentDTO, Equipment equipment, Client client) {
+        this.beginTime = LocalDateTime.parse(rentDTO.getBeginTime());
+        this.endTime = LocalDateTime.parse(rentDTO.getEndTime());
+        this.equipment = equipment;
+        this.client = client;
+    }
+
     public Rent(long id, LocalDateTime beginTime, LocalDateTime endTime,
                 Equipment equipment, Client client) {
 
@@ -73,7 +83,7 @@ public class Rent extends AbstractEntity {
         } else if (equipment.isMissing()) {
             return equipment.getBail();
         } else {
-            long diffDays= Math.abs(Days.daysBetween(beginTime, endTime).getDays());
+            long diffDays = Math.abs( ChronoUnit.DAYS.between(beginTime, endTime));
             //FIXME Nie jestem pewien co do tego, ustawiłem sprawdzanie od 1, bo myślę, że gdzieś indziej będzie sprawdzane
             // Czy data jest w ogóle większa od 0?
             if (diffDays > 1) {
@@ -98,6 +108,12 @@ public class Rent extends AbstractEntity {
     }
 
 
+    public void merge(RentDTO rentDTO, Equipment equipment, Client client) {
+        this.beginTime = LocalDateTime.parse(rentDTO.getBeginTime());
+        this.endTime = LocalDateTime.parse(rentDTO.getEndTime());
+        this.equipment = equipment;
+        this.client = client;
+    }
     public LocalDateTime getBeginTime() {
         return beginTime;
     }

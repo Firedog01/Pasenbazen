@@ -3,9 +3,11 @@ package pl.lodz.p.edu.rest.managers;
 import jakarta.inject.Inject;
 
 import jakarta.transaction.Transactional;
+import pl.lodz.p.edu.rest.DTO.RentDTO;
 import pl.lodz.p.edu.rest.model.Equipment;
 import pl.lodz.p.edu.rest.model.Rent;
 
+import pl.lodz.p.edu.rest.model.users.Client;
 import pl.lodz.p.edu.rest.repository.impl.RentRepository;
 
 import java.util.List;
@@ -24,8 +26,8 @@ public class RentManager {
         return rentRepository.getRentByEq(equipment);
     }
 
-    public List<Rent> getRentsByClient(UUID uuid) {
-        return rentRepository.getRentByClient(get(uuid).getClient());
+    public List<Rent> getRentsByClient(Client client) {
+        return rentRepository.getRentByClient(client);
     }
 
     public Rent get(UUID uuid) {
@@ -40,8 +42,11 @@ public class RentManager {
         rentRepository.add(rent);
     }
 
-    public void update(Rent rent) {
+    public Rent update(UUID entityId, RentDTO rentDTO, Equipment equipment, Client client) {
+        Rent rent = rentRepository.get(entityId);
+        rent.merge(rentDTO, equipment, client);
         rentRepository.update(rent);
+        return rent;
     }
 
     public void remove(UUID uuid) {
