@@ -15,6 +15,15 @@ public class Admin extends User {
     public Admin() {
     }
 
+    public Admin(AdminDTO adminDTO) throws MalformedUserException {
+        this.merge(adminDTO);
+    }
+
+    public Admin(String login, String favouriteIceCream) throws MalformedUserException {
+        super(login);
+        this.favouriteIceCream = favouriteIceCream;
+    }
+
     public boolean verify() {
         return super.verify() && !favouriteIceCream.isEmpty();
     }
@@ -24,14 +33,7 @@ public class Admin extends User {
         this.favouriteIceCream = adminDTO.getFavouriteIceCream();
     }
 
-    public Admin(AdminDTO adminDTO) throws MalformedUserException {
-        this.merge(adminDTO);
-    }
 
-    public Admin(String login, String favouriteIceCream) throws MalformedUserException {
-        super(login);
-        this.favouriteIceCream = favouriteIceCream;
-    }
 
     public String getFavouriteIceCream() {
         return favouriteIceCream;

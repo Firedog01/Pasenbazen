@@ -45,8 +45,12 @@ public class DataFaker {
         }
     }
 
-    public static Employee getResourceAdmin() {
-        return new Employee();
+    public static Employee getEmployee() {
+        try {
+            return new Employee(randStr(10), randStr(20));
+        } catch (MalformedUserException e) {
+            return null; // will never happen
+        }
     }
 
 

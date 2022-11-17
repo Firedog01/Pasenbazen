@@ -15,12 +15,16 @@ import pl.lodz.p.edu.rest.model.users.Employee;
 import pl.lodz.p.edu.rest.repository.DataFaker;
 
 import java.util.UUID;
+import java.util.logging.Logger;
 
 import static jakarta.ws.rs.core.Response.Status.*;
 import static jakarta.ws.rs.core.Response.Status.OK;
 
 @Path("/employees")
 public class EmployeeController {
+
+    Logger logger = Logger.getLogger(AdminController.class.getName());
+
     @Inject
     private UserManager userManager;
 
@@ -37,7 +41,7 @@ public class EmployeeController {
         try {
             Employee employee = new Employee(employeeDTO);
             userManager.registerEmployee(employee);
-            return Response.status(CREATED).entity(employeeDTO).build();
+            return Response.status(CREATED).entity(employee).build();
         } catch(UserConflictException e) {
             return Response.status(CONFLICT).build();
         } catch(TransactionalException e) {
@@ -59,9 +63,9 @@ public class EmployeeController {
     }
 
     @GET
-    @Path("/{uuid}")
+    @Path("/{entityId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getUserByUuid(@PathParam("uuid") UUID entityId) {
+    public Response getUserByUuid(@PathParam("entityId") UUID entityId) {
         return userControllerMethods.getSingleUser("Employee", entityId);
     }
 
@@ -109,7 +113,7 @@ public class EmployeeController {
     @Path("/addFake")
     @Produces(MediaType.APPLICATION_JSON)
     public Employee addFakeUserAdmin() {
-        Employee c = DataFaker.getResourceAdmin();
+        Employee c = DataFaker.getEmployee();
         try {
             userManager.registerEmployee(c);
         } catch (Exception e) {

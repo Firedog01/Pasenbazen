@@ -1,27 +1,46 @@
 package pl.lodz.p.edu.rest.model.users;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import pl.lodz.p.edu.rest.model.users.DTO.EmployeeDTO;
 import pl.lodz.p.edu.rest.exception.user.MalformedUserException;
 
 @Entity
-@DiscriminatorValue("resource_admin")
+@DiscriminatorValue("employee")
 public class Employee extends User {
 
-    public Employee(String login) throws MalformedUserException {
+    @Column(name = "desk")
+    private String desk;
+
+    public Employee() {}
+
+    public Employee(String login, String desk) throws MalformedUserException {
         super(login);
+        this.desk = desk;
     }
 
     public Employee(EmployeeDTO employeeDTO) throws MalformedUserException {
-        super(employeeDTO.getLogin());
+        this.merge(employeeDTO);
     }
 
-    public Employee() {
 
+
+    public boolean verify() {
+        return super.verify() && !desk.isEmpty();
     }
 
     public void merge(EmployeeDTO employeeDTO) {
         this.setLogin(employeeDTO.getLogin());
+        this.desk = employeeDTO.getDesk();
     }
+
+    public String getDesk() {
+        return desk;
+    }
+
+    public void setDesk(String desk) {
+        this.desk = desk;
+    }
+
 }
