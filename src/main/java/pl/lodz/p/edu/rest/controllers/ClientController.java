@@ -92,11 +92,7 @@ public class ClientController {
             return Response.status(BAD_REQUEST).build();
         } catch(TransactionalException e) { // login modification
             return Response.status(BAD_REQUEST).build();
-        }
-//        catch(NullPointerException e) {
-//            return Response.status(NOT_FOUND).build();
-//        }
-        catch(NoResultException e) {
+        } catch(NoResultException e) {
             return Response.status(NOT_FOUND).build();
         }
     }

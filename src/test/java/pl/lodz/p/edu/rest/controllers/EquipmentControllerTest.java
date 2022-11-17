@@ -69,24 +69,6 @@ class EquipmentControllerTest {
                 .statusCode(400);
     }
 
-    @Test
-    void createEquipment_conflict() {
-        given()
-                .header("Content-Type", "application/json")
-                .body(validEquipmentStr)
-                .when()
-                .post("/equipment")
-                .then()
-                .statusCode(201);
-        given()
-                .header("Content-Type", "application/json")
-                .body(validEquipmentStr)
-                .when()
-                .post("/equipment")
-                .then()
-                .statusCode(409);
-    }
-
     // read
     @Test
     void getAllEquipments_correct()  {

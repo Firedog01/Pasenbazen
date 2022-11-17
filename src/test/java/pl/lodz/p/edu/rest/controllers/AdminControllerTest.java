@@ -278,4 +278,44 @@ class AdminControllerTest {
                 .then()
                 .statusCode(400);
     }
+
+    @Test
+    void activateDeactivateTest() throws JsonProcessingException {
+        String uuid = given()
+                .header("Content-Type", "application/json")
+                .body(validAdminStr)
+                .when()
+                .post("/admins")
+                .then()
+                .statusCode(201)
+                .extract().path("entityId");
+
+        // deactivate
+        given()
+                .header("Content-Type", "application/json")
+                .when()
+                .put("/admins/" + uuid + "/deactivate")
+                .then()
+                .statusCode(204);
+        given()
+                .header("Content-Type", "application/json")
+                .when()
+                .get("/admins/" + uuid)
+                .then()
+                .body("active", equalTo(false));
+
+        // activate
+        given()
+                .header("Content-Type", "application/json")
+                .when()
+                .put("/admins/" + uuid + "/activate")
+                .then()
+                .statusCode(204);
+        given()
+                .header("Content-Type", "application/json")
+                .when()
+                .get("/admins/" + uuid)
+                .then()
+                .body("active", equalTo(true));
+    }
 }

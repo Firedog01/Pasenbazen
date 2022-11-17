@@ -39,10 +39,6 @@ public class EquipmentController {
             Equipment equipment = new Equipment(equipmentDTO);
             equipmentManager.add(equipment);
             return Response.status(CREATED).entity(equipment).build();
-        } catch(ConflictException e) {
-            return Response.status(CONFLICT).build();
-        } catch(TransactionalException e) {
-            return Response.status(CONFLICT).build();
         } catch(NullPointerException e) {
             return Response.status(BAD_REQUEST).build();
         } catch(ObjectNotValidException e) {
@@ -65,10 +61,10 @@ public class EquipmentController {
     @Path("/{uuid}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getEquipment(@PathParam("uuid") UUID uuid) {
-        Equipment equipment = equipmentManager.get(uuid);
-        if (equipment != null) {
+        try {
+            Equipment equipment = equipmentManager.get(uuid);
             return Response.status(Response.Status.OK).entity(equipment).build();
-        } else {
+        } catch(EntityNotFoundException e) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
     }
@@ -84,12 +80,6 @@ public class EquipmentController {
             return Response.status(OK).entity(equipmentDTO).build();
         } catch (ObjectNotValidException | IllegalModificationException e) {
             return Response.status(BAD_REQUEST).build();
-        }
-//        catch(TransactionalException e) { // login modification
-//            return Response.status(BAD_REQUEST).build();
-//        }
-        catch(NullPointerException e) {
-            return Response.status(NOT_FOUND).build();
         } catch(EntityNotFoundException e) {
             return Response.status(NOT_FOUND).build();
         }

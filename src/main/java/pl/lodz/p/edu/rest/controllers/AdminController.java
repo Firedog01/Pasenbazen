@@ -47,8 +47,6 @@ public class AdminController {
             return Response.status(CONFLICT).build();
         } catch(TransactionalException e) {
             return Response.status(CONFLICT).build();
-        } catch(NullPointerException e) {
-            return Response.status(BAD_REQUEST).build();
         } catch(ObjectNotValidException e) {
             return Response.status(BAD_REQUEST).build();
         }
@@ -89,8 +87,6 @@ public class AdminController {
             return Response.status(BAD_REQUEST).build();
         } catch(TransactionalException e) { // login modification
             return Response.status(BAD_REQUEST).build();
-        } catch(NullPointerException e) {
-            return Response.status(NOT_FOUND).build();
         } catch(NoResultException e) {
             return Response.status(NOT_FOUND).build();
         }

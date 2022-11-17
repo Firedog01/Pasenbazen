@@ -40,7 +40,7 @@ public class UserRepository implements Repository<User> {
     }
 
     public User getOfType(String type, UUID entityId) {
-        Query q = em.createQuery("SELECT user FROM User user WHERE user.entityId = :entityId and type(user) = Employee ", User.class);
+        Query q = em.createQuery("SELECT user FROM User user WHERE user.entityId = :entityId and type(user) = " + type, User.class);
         q.setParameter("entityId", entityId);
         return (User) q.getSingleResult();
     }

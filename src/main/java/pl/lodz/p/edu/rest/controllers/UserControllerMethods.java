@@ -46,16 +46,20 @@ public class UserControllerMethods {
     }
 
     public Response activateUser(String type, UUID entityId) {
-        User user = userManager.getUserByUuidOfType(type, entityId);
-        user.setActive(true);
-        userManager.updateUser(user);
-        return Response.status(OK).entity(user).build();
+        try {
+            userManager.activateUser(type, entityId);
+            return Response.status(NO_CONTENT).build();
+        } catch(NoResultException e) {
+            return Response.status(NOT_FOUND).build();
+        }
     }
 
     public Response deactivateUser(String type, UUID entityId) {
-        User user = userManager.getUserByUuidOfType(type, entityId);
-        user.setActive(false);
-        userManager.updateUser(user);
-        return Response.status(OK).entity(user).build();
+        try {
+            userManager.deactivateUser(type, entityId);
+            return Response.status(NO_CONTENT).build();
+        } catch(NoResultException e) {
+            return Response.status(NOT_FOUND).build();
+        }
     }
 }

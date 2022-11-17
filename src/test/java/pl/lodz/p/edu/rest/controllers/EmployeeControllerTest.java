@@ -278,4 +278,44 @@ class EmployeeControllerTest {
                 .then()
                 .statusCode(400);
     }
+
+    @Test
+    void activateDeactivateTest() throws JsonProcessingException {
+        String uuid = given()
+                .header("Content-Type", "application/json")
+                .body(validEmployeeStr)
+                .when()
+                .post("/employees")
+                .then()
+                .statusCode(201)
+                .extract().path("entityId");
+
+        // deactivate
+        given()
+                .header("Content-Type", "application/json")
+                .when()
+                .put("/employees/" + uuid + "/deactivate")
+                .then()
+                .statusCode(204);
+        given()
+                .header("Content-Type", "application/json")
+                .when()
+                .get("/employees/" + uuid)
+                .then()
+                .body("active", equalTo(false));
+
+        // activate
+        given()
+                .header("Content-Type", "application/json")
+                .when()
+                .put("/employees/" + uuid + "/activate")
+                .then()
+                .statusCode(204);
+        given()
+                .header("Content-Type", "application/json")
+                .when()
+                .get("/employees/" + uuid)
+                .then()
+                .body("active", equalTo(true));
+    }
 }

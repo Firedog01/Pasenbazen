@@ -1,6 +1,7 @@
 package pl.lodz.p.edu.rest.managers;
 
 import jakarta.inject.Inject;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceException;
 import jakarta.transaction.Transactional;
 
@@ -23,19 +24,20 @@ public class EquipmentManager {
 
 
 
-    public void add(Equipment equipment) throws ObjectNotValidException, ConflictException {
-        if (!equipment.verify()) {
+    public void add(Equipment equipment) throws ObjectNotValidException {
+        try {
+            if (!equipment.verify()) {
+                throw new ObjectNotValidException("Equipment fields have illegal values");
+            }
+        } catch(NullPointerException e) {
             throw new ObjectNotValidException("Equipment fields have illegal values");
         }
-        try {
-            equipmentRepository.add(equipment);
-        } catch(PersistenceException e) {
-            throw new ConflictException("Already exists user with given login");
-        }
 
+        equipmentRepository.add(equipment);
     }
 
     public Equipment get(UUID uuid) {
+
         return equipmentRepository.get(uuid);
     }
 
@@ -45,8 +47,12 @@ public class EquipmentManager {
 
     public void update(UUID entityId, EquipmentDTO equipmentDTO) throws IllegalModificationException, ObjectNotValidException {
         Equipment equipmentVerify = new Equipment(equipmentDTO);
-        if (!equipmentVerify.verify()) {
-            throw new ObjectNotValidException("Clients fields have illegal values");
+        try {
+            if (!equipmentVerify.verify()) {
+                throw new ObjectNotValidException("Equipment fields have illegal values");
+            }
+        } catch(NullPointerException e) {
+            throw new ObjectNotValidException("Equipment fields have illegal values");
         }
 
         Equipment equipment = equipmentRepository.get(entityId);
@@ -56,11 +62,11 @@ public class EquipmentManager {
     }
 
     public void remove(UUID uuid) {
-        equipmentRepository.remove(uuid);
+        try {
+            // todo check if is rented
+            equipmentRepository.remove(uuid);
+        } catch(EntityNotFoundException ignored) {}
     }
-
-
-
 }
 
 //public class EquipmentManager {
