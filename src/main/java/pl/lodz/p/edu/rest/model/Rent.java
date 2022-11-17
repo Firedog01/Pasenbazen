@@ -29,7 +29,7 @@ public class Rent extends AbstractEntity {
 
     @NotNull
     @JoinColumn(name = "client_id")
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Client client;
 
     @NotNull
