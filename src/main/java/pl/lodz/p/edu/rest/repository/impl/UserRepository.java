@@ -6,6 +6,7 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import jakarta.transaction.Transactional;
+import pl.lodz.p.edu.rest.exception.user.IllegalModificationException;
 import pl.lodz.p.edu.rest.model.users.*;
 import pl.lodz.p.edu.rest.repository.Repository;
 
@@ -40,62 +41,42 @@ public class UserRepository implements Repository<User> {
     }
 
     public User getOfType(String type, UUID entityId) {
-        Query q = em.createQuery("SELECT user FROM User user WHERE user.entityId = :login and type(user) = " + type, User.class);
+        Query q = em.createQuery("SELECT user FROM User user WHERE user.entityId = :entityId and type(user) = " + type, User.class);
         q.setParameter("entityId", entityId);
         return (User) q.getSingleResult();
     }
 
-    public Client getClient(UUID entityId) {
-        Query q = em.createQuery("SELECT user FROM User user WHERE user.entityId = :login and type(user) = Client", User.class);
-        q.setParameter("entityId", entityId);
-        return (Client) q.getSingleResult();
-    }
-
-    public Admin getAdmin(UUID entityId) {
-        Query q = em.createQuery("SELECT user FROM User user WHERE user.entityId = :login and type(user) = Admin", User.class);
-        q.setParameter("entityId", entityId);
-        return (Admin) q.getSingleResult();
-    }
-
-    public Employee getEmployee(UUID entityId) {
-        Query q = em.createQuery("SELECT user FROM User user WHERE user.entityId = :login and type(user) = Employee", User.class);
-        q.setParameter("entityId", entityId);
-        return (Employee) q.getSingleResult();
-    }
-
-    @Transactional
-    public User getByLogin(String login) {
-        Query q = em.createQuery("SELECT user FROM User user WHERE user.login = :login", User.class);
+    public User getByLogin(String type, String login) {
+        Query q = em.createQuery("SELECT user FROM User user WHERE user.login = :login and type(user) = " + type, User.class);
         q.setParameter("login", login);
         return (User) q.getSingleResult();
     }
 
-    @Transactional
-    public List<User> getAllWithLogin(String login) {
-        Query q = em.createQuery("SELECT user FROM User user WHERE user.login like :login", User.class);
+    public List<User> getAllWithLogin(String type, String login) {
+        Query q = em.createQuery("SELECT user FROM User user WHERE user.login like :login and type(user) = " + type, User.class);
         q.setParameter("login", login + "%");
         return q.getResultList();
     }
 
     @Override
-    @Transactional
     public List<User> getAll()  {
-        return em.createQuery("SELECT user FROM User user", User.class)
-                .setLockMode(LockModeType.OPTIMISTIC).getResultList();
+        return em.createQuery("SELECT user FROM User user", User.class).getResultList();
+    }
+
+    public List<User> getAllOfType(String type) {
+        return em.createQuery("SELECT user FROM User user WHERE type(user) = " + type, User.class).getResultList();
     }
 
     @Override
     @Transactional
     public void add(User elem) {
         em.persist(elem);
-//        em.lock(elem, LockModeType.OPTIMISTIC_FORCE_INCREMENT);
     }
 
     @Override
     @Transactional
     public void remove(UUID entityId) {
         User elem = get(entityId);
-        em.lock(elem, LockModeType.OPTIMISTIC);
         em.remove(elem);
     }
 
@@ -112,7 +93,6 @@ public class UserRepository implements Repository<User> {
         q.setParameter("entityId", entityId);
         User existing = (User) q.getSingleResult();
         existing.merge(elem);
-
     }
 
     @Override

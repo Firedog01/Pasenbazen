@@ -2,13 +2,13 @@ package pl.lodz.p.edu.rest.managers;
 
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
+import jakarta.persistence.PersistenceException;
 import jakarta.persistence.RollbackException;
 import jakarta.transaction.Transactional;
 import pl.lodz.p.edu.rest.DTO.AdminDTO;
 import pl.lodz.p.edu.rest.DTO.ClientDTO;
 import pl.lodz.p.edu.rest.DTO.EmployeeDTO;
-import pl.lodz.p.edu.rest.controllers.ClientController;
-import pl.lodz.p.edu.rest.exception.NoObjectException;
+import pl.lodz.p.edu.rest.exception.user.IllegalModificationException;
 import pl.lodz.p.edu.rest.exception.user.MalformedUserException;
 import pl.lodz.p.edu.rest.exception.user.UserConflictException;
 import pl.lodz.p.edu.rest.model.users.Admin;
@@ -54,7 +54,6 @@ public class UserManager {
         } catch(RollbackException e) {
             throw new UserConflictException("Already exists user with given login");
         }
-        userRepository.add(admin);
     }
 
     public void registerEmployee(Employee employee) throws MalformedUserException, UserConflictException {
@@ -66,7 +65,6 @@ public class UserManager {
         } catch(RollbackException e) {
             throw new UserConflictException("Already exists user with given login");
         }
-        userRepository.add(employee);
     }
 
 //    public void unregisterClient(UUID entityId) {
@@ -75,40 +73,66 @@ public class UserManager {
 
     // ========================================= read
 
-    public User getUserByUuid(UUID entityId) {
-        return userRepository.get(entityId);
+    public User getUserByUuidOfType(String type, UUID entityId) {
+        return userRepository.getOfType(type, entityId);
     }
 
-    public List<User> getAllUsers() {
-        return userRepository.getAll();
+    public List<User> getAllUsersOfType(String type) {
+        return userRepository.getAllOfType(type);
     }
 
-    public List<User> search(String login) {
-        return userRepository.getAllWithLogin(login);
+    public List<User> searchOfType(String type, String login) {
+        return userRepository.getAllWithLogin(type, login);
     }
 
-    public User getUserByLogin(String login) {
-        return userRepository.getByLogin(login);
+    public User getUserByLoginOfType(String type, String login) {
+        return userRepository.getByLogin(type, login);
     }
 
     // ========================================= update
 
-    public void updateClient(UUID entityId, ClientDTO clientDTO) throws MalformedUserException {
+    public void updateClient(UUID entityId, ClientDTO clientDTO) throws MalformedUserException, IllegalModificationException {
         Client clientVerify = new Client(clientDTO);
-        logger.info(clientVerify.toString());
-        if (clientVerify.verify()) {
+        if (!clientVerify.verify()) {
             throw new MalformedUserException("Clients fields have illegal values");
         }
         Client client = (Client) userRepository.getOfType("Client", entityId);
-        System.out.println(client);
         client.merge(clientDTO);
-        userRepository.update(client);
+
+        try {
+            userRepository.update(client);
+        } catch(PersistenceException e) {
+            throw new IllegalModificationException("Cannot modify clients login");
+        }
     }
 
-    public void updateAdmin(UUID entityId, AdminDTO adminDTO) {
+    public void updateAdmin(UUID entityId, AdminDTO adminDTO) throws MalformedUserException, IllegalModificationException {
+        Admin adminVerify = new Admin(adminDTO);
+        if (!adminVerify.verify()) {
+            throw new MalformedUserException("Clients fields have illegal values");
+        }
+        Admin admin = (Admin) userRepository.getOfType("Admin", entityId);
+        admin.merge(adminDTO);
 
+        try {
+            userRepository.update(admin);
+        } catch(PersistenceException e) {
+            throw new IllegalModificationException("Cannot modify clients login");
+        }
     }
-    public void updateEmployee(UUID entityId, EmployeeDTO employeeDTO) {
+    public void updateEmployee(UUID entityId, EmployeeDTO employeeDTO) throws IllegalModificationException, MalformedUserException {
+        Employee employeeVerify = new Employee(employeeDTO);
+        if (!employeeVerify.verify()) {
+            throw new MalformedUserException("Clients fields have illegal values");
+        }
+        Employee employee = (Employee) userRepository.getOfType("Employee", entityId);
+        employee.merge(employeeDTO);
+
+        try {
+            userRepository.update(employee);
+        } catch(PersistenceException e) {
+            throw new IllegalModificationException("Cannot modify clients login");
+        }
     }
 
     public void updateUser(User user) {

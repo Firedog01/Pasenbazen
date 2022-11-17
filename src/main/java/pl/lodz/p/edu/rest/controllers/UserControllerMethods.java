@@ -2,12 +2,10 @@ package pl.lodz.p.edu.rest.controllers;
 
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
-import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.Response;
 import pl.lodz.p.edu.rest.managers.UserManager;
 import pl.lodz.p.edu.rest.model.users.User;
 
-import java.awt.image.RescaleOp;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,24 +17,17 @@ public class UserControllerMethods {
     @Inject
     private UserManager userManager;
 
-    // todo podział na rodzaje userów
-    public Response searchUser(String login) {
+    public Response searchUser(String type, String login) {
         if(login != null) {
-            List<User> searchResult = userManager.search(login);
-            if(searchResult.size() == 1) {
-                return Response.status(OK).entity(searchResult.get(0)).build();
-            } else {
-                return Response.status(OK).entity(searchResult).build();
-            }
+            List<User> searchResult = userManager.searchOfType(type, login);
+            return Response.status(OK).entity(searchResult).build();
         }
-        List<User> users = userManager.getAllUsers();
+        List<User> users = userManager.getAllUsersOfType(type);
         return Response.status(OK).entity(users).build();
     }
 
-    // todo podział na rodzaje userów
-
-    public Response getSingleUser(UUID entityId) {
-        User user = userManager.getUserByUuid(entityId);
+    public Response getSingleUser(String type, UUID entityId) {
+        User user = userManager.getUserByUuidOfType(type, entityId);
         if(user != null) {
             return Response.status(OK).entity(user).build();
         } else {
@@ -44,8 +35,8 @@ public class UserControllerMethods {
         }
     }
 
-    public Response getSingleUser(String login) {
-        User user = userManager.getUserByLogin(login);
+    public Response getSingleUser(String type, String login) {
+        User user = userManager.getUserByLoginOfType(type, login);
         if(user != null) {
             return Response.status(OK).entity(user).build();
         } else {
@@ -53,15 +44,15 @@ public class UserControllerMethods {
         }
     }
 
-    public Response activateUser(UUID entityId) {
-        User user = userManager.getUserByUuid(entityId);
+    public Response activateUser(String type, UUID entityId) {
+        User user = userManager.getUserByUuidOfType(type, entityId);
         user.setActive(true);
         userManager.updateUser(user);
         return Response.status(OK).entity(user).build();
     }
 
-    public Response deactivateUser(UUID entityId) {
-        User user = userManager.getUserByUuid(entityId);
+    public Response deactivateUser(String type, UUID entityId) {
+        User user = userManager.getUserByUuidOfType(type, entityId);
         user.setActive(false);
         userManager.updateUser(user);
         return Response.status(OK).entity(user).build();

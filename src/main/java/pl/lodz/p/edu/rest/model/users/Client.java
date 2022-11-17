@@ -39,6 +39,10 @@ public class Client extends User {
     }
 
     public boolean verify() {
+        System.out.println("login " + super.verify());
+        System.out.println("first name " + !firstName.isEmpty());
+        System.out.println("first name " + !lastName.isEmpty());
+        System.out.println("first name " + address.verify());
         return super.verify() && !firstName.isEmpty()
                 && !lastName.isEmpty() && address.verify();
     }

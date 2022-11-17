@@ -21,4 +21,8 @@ public class Employee extends User {
     public Employee() {
 
     }
+
+    public void merge(EmployeeDTO employeeDTO) {
+        this.setLogin(employeeDTO.getLogin());
+    }
 }

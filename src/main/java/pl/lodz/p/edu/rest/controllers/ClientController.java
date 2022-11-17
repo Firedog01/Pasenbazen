@@ -10,6 +10,7 @@ import jakarta.ws.rs.core.Response;
 import pl.lodz.p.edu.rest.DTO.ClientDTO;
 import pl.lodz.p.edu.rest.exception.NoObjectException;
 import pl.lodz.p.edu.rest.exception.UserException;
+import pl.lodz.p.edu.rest.exception.user.IllegalModificationException;
 import pl.lodz.p.edu.rest.exception.user.MalformedUserException;
 import pl.lodz.p.edu.rest.exception.user.UserConflictException;
 import pl.lodz.p.edu.rest.managers.UserManager;
@@ -60,21 +61,21 @@ public class ClientController {
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
     public Response searchClients(@QueryParam("login") String login) {
-        return userControllerMethods.searchUser(login);
+        return userControllerMethods.searchUser("Client", login);
     }
 
     @GET
     @Path("/{uuid}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUserByUuid(@PathParam("uuid") UUID entityId) {
-        return userControllerMethods.getSingleUser(entityId);
+        return userControllerMethods.getSingleUser("Client", entityId);
     }
 
     @GET
     @Path("/login/{login}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUserByLogin(@PathParam("login") String login) {
-        return userControllerMethods.getSingleUser(login);
+        return userControllerMethods.getSingleUser("Client", login);
     }
 
     // update
@@ -83,12 +84,12 @@ public class ClientController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateClient(@PathParam("entityId") UUID entityId, ClientDTO clientDTO) {
         try {
-            logger.log(Level.INFO, clientDTO.toString());
             userManager.updateClient(entityId, clientDTO);
             return Response.status(OK).entity(clientDTO).build();
         } catch (MalformedUserException e) {
-            logger.info(e.getMessage());
-            return Response.status(NOT_ACCEPTABLE).entity(clientDTO).build();
+            return Response.status(NOT_ACCEPTABLE).build();
+        } catch(IllegalModificationException e) {
+            return Response.status(NOT_ACCEPTABLE).build();
         } catch(NullPointerException e) {
             return Response.status(BAD_REQUEST).build();
         }
@@ -97,13 +98,13 @@ public class ClientController {
     @PUT
     @Path("/{entityId}/activate")
     public Response activateUser(@PathParam("entityId") UUID entityId) {
-        return userControllerMethods.activateUser(entityId);
+        return userControllerMethods.activateUser("Client", entityId);
     }
 
     @PUT
     @Path("/{entityId}/deactivate")
     public Response deactivateUser(@PathParam("entityId") UUID entityId) {
-        return userControllerMethods.deactivateUser(entityId);
+        return userControllerMethods.deactivateUser("Client", entityId);
     }
 
 

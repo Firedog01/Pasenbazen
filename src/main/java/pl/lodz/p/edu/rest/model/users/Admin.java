@@ -13,6 +13,10 @@ public class Admin extends User {
     public Admin() {
     }
 
+    public void merge(AdminDTO adminDTO) {
+        this.setLogin(adminDTO.getLogin());
+    }
+
     public Admin(AdminDTO adminDTO) throws MalformedUserException {
         super(adminDTO.getLogin());
     }
