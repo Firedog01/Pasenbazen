@@ -9,9 +9,6 @@ public class ClientDTO {
 
     @NotNull
     @NotEmpty
-    private String clientId;
-    @NotNull
-    @NotEmpty
     private String firstName;
     @NotNull
     @NotEmpty
@@ -27,10 +24,6 @@ public class ClientDTO {
     public ClientDTO() {
     }
 
-    public String getClientId() {
-        return clientId;
-    }
-
     public String getFirstName() {
         return firstName;
     }
@@ -41,10 +34,6 @@ public class ClientDTO {
 
     public Address getAddress() {
         return address;
-    }
-
-    public void setClientId(String clientId) {
-        this.clientId = clientId;
     }
 
     public void setFirstName(String firstName) {

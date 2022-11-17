@@ -68,4 +68,10 @@ public class Client extends User {
                 ", address=" + address +
                 "} " + super.toString();
     }
+
+    public void updateClientData(String firstName, String lastName, Address address) {
+        setFirstName(firstName);
+        setLastName(lastName);
+        setAddress(address);
+    }
 }

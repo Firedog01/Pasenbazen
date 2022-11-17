@@ -90,8 +90,7 @@ public class UserManager {
     // update
 
     public void updateClient(UUID entityId, Client client) {
-        // todo
-//        userRepository.update(client);
+        userRepository.update(client);
     }
     public void updateResourceAdmin(UUID entityId, ResourceAdmin resourceAdmin) {
     }

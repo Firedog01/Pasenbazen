@@ -80,7 +80,9 @@ public class ClientController {
     @PUT
     @Path("/{entityId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateClient(@PathParam("entityId") UUID entityId, Client client) {
+    public Response updateClient(@PathParam("entityId") UUID entityId, ClientDTO clientDTO) {
+        Client client = (Client) userManager.getUserByUuid(entityId);
+        client.updateClientData(clientDTO.getFirstName(), clientDTO.getLastName(), clientDTO.getAddress());
         userManager.updateClient(entityId, client);
         return Response.status(OK).entity(client).build();
     }
@@ -113,51 +115,4 @@ public class ClientController {
         }
         return c;
     }
-
-
-
-
-
-//    @Produces({MediaType.APPLICATION_JSON, MediaType.TEXT_PLAIN})
-//    @POST
-//    @Path(("/addClient"))
-//    @Consumes(MediaType.APPLICATION_JSON)
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public Response registerClient(ClientDTO clientDTO) {
-//
-//        String clientId = clientDTO.getClientId();
-//        String firstName = clientDTO.getFirstName();
-//        String lastName = clientDTO.getLastName();
-//        Address address = clientDTO.getAddress();
-//
-//        if (address == null) {
-//            return Response.status(NOT_ACCEPTABLE).build();
-//        }
-//
-//        Client client = null;
-//
-//        try {
-//            client = new Client(clientId, firstName, lastName, address);
-//        } catch (ClientException e) {
-//            System.out.println(e.getMessage());
-//        }
-//
-////        Client mock = null;
-////        try {
-////            mock = new Client("test", "123", "324",
-////                    new Address("twoja", "stara", "awd"));
-////        } catch (ClientException e) {
-////            throw new RuntimeException(e);
-////        }
-//
-//        if (clientManager.registerClient(client)) {
-//            return Response.status(CREATED).entity(client).build();
-//            //Może tu jest błąd?
-//        }
-//        return Response.status(FORBIDDEN).build();
-//    }
-
-
-
-
 }
