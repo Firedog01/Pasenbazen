@@ -3,6 +3,7 @@ package pl.lodz.p.edu.rest.managers;
 import jakarta.inject.Inject;
 
 import jakarta.transaction.Transactional;
+import pl.lodz.p.edu.rest.DTO.RentDTO;
 import pl.lodz.p.edu.rest.model.Equipment;
 import pl.lodz.p.edu.rest.model.Rent;
 
@@ -41,8 +42,11 @@ public class RentManager {
         rentRepository.add(rent);
     }
 
-    public void update(Rent rent) {
+    public Rent update(UUID entityId, RentDTO rentDTO, Equipment equipment, Client client) {
+        Rent rent = rentRepository.get(entityId);
+        rent.merge(rentDTO, equipment, client);
         rentRepository.update(rent);
+        return rent;
     }
 
     public void remove(UUID uuid) {

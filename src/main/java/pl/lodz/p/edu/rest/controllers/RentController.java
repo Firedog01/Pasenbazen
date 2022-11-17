@@ -55,9 +55,7 @@ public class RentController {
         try {
             List<Rent> rentEquipmentList = rentManager.getRentByEq(equipment);
             if(!rentEquipmentList.isEmpty() && validateTime(rentEquipmentList, beginTime, endTime)) {
-                Rent rent = new Rent(LocalDateTime.parse(rentDTO.getBeginTime()),
-                        LocalDateTime.parse(rentDTO.getEndTime()),
-                        equipment, client);
+                Rent rent = new Rent(rentDTO, equipment, client);
 
                 rentManager.add(rent);
                 return Response.status(Response.Status.CREATED).entity(rent).build();
@@ -66,9 +64,7 @@ public class RentController {
             }
 
         } catch (EntityNotFoundException e) {
-            Rent rent = new Rent(LocalDateTime.parse(rentDTO.getBeginTime()),
-                    LocalDateTime.parse(rentDTO.getEndTime()),
-                    equipment, client);
+            Rent rent = new Rent(rentDTO, equipment, client);
 
             rentManager.add(rent);
             return Response.status(Response.Status.CREATED).entity(rent).build();
@@ -86,13 +82,6 @@ public class RentController {
         } catch (EntityNotFoundException e) {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
-
-
-    }
-
-    public void shipEquipment(Rent rent) {
-        rent.setShipped(true);
-        rentManager.update(rent);
     }
 
     @GET
@@ -128,9 +117,19 @@ public class RentController {
 
     }
 
-    public void returnEquipment(Rent rent, boolean missing) {
-        rent.getEquipment().setMissing(missing);
-        rentManager.update(rent); //FIXME UPDATE BY POST? Kinda weird here tho
+    @PUT
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/{uuid}")
+    public Response modifyRent(@PathParam("uuid") UUID uuid, RentDTO rentDTO) {
+        try {
+            Client client = (Client) userManager.getUserByUuid(rentDTO.getClientUUIDFromString());
+            Equipment equipment = equipmentManager.get(rentDTO.getEquipmentFromString());
+            Rent updated = rentManager.update(uuid, rentDTO, equipment, client);
+            return Response.status(Response.Status.ACCEPTED).entity(updated).build();
+        } catch (EntityNotFoundException e) {
+            return Response.status(Response.Status.NOT_ACCEPTABLE).build();
+        }
     }
 
     @GET
@@ -159,29 +158,6 @@ public class RentController {
         }
         return when;
     }
-
-    //TODO PLANTEXT?
-    public LocalDateTime untilAvailable(Equipment equipment) {
-        // todo
-        LocalDateTime until = null;
-
-        if (equipment.isArchive() || equipment.isMissing()) {
-            return null;
-        }
-
-        LocalDateTime when = whenAvailable(equipment);
-        List<Rent> equipmentRents = rentManager.getRentByEq(equipment);
-//        List<Rent> equipmentRents = equipment.getEquipmentRents();
-
-        for (Rent rent :
-                equipmentRents) {
-            if (when.isBefore(rent.getBeginTime())) {
-                until = rent.getEndTime();
-            }
-        }
-        return until;
-    }
-
     public boolean validateTime(List<Rent> rentEquipmentList, LocalDateTime beginTime, LocalDateTime endTime) {
         for (int i = 0; i < rentEquipmentList.size(); i++) {
             Rent curRent = rentEquipmentList.get(i);
