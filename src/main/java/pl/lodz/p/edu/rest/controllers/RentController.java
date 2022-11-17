@@ -79,9 +79,15 @@ public class RentController {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/client/{uuid}")
     public Response getClientRents(@PathParam("uuid") UUID clientUuid) {
-        Client client = (Client) userManager.getUserByUuid(clientUuid);
-        List<Rent> rents = rentManager.getRentsByClient(client);
-        return Response.status(Response.Status.OK).entity(rents).build();
+        try {
+            Client client = (Client) userManager.getUserByUuid(clientUuid);
+            List<Rent> rents = rentManager.getRentsByClient(client);
+            return Response.status(Response.Status.OK).entity(rents).build();
+        } catch (EntityNotFoundException e) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+
+
     }
 
     public void shipEquipment(Rent rent) {
@@ -101,10 +107,10 @@ public class RentController {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{uuid}")
     public Response getRent(@PathParam("uuid") UUID uuid) {
-        Rent rent = rentManager.get(uuid);
-        if (rent != null) {
+        try {
+            Rent rent = rentManager.get(uuid);
             return Response.status(Response.Status.OK).entity(rent).build();
-        } else {
+        } catch (EntityNotFoundException e) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
     }
@@ -112,9 +118,15 @@ public class RentController {
     @DELETE
     @Path("/{uuid}")
     public Response cancelReservation(@PathParam("uuid") UUID rentUuid) {
-        rentManager.remove(rentUuid);
-        return Response.status(Response.Status.NO_CONTENT).build();
-    } //FIXME send UUID or get UUID from rent obj?
+        try {
+            rentManager.remove(rentUuid);
+            return Response.status(Response.Status.NO_CONTENT).build();
+        } catch (EntityNotFoundException e) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+
+    }
 
     public void returnEquipment(Rent rent, boolean missing) {
         rent.getEquipment().setMissing(missing);
