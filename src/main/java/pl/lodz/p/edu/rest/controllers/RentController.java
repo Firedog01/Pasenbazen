@@ -79,7 +79,8 @@ public class RentController {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/client/{uuid}")
     public Response getClientRents(@PathParam("uuid") UUID clientUuid) {
-        List<Rent> rents = rentManager.getRentsByClient(clientUuid);
+        Client client = (Client) userManager.getUserByUuid(clientUuid);
+        List<Rent> rents = rentManager.getRentsByClient(client);
         return Response.status(Response.Status.OK).entity(rents).build();
     }
 

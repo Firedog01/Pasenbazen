@@ -6,6 +6,7 @@ import jakarta.transaction.Transactional;
 import pl.lodz.p.edu.rest.model.Equipment;
 import pl.lodz.p.edu.rest.model.Rent;
 
+import pl.lodz.p.edu.rest.model.users.Client;
 import pl.lodz.p.edu.rest.repository.impl.RentRepository;
 
 import java.util.List;
@@ -24,8 +25,8 @@ public class RentManager {
         return rentRepository.getRentByEq(equipment);
     }
 
-    public List<Rent> getRentsByClient(UUID uuid) {
-        return rentRepository.getRentByClient(get(uuid).getClient());
+    public List<Rent> getRentsByClient(Client client) {
+        return rentRepository.getRentByClient(client);
     }
 
     public Rent get(UUID uuid) {
