@@ -1,11 +1,11 @@
 package pl.lodz.p.edu.rest.DTO;
 
-import jakarta.persistence.Embedded;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import pl.lodz.p.edu.rest.model.Address;
+import pl.lodz.p.edu.rest.model.users.Client;
 
-public class ClientDTO {
+public class ClientDTO extends UserDTO {
 
     @NotNull
     @NotEmpty
@@ -17,14 +17,16 @@ public class ClientDTO {
     @NotEmpty
     private String lastName;
     @NotNull
-    @Embedded
     private Address address;
 
-    @NotNull
-    @NotEmpty
-    private String login;
-
     public ClientDTO() {
+    }
+
+    public ClientDTO(Client c) {
+        super(c);
+        this.firstName = c.getFirstName();
+        this.lastName = c.getLastName();
+        this.address = c.getAddress();
     }
 
     public String getClientId() {
@@ -59,11 +61,4 @@ public class ClientDTO {
         this.address = address;
     }
 
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
 }
