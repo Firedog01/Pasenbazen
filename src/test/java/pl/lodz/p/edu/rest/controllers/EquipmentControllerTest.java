@@ -211,6 +211,5 @@ class EquipmentControllerTest {
                 .delete("/equipment/" + uuid)
                 .then()
                 .statusCode(204);
-
     }
 }
