@@ -196,4 +196,91 @@ class ClientControllerTest {
                 .statusCode(200)
                 .body("size()", is(2));
     }
+
+    // update
+    @Test
+    void updateOneClient_correct() throws JsonProcessingException {
+        String uuid = given()
+                .header("Content-Type", "application/json")
+                .body(validClientStr)
+                .when()
+                .post("/clients")
+                .then()
+                .statusCode(201)
+                .extract().path("entityId");
+
+        String newFirstName = "___other_first_name___";
+        validClient.setFirstName(newFirstName);
+        String updatedClientStr = obj.writeValueAsString(validClient);
+        given()
+                .header("Content-Type", "application/json")
+                .body(updatedClientStr)
+                .when()
+                .put("/clients/" + uuid)
+                .then()
+                .statusCode(200);
+        String firstName = given()
+                .header("Content-Type", "application/json")
+                .when()
+                .get("/clients/" + uuid)
+                .then()
+                .statusCode(200)
+                .extract().path("firstName");
+        assertEquals(newFirstName, firstName);
+    }
+
+    @Test
+    void updateOneClient_noClient() throws JsonProcessingException {
+        String uuid = UUID.randomUUID().toString();
+        given()
+                .header("Content-Type", "application/json")
+                .body(validClientStr)
+                .when()
+                .put("/clients/" + uuid)
+                .then()
+                .statusCode(404);
+    }
+
+    @Test
+    void updateOneClient_updateLogin() throws JsonProcessingException {
+        String uuid = given()
+                .header("Content-Type", "application/json")
+                .body(validClientStr)
+                .when()
+                .post("/clients")
+                .then()
+                .statusCode(201)
+                .extract().path("entityId");
+        validClient.setLogin("__other_login__");
+        String updatedLogin = obj.writeValueAsString(validClient);
+        given()
+                .header("Content-Type", "application/json")
+                .body(updatedLogin)
+                .when()
+                .put("/clients/" + uuid)
+                .then()
+                .statusCode(400);
+    }
+
+    @Test
+    void updateOneClient_illegalValues() throws JsonProcessingException {
+        String uuid = given()
+                .header("Content-Type", "application/json")
+                .body(validClientStr)
+                .when()
+                .post("/clients")
+                .then()
+                .statusCode(201)
+                .extract().path("entityId");
+        validClient.setAddress(null);
+        String updatedLogin = obj.writeValueAsString(validClient);
+        given()
+                .header("Content-Type", "application/json")
+                .body(updatedLogin)
+                .when()
+                .put("/clients/" + uuid)
+                .then()
+                .statusCode(400);
+    }
+
 }

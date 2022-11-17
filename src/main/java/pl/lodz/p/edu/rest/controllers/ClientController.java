@@ -90,8 +90,10 @@ public class ClientController {
         try {
             userManager.updateClient(entityId, clientDTO);
             return Response.status(OK).entity(clientDTO).build();
-        } catch (MalformedUserException | IllegalModificationException | NullPointerException e) {
+        } catch (MalformedUserException | IllegalModificationException e) {
             return Response.status(BAD_REQUEST).build();
+        } catch(NullPointerException e) {
+            return Response.status(NOT_FOUND).build();
         }
     }
 
