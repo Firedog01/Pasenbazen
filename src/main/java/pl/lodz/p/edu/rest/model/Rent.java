@@ -42,20 +42,10 @@ public class Rent extends AbstractEntity {
     private LocalDateTime endTime;
 
 
-    @Column(name = "shipped")
-    private boolean shipped;
-
-
-    @Column(name = "eq_returned")
-    private boolean eqReturned;
-
-
     public Rent(LocalDateTime beginTime, LocalDateTime endTime,
                 Equipment equipment, Client client) {
         this.beginTime = beginTime;
         this.endTime = endTime;
-        this.shipped = false;
-        this.eqReturned = false;
         this.equipment = equipment;
         this.client = client;
     }
@@ -77,33 +67,27 @@ public class Rent extends AbstractEntity {
     }
 
     public boolean verify() {
-        return beginTime.isBefore(endTime)
-                && client.verify() && equipment.verify()
-                && !equipment.isArchive() && !equipment.isMissing();
+        boolean check = true;
+        if(endTime != null) {
+            check = beginTime.isBefore(endTime);
+        }
+        return check && client.verify() && equipment.verify();
     }
 
 
     public double getRentCost() {
-        if (!eqReturned) {
-            return 0.0;
-        } else if (equipment.isMissing()) {
-            return equipment.getBail();
+        long diffDays = Math.abs( ChronoUnit.DAYS.between(beginTime, endTime));
+        if (diffDays > 1) {
+            return equipment.getFirstDayCost() + equipment.getNextDaysCost() * (diffDays - 1);
         } else {
-            long diffDays = Math.abs( ChronoUnit.DAYS.between(beginTime, endTime));
-            //FIXME Nie jestem pewien co do tego, ustawiłem sprawdzanie od 1, bo myślę, że gdzieś indziej będzie sprawdzane
-            // Czy data jest w ogóle większa od 0?
-            if (diffDays > 1) {
-                return equipment.getFirstDayCost() + equipment.getNextDaysCost() * (diffDays - 1);
-            } else {
-                return equipment.getFirstDayCost();
-            }
+            return equipment.getFirstDayCost();
         }
     }
 
     public String toString() {
         final StringBuilder sb = new StringBuilder("Rent{");
         sb.append("id=").append(id);
-        sb.append("Klient=").append(getClient().toString()); //FIXME to string
+        sb.append("Klient=").append(getClient().toString());
         sb.append("Sprzęt=").append(getEquipment().toString());
         sb.append("Czas wypożyczenia=");
         sb.append("Początek=").append(beginTime);
@@ -134,22 +118,6 @@ public class Rent extends AbstractEntity {
 
     public void setEndTime(LocalDateTime endTime) {
         this.endTime = endTime;
-    }
-
-    public boolean isShipped() {
-        return shipped;
-    }
-
-    public void setShipped(boolean shipped) {
-        this.shipped = shipped;
-    }
-
-    public boolean isEqReturned() {
-        return eqReturned;
-    }
-
-    public void setEqReturned(boolean eqReturned) {
-        this.eqReturned = eqReturned;
     }
 
     public Equipment getEquipment() {

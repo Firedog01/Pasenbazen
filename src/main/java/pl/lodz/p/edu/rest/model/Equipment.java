@@ -28,14 +28,8 @@ public class Equipment extends AbstractEntity {
     @Column(name = "next_day_cost")
     private double nextDaysCost;
 
-    @Column(name = "archive")
-    private boolean archive;
-
     @Column(name = "description")
     private String description;
-
-    @Column(name = "missing")
-    private boolean missing;
 
 
     public Equipment(double firstDayCost, double nextDaysCost, double bail, String name) {
@@ -43,9 +37,7 @@ public class Equipment extends AbstractEntity {
         this.nextDaysCost = nextDaysCost;
         this.bail = bail;
         this.name = name;
-        this.archive = false;
         this.description = null;
-        this.missing = false;
     }
 
     public Equipment(EquipmentDTO equipmentDTO) {
@@ -62,9 +54,7 @@ public class Equipment extends AbstractEntity {
         this.bail = equipmentDTO.getBail();
         this.firstDayCost = equipmentDTO.getFirstDayCost();
         this.nextDaysCost = equipmentDTO.getNextDaysCost();
-        this.archive = equipmentDTO.isArchive();
         this.description = equipmentDTO.getDescription();
-        this.missing = equipmentDTO.isMissing();
     }
 
     protected Equipment() {}
@@ -77,14 +67,11 @@ public class Equipment extends AbstractEntity {
         sb.append(", nextDaysCost=").append(nextDaysCost);
         sb.append(", bail=").append(bail);
         sb.append(", name='").append(name).append('\'');
-        sb.append(", archive=").append(archive);
         sb.append(", description='").append(description).append('\'');
         sb.append(", id=").append(id);
-        sb.append(", missing=").append(missing);
         sb.append('}');
         return sb.toString();
     }
-
 
 
     public Long getId() {
@@ -107,18 +94,9 @@ public class Equipment extends AbstractEntity {
         return name;
     }
 
-    public boolean isArchive() {
-        return archive;
-    }
-
     public String getDescription() {
         return description;
     }
-
-    public boolean isMissing() {
-        return missing;
-    }
-
 
     public void setFirstDayCost(double firstDayCost) {
         this.firstDayCost = firstDayCost;
@@ -136,16 +114,7 @@ public class Equipment extends AbstractEntity {
         this.name = name;
     }
 
-    public void setArchive(boolean archive) {
-        this.archive = archive;
-    }
-
     public void setDescription(String description) {
         this.description = description;
     }
-
-    public void setMissing(boolean missing) {
-        this.missing = missing;
-    }
-
 }

@@ -3,10 +3,12 @@ package pl.lodz.p.edu.rest.managers;
 import jakarta.inject.Inject;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceException;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.BeanParam;
 import jakarta.ws.rs.core.Response;
+import pl.lodz.p.edu.rest.controllers.AdminController;
 import pl.lodz.p.edu.rest.exception.BusinessLogicInterruptException;
 import pl.lodz.p.edu.rest.exception.ConflictException;
 import pl.lodz.p.edu.rest.exception.IllegalModificationException;
@@ -24,10 +26,13 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Logger;
 
 
 @Transactional
 public class RentManager {
+
+    Logger logger = Logger.getLogger(RentManager.class.getName());
 
     @Inject
     private RentRepository rentRepository;
@@ -66,10 +71,12 @@ public class RentManager {
         } catch(DateTimeParseException e) {
             throw new ObjectNotValidException("Given dates were invalid");
         }
+//        logger.info("");
         synchronized (userRepository) {
             try {
+                logger.info("LOGGGER: " + rentDTO.getClientUUIDFromString().toString());
                 client = (Client) userRepository.getOfType("Client", rentDTO.getClientUUIDFromString());
-            } catch(EntityNotFoundException e) {
+            } catch(NoResultException e) {
                 throw new ObjectNotValidException("Client of given uuid does not exist");
             }
             synchronized (equipmentRepository) {
@@ -78,7 +85,7 @@ public class RentManager {
                 } catch(EntityNotFoundException e) {
                     throw new ObjectNotValidException("Equipment of given uuid does not exist");
                 }
-                boolean available = this.checkEquipmentAvailable(equipment, beginTime, endTime);
+                boolean available = this.checkEquipmentAvailable(equipment, beginTime);
                 if(available) {
                     Rent rent = new Rent(beginTime, endTime, equipment, client);
                     rentRepository.add(rent);
@@ -90,37 +97,39 @@ public class RentManager {
         }
     }
 
-    private boolean checkEquipmentAvailable(Equipment equipment,
-                                            LocalDateTime beginTime, LocalDateTime endTime) {
+    private boolean checkEquipmentAvailable(Equipment equipment, LocalDateTime beginTime) {
         List<Rent> rentEquipmentList;
         try {
             rentEquipmentList = rentRepository.getEquipmentRents(equipment);
-        } catch(EntityNotFoundException e) {
+        } catch(NoResultException e) {
             return true;
         }
         for (int i = 0; i < rentEquipmentList.size(); i++) {
             Rent curRent = rentEquipmentList.get(i);
+            if (beginTime.isBefore(curRent.getEndTime())) {
+                return false;
+            }
 
             // +----- old rent -----+
             //         +----- new rent -----+
-            if (beginTime.isBefore(curRent.getEndTime()) && beginTime.isAfter(curRent.getBeginTime())) {
-                return false;
-            }
+//            if (beginTime.isBefore(curRent.getEndTime()) && beginTime.isAfter(curRent.getBeginTime())) {
+//                return false;
+//            }
             //         +----- old rent -----+
             // +----- new rent -----+
-            if (endTime.isAfter(curRent.getBeginTime()) && endTime.isBefore(curRent.getEndTime())) {
-                return false;
-            }
-            // +----- old rent -----+
-            //    +-- new rent --+
-            if (beginTime.isAfter(curRent.getBeginTime()) && beginTime.isBefore(curRent.getEndTime())) {
-                return false;
-            }
-            //    +-- old rent --+
-            // +----- new rent -----+
-            if (beginTime.isBefore(curRent.getBeginTime()) && endTime.isAfter(curRent.getEndTime())) {
-                return false;
-            }
+//            if (endTime.isAfter(curRent.getBeginTime()) && endTime.isBefore(curRent.getEndTime())) {
+//                return false;
+//            }
+//            // +----- old rent -----+
+//            //    +-- new rent --+
+//            if (beginTime.isAfter(curRent.getBeginTime()) && beginTime.isBefore(curRent.getEndTime())) {
+//                return false;
+//            }
+//            //    +-- old rent --+
+//            // +----- new rent -----+
+//            if (beginTime.isBefore(curRent.getBeginTime()) && endTime.isAfter(curRent.getEndTime())) {
+//                return false;
+//            }
         }
         return true;
     }
@@ -129,13 +138,22 @@ public class RentManager {
         Rent rent = rentRepository.get(entityId);
         Client client;
         Equipment equipment;
-        LocalDateTime beginTime, endTime;
+        LocalDateTime now, beginTime, endTime = null;
+        now = LocalDateTime.now();
+
+        // date validation
         try {
             beginTime = LocalDateTime.parse(rentDTO.getBeginTime());
-            endTime = LocalDateTime.parse(rentDTO.getEndTime());
+            if(rentDTO.getEndTime() != null) {
+                endTime = LocalDateTime.parse(rentDTO.getEndTime());
+            }
         } catch(DateTimeParseException e) {
             throw new ObjectNotValidException("Given dates were invalid");
         }
+        if(beginTime.isBefore(now)) {
+            throw new ObjectNotValidException("Given dates were invalid");
+        }
+
         synchronized (userRepository) {
             client = (Client) userRepository.getOfType("Client", rentDTO.getClientUUIDFromString());
             if (client == null) {
@@ -146,7 +164,7 @@ public class RentManager {
                 if (equipment == null) {
                     throw new ObjectNotValidException("Equipment of given uuid does not exist");
                 }
-                boolean available = this.checkEquipmentAvailable(equipment, beginTime, endTime);
+                boolean available = this.checkEquipmentAvailable(equipment, beginTime);
                 if(available) {
                     rent.merge(rentDTO, equipment, client);
                     rentRepository.update(rent);
@@ -165,10 +183,6 @@ public class RentManager {
 
 
     public LocalDateTime whenAvailable(Equipment equipment) {
-        // todo
-        if (equipment.isArchive() || equipment.isMissing()) {
-            return null;
-        }
         LocalDateTime when = LocalDateTime.now();
         List<Rent> equipmentRents = getRentByEq(equipment);
 //        List<Rent> equipmentRents = equipment.getEquipmentRents();
@@ -181,31 +195,31 @@ public class RentManager {
         }
         return when;
     }
-    public boolean validateTime(List<Rent> rentEquipmentList, LocalDateTime beginTime, LocalDateTime endTime) {
-        for (int i = 0; i < rentEquipmentList.size(); i++) {
-            Rent curRent = rentEquipmentList.get(i);
-
-            // +----- old rent -----+
-            //         +----- new rent -----+
-            if (beginTime.isBefore(curRent.getEndTime()) && beginTime.isAfter(curRent.getBeginTime())) {
-                return false;
-            }
-            //         +----- old rent -----+
-            // +----- new rent -----+
-            if (endTime.isAfter(curRent.getBeginTime()) && endTime.isBefore(curRent.getEndTime())) {
-                return false;
-            }
-            // +----- old rent -----+
-            //    +-- new rent --+
-            if (beginTime.isAfter(curRent.getBeginTime()) && beginTime.isBefore(curRent.getEndTime())) {
-                return false;
-            }
-            //    +-- old rent --+
-            // +----- new rent -----+
-            if (beginTime.isBefore(curRent.getBeginTime()) && endTime.isAfter(curRent.getEndTime())) {
-                return false;
-            }
-        }
-        return true;
-    }
+//    public boolean validateTime(List<Rent> rentEquipmentList, LocalDateTime beginTime, LocalDateTime endTime) {
+//        for (int i = 0; i < rentEquipmentList.size(); i++) {
+//            Rent curRent = rentEquipmentList.get(i);
+//
+//            // +----- old rent -----+
+//            //         +----- new rent -----+
+//            if (beginTime.isBefore(curRent.getEndTime()) && beginTime.isAfter(curRent.getBeginTime())) {
+//                return false;
+//            }
+//            //         +----- old rent -----+
+//            // +----- new rent -----+
+//            if (endTime.isAfter(curRent.getBeginTime()) && endTime.isBefore(curRent.getEndTime())) {
+//                return false;
+//            }
+//            // +----- old rent -----+
+//            //    +-- new rent --+
+//            if (beginTime.isAfter(curRent.getBeginTime()) && beginTime.isBefore(curRent.getEndTime())) {
+//                return false;
+//            }
+//            //    +-- old rent --+
+//            // +----- new rent -----+
+//            if (beginTime.isBefore(curRent.getBeginTime()) && endTime.isAfter(curRent.getEndTime())) {
+//                return false;
+//            }
+//        }
+//        return true;
+//    }
 }

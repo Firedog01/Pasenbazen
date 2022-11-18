@@ -58,10 +58,13 @@ public class EquipmentManager {
         }
     }
 
-    public void remove(UUID uuid) {
+    public void remove(UUID uuid) throws ConflictException {
         try {
-            // todo check if is rented
-            equipmentRepository.remove(uuid);
+            if(!equipmentRepository.isEquipmentRented(uuid)) {
+                equipmentRepository.remove(uuid);
+            } else {
+                throw new ConflictException("There exists unfinished rent for this equipment");
+            }
         } catch(EntityNotFoundException ignored) {}
     }
 }

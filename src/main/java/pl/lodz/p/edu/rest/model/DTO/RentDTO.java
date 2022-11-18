@@ -7,11 +7,18 @@ import java.util.UUID;
 public class RentDTO {
     private String equipmentUUID;
     private String clientUUID;
-    private Address shippingAddress;
     private String beginTime;
     private String endTime;
 
     public RentDTO() {
+    }
+
+    public RentDTO(String clientUUID, String equipmentUUID,
+                   String beginTime, String endTime) {
+        this.clientUUID = clientUUID;
+        this.equipmentUUID = equipmentUUID;
+        this.beginTime = beginTime;
+        this.endTime = endTime;
     }
 
     public String getEquipmentUUID() {
@@ -20,11 +27,6 @@ public class RentDTO {
 
     public String getClientUUID() {
         return clientUUID;
-    }
-
-
-    public Address getShippingAddress() {
-        return shippingAddress;
     }
 
     public String getBeginTime() {
@@ -51,10 +53,6 @@ public class RentDTO {
         this.clientUUID = clientUUID;
     }
 
-    public void setShippingAddress(Address shippingAddress) {
-        this.shippingAddress = shippingAddress;
-    }
-
     public void setBeginTime(String beginTime) {
         this.beginTime = beginTime;
     }
@@ -68,7 +66,6 @@ public class RentDTO {
         return "RentDTO{" +
                 "equipmentUUID='" + equipmentUUID + '\'' +
                 ", clientUUID='" + clientUUID + '\'' +
-                ", shippingAddress=" + shippingAddress +
                 ", beginTime='" + beginTime + '\'' +
                 ", endTime='" + endTime + '\'' +
                 '}';

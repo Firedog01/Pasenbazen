@@ -6,8 +6,11 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import pl.lodz.p.edu.rest.model.DTO.EquipmentDTO;
+import pl.lodz.p.edu.rest.model.DTO.RentDTO;
+import pl.lodz.p.edu.rest.model.users.Client;
 import pl.lodz.p.edu.rest.repository.DataFaker;
 
+import javax.xml.crypto.Data;
 import java.util.UUID;
 
 import static io.restassured.RestAssured.baseURI;
@@ -198,7 +201,48 @@ class EquipmentControllerTest {
                 .get("/equipment/" + uuid)
                 .then()
                 .statusCode(404);
+    }
 
+    // todo test z próbą usunięcia equipment które ma renta
+    @Test
+    void deleteOneEquipment_withExistingRent() throws JsonProcessingException {
+        String equipmentId = given()
+                .header("Content-Type", "application/json")
+                .body(validEquipmentStr)
+                .when()
+                .post("/equipment")
+                .then()
+                .statusCode(201)
+                .extract().path("entityId");
+
+        Client client = DataFaker.getClient();
+        String clientStr = obj.writeValueAsString(client);
+        String clientId = given()
+                .header("Content-Type", "application/json")
+                .body(clientStr)
+                .when()
+                .post("/clients")
+                .then()
+                .statusCode(201)
+                .extract().path("entityId");
+
+        RentDTO rent = new RentDTO(clientId, equipmentId, "2023-04-05T12:38:35.585", null);
+        String rentStr = obj.writeValueAsString(rent);
+
+        given()
+                .header("Content-Type", "application/json")
+                .body(rentStr)
+                .when()
+                .post("/rents")
+                .then()
+                .statusCode(201);
+
+        given()
+                .header("Content-Type", "application/json")
+                .when()
+                .delete("/equipment/" + equipmentId)
+                .then()
+                .statusCode(409);
     }
 
     @Test

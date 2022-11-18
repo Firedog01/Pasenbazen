@@ -90,8 +90,12 @@ public class EquipmentController {
     @DELETE
     @Path("/{uuid}")
     public Response unregisterEquipment(@PathParam("uuid") UUID uuid) {
-        equipmentManager.remove(uuid);
-        return Response.status(Response.Status.NO_CONTENT).build();
+        try {
+            equipmentManager.remove(uuid);
+            return Response.status(NO_CONTENT).build();
+        } catch (ConflictException e) {
+            return Response.status(CONFLICT).build();
+        }
     }
 
     //===============================================

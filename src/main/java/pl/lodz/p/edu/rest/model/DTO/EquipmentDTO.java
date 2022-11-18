@@ -15,11 +15,7 @@ public class EquipmentDTO {
 
     private double nextDaysCost;
 
-    private boolean archive;
-
     private String description;
-
-    private boolean missing;
 
     public EquipmentDTO() {}
 
@@ -28,8 +24,6 @@ public class EquipmentDTO {
         bail = e.getBail();
         firstDayCost = e.getFirstDayCost();
         nextDaysCost = e.getNextDaysCost();
-        archive = e.isArchive();
-        missing = e.isMissing();
         description = e.getDescription();
     }
 
@@ -40,9 +34,7 @@ public class EquipmentDTO {
                 ", bail=" + bail +
                 ", firstDayCost=" + firstDayCost +
                 ", nextDaysCost=" + nextDaysCost +
-                ", archive=" + archive +
                 ", description='" + description + '\'' +
-                ", missing=" + missing +
                 '}';
     }
 
@@ -78,27 +70,11 @@ public class EquipmentDTO {
         this.nextDaysCost = nextDaysCost;
     }
 
-    public boolean isArchive() {
-        return archive;
-    }
-
-    public void setArchive(boolean archive) {
-        this.archive = archive;
-    }
-
     public String getDescription() {
         return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public boolean isMissing() {
-        return missing;
-    }
-
-    public void setMissing(boolean missing) {
-        this.missing = missing;
     }
 }

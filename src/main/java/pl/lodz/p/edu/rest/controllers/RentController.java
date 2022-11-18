@@ -49,9 +49,9 @@ public class RentController {
     public Response makeReservation(RentDTO rentDTO) {
         try {
             Rent rent = rentManager.add(rentDTO);
-            return Response.status(OK).entity(rent).build();
+            return Response.status(CREATED).entity(rent).build();
         } catch (ObjectNotValidException e) {
-            return Response.status(BAD_REQUEST).build();
+            return Response.status(BAD_REQUEST).entity(e.getMessage()).build();
         } catch (BusinessLogicInterruptException e) {
             return Response.status(CONFLICT).build();
         }
