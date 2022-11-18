@@ -67,8 +67,8 @@ public class RentController {
             Client client = (Client) userManager.getUserByUuidOfType("Client", clientUuid);
             List<Rent> rents = rentManager.getRentsByClient(client);
             return Response.status(Response.Status.OK).entity(rents).build();
-        } catch (EntityNotFoundException e) {
-            return Response.status(Response.Status.BAD_REQUEST).build();
+        } catch (NoResultException e) {
+            return Response.status(NOT_FOUND).build();
         }
     }
 
@@ -104,9 +104,7 @@ public class RentController {
             return Response.status(BAD_REQUEST).build();
         } catch(TransactionalException e) {
             return Response.status(BAD_REQUEST).build();
-        } catch(NullPointerException e) {
-            return Response.status(NOT_FOUND).build();
-        } catch(EntityNotFoundException e) {
+        } catch(NoResultException e) {
             return Response.status(NOT_FOUND).build();
         } catch (BusinessLogicInterruptException e) {
             return Response.status(CONFLICT).build();
@@ -116,12 +114,14 @@ public class RentController {
     @DELETE
     @Path("/{uuid}")
     public Response cancelReservation(@PathParam("uuid") UUID rentUuid) {
-//        try {
+        try {
             rentManager.remove(rentUuid);
-            return Response.status(Response.Status.NO_CONTENT).build();
-//        } catch (EntityNotFoundException e) {
-//            return Response.status(Response.Status.NOT_FOUND).build();
-//        }
+            return Response.status(NO_CONTENT).build();
+        } catch (EntityNotFoundException e) {
+            return Response.status(NO_CONTENT).build();
+        } catch (BusinessLogicInterruptException e) {
+            return Response.status(CONFLICT).build();
+        }
     }
 
 

@@ -53,7 +53,11 @@ public class Rent extends AbstractEntity {
 
     public Rent(RentDTO rentDTO, Equipment equipment, Client client) {
         this.beginTime = LocalDateTime.parse(rentDTO.getBeginTime());
-        this.endTime = LocalDateTime.parse(rentDTO.getEndTime());
+        if(rentDTO.getEndTime() != null) {
+            this.endTime = LocalDateTime.parse(rentDTO.getEndTime());
+        } else {
+            this.endTime = null;
+        }
         this.equipment = equipment;
         this.client = client;
     }
@@ -99,7 +103,11 @@ public class Rent extends AbstractEntity {
 
     public void merge(RentDTO rentDTO, Equipment equipment, Client client) {
         this.beginTime = LocalDateTime.parse(rentDTO.getBeginTime());
-        this.endTime = LocalDateTime.parse(rentDTO.getEndTime());
+        if(rentDTO.getEndTime() != null) {
+            this.endTime = LocalDateTime.parse(rentDTO.getEndTime());
+        } else {
+            this.endTime = null;
+        }
         this.equipment = equipment;
         this.client = client;
     }
