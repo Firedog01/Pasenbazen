@@ -202,8 +202,7 @@ class EquipmentControllerTest {
                 .then()
                 .statusCode(404);
     }
-
-    // todo test z próbą usunięcia equipment które ma renta
+    
     @Test
     void deleteOneEquipment_withExistingRent() throws JsonProcessingException {
         String equipmentId = given()
