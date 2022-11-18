@@ -64,10 +64,12 @@ public class RentManager {
     public Rent add(RentDTO rentDTO) throws ObjectNotValidException, BusinessLogicInterruptException {
         Client client;
         Equipment equipment;
-        LocalDateTime beginTime, endTime;
+        LocalDateTime beginTime, endTime = null;
         try {
             beginTime = LocalDateTime.parse(rentDTO.getBeginTime());
-            endTime = LocalDateTime.parse(rentDTO.getEndTime());
+            if(rentDTO.getEndTime() != null) {
+                endTime = LocalDateTime.parse(rentDTO.getEndTime());
+            }
         } catch(DateTimeParseException e) {
             throw new ObjectNotValidException("Given dates were invalid");
         }

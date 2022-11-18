@@ -37,7 +37,6 @@ public class Rent extends AbstractEntity {
     @Column(name = "begin_time")
     private LocalDateTime beginTime;
 
-    @NotNull
     @Column(name = "end_time")
     private LocalDateTime endTime;
 
@@ -75,14 +74,14 @@ public class Rent extends AbstractEntity {
     }
 
 
-    public double getRentCost() {
-        long diffDays = Math.abs( ChronoUnit.DAYS.between(beginTime, endTime));
-        if (diffDays > 1) {
-            return equipment.getFirstDayCost() + equipment.getNextDaysCost() * (diffDays - 1);
-        } else {
-            return equipment.getFirstDayCost();
-        }
-    }
+//    public double getRentCost() {
+//        long diffDays = Math.abs( ChronoUnit.DAYS.between(beginTime, endTime));
+//        if (diffDays > 1) {
+//            return equipment.getFirstDayCost() + equipment.getNextDaysCost() * (diffDays - 1);
+//        } else {
+//            return equipment.getFirstDayCost();
+//        }
+//    }
 
     public String toString() {
         final StringBuilder sb = new StringBuilder("Rent{");

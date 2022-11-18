@@ -32,12 +32,7 @@ public class RentRepository implements Repository<Rent> {
         cq.select(rent);
         cq.where(cb.equal(rent.get(Rent_.ENTITY_ID), entityId));
 
-
-        EntityTransaction et = em.getTransaction();
-        et.begin();
-
-        List<Rent> rents = em.createQuery(cq).setLockMode(LockModeType.OPTIMISTIC).getResultList();
-        et.commit();
+        List<Rent> rents = em.createQuery(cq).getResultList();
 
         if (rents.isEmpty()) {
             throw new EntityNotFoundException("Rent not found for uniqueId: " + entityId);
@@ -48,8 +43,7 @@ public class RentRepository implements Repository<Rent> {
     @Override
     @Transactional
     public List<Rent> getAll() {
-        TypedQuery<Rent> rentQuery = em.createQuery("Select r from Rent r", Rent.class)
-                .setLockMode(LockModeType.OPTIMISTIC);
+        TypedQuery<Rent> rentQuery = em.createQuery("Select r from Rent r", Rent.class);
         return rentQuery.getResultList();
     }
 
@@ -65,51 +59,32 @@ public class RentRepository implements Repository<Rent> {
         cq.where(cb.equal(rent.get(Rent_.EQUIPMENT), e));
         // jakiś błąd z cascade type
 
-        EntityTransaction et = em.getTransaction();
-        et.begin();
-        List<Rent> rents = em.createQuery(cq).
-                setLockMode(LockModeType.OPTIMISTIC).
-                getResultList();
-        et.commit();
+        List<Rent> rents = em.createQuery(cq).getResultList();
         return rents;
     }
 
     @Override
     @Transactional
     public void add(Rent elem) {
-//        if(elem.getEquipment().getId() != null) {
-////            Equipment e = em.find(Equipment.class, elem.getEquipment().getId(),
-////                    LockModeType.OPTIMISTIC_FORCE_INCREMENT);
-//            Equipment e = em.find(Equipment.class, elem.getEquipment().getId());
-//            elem.setEquipment(e);
-//        }
-        EntityTransaction transaction = em.getTransaction();
-        transaction.begin();
         em.merge(elem);
-        transaction.commit();
     }
 
     @Override
     @Transactional
     public void remove(UUID entityId) {
         Rent elem = get(entityId);
-        em.lock(elem, LockModeType.OPTIMISTIC);
         em.remove(elem);
     }
 
     @Override
     @Transactional
     public void update(Rent elem) {
-        em.lock(elem, LockModeType.OPTIMISTIC_FORCE_INCREMENT);
         em.merge(elem);
     }
 
     @Override
     public Long count() {
-        EntityTransaction et = em.getTransaction();
-        et.begin();
         Long count = em.createQuery("Select count(rent) from Rent rent", Long.class).getSingleResult();
-        et.commit();
         return count;
     }
 
