@@ -1,5 +1,6 @@
 import com.lambdaworks.redis.*;
 import org.junit.jupiter.api.Test;
+import repository.cache.RedisCache;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
