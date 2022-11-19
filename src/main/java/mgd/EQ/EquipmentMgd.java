@@ -6,7 +6,7 @@ import org.bson.codecs.pojo.annotations.BsonCreator;
 import org.bson.codecs.pojo.annotations.BsonDiscriminator;
 import org.bson.codecs.pojo.annotations.BsonProperty;
 
-@BsonDiscriminator(key = "_clazz", value = "equipment")
+@BsonDiscriminator(key = "_clazz")
 public abstract class EquipmentMgd extends AbstractEntityMgd {
 
     @BsonProperty("name")
@@ -30,15 +30,14 @@ public abstract class EquipmentMgd extends AbstractEntityMgd {
     @BsonProperty("missing")
     private boolean missing;
 
-    @BsonCreator
-    public EquipmentMgd(@BsonProperty("_id") UniqueIdMgd entityId,
-                        @BsonProperty("name") String name,
-                        @BsonProperty("bail") double bail,
-                        @BsonProperty("first_day_cost") double firstDayCost,
-                        @BsonProperty("next_day_cost") double nextDaysCost,
-                        @BsonProperty("archive") boolean archive,
-                        @BsonProperty("description") String description,
-                        @BsonProperty("missing") boolean missing) {
+    public EquipmentMgd(UniqueIdMgd entityId,
+                        String name,
+                        double bail,
+                        double firstDayCost,
+                        double nextDaysCost,
+                        boolean archive,
+                        String description,
+                        boolean missing) {
         super(entityId);
         this.firstDayCost = firstDayCost;
         this.nextDaysCost = nextDaysCost;

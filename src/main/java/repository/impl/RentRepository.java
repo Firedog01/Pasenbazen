@@ -82,7 +82,7 @@ public class RentRepository extends AbstractRepository {
     }
 
     public RentMgd updateMissingReturned(RentMgd rent, boolean missing, boolean eqReturned) {
-        ClientSession session = startNewSession();
+//        ClientSession session = startNewSession();
 
         // prepare data
         MongoCollection<RentMgd> rentCollection = getDb().getCollection("rents", RentMgd.class);
@@ -96,12 +96,12 @@ public class RentRepository extends AbstractRepository {
         Bson updateEq = Updates.set("missing", missing);
 
         try {
-            session.startTransaction(getTransactionOptions());
+//            session.startTransaction(getTransactionOptions());
             rentCollection.updateOne(filterRent, updateRent);
             equipmentCollection.updateOne(filterEq, updateEq);
-            session.commitTransaction();
+//            session.commitTransaction();
         } catch (MongoCommandException e) {
-            session.abortTransaction();
+//            session.abortTransaction();
             System.out.println("#####  MongoCommandException  #####");
             System.out.println(e.getMessage());
         }
