@@ -29,12 +29,12 @@ class ClientRepositoryTest {
     @Test
     void GetRemoveTest() {
         ClientMgd client4 = DataFakerMgd.getClientMgd();
-        int startSize = clientRepository.getAllClients().size();
+        int startSize = clientRepository.getAll().size();
         clientRepository.add(client4);
-        Assertions.assertEquals(startSize + 1, (long) clientRepository.getAllClients().size());
-        Assertions.assertEquals(clientRepository.getByUniqueId(client4.getEntityId()), client4);
-        clientRepository.deleteOne(client4);
-        Assertions.assertEquals(startSize, (long) clientRepository.getAllClients().size());
+        Assertions.assertEquals(startSize + 1, (long) clientRepository.getAll().size());
+        Assertions.assertEquals(clientRepository.get(client4.getEntityId()), client4);
+        clientRepository.remove(client4);
+        Assertions.assertEquals(startSize, (long) clientRepository.getAll().size());
     }
 
     @Test
@@ -44,9 +44,9 @@ class ClientRepositoryTest {
         client1.setArchive(true);
         AddressMgd tempAddr = DataFakerMgd.getAddressMgd();
         client1.setAddress(tempAddr);
-        clientRepository.updateClient(client1);
+        clientRepository.update(client1);
 
-        ClientMgd client1_updated = clientRepository.getByUniqueId(client1.getEntityId());
+        ClientMgd client1_updated = clientRepository.get(client1.getEntityId());
         Assertions.assertEquals("__1__", client1_updated.getFirstName());
         Assertions.assertEquals("__2__", client1_updated.getLastName());
         Assertions.assertEquals(true, client1_updated.isArchive());
@@ -58,7 +58,7 @@ class ClientRepositoryTest {
         client2.setLastName("_1_");
         clientRepository.updateByKey(client1.getEntityId(), "last_name", client2.getLastName());
 
-        ClientMgd client1_updated = clientRepository.getByUniqueId(client1.getEntityId());
+        ClientMgd client1_updated = clientRepository.get(client1.getEntityId());
         Assertions.assertEquals("_1_", client1_updated.getLastName());
     }
 }

@@ -20,11 +20,11 @@ public class EquipmentManager {
     }
 
     public void unregisterEquipment(EquipmentMgd equipmentMgd) {
-        equipmentRepository.deleteOne(equipmentMgd);
+        equipmentRepository.remove(equipmentMgd);
     }
 
     public List<EquipmentMgd> getAllEquipment() {
-        return equipmentRepository.getAllEq();
+        return equipmentRepository.getAll();
     }
 
     public List<EquipmentMgd> getAllAvailableEquipment() {
@@ -63,7 +63,7 @@ public class EquipmentManager {
 
     public EquipmentMgd getEquipment(UniqueIdMgd id) {
         try {
-            return equipmentRepository.getById(id);
+            return equipmentRepository.get(id);
         } catch(EntityNotFoundException ex) {
             return null;
         }

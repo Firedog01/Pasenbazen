@@ -24,7 +24,7 @@ public class ClientManager {
     }
 
     public void unregisterClient(ClientMgd clientMgd) {
-        clientRepository.deleteOne(clientMgd);
+        clientRepository.remove(clientMgd);
     }
 
     public ClientMgd getClient(String clientId) {
@@ -36,7 +36,7 @@ public class ClientManager {
     }
 
     public List<ClientMgd> getAllClients() {
-        return clientRepository.getAllClients();
+        return clientRepository.getAll();
     }
 
     public List<ClientMgd> getAllAvailableClients() {

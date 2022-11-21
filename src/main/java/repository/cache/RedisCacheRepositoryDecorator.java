@@ -1,7 +1,8 @@
 package repository.cache;
 
+import mgd.UniqueIdMgd;
 import model.UniqueId;
-import repository.Repository;
+import repository.AbstractRepository;
 import repository.RepositoryDecorator;
 
 import java.util.List;
@@ -10,13 +11,18 @@ public class RedisCacheRepositoryDecorator extends RepositoryDecorator {
 
     private RedisCache cache;
 
-    public RedisCacheRepositoryDecorator(Repository repository) {
+
+
+
+
+    public RedisCacheRepositoryDecorator(AbstractRepository repository) {
         super(repository);
         cache = new RedisCache();
+
     }
 
     @Override
-    public Object get(UniqueId id) {
+    public Object get(UniqueIdMgd id) {
         return super.get(id);
     }
 
@@ -38,10 +44,5 @@ public class RedisCacheRepositoryDecorator extends RepositoryDecorator {
     @Override
     public void update(Object elem) {
         super.update(elem);
-    }
-
-    @Override
-    public Long count() {
-        return super.count();
     }
 }

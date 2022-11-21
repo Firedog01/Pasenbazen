@@ -112,7 +112,7 @@ public class RentManager {
     }
 
     public void cancelReservation(RentMgd rent) {
-        rentRepository.deleteOne(rent);
+        rentRepository.remove(rent);
     }
 
     public void returnEquipment(RentMgd rent, boolean missing) {
@@ -130,10 +130,10 @@ public class RentManager {
     }
 
     public List<RentMgd> getAllRents() {
-        return rentRepository.getAllRents();
+        return rentRepository.getAll();
     }
 
     public RentMgd getRent(UniqueIdMgd id) {
-        return rentRepository.getById(id);
+        return rentRepository.get(id);
     }
 }

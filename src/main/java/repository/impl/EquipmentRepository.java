@@ -8,6 +8,7 @@ import mgd.EQ.EquipmentMgd;
 import mgd.EQ.LensMgd;
 import mgd.EQ.TrivetMgd;
 import mgd.UniqueIdMgd;
+import model.UniqueId;
 import org.bson.conversions.Bson;
 import repository.AbstractRepository;
 
@@ -16,30 +17,53 @@ import java.util.List;
 
 import static com.mongodb.client.model.Filters.eq;
 
-public class EquipmentRepository extends AbstractRepository {
+public class EquipmentRepository extends AbstractRepository<EquipmentMgd> {
 
     // create
 
+    @Override
     public void add(EquipmentMgd equipment) {
         MongoCollection<EquipmentMgd> equipmentCollection =
                 getDb().getCollection("equipment", EquipmentMgd.class);
         equipmentCollection.insertOne(equipment);
     }
 
-    // read
-    public List<EquipmentMgd> getAllEq() {
-        MongoCollection<EquipmentMgd> eqCollection = getDb().getCollection("equipment", EquipmentMgd.class);
-        ArrayList<EquipmentMgd> equipmentMgds = eqCollection.find().into(new ArrayList<>());
-        return equipmentMgds;
-    }
 
-    public EquipmentMgd getById(UniqueIdMgd uniqueIdMgd) {
+
+    // read
+
+    @Override
+    public EquipmentMgd get(UniqueIdMgd id) {
         MongoCollection<EquipmentMgd> eqCollection = getDb().getCollection("equipment", EquipmentMgd.class);
-        Bson filter = eq("_id", uniqueIdMgd);
+        Bson filter = eq("_id", id);
         return eqCollection.find(filter).first();
     }
 
+    @Override
+    public List<EquipmentMgd> getAll() {
+        MongoCollection<EquipmentMgd> eqCollection = getDb().getCollection("equipment", EquipmentMgd.class);
+        return eqCollection.find().into(new ArrayList<>());
+    }
+
     // update
+
+    @Override
+    public void update(EquipmentMgd equipment) {
+
+        MongoCollection<ClientMgd> clientsCollection =
+                getDb().getCollection("equipment", ClientMgd.class);
+        Bson filter = eq("_id", equipment.getEntityId().getUuid());
+        Bson update = Updates.combine(
+                Updates.set("first_day_cost", equipment.getFirstDayCost()),
+                Updates.set("next_day_cost", equipment.getNextDaysCost()),
+                Updates.set("bail", equipment.getBail()),
+                Updates.set("name", equipment.getName()),
+                Updates.set("archive", equipment.isArchive()),
+                Updates.set("description", equipment.getDescription()),
+                Updates.set("missing", equipment.isMissing())
+        );
+        clientsCollection.updateOne(filter, update);
+    }
 
     public void updateByKey(UniqueIdMgd uniqueIdMgd, String key, String value) {
         MongoCollection<EquipmentMgd> eqCollection = getDb().getCollection("equipment", EquipmentMgd.class);
@@ -75,30 +99,12 @@ public class EquipmentRepository extends AbstractRepository {
         return trivet;
     }
 
-    /*
-     * only updates base class, no children
-     */
-    public void updateWholeEquipment(EquipmentMgd equipment) {
-        MongoCollection<ClientMgd> clientsCollection =
-                getDb().getCollection("equipment", ClientMgd.class);
-        Bson filter = eq("_id", equipment.getEntityId().getUuid());
-        Bson update = Updates.combine(
-                Updates.set("first_day_cost", equipment.getFirstDayCost()),
-                Updates.set("next_day_cost", equipment.getNextDaysCost()),
-                Updates.set("bail", equipment.getBail()),
-                Updates.set("name", equipment.getName()),
-                Updates.set("archive", equipment.isArchive()),
-                Updates.set("description", equipment.getDescription()),
-                Updates.set("missing", equipment.isMissing())
-        );
-        clientsCollection.updateOne(filter, update);
-    }
-
     // delete
 
-    public void deleteOne(EquipmentMgd clientMgd) {
+    @Override
+    public void remove(EquipmentMgd equipmentMgd) {
         MongoCollection<EquipmentMgd> eqCollection = getDb().getCollection("equipment", EquipmentMgd.class);
-        Bson filter = eq("_id", clientMgd.getEntityId().getUuid());
+        Bson filter = eq("_id", equipmentMgd.getEntityId().getUuid());
         eqCollection.deleteOne(filter);
     }
 }

@@ -2,10 +2,7 @@ package mapper;
 
 import mgd.AddressMgd;
 import model.Address;
-import model.UniqueId;
 import org.bson.Document;
-
-import java.util.UUID;
 
 import static model.Address_.*;
 

@@ -4,7 +4,6 @@ import exception.ClientException;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import org.hibernate.mapping.Value;
 
 import java.util.Objects;
 import java.util.UUID;

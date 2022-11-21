@@ -1,14 +1,13 @@
 package repository;
 
 
-import model.UniqueId;
+import mgd.UniqueIdMgd;
 
 import java.util.List;
-import java.util.UUID;
 
 public interface Repository<T> {
 
-    T get(UniqueId id);
+    T get(UniqueIdMgd id);
 
     List<T> getAll();
 
@@ -17,6 +16,4 @@ public interface Repository<T> {
     void remove(T elem);
 
     void update(T elem);
-
-    Long count();
 }

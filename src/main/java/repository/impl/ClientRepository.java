@@ -5,6 +5,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Updates;
 import mgd.ClientMgd;
 import mgd.UniqueIdMgd;
+import model.UniqueId;
 import org.bson.conversions.Bson;
 import repository.AbstractRepository;
 
@@ -13,21 +14,28 @@ import java.util.List;
 
 import static com.mongodb.client.model.Filters.eq;
 
-public class ClientRepository extends AbstractRepository {
+public class ClientRepository extends AbstractRepository<ClientMgd> {
 
     // create
 
+    @Override
     public void add(ClientMgd clientMgd) {
         MongoCollection<ClientMgd> clientsCollection = getDb().getCollection("clients", ClientMgd.class);
         clientsCollection.insertOne(clientMgd);
     }
 
     // read
-
-    public List<ClientMgd> getAllClients() {
+    @Override
+    public ClientMgd get(UniqueIdMgd uniqueIdMgd) {
         MongoCollection<ClientMgd> clientsCollection = getDb().getCollection("clients", ClientMgd.class);
-        ArrayList<ClientMgd> clientMgds = clientsCollection.find().into(new ArrayList<>());
-        return clientMgds;
+        Bson filter = eq("_id", uniqueIdMgd);
+        return clientsCollection.find(filter).first();
+    }
+
+    @Override
+    public List<ClientMgd> getAll() {
+        MongoCollection<ClientMgd> clientsCollection = getDb().getCollection("clients", ClientMgd.class);
+        return clientsCollection.find().into(new ArrayList<>());
     }
 
     public ClientMgd getByClientId(String clientId) {
@@ -36,22 +44,10 @@ public class ClientRepository extends AbstractRepository {
         return clientsCollection.find(filter).first();
     }
 
-    public ClientMgd getByUniqueId(UniqueIdMgd uniqueIdMgd) {
-        MongoCollection<ClientMgd> clientsCollection = getDb().getCollection("clients", ClientMgd.class);
-        Bson filter = eq("_id", uniqueIdMgd);
-        return clientsCollection.find(filter).first();
-    }
-
     // update
 
-    public void updateByKey(UniqueIdMgd uniqueIdMgd, String key, String value) {
-        MongoCollection<ClientMgd> clientsCollection = getDb().getCollection("clients", ClientMgd.class);
-        Bson filter = eq("_id", uniqueIdMgd);
-        Bson updateOp = Updates.set(key, value);
-        clientsCollection.updateOne(filter, updateOp);
-    }
-
-    public void updateClient(ClientMgd client) {
+    @Override
+    public void update(ClientMgd client) {
         MongoCollection<ClientMgd> clientsCollection =
                 getDb().getCollection("clients", ClientMgd.class);
         Bson filter = eq("_id", client.getEntityId().getUuid());
@@ -64,12 +60,19 @@ public class ClientRepository extends AbstractRepository {
         clientsCollection.updateOne(filter, update);
     }
 
+    public void updateByKey(mgd.UniqueIdMgd uniqueIdMgd, String key, String value) {
+        MongoCollection<ClientMgd> clientsCollection = getDb().getCollection("clients", ClientMgd.class);
+        Bson filter = eq("_id", uniqueIdMgd);
+        Bson updateOp = Updates.set(key, value);
+        clientsCollection.updateOne(filter, updateOp);
+    }
+
     // delete
 
-    public void deleteOne(ClientMgd clientMgd) {
+    @Override
+    public void remove(ClientMgd clientMgd) {
         MongoCollection<ClientMgd> clientsCollection = getDb().getCollection("clients", ClientMgd.class);
         Bson filter = eq("_id", clientMgd.getEntityId().getUuid());
         clientsCollection.deleteOne(filter);
     }
-
 }

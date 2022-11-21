@@ -1,22 +1,38 @@
 package repository.cache;
 
-import com.lambdaworks.redis.RedisClient;
-import com.lambdaworks.redis.RedisConnection;
-import com.lambdaworks.redis.RedisURI;
+import redis.clients.jedis.*;
+import redis.clients.jedis.exceptions.JedisConnectionException;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Properties;
-import java.util.UUID;
+import java.io.InputStream;
+import java.net.SocketTimeoutException;
+import java.util.*;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ScheduledExecutorService;
 
-public class RedisCache implements AutoCloseable {
+public class RedisCache {
+
+    public RedisCache() {
+        HostAndPort hnp = getHostAndPort();
+        JedisClientConfig clientConfig = DefaultJedisClientConfig.builder().build();
+        if(pool == null) {
+            pool = new JedisPooled(hnp, clientConfig);
+            task = new Healthcheck();
+            timer = new Timer(true);
+            healthy = RedisCache.checkHealthy();
+            timer.scheduleAtFixedRate(task, 0, 2);
+        }
+    }
+
+    // config
     public static String getConnectionString() {
-        String rootPath = Thread.currentThread().getContextClassLoader().getResource("").getPath();
-        String appConfigPath = rootPath + "app.properties";
+        ClassLoader loader = Thread.currentThread().getContextClassLoader();
+        InputStream stream = loader.getResourceAsStream("app.properties");
         Properties appProps = new Properties();
         try {
-            appProps.load(new FileInputStream(appConfigPath));
+            appProps.load(stream);
             return appProps.getProperty("connectionString");
         } catch (FileNotFoundException e) {
             throw new RuntimeException("Property file not found");
@@ -25,19 +41,48 @@ public class RedisCache implements AutoCloseable {
         }
     }
 
-    RedisClient redisClient;
-
-    public RedisConnection<String, String> getConnection() {
-        return connection;
-    }
-
-    RedisConnection<String, String> connection;
-
-    public RedisCache() {
+    private static HostAndPort getHostAndPort() {
         String connectionString = RedisCache.getConnectionString();
-        redisClient = new RedisClient(RedisURI.create(connectionString));
-        connection = redisClient.connect();
+        return HostAndPort.from(connectionString);
     }
+
+    // healthcheck
+
+    private static TimerTask task = null;
+    private static Timer timer = null;
+    static class Healthcheck extends TimerTask {
+        @Override
+        public void run() {
+            RedisCache.healthy = RedisCache.checkHealthy();
+        }
+    }
+
+    private static boolean healthy;
+
+    public static boolean checkHealthy() {
+        HostAndPort hnp = getHostAndPort();
+        JedisClientConfig clientConfig = DefaultJedisClientConfig.builder().build();
+        try(Jedis jedis = new Jedis(hnp, clientConfig)) {
+            try {
+                return Objects.equals(jedis.ping(), "PONG");
+            } catch(JedisConnectionException e) {
+                return false;
+            }
+        }
+    }
+
+    public boolean isHealthy() {
+        return healthy;
+    }
+
+    // connection
+
+    private static JedisPooled pool;
+
+
+
+
+
 
     public void save(Object obj) {
 
@@ -51,9 +96,9 @@ public class RedisCache implements AutoCloseable {
 
     }
 
-    @Override
-    public void close() {
-        connection.close();
-        redisClient.shutdown();
+
+
+    public void close() throws Exception {
+
     }
 }

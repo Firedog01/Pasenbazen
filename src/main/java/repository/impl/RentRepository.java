@@ -1,7 +1,6 @@
 package repository.impl;
 
 import com.mongodb.MongoCommandException;
-import com.mongodb.client.ClientSession;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
@@ -9,6 +8,7 @@ import mgd.ClientMgd;
 import mgd.EQ.EquipmentMgd;
 import mgd.RentMgd;
 import mgd.UniqueIdMgd;
+import model.UniqueId;
 import org.bson.conversions.Bson;
 import repository.AbstractRepository;
 
@@ -17,10 +17,11 @@ import java.util.List;
 
 import static com.mongodb.client.model.Filters.eq;
 
-public class RentRepository extends AbstractRepository {
+public class RentRepository extends AbstractRepository<RentMgd> {
 
     // create
 
+    @Override
     public void add(RentMgd rentMgd) {
         MongoCollection<RentMgd> rentCollection = getDb().getCollection("rents", RentMgd.class);
         rentCollection.insertOne(rentMgd);
@@ -28,15 +29,17 @@ public class RentRepository extends AbstractRepository {
 
     // read
 
-    public List<RentMgd> getAllRents() {
+    @Override
+    public RentMgd get(UniqueIdMgd id) {
         MongoCollection<RentMgd> rentCollection = getDb().getCollection("rents", RentMgd.class);
-        return rentCollection.find(Filters.empty()).into(new ArrayList<>());
+        Bson filter = eq("_id", id);
+        return rentCollection.find(filter).first();
     }
 
-    public RentMgd getById(UniqueIdMgd uniqueIdMgd) {
+    @Override
+    public List<RentMgd> getAll() {
         MongoCollection<RentMgd> rentCollection = getDb().getCollection("rents", RentMgd.class);
-        Bson filter = eq("_id", uniqueIdMgd);
-        return rentCollection.find(filter).first();
+        return rentCollection.find(Filters.empty()).into(new ArrayList<>());
     }
 
     public List<RentMgd> getEquipmentRents(EquipmentMgd equipment) {
@@ -53,7 +56,12 @@ public class RentRepository extends AbstractRepository {
 
     // update
 
-    public void updateByKey(UniqueIdMgd uniqueIdMgd, String key, String value) {
+    @Override
+    public void update(RentMgd elem) {
+        throw new RuntimeException("update not implemented for rent, use other methods");
+    }
+
+    public void updateByKey(UniqueId uniqueIdMgd, String key, String value) {
 //        ClientSession session = startNewSession();
         MongoCollection<EquipmentMgd> eqCollection = getDb().getCollection("equipment", EquipmentMgd.class);
         Bson filter = eq("_id", uniqueIdMgd);
@@ -113,7 +121,8 @@ public class RentRepository extends AbstractRepository {
     }
     // delete
 
-    public void deleteOne(RentMgd rentMgd) {
+    @Override
+    public void remove(RentMgd rentMgd) {
         MongoCollection<RentMgd> rentCollection = getDb().getCollection("rents", RentMgd.class);
         Bson filter = eq("_id", rentMgd.getEntityId().getUuid());
         try {
@@ -123,5 +132,4 @@ public class RentRepository extends AbstractRepository {
             System.out.println(e.getMessage());
         }
     }
-
 }

@@ -1,18 +1,19 @@
 package repository;
 
+import mgd.UniqueIdMgd;
 import model.UniqueId;
 
 import java.util.List;
 
 public abstract class RepositoryDecorator implements Repository {
-    protected Repository decoratedRepository;
+    protected AbstractRepository decoratedRepository;
 
-    public RepositoryDecorator(Repository repository) {
+    public RepositoryDecorator(AbstractRepository repository) {
         this.decoratedRepository = repository;
     }
 
     @Override
-    public Object get(UniqueId id) {
+    public Object get(UniqueIdMgd id) {
         return decoratedRepository.get(id);
     }
 
@@ -34,10 +35,5 @@ public abstract class RepositoryDecorator implements Repository {
     @Override
     public void update(Object elem) {
         decoratedRepository.update(elem);
-    }
-
-    @Override
-    public Long count() {
-        return decoratedRepository.count();
     }
 }

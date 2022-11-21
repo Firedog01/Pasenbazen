@@ -2,16 +2,9 @@ package mapper;
 
 import mgd.ClientMgd;
 import mgd.EQ.EquipmentMgd;
-import model.Address;
-import model.Client;
-import model.EQ.Equipment;
 import model.Rent;
-import model.UniqueId;
 import org.bson.Document;
-import org.joda.time.LocalDateTime;
 
-
-import java.util.UUID;
 
 import static model.Client_.ADDRESS;
 import static model.Rent_.*;

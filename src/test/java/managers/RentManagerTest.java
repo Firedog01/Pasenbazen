@@ -73,16 +73,16 @@ class RentManagerTest {
 
     @BeforeEach
     void beforeEach() {
-        List<RentMgd> allRents = rentRepository.getAllRents();
+        List<RentMgd> allRents = rentRepository.getAll();
         for(RentMgd rent : allRents) {
-            rentRepository.deleteOne(rent);
+            rentRepository.remove(rent);
         }
         rent = rentManager.makeReservation(client1, lens, address1, t1, t3);
     }
 
     @AfterEach
     void afterEach() {
-        rentRepository.deleteOne(rent);
+        rentRepository.remove(rent);
     }
 
     // +----- old rent -----+
@@ -92,11 +92,11 @@ class RentManagerTest {
         RentMgd correctRent = rentManager.makeReservation(client2, lens, address2, t4, t5);
 
         assertNotNull(correctRent);
-        assertEquals(2, rentRepository.getAllRents().size());
-        RentMgd addedRent = rentRepository.getById(correctRent.getEntityId());
+        assertEquals(2, rentRepository.getAll().size());
+        RentMgd addedRent = rentRepository.get(correctRent.getEntityId());
 
         assertEquals(correctRent, addedRent);
-        rentRepository.deleteOne(correctRent);
+        rentRepository.remove(correctRent);
     }
 
     //         +----- old rent -----+
@@ -106,7 +106,7 @@ class RentManagerTest {
         RentMgd incorrectRent = rentManager.makeReservation(client2, lens, address1, t0, t2);
 
         assertNull(incorrectRent);
-        assertEquals(1, rentRepository.getAllRents().size());
+        assertEquals(1, rentRepository.getAll().size());
     }
 
     // +----- old rent -----+
@@ -116,7 +116,7 @@ class RentManagerTest {
         RentMgd incorrectRent = rentManager.makeReservation(client2, lens, address1, t2, t4);
 
         assertNull(incorrectRent);
-        assertEquals(1, rentRepository.getAllRents().size());
+        assertEquals(1, rentRepository.getAll().size());
     }
 
     // +----- old rent -----+
@@ -126,7 +126,7 @@ class RentManagerTest {
         RentMgd incorrectRent = rentManager.makeReservation(client2, lens, address1, t1, t2);
 
         assertNull(incorrectRent);
-        assertEquals(1, rentRepository.getAllRents().size());
+        assertEquals(1, rentRepository.getAll().size());
     }
 
     //    +-- old rent --+
@@ -136,7 +136,7 @@ class RentManagerTest {
         RentMgd incorrectRent = rentManager.makeReservation(client2, lens, address1, t0, t4);
 
         assertNull(incorrectRent);
-        assertEquals(1, rentRepository.getAllRents().size());
+        assertEquals(1, rentRepository.getAll().size());
     }
 
     @Test
@@ -144,7 +144,7 @@ class RentManagerTest {
         RentMgd incorrectRent = rentManager.makeReservation(client2, lens, address1, t5, t4);
 
         assertNull(incorrectRent);
-        assertEquals(1, rentRepository.getAllRents().size());
+        assertEquals(1, rentRepository.getAll().size());
     }
 
     @Test
@@ -154,13 +154,13 @@ class RentManagerTest {
         clientArchive.setArchive(true);
         RentMgd badRent = rentManager.makeReservation(clientArchive, trivet, address1, t1, t3);
         assertNull(badRent);
-        assertEquals(1, rentRepository.getAllRents().size());
+        assertEquals(1, rentRepository.getAll().size());
 
         EquipmentMgd badTrivet = DataFakerMgd.getTrivetMgd();
         badTrivet.setMissing(true);
         badRent = rentManager.makeReservation(client2, badTrivet, address1, t1, t3);
         assertNull(badRent);
-        assertEquals(1, rentRepository.getAllRents().size());
+        assertEquals(1, rentRepository.getAll().size());
 
         badTrivet.setMissing(false);
         badTrivet.setArchive(true);
@@ -168,7 +168,7 @@ class RentManagerTest {
         badRent = rentManager.makeReservation(client2, badTrivet, address1, t1, t3);
         assertNull(badRent);
 
-        assertEquals(1, rentRepository.getAllRents().size());
+        assertEquals(1, rentRepository.getAll().size());
 
     }
 
@@ -180,7 +180,7 @@ class RentManagerTest {
 
         assertEquals(2, equipmentRents.size());
 
-        rentRepository.deleteOne(rent1);
-        rentRepository.deleteOne(rent2);
+        rentRepository.remove(rent1);
+        rentRepository.remove(rent2);
     }
 }

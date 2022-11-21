@@ -46,9 +46,9 @@ class RentRepositoryTest {
     void deleteTest() {
         RentMgd otherRent = DataFakerMgd.getRent();
         rentRepository.add(otherRent);
-        assertEquals(otherRent, rentRepository.getById(otherRent.getEntityId()));
-        rentRepository.deleteOne(otherRent);
-        assertNull(rentRepository.getById(otherRent.getEntityId()));
+        assertEquals(otherRent, rentRepository.get(otherRent.getEntityId()));
+        rentRepository.remove(otherRent);
+        assertNull(rentRepository.get(otherRent.getEntityId()));
     }
 
     @Test
@@ -56,7 +56,7 @@ class RentRepositoryTest {
         boolean shipped = true;
         RentMgd updatedRent = rentRepository.updateShipped(rent1, shipped);
         assertEquals(updatedRent, rent1);
-        assertEquals(updatedRent, rentRepository.getById(updatedRent.getEntityId()));
+        assertEquals(updatedRent, rentRepository.get(updatedRent.getEntityId()));
     }
 
     @Test
@@ -65,10 +65,10 @@ class RentRepositoryTest {
         boolean eqReturned = true;
         RentMgd updatedRent = rentRepository.updateMissingReturned(rent2, missing, eqReturned);
         assertEquals(updatedRent, rent2);
-        assertEquals(updatedRent, rentRepository.getById(updatedRent.getEntityId()));
+        assertEquals(updatedRent, rentRepository.get(updatedRent.getEntityId()));
         // equipment was also updated
 
-        assertEquals(missing, equipmentRepository.getById(updatedRent.getEquipment().getEntityId())
+        assertEquals(missing, equipmentRepository.get(updatedRent.getEquipment().getEntityId())
                 .isMissing());
 
     }
@@ -76,7 +76,7 @@ class RentRepositoryTest {
 
     @Test
     void count() {
-        int startingCount = rentRepository.getAllRents().size();
+        int startingCount = rentRepository.getAll().size();
 
         AddressMgd address1c = DataFakerMgd.getAddressMgd();
         AddressMgd address2c = DataFakerMgd.getAddressMgd();
@@ -96,10 +96,10 @@ class RentRepositoryTest {
         rentRepository.add(r2);
         rentRepository.add(r3);
 
-        assertEquals(startingCount + 3, rentRepository.getAllRents().size());
+        assertEquals(startingCount + 3, rentRepository.getAll().size());
 
-        rentRepository.deleteOne(r1);
+        rentRepository.remove(r1);
 
-        assertEquals(startingCount + 2, rentRepository.getAllRents().size());
+        assertEquals(startingCount + 2, rentRepository.getAll().size());
     }
 }
