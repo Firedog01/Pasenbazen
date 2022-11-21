@@ -8,6 +8,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
+import java.util.UUID;
 
 public class RedisCache implements AutoCloseable {
     public static String getConnectionString() {
@@ -36,6 +37,18 @@ public class RedisCache implements AutoCloseable {
         String connectionString = RedisCache.getConnectionString();
         redisClient = new RedisClient(RedisURI.create(connectionString));
         connection = redisClient.connect();
+    }
+
+    public void save(Object obj) {
+
+    }
+
+    public Object get(UUID uuid) {
+        return new Object();
+    }
+
+    public void delete(UUID uuid) {
+
     }
 
     @Override
