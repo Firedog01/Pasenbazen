@@ -1,11 +1,14 @@
 package mgd;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.bson.codecs.pojo.annotations.BsonProperty;
 
 public abstract class AbstractEntityMgd implements AutoCloseable {
 
     public AbstractEntityMgd() {}
-    public AbstractEntityMgd(UniqueIdMgd entityId) {
+    @JsonCreator
+    public AbstractEntityMgd(@JsonProperty("entityId") UniqueIdMgd entityId) {
         this.entityId = entityId;
     }
 

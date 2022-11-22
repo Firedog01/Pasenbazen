@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import mgd.EQ.EquipmentMgd;
 import model.Address;
 import model.Client;
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
 
 import java.util.Objects;
 
+@AllArgsConstructor
 public class RentMgd extends AbstractEntityMgd {
 
     public RentMgd() {}

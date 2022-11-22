@@ -1,5 +1,6 @@
 package mgd.EQ;
 
+import lombok.AllArgsConstructor;
 import mgd.UniqueIdMgd;
 import org.bson.codecs.pojo.annotations.BsonCreator;
 import org.bson.codecs.pojo.annotations.BsonDiscriminator;
