@@ -3,26 +3,26 @@ package repository.cache;
 import redis.clients.jedis.*;
 import redis.clients.jedis.exceptions.JedisConnectionException;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.SocketTimeoutException;
-import java.util.*;
-import java.util.concurrent.Executor;
-import java.util.concurrent.ScheduledExecutorService;
+import java.util.Objects;
+import java.util.Properties;
+import java.util.Timer;
+import java.util.TimerTask;
 
-public class RedisCache {
+public abstract class AbstractCache {
 
-    public RedisCache() {
+    public AbstractCache() {
         HostAndPort hnp = getHostAndPort();
         JedisClientConfig clientConfig = DefaultJedisClientConfig.builder().build();
+
         if(pool == null) {
             pool = new JedisPooled(hnp, clientConfig);
             task = new Healthcheck();
             timer = new Timer(true);
-            healthy = RedisCache.checkHealthy();
-            timer.scheduleAtFixedRate(task, 0, 2);
+            healthy = RentCache.checkHealthy();
+            timer.scheduleAtFixedRate(task, 2, 2);
         }
     }
 
@@ -41,8 +41,8 @@ public class RedisCache {
         }
     }
 
-    private static HostAndPort getHostAndPort() {
-        String connectionString = RedisCache.getConnectionString();
+    protected static HostAndPort getHostAndPort() {
+        String connectionString = RentCache.getConnectionString();
         return HostAndPort.from(connectionString);
     }
 
@@ -53,7 +53,7 @@ public class RedisCache {
     static class Healthcheck extends TimerTask {
         @Override
         public void run() {
-            RedisCache.healthy = RedisCache.checkHealthy();
+            AbstractCache.healthy = RentCache.checkHealthy();
         }
     }
 
@@ -71,34 +71,11 @@ public class RedisCache {
         }
     }
 
-    public boolean isHealthy() {
+    public static boolean isHealthy() {
         return healthy;
     }
 
     // connection
 
-    private static JedisPooled pool;
-
-
-
-
-
-
-    public void save(Object obj) {
-
-    }
-
-    public Object get(UUID uuid) {
-        return new Object();
-    }
-
-    public void delete(UUID uuid) {
-
-    }
-
-
-
-    public void close() throws Exception {
-
-    }
+    protected static JedisPooled pool;
 }

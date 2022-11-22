@@ -5,35 +5,10 @@ import model.UniqueId;
 
 import java.util.List;
 
-public abstract class RepositoryDecorator implements Repository {
-    protected AbstractRepository decoratedRepository;
+public abstract class RepositoryDecorator<T> implements Repository<T> {
+    protected AbstractRepository<T> decoratedRepository;
 
-    public RepositoryDecorator(AbstractRepository repository) {
+    public RepositoryDecorator(AbstractRepository<T> repository) {
         this.decoratedRepository = repository;
-    }
-
-    @Override
-    public Object get(UniqueIdMgd id) {
-        return decoratedRepository.get(id);
-    }
-
-    @Override
-    public List getAll() {
-        return decoratedRepository.getAll();
-    }
-
-    @Override
-    public void add(Object elem) {
-        decoratedRepository.add(elem);
-    }
-
-    @Override
-    public void remove(Object elem) {
-        decoratedRepository.remove(elem);
-    }
-
-    @Override
-    public void update(Object elem) {
-        decoratedRepository.update(elem);
     }
 }
