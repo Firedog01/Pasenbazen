@@ -1,9 +1,7 @@
 package mgd;
 
 import mgd.EQ.*;
-import org.joda.time.DateTime;
-import org.joda.time.Instant;
-import org.joda.time.LocalDateTime;
+import java.time.LocalDateTime;
 
 
 public class DataFakerMgd {
@@ -46,28 +44,9 @@ public class DataFakerMgd {
                 false, Math.random() * 20);
     }
 
-    public static RentMgd getRentMgd(EquipmentMgd e, ClientMgd c, AddressMgd a) {
-        if(e == null) {
-            e = getCameraMgd();
-        }
-        if(c == null) {
-            c = getClientMgd();
-        }
-        if(a == null) {
-            a = getAddressMgd();
-        }
-        LocalDateTime nowLocal = LocalDateTime.now();
-        DateTime now = nowLocal.toDateTime();
-        long sinceEpoch = now.getMillis();
-        long beginUnix = sinceEpoch + (long) (Math.random() * 10000000);
-        long endUnix = beginUnix + (long) (Math.random() * 10000000);
-        LocalDateTime begin = Instant.ofEpochMilli(beginUnix).toDateTime().toLocalDateTime();
-        LocalDateTime end = Instant.ofEpochMilli(endUnix).toDateTime().toLocalDateTime();
-        return new RentMgd(new UniqueIdMgd(), begin, end, e, c, a);
-    }
 
-    public static RentMgd getRent() {
-        return getRentMgd(null, null, null);
+    public static RentMgd getRentMgd(LocalDateTime begin, LocalDateTime end) {
+        return new RentMgd(new UniqueIdMgd(), begin, end, getCameraMgd(), getClientMgd(), getAddressMgd());
     }
 
 

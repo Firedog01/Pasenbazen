@@ -1,5 +1,7 @@
 package mgd;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import mgd.EQ.EquipmentMgd;
@@ -9,11 +11,13 @@ import model.EQ.Equipment;
 import org.bson.codecs.pojo.annotations.BsonCreator;
 import org.bson.codecs.pojo.annotations.BsonProperty;
 import org.joda.time.Days;
-import org.joda.time.LocalDateTime;
+import java.time.LocalDateTime;
 
 import java.util.Objects;
 
 public class RentMgd extends AbstractEntityMgd {
+
+    public RentMgd() {}
 
     @BsonCreator
     public RentMgd(@BsonProperty("_id") UniqueIdMgd entityId,
@@ -30,6 +34,25 @@ public class RentMgd extends AbstractEntityMgd {
         this.endTime = endTime;
         this.shipped = false;
         this.eqReturned = false;
+    }
+
+    @JsonCreator
+    public RentMgd(@JsonProperty("entityId") UniqueIdMgd entityId,
+                   @JsonProperty("beginTime") LocalDateTime beginTime,
+                   @JsonProperty("endTime") LocalDateTime endTime,
+                   @JsonProperty("equipment") EquipmentMgd equipment,
+                   @JsonProperty("client") ClientMgd client,
+                   @JsonProperty("address") AddressMgd address,
+                   @JsonProperty("shipped") boolean shipped,
+                   @JsonProperty("eqReturned") boolean eqReturned) {
+        super(entityId);
+        this.equipment = equipment;
+        this.client = client;
+        this.address = address;
+        this.beginTime = beginTime;
+        this.endTime = endTime;
+        this.shipped = shipped;
+        this.eqReturned = eqReturned;
     }
 
     @BsonProperty("equipment")
@@ -53,21 +76,6 @@ public class RentMgd extends AbstractEntityMgd {
     @BsonProperty("eqReturned")
     private boolean eqReturned;
 
-
-    public double getRentCost() {
-        if (!eqReturned) {
-            return 0.0;
-        } else if (equipment.isMissing()) {
-            return equipment.getBail();
-        } else {
-            long diffDays = Math.abs(Days.daysBetween(beginTime, endTime).getDays());
-            if (diffDays > 1) {
-                return equipment.getFirstDayCost() + equipment.getNextDaysCost() * (diffDays - 1);
-            } else {
-                return equipment.getFirstDayCost();
-            }
-        }
-    }
 
     public EquipmentMgd getEquipment() {
         return equipment;

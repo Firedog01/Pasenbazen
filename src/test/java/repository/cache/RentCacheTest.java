@@ -1,3 +1,5 @@
+package repository.cache;
+
 import org.junit.jupiter.api.Test;
 import repository.cache.RentCache;
 

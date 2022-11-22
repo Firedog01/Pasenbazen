@@ -1,5 +1,7 @@
 package mgd;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import exception.ClientException;
 import model.Address;
 import model.idType;
@@ -11,12 +13,13 @@ import java.util.Objects;
 public class ClientMgd extends AbstractEntityMgd {
 
     @BsonCreator
-    public ClientMgd(@BsonProperty("_id") UniqueIdMgd entityId,
-                     @BsonProperty("client_id") String clientId,
-                     @BsonProperty("first_name") String firstName,
-                     @BsonProperty("last_name") String lastName,
-                     @BsonProperty("address") AddressMgd address,
-                     @BsonProperty("archive") boolean archive) {
+    @JsonCreator
+    public ClientMgd(@JsonProperty("entityId") @BsonProperty("_id") UniqueIdMgd entityId,
+                     @JsonProperty("clientId") @BsonProperty("client_id") String clientId,
+                     @JsonProperty("firstName") @BsonProperty("first_name") String firstName,
+                     @JsonProperty("lastName") @BsonProperty("last_name") String lastName,
+                     @JsonProperty("address") @BsonProperty("address") AddressMgd address,
+                     @JsonProperty("archive") @BsonProperty("archive") boolean archive) {
         super(entityId);
         this.clientId = clientId;
         this.firstName = firstName;

@@ -2,6 +2,7 @@ package repository.cache;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import mgd.RentMgd;
 import mgd.UniqueIdMgd;
 import redis.clients.jedis.*;
@@ -20,6 +21,8 @@ public class RentCache extends AbstractCache {
     public RentCache() {
         super();
         obj = new ObjectMapper();
+        obj.registerModule(new JavaTimeModule());
+//        obj.registerModule(new JodaModule());
         prefix = "rent:";
     }
 
@@ -32,24 +35,25 @@ public class RentCache extends AbstractCache {
             throw new RuntimeException(e);
         }
         String key = prefix + rent.getEntityId().toString();
-        pool.jsonSet(key, rentString);
+        pool.set(key, rentString);
     }
 
     public RentMgd get(UniqueIdMgd entityId) {
         String key = prefix + entityId.toString();
-        String rentStr = pool.get(key);
-        return obj.convertValue(rentStr, RentMgd.class);
+        System.out.println(key);
+        var ret = pool.get(key);
+        return obj.convertValue(ret, RentMgd.class);
     }
 
     public void delete(RentMgd rent) {
         String key = prefix + rent.getEntityId().toString();
-        pool.jsonDel(key);
+        pool.del(key);
     }
 
     public void deleteAll() {
         JedisClientConfig clientConfig = DefaultJedisClientConfig.builder().build();
         try (Jedis jedis = new Jedis(getHostAndPort(), clientConfig)) {
-            jedis.flushAll(); // flushDb
+            jedis.flushAll();
         }
     }
 }

@@ -1,5 +1,8 @@
 package mgd;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.UUID;
 
 public class UniqueIdMgd {
@@ -9,9 +12,11 @@ public class UniqueIdMgd {
         this.uuid = UUID.randomUUID();
     }
 
-    public UniqueIdMgd(UUID uuid) {
+    @JsonCreator
+    public UniqueIdMgd(@JsonProperty("uuid") UUID uuid) {
         this.uuid = uuid;
     }
+
 
     public UUID getUuid() {
         return uuid;

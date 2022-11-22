@@ -1,15 +1,18 @@
 package mgd;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.bson.codecs.pojo.annotations.BsonCreator;
 import org.bson.codecs.pojo.annotations.BsonProperty;
 
 public class AddressMgd extends AbstractEntityMgd {
 
     @BsonCreator
-    public AddressMgd(@BsonProperty("_id") UniqueIdMgd entityId,
-                      @BsonProperty("city") String city,
-                      @BsonProperty("street") String street,
-                      @BsonProperty("street_nr") String streetNr) {
+    @JsonCreator
+    public AddressMgd(@JsonProperty("entityId") @BsonProperty("_id") UniqueIdMgd entityId,
+                      @JsonProperty("city") @BsonProperty("city") String city,
+                      @JsonProperty("street") @BsonProperty("street") String street,
+                      @JsonProperty("streetNr") @BsonProperty("street_nr") String streetNr) {
         super(entityId);
         this.city = city;
         this.street = street;

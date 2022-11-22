@@ -3,17 +3,33 @@ package repository.cache;
 import mgd.RentMgd;
 import mgd.UniqueIdMgd;
 import repository.AbstractRepository;
+import repository.Repository;
 import repository.RepositoryDecorator;
+import repository.impl.RentRepository;
 
 import java.util.List;
 
 public class RentCacheRepositoryDecorator extends RepositoryDecorator<RentMgd> {
 
     private RentCache cache;
+    private RentRepository repository;
 
-    public RentCacheRepositoryDecorator(AbstractRepository<RentMgd> repository) {
+    public RentCacheRepositoryDecorator(RentRepository repository) {
         super(repository);
         cache = new RentCache();
+        this.repository = repository;
+    }
+
+    public void clearCache() {
+        cache.deleteAll();
+    }
+
+    public RentMgd updateMissingReturned(RentMgd rent, boolean missing, boolean eqReturned) {
+        return repository.updateMissingReturned(rent, missing, eqReturned);
+    }
+
+    public RentMgd updateShipped(RentMgd rent, boolean shipped) {
+        return repository.updateShipped(rent, shipped);
     }
 
     @Override

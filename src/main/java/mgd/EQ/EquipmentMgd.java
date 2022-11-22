@@ -1,5 +1,6 @@
 package mgd.EQ;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import mgd.AbstractEntityMgd;
 import mgd.UniqueIdMgd;
 import org.bson.codecs.pojo.annotations.BsonCreator;
@@ -30,14 +31,15 @@ public abstract class EquipmentMgd extends AbstractEntityMgd {
     @BsonProperty("missing")
     private boolean missing;
 
-    public EquipmentMgd(UniqueIdMgd entityId,
-                        String name,
-                        double bail,
-                        double firstDayCost,
-                        double nextDaysCost,
-                        boolean archive,
-                        String description,
-                        boolean missing) {
+    @JsonCreator
+    public EquipmentMgd(@BsonProperty("entityId") UniqueIdMgd entityId,
+                        @BsonProperty("name") String name,
+                        @BsonProperty("bail") double bail,
+                        @BsonProperty("firstDayCost") double firstDayCost,
+                        @BsonProperty("nextDaysCost") double nextDaysCost,
+                        @BsonProperty("archive") boolean archive,
+                        @BsonProperty("description") String description,
+                        @BsonProperty("missing") boolean missing) {
         super(entityId);
         this.firstDayCost = firstDayCost;
         this.nextDaysCost = nextDaysCost;

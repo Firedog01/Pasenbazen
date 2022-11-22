@@ -5,7 +5,7 @@ import mgd.ClientMgd;
 import mgd.EQ.EquipmentMgd;
 import mgd.RentMgd;
 import mgd.UniqueIdMgd;
-import org.joda.time.LocalDateTime;
+import java.time.LocalDateTime;
 import repository.impl.RentRepository;
 
 import java.util.List;
@@ -117,16 +117,6 @@ public class RentManager {
 
     public void returnEquipment(RentMgd rent, boolean missing) {
         rentRepository.updateMissingReturned(rent, missing, true);
-    }
-
-    public double checkClientBalance(ClientMgd client) {
-        List<RentMgd> rentList = rentRepository.getClientRents(client);
-        double balance = 0.0;
-        for (RentMgd rent :
-                rentList) {
-            balance += rent.getRentCost();
-        }
-        return balance;
     }
 
     public List<RentMgd> getAllRents() {

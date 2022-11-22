@@ -5,7 +5,6 @@ import mgd.ClientMgd;
 import mgd.DataFakerMgd;
 import mgd.EQ.EquipmentMgd;
 import mgd.RentMgd;
-import org.joda.time.LocalDateTime;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,6 +13,7 @@ import repository.impl.ClientRepository;
 import repository.impl.EquipmentRepository;
 import repository.impl.RentRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
