@@ -3,6 +3,8 @@ package pl.lodz.p.edu.rest.model.users;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
 import pl.lodz.p.edu.rest.model.DTO.users.AdminDTO;
 import pl.lodz.p.edu.rest.exception.ObjectNotValidException;
 
@@ -10,6 +12,7 @@ import pl.lodz.p.edu.rest.exception.ObjectNotValidException;
 @DiscriminatorValue("admin")
 public class Admin extends User {
     @Column(name = "favourite_ice_cream")
+    @NotEmpty
     private String favouriteIceCream;
 
     public Admin() {
@@ -24,9 +27,6 @@ public class Admin extends User {
         this.favouriteIceCream = favouriteIceCream;
     }
 
-    public boolean verify() {
-        return super.verify() && !favouriteIceCream.isEmpty();
-    }
 
     public void merge(AdminDTO adminDTO) {
         this.setLogin(adminDTO.getLogin());

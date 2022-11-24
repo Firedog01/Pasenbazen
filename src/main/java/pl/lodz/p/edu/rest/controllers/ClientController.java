@@ -1,18 +1,16 @@
 package pl.lodz.p.edu.rest.controllers;
 
 import jakarta.inject.Inject;
-
 import jakarta.persistence.NoResultException;
 import jakarta.transaction.TransactionalException;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-
-import pl.lodz.p.edu.rest.model.DTO.users.ClientDTO;
+import pl.lodz.p.edu.rest.exception.ConflictException;
 import pl.lodz.p.edu.rest.exception.IllegalModificationException;
 import pl.lodz.p.edu.rest.exception.ObjectNotValidException;
-import pl.lodz.p.edu.rest.exception.ConflictException;
 import pl.lodz.p.edu.rest.managers.UserManager;
+import pl.lodz.p.edu.rest.model.DTO.users.ClientDTO;
 import pl.lodz.p.edu.rest.model.users.Client;
 import pl.lodz.p.edu.rest.repository.DataFaker;
 
@@ -34,7 +32,8 @@ public class ClientController {
     @Inject
     private UserControllerMethods userControllerMethods;
 
-    protected ClientController() {}
+    protected ClientController() {
+    }
 
     // create
     @POST
@@ -46,13 +45,13 @@ public class ClientController {
             Client client = new Client(clientDTO);
             userManager.registerClient(client);
             return Response.status(CREATED).entity(client).build();
-        } catch(ConflictException e) {
+        } catch (ConflictException e) {
             return Response.status(CONFLICT).build();
-        } catch(TransactionalException e) {
-            return Response.status(CONFLICT).build();
-        } catch(NullPointerException e) {
+        } catch (TransactionalException e) {
             return Response.status(BAD_REQUEST).build();
-        } catch(ObjectNotValidException e) {
+        } catch (NullPointerException e) {
+            return Response.status(BAD_REQUEST).build();
+        } catch (ObjectNotValidException e) {
             return Response.status(BAD_REQUEST).build();
         }
     }
@@ -90,9 +89,9 @@ public class ClientController {
             return Response.status(OK).entity(clientDTO).build();
         } catch (ObjectNotValidException | IllegalModificationException e) {
             return Response.status(BAD_REQUEST).build();
-        } catch(TransactionalException e) { // login modification
+        } catch (TransactionalException e) { // login modification
             return Response.status(BAD_REQUEST).build();
-        } catch(NoResultException e) {
+        } catch (NoResultException e) {
             return Response.status(NOT_FOUND).build();
         }
     }
@@ -110,7 +109,6 @@ public class ClientController {
     }
 
 
-
     // ========= other
 
     @POST
@@ -121,7 +119,7 @@ public class ClientController {
         logger.log(Level.INFO, c.toString());
         try {
             userManager.registerClient(c);
-        } catch(Exception e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
             return null;
         }

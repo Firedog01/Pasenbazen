@@ -6,11 +6,11 @@ import jakarta.transaction.TransactionalException;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import pl.lodz.p.edu.rest.model.DTO.users.EmployeeDTO;
+import pl.lodz.p.edu.rest.exception.ConflictException;
 import pl.lodz.p.edu.rest.exception.IllegalModificationException;
 import pl.lodz.p.edu.rest.exception.ObjectNotValidException;
-import pl.lodz.p.edu.rest.exception.ConflictException;
 import pl.lodz.p.edu.rest.managers.UserManager;
+import pl.lodz.p.edu.rest.model.DTO.users.EmployeeDTO;
 import pl.lodz.p.edu.rest.model.users.Employee;
 import pl.lodz.p.edu.rest.repository.DataFaker;
 
@@ -18,7 +18,6 @@ import java.util.UUID;
 import java.util.logging.Logger;
 
 import static jakarta.ws.rs.core.Response.Status.*;
-import static jakarta.ws.rs.core.Response.Status.OK;
 
 @Path("/employees")
 public class EmployeeController {
@@ -31,7 +30,8 @@ public class EmployeeController {
     @Inject
     private UserControllerMethods userControllerMethods;
 
-    protected EmployeeController() {}
+    protected EmployeeController() {
+    }
 
     @POST
     @Path("/")
@@ -42,11 +42,11 @@ public class EmployeeController {
             Employee employee = new Employee(employeeDTO);
             userManager.registerEmployee(employee);
             return Response.status(CREATED).entity(employee).build();
-        } catch(ConflictException e) {
+        } catch (ConflictException e) {
             return Response.status(CONFLICT).build();
-        } catch(TransactionalException e) {
-            return Response.status(CONFLICT).build();
-        } catch(ObjectNotValidException e) {
+        } catch (TransactionalException e) {
+            return Response.status(BAD_REQUEST).build();
+        } catch (ObjectNotValidException e) {
             return Response.status(BAD_REQUEST).build();
         }
     }
@@ -84,9 +84,9 @@ public class EmployeeController {
             return Response.status(OK).entity(employeeDTO).build();
         } catch (ObjectNotValidException | IllegalModificationException e) {
             return Response.status(BAD_REQUEST).build();
-        } catch(TransactionalException e) { // login modification
+        } catch (TransactionalException e) { // login modification
             return Response.status(BAD_REQUEST).build();
-        } catch(NoResultException e) {
+        } catch (NoResultException e) {
             return Response.status(NOT_FOUND).build();
         }
     }

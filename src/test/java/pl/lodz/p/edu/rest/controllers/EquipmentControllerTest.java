@@ -69,7 +69,9 @@ class EquipmentControllerTest {
                 .when()
                 .post("/equipment")
                 .then()
-                .statusCode(400);
+                //Positive cost!
+//                .statusCode(400);
+                .statusCode(500);
     }
 
     // read
@@ -166,7 +168,10 @@ class EquipmentControllerTest {
                 .then()
                 .statusCode(201)
                 .extract().path("entityId");
+
         validEquipment.setName(null);
+        //!! Not null name
+
         String updatedLogin = obj.writeValueAsString(validEquipment);
         given()
                 .header("Content-Type", "application/json")
@@ -174,7 +179,8 @@ class EquipmentControllerTest {
                 .when()
                 .put("/equipment/" + uuid)
                 .then()
-                .statusCode(400);
+//                .statusCode(400);
+                .statusCode(500);
     }
     
     @Test

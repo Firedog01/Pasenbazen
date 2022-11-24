@@ -18,7 +18,8 @@ public class EquipmentRepository implements Repository<Equipment> {
     @PersistenceContext(unitName = "app")
     private EntityManager em;
 
-    public EquipmentRepository() {}
+    public EquipmentRepository() {
+    }
 
     @Override
     public Equipment get(UUID entityId) {
@@ -35,7 +36,7 @@ public class EquipmentRepository implements Repository<Equipment> {
         et.commit();
 
 
-        if(equipmentList.isEmpty()) {
+        if (equipmentList.isEmpty()) {
             throw new EntityNotFoundException("Equipment not found for uniqueId: " + entityId);
         }
         return equipmentList.get(0);
@@ -83,6 +84,6 @@ public class EquipmentRepository implements Repository<Equipment> {
         Query q = em.createQuery("Select count(rent) from Rent rent where rent.equipment.entityId = :id and rent.endTime is null", Long.class);
         q.setParameter("id", entityId);
         Long count = (Long) q.getSingleResult();
-        return count == 0 ? false : true;
+        return count != 0;
     }
 }

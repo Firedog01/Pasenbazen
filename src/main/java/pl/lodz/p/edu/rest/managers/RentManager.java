@@ -1,22 +1,14 @@
 package pl.lodz.p.edu.rest.managers;
 
 import jakarta.inject.Inject;
-
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.NoResultException;
-import jakarta.persistence.PersistenceException;
 import jakarta.transaction.Transactional;
-import jakarta.ws.rs.BeanParam;
-import jakarta.ws.rs.core.Response;
-import pl.lodz.p.edu.rest.controllers.AdminController;
 import pl.lodz.p.edu.rest.exception.BusinessLogicInterruptException;
-import pl.lodz.p.edu.rest.exception.ConflictException;
-import pl.lodz.p.edu.rest.exception.IllegalModificationException;
 import pl.lodz.p.edu.rest.exception.ObjectNotValidException;
 import pl.lodz.p.edu.rest.model.DTO.RentDTO;
 import pl.lodz.p.edu.rest.model.Equipment;
 import pl.lodz.p.edu.rest.model.Rent;
-
 import pl.lodz.p.edu.rest.model.users.Client;
 import pl.lodz.p.edu.rest.repository.impl.EquipmentRepository;
 import pl.lodz.p.edu.rest.repository.impl.RentRepository;
@@ -44,7 +36,8 @@ public class RentManager {
     @Inject
     private EquipmentRepository equipmentRepository;
 
-    protected RentManager() {}
+    protected RentManager() {
+    }
 
     public List<Rent> getRentByEq(Equipment equipment) {
         return rentRepository.getRentByEq(equipment);
@@ -53,7 +46,7 @@ public class RentManager {
     public List<Rent> getRentsByClient(Client client) {
         try {
             return rentRepository.getRentByClient(client);
-        } catch(EntityNotFoundException e) {
+        } catch (EntityNotFoundException e) {
             return new ArrayList<>();
         }
     }
@@ -73,16 +66,16 @@ public class RentManager {
         now = LocalDateTime.now();
         try {
             beginTime = LocalDateTime.parse(rentDTO.getBeginTime());
-            if(rentDTO.getEndTime() != null) {
+            if (rentDTO.getEndTime() != null) {
                 endTime = LocalDateTime.parse(rentDTO.getEndTime());
-                if(beginTime.isAfter(endTime)) {
+                if (beginTime.isAfter(endTime)) {
                     throw new ObjectNotValidException("Given dates were invalid");
                 }
             }
-        } catch(DateTimeParseException e) {
+        } catch (DateTimeParseException e) {
             throw new ObjectNotValidException("Given dates were invalid");
         }
-        if(beginTime.isBefore(now)) {
+        if (beginTime.isBefore(now)) {
             throw new ObjectNotValidException("Given dates were invalid");
         }
 //        logger.info("");
@@ -90,17 +83,17 @@ public class RentManager {
             try {
                 logger.info("LOGGGER: " + rentDTO.getClientUUIDFromString().toString());
                 client = (Client) userRepository.getOfType("Client", rentDTO.getClientUUIDFromString());
-            } catch(NoResultException e) {
+            } catch (NoResultException e) {
                 throw new ObjectNotValidException("Client of given uuid does not exist");
             }
             synchronized (equipmentRepository) {
                 try {
                     equipment = equipmentRepository.get(rentDTO.getEquipmentUUIDFromString());
-                } catch(EntityNotFoundException e) {
+                } catch (EntityNotFoundException e) {
                     throw new ObjectNotValidException("Equipment of given uuid does not exist");
                 }
                 boolean available = this.checkEquipmentAvailable(equipment, beginTime);
-                if(available) {
+                if (available) {
                     Rent rent = new Rent(beginTime, endTime, equipment, client);
                     rentRepository.add(rent);
                     return rent;
@@ -110,7 +103,6 @@ public class RentManager {
             }
         }
     }
-
 
 
     public Rent update(UUID entityId, RentDTO rentDTO) throws ObjectNotValidException, BusinessLogicInterruptException {
@@ -129,34 +121,34 @@ public class RentManager {
         // date validation
         try {
             beginTime = LocalDateTime.parse(rentDTO.getBeginTime());
-            if(rentDTO.getEndTime() != null) {
+            if (rentDTO.getEndTime() != null) {
                 endTime = LocalDateTime.parse(rentDTO.getEndTime());
-                if(beginTime.isAfter(endTime)) {
+                if (beginTime.isAfter(endTime)) {
                     throw new ObjectNotValidException("Given dates were invalid");
                 }
             }
-        } catch(DateTimeParseException e) {
+        } catch (DateTimeParseException e) {
             throw new ObjectNotValidException("Given dates were invalid");
         }
-        if(beginTime.isBefore(now)) {
+        if (beginTime.isBefore(now)) {
             throw new ObjectNotValidException("Given dates were invalid");
         }
 
         synchronized (userRepository) {
             try {
                 client = (Client) userRepository.getOfType("Client", rentDTO.getClientUUIDFromString());
-            } catch(NoResultException e) {
+            } catch (NoResultException e) {
                 throw new ObjectNotValidException("Client of given uuid does not exist");
             }
             synchronized (equipmentRepository) {
                 try {
                     equipment = equipmentRepository.get(rentDTO.getEquipmentUUIDFromString());
-                } catch(EntityNotFoundException e) {
+                } catch (EntityNotFoundException e) {
                     throw new ObjectNotValidException("Equipment of given uuid does not exist");
                 }
                 boolean available = this.checkEquipmentAvailable(equipment, beginTime);
-                logger.info("available:" + Boolean.toString(available));
-                if(available) {
+                logger.info("available:" + available);
+                if (available) {
                     rent.merge(rentDTO, equipment, client);
                     rentRepository.update(rent);
                 } else {
@@ -171,10 +163,10 @@ public class RentManager {
         Rent rent;
         try {
             rent = rentRepository.get(uuid);
-        } catch(EntityNotFoundException ignored) {
+        } catch (EntityNotFoundException ignored) {
             return;
         }
-        if(rent.getEndTime() == null) {
+        if (rent.getEndTime() == null) {
             rentRepository.remove(uuid);
         } else {
             throw new BusinessLogicInterruptException("Cannot delete ended rent");
@@ -201,13 +193,13 @@ public class RentManager {
         try {
             rentEquipmentList = rentRepository.getEquipmentRents(equipment);
             logger.info("equipment rent size: " + rentEquipmentList.size());
-        } catch(NoResultException e) {
+        } catch (NoResultException e) {
             return true;
         }
         for (int i = 0; i < rentEquipmentList.size(); i++) {
             Rent curRent = rentEquipmentList.get(i);
-            if(curRent.getEndTime() == null) {
-                if(!curRent.getBeginTime().isEqual(beginTime)) {
+            if (curRent.getEndTime() == null) {
+                if (!curRent.getBeginTime().isEqual(beginTime)) {
                     return false;
                 } else {
                     continue;

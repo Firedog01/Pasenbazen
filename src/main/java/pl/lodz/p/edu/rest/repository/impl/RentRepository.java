@@ -20,7 +20,8 @@ public class RentRepository implements Repository<Rent> {
     @PersistenceContext(unitName = "app")
     private EntityManager em;
 
-    public RentRepository() {}
+    public RentRepository() {
+    }
 
     @Override
     public Rent get(UUID entityId) {
@@ -48,7 +49,7 @@ public class RentRepository implements Repository<Rent> {
     }
 
     public List<Rent> getEquipmentRents(Equipment e) {
-        if(e.getId() == null) {
+        if (e.getId() == null) {
             return new ArrayList<Rent>();
         }
         CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -99,7 +100,7 @@ public class RentRepository implements Repository<Rent> {
         TypedQuery<Rent> q = em.createQuery(cq).setLockMode(LockModeType.OPTIMISTIC);
         List<Rent> rents = q.getResultList();
 
-        if(rents.isEmpty()) {
+        if (rents.isEmpty()) {
             throw new EntityNotFoundException("Rent not found for Client: " + clientP);
         }
         return rents;
@@ -116,7 +117,7 @@ public class RentRepository implements Repository<Rent> {
         TypedQuery<Rent> q = em.createQuery(cq).setLockMode(LockModeType.OPTIMISTIC);
         List<Rent> rents = q.getResultList();
 
-        if(rents.isEmpty()) {
+        if (rents.isEmpty()) {
             throw new EntityNotFoundException("Rent not found for equipment: " + equipment);
         }
         return rents;

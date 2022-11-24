@@ -1,12 +1,15 @@
 package pl.lodz.p.edu.rest.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import pl.lodz.p.edu.rest.model.DTO.EquipmentDTO;
 
 @Entity
 @Table(name = "equipment")
 @Access(AccessType.FIELD)
+@Valid
 public class Equipment extends AbstractEntity {
 
     @Id
@@ -19,12 +22,15 @@ public class Equipment extends AbstractEntity {
     @NotNull
     private String name;
 
+    @Positive
     @Column(name = "bail")
     private double bail;
 
+    @Positive
     @Column(name = "first_day_cost")
     private double firstDayCost;
 
+    @Positive
     @Column(name = "next_day_cost")
     private double nextDaysCost;
 
@@ -44,10 +50,6 @@ public class Equipment extends AbstractEntity {
         this.merge(equipmentDTO);
     }
 
-    public boolean verify() {
-        return !(firstDayCost <= 0.0 || nextDaysCost <= 0.0 || bail <= 0.0)
-                && !name.isEmpty();
-    }
 
     public void merge(EquipmentDTO equipmentDTO) {
         this.name = equipmentDTO.getName();

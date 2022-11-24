@@ -88,6 +88,7 @@ class EmployeeControllerTest {
                 .post("/employees")
                 .then()
                 .statusCode(409);
+        //FIXME something wrong with exception hierarchy
     }
 
     // read

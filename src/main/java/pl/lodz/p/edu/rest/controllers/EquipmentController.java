@@ -2,14 +2,12 @@ package pl.lodz.p.edu.rest.controllers;
 
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.persistence.NoResultException;
-import jakarta.transaction.TransactionalException;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import pl.lodz.p.edu.rest.exception.ConflictException;
 import pl.lodz.p.edu.rest.exception.IllegalModificationException;
 import pl.lodz.p.edu.rest.exception.ObjectNotValidException;
-import pl.lodz.p.edu.rest.exception.ConflictException;
 import pl.lodz.p.edu.rest.managers.EquipmentManager;
 import pl.lodz.p.edu.rest.model.DTO.EquipmentDTO;
 import pl.lodz.p.edu.rest.model.Equipment;
@@ -19,7 +17,6 @@ import java.util.List;
 import java.util.UUID;
 
 import static jakarta.ws.rs.core.Response.Status.*;
-import static jakarta.ws.rs.core.Response.Status.BAD_REQUEST;
 
 
 @Path("/equipment")
@@ -39,12 +36,12 @@ public class EquipmentController {
             Equipment equipment = new Equipment(equipmentDTO);
             equipmentManager.add(equipment);
             return Response.status(CREATED).entity(equipment).build();
-        } catch(NullPointerException e) {
+        } catch (NullPointerException e) {
             return Response.status(BAD_REQUEST).build();
-        } catch(ObjectNotValidException e) {
+        } catch (ObjectNotValidException e) {
             return Response.status(BAD_REQUEST).build();
         }
-        
+
     }
 
     // read
@@ -64,7 +61,7 @@ public class EquipmentController {
         try {
             Equipment equipment = equipmentManager.get(uuid);
             return Response.status(Response.Status.OK).entity(equipment).build();
-        } catch(EntityNotFoundException e) {
+        } catch (EntityNotFoundException e) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
     }
@@ -80,7 +77,7 @@ public class EquipmentController {
             return Response.status(OK).entity(equipmentDTO).build();
         } catch (ObjectNotValidException | IllegalModificationException e) {
             return Response.status(BAD_REQUEST).build();
-        } catch(EntityNotFoundException e) {
+        } catch (EntityNotFoundException e) {
             return Response.status(NOT_FOUND).build();
         }
     }
@@ -107,7 +104,7 @@ public class EquipmentController {
         Equipment e = DataFaker.getEquipment();
         try {
             equipmentManager.add(e);
-        } catch(Exception ex) {
+        } catch (Exception ex) {
             return null;
         }
         return e;

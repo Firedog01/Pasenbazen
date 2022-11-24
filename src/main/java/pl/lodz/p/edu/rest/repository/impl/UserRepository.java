@@ -6,7 +6,8 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import jakarta.transaction.Transactional;
-import pl.lodz.p.edu.rest.model.users.*;
+import pl.lodz.p.edu.rest.model.users.User;
+import pl.lodz.p.edu.rest.model.users.User_;
 import pl.lodz.p.edu.rest.repository.Repository;
 
 import java.util.List;
@@ -18,7 +19,8 @@ public class UserRepository implements Repository<User> {
     @PersistenceContext(name = "request")
     protected EntityManager em;
 
-    public UserRepository() {}
+    public UserRepository() {
+    }
 
     // get user of any type
     @Override
@@ -33,7 +35,7 @@ public class UserRepository implements Repository<User> {
 
         List<User> users = em.createQuery(cq).getResultList();
 
-        if(users.isEmpty()) {
+        if (users.isEmpty()) {
             throw new EntityNotFoundException("Client not found for uniqueId: " + entityId);
         }
         return users.get(0);
@@ -58,7 +60,7 @@ public class UserRepository implements Repository<User> {
     }
 
     @Override
-    public List<User> getAll()  {
+    public List<User> getAll() {
         return em.createQuery("SELECT user FROM User user", User.class).getResultList();
     }
 

@@ -60,7 +60,9 @@ class ClientControllerTest {
 
     @Test
     void createClient_illegalValue() throws JsonProcessingException {
+        //Not null!
         validClient.setAddress(null);
+
         String notValidClientStr = obj.writeValueAsString(validClient);
         System.out.println(notValidClientStr);
         given()
@@ -72,6 +74,7 @@ class ClientControllerTest {
                 .statusCode(400);
     }
 
+    //FIXME
     @Test
     void createClient_conflict() {
         given()
@@ -88,6 +91,7 @@ class ClientControllerTest {
                 .post("/clients")
                 .then()
                 .statusCode(409);
+        //FIXME
     }
 
     // read

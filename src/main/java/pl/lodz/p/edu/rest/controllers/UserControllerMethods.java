@@ -19,7 +19,7 @@ public class UserControllerMethods {
     private UserManager userManager;
 
     public Response searchUser(String type, String login) {
-        if(login != null) {
+        if (login != null) {
             List<User> searchResult = userManager.searchOfType(type, login);
             return Response.status(OK).entity(searchResult).build();
         }
@@ -31,7 +31,7 @@ public class UserControllerMethods {
         try {
             User user = userManager.getUserByUuidOfType(type, entityId);
             return Response.status(OK).entity(user).build();
-        } catch(NoResultException e) {
+        } catch (NoResultException e) {
             return Response.status(NOT_FOUND).build();
         }
     }
@@ -40,7 +40,7 @@ public class UserControllerMethods {
         try {
             User user = userManager.getUserByLoginOfType(type, login);
             return Response.status(OK).entity(user).build();
-        } catch(NoResultException e) {
+        } catch (NoResultException e) {
             return Response.status(NOT_FOUND).build();
         }
     }
@@ -49,7 +49,7 @@ public class UserControllerMethods {
         try {
             userManager.activateUser(type, entityId);
             return Response.status(NO_CONTENT).build();
-        } catch(NoResultException e) {
+        } catch (NoResultException e) {
             return Response.status(NOT_FOUND).build();
         }
     }
@@ -58,7 +58,7 @@ public class UserControllerMethods {
         try {
             userManager.deactivateUser(type, entityId);
             return Response.status(NO_CONTENT).build();
-        } catch(NoResultException e) {
+        } catch (NoResultException e) {
             return Response.status(NOT_FOUND).build();
         }
     }

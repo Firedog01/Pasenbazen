@@ -1,9 +1,12 @@
 package pl.lodz.p.edu.rest.model.users;
 
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
 import pl.lodz.p.edu.rest.exception.ObjectNotValidException;
 import pl.lodz.p.edu.rest.model.AbstractEntity;
 
+@Valid
 @Entity
 @Table(name = "tuser")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -11,6 +14,7 @@ import pl.lodz.p.edu.rest.model.AbstractEntity;
 public abstract class User extends AbstractEntity {
     @Id
     @Column(name = "login")
+    @NotEmpty
     private String login;
 
     @Column(name = "archive")
@@ -47,9 +51,6 @@ public abstract class User extends AbstractEntity {
         this.active = user.active;
     }
 
-    public boolean verify() {
-        return !login.isEmpty();
-    }
 
     @Override
     public String toString() {

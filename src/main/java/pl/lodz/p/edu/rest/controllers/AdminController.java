@@ -6,19 +6,18 @@ import jakarta.transaction.TransactionalException;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import pl.lodz.p.edu.rest.model.DTO.users.AdminDTO;
+import pl.lodz.p.edu.rest.exception.ConflictException;
 import pl.lodz.p.edu.rest.exception.IllegalModificationException;
 import pl.lodz.p.edu.rest.exception.ObjectNotValidException;
-import pl.lodz.p.edu.rest.exception.ConflictException;
 import pl.lodz.p.edu.rest.managers.UserManager;
-import pl.lodz.p.edu.rest.model.users.*;
+import pl.lodz.p.edu.rest.model.DTO.users.AdminDTO;
+import pl.lodz.p.edu.rest.model.users.Admin;
 import pl.lodz.p.edu.rest.repository.DataFaker;
 
 import java.util.UUID;
 import java.util.logging.Logger;
 
 import static jakarta.ws.rs.core.Response.Status.*;
-import static jakarta.ws.rs.core.Response.Status.CONFLICT;
 
 @Path("/admins")
 public class AdminController {
@@ -30,7 +29,8 @@ public class AdminController {
     @Inject
     private UserControllerMethods userControllerMethods;
 
-    protected AdminController() {}
+    protected AdminController() {
+    }
 
     // create
 
@@ -43,11 +43,11 @@ public class AdminController {
             Admin admin = new Admin(adminDTO);
             userManager.registerAdmin(admin);
             return Response.status(CREATED).entity(admin).build();
-        } catch(ConflictException e) {
+        } catch (ConflictException e) {
             return Response.status(CONFLICT).build();
-        } catch(TransactionalException e) {
-            return Response.status(CONFLICT).build();
-        } catch(ObjectNotValidException e) {
+        } catch (TransactionalException e) {
+            return Response.status(BAD_REQUEST).build();
+        } catch (ObjectNotValidException e) {
             return Response.status(BAD_REQUEST).build();
         }
     }
@@ -85,9 +85,9 @@ public class AdminController {
             return Response.status(OK).entity(adminDTO).build();
         } catch (ObjectNotValidException | IllegalModificationException e) {
             return Response.status(BAD_REQUEST).build();
-        } catch(TransactionalException e) { // login modification
+        } catch (TransactionalException e) { // login modification
             return Response.status(BAD_REQUEST).build();
-        } catch(NoResultException e) {
+        } catch (NoResultException e) {
             return Response.status(NOT_FOUND).build();
         }
     }
@@ -113,7 +113,7 @@ public class AdminController {
         Admin c = DataFaker.getAdmin();
         try {
             userManager.registerAdmin(c);
-        } catch(Exception e) {
+        } catch (Exception e) {
             return null;
         }
         return c;

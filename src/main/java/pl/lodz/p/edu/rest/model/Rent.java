@@ -2,18 +2,19 @@ package pl.lodz.p.edu.rest.model;
 
 import jakarta.persistence.*;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-
 import pl.lodz.p.edu.rest.model.DTO.RentDTO;
 import pl.lodz.p.edu.rest.model.users.Client;
 
+import java.time.LocalDateTime;
+
+
+@Access(AccessType.FIELD)
 @Entity
 @Table(name = "rent")
 @Transactional
-@Access(AccessType.FIELD)
+@Valid
 public class Rent extends AbstractEntity {
 
     @Id
@@ -49,11 +50,12 @@ public class Rent extends AbstractEntity {
         this.client = client;
     }
 
-    protected Rent() {}
+    protected Rent() {
+    }
 
     public Rent(RentDTO rentDTO, Equipment equipment, Client client) {
         this.beginTime = LocalDateTime.parse(rentDTO.getBeginTime());
-        if(rentDTO.getEndTime() != null) {
+        if (rentDTO.getEndTime() != null) {
             this.endTime = LocalDateTime.parse(rentDTO.getEndTime());
         } else {
             this.endTime = null;
@@ -69,41 +71,22 @@ public class Rent extends AbstractEntity {
         this.id = id;
     }
 
-    public boolean verify() {
-        boolean check = true;
-        if(endTime != null) {
-            check = beginTime.isBefore(endTime);
-        }
-        return check && client.verify() && equipment.verify();
-    }
-
-
-//    public double getRentCost() {
-//        long diffDays = Math.abs( ChronoUnit.DAYS.between(beginTime, endTime));
-//        if (diffDays > 1) {
-//            return equipment.getFirstDayCost() + equipment.getNextDaysCost() * (diffDays - 1);
-//        } else {
-//            return equipment.getFirstDayCost();
-//        }
-//    }
-
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Rent{");
-        sb.append("id=").append(id);
-        sb.append("Klient=").append(getClient().toString());
-        sb.append("Sprzęt=").append(getEquipment().toString());
-        sb.append("Czas wypożyczenia=");
-        sb.append("Początek=").append(beginTime);
-        sb.append(" do ");
-        sb.append("Koniec=").append(endTime);
-        sb.append('}');
-        return sb.toString();
+        String sb = "Rent{" + "id=" + id +
+                "Klient=" + getClient().toString() +
+                "Sprzęt=" + getEquipment().toString() +
+                "Czas wypożyczenia=" +
+                "Początek=" + beginTime +
+                " do " +
+                "Koniec=" + endTime +
+                '}';
+        return sb;
     }
 
 
     public void merge(RentDTO rentDTO, Equipment equipment, Client client) {
         this.beginTime = LocalDateTime.parse(rentDTO.getBeginTime());
-        if(rentDTO.getEndTime() != null) {
+        if (rentDTO.getEndTime() != null) {
             this.endTime = LocalDateTime.parse(rentDTO.getEndTime());
         } else {
             this.endTime = null;
@@ -111,6 +94,7 @@ public class Rent extends AbstractEntity {
         this.equipment = equipment;
         this.client = client;
     }
+
     public LocalDateTime getBeginTime() {
         return beginTime;
     }

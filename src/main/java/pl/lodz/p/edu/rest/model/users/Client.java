@@ -4,18 +4,22 @@ import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import pl.lodz.p.edu.rest.model.DTO.users.ClientDTO;
 import pl.lodz.p.edu.rest.exception.ObjectNotValidException;
 import pl.lodz.p.edu.rest.model.Address;
 
-@Entity
 @DiscriminatorValue("client")
+@Entity
 public class Client extends User {
 
+    @NotEmpty
     @Column(name = "first_name")
     private String firstName;
 
+    @NotEmpty
     @Column(name = "last_name")
     private String lastName;
 
@@ -37,10 +41,6 @@ public class Client extends User {
         this.address = clientDTO.getAddress();
     }
 
-    public boolean verify() {
-        return super.verify() && !firstName.isEmpty()
-                && !lastName.isEmpty() && address.verify();
-    }
 
     public void merge(ClientDTO clientDTO) {
         this.setLogin(clientDTO.getLogin());
