@@ -1,6 +1,7 @@
 package repository.cache;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import mgd.RentMgd;
@@ -38,11 +39,12 @@ public class RentCache extends AbstractCache {
         pool.set(key, rentString);
     }
 
-    public RentMgd get(UniqueIdMgd entityId) {
+    public RentMgd get(UniqueIdMgd entityId) throws JsonProcessingException {
         String key = prefix + entityId.toString();
         System.out.println(key);
         var ret = pool.get(key);
-        return obj.convertValue(ret, RentMgd.class);
+//        return obj.convertValue(ret, RentMgd.class);
+        return obj.readValue(ret, RentMgd.class);
     }
 
     public void delete(RentMgd rent) {

@@ -1,6 +1,6 @@
 package mgd.EQ;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.*;
 import mgd.AbstractEntityMgd;
 import mgd.UniqueIdMgd;
 import org.bson.codecs.pojo.annotations.BsonCreator;
@@ -8,6 +8,13 @@ import org.bson.codecs.pojo.annotations.BsonDiscriminator;
 import org.bson.codecs.pojo.annotations.BsonProperty;
 
 @BsonDiscriminator(key = "_clazz")
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+    @JsonSubTypes({
+        @JsonSubTypes.Type(value = CameraMgd.class, name = "camera"),
+        @JsonSubTypes.Type(value = LensMgd.class, name = "lens"),
+        @JsonSubTypes.Type(value = TrivetMgd.class, name = "trivet")
+})
 public abstract class EquipmentMgd extends AbstractEntityMgd {
 
     @BsonProperty("name")
@@ -32,14 +39,15 @@ public abstract class EquipmentMgd extends AbstractEntityMgd {
     private boolean missing;
 
     @JsonCreator
-    public EquipmentMgd(@BsonProperty("entityId") UniqueIdMgd entityId,
-                        @BsonProperty("name") String name,
-                        @BsonProperty("bail") double bail,
-                        @BsonProperty("firstDayCost") double firstDayCost,
-                        @BsonProperty("nextDaysCost") double nextDaysCost,
-                        @BsonProperty("archive") boolean archive,
-                        @BsonProperty("description") String description,
-                        @BsonProperty("missing") boolean missing) {
+    @BsonCreator
+    public EquipmentMgd(@BsonProperty("entityId") @JsonProperty("entityId") UniqueIdMgd entityId,
+                        @BsonProperty("name") @JsonProperty("name") String name,
+                        @BsonProperty("bail") @JsonProperty("bail") double bail,
+                        @BsonProperty("firstDayCost") @JsonProperty("firstDayCost") double firstDayCost,
+                        @BsonProperty("nextDaysCost") @JsonProperty("nextDaysCost") double nextDaysCost,
+                        @BsonProperty("archive") @JsonProperty("archive") boolean archive,
+                        @BsonProperty("description") @JsonProperty("description") String description,
+                        @BsonProperty("missing") @JsonProperty("missing") boolean missing) {
         super(entityId);
         this.firstDayCost = firstDayCost;
         this.nextDaysCost = nextDaysCost;

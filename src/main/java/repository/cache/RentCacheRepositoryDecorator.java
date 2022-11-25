@@ -1,5 +1,6 @@
 package repository.cache;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import mgd.RentMgd;
 import mgd.UniqueIdMgd;
 import repository.AbstractRepository;
@@ -43,7 +44,11 @@ public class RentCacheRepositoryDecorator extends RepositoryDecorator<RentMgd> {
     @Override
     public RentMgd get(UniqueIdMgd id) {
         if(RentCache.isHealthy()) {
-            return cache.get(id);
+            try {
+                return cache.get(id);
+            } catch (JsonProcessingException e) {
+                System.out.println(e.getMessage());
+            }
         }
         return decoratedRepository.get(id);
     }

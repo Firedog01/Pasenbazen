@@ -1,5 +1,6 @@
 package mgd.EQ;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import mgd.UniqueIdMgd;
 import org.bson.codecs.pojo.annotations.BsonCreator;
 import org.bson.codecs.pojo.annotations.BsonDiscriminator;
@@ -9,18 +10,19 @@ import org.bson.codecs.pojo.annotations.BsonProperty;
 public class TrivetMgd extends EquipmentMgd {
 
     @BsonProperty("weight")
+    @JsonProperty("weight")
     private double weight;
 
     @BsonCreator
-    public TrivetMgd(@BsonProperty("_id") UniqueIdMgd entityId,
-                         @BsonProperty("name") String name,
-                         @BsonProperty("bail") double bail,
-                         @BsonProperty("first_day_cost") double firstDayCost,
-                         @BsonProperty("next_day_cost") double nextDaysCost,
-                         @BsonProperty("archive") boolean archive,
-                         @BsonProperty("description") String description,
-                         @BsonProperty("missing") boolean missing,
-                         @BsonProperty("weight") double weight
+    public TrivetMgd(@BsonProperty("_id") @JsonProperty("_id") UniqueIdMgd entityId,
+                         @BsonProperty("name") @JsonProperty("name") String name,
+                         @BsonProperty("bail") @JsonProperty("bail") double bail,
+                         @BsonProperty("first_day_cost") @JsonProperty("first_day_cost") double firstDayCost,
+                         @BsonProperty("next_day_cost") @JsonProperty("next_day_cost") double nextDaysCost,
+                         @BsonProperty("archive") @JsonProperty("archive") boolean archive,
+                         @BsonProperty("description") @JsonProperty("description") String description,
+                         @BsonProperty("missing") @JsonProperty("missing") boolean missing,
+                         @BsonProperty("weight") @JsonProperty("weight") double weight
     ) {
         super(entityId, name, bail, firstDayCost, nextDaysCost,
                 archive, description, missing);

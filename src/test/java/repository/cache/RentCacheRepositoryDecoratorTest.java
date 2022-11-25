@@ -10,9 +10,9 @@ import repository.impl.EquipmentRepository;
 import repository.impl.RentRepository;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 class RentCacheRepositoryDecoratorTest {
 
@@ -31,7 +31,7 @@ class RentCacheRepositoryDecoratorTest {
     static EquipmentMgd lens    = DataFakerMgd.getLensMgd();
     static EquipmentMgd trivet  = DataFakerMgd.getTrivetMgd();
 
-    static LocalDateTime t0 = LocalDateTime.now();
+    static LocalDateTime t0 = LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS);
     static  LocalDateTime t1 = t0.plusDays('1');
     static RentMgd rent1;
     static RentMgd rent2;
@@ -72,7 +72,11 @@ class RentCacheRepositoryDecoratorTest {
         rentRepository.add(otherRent);
         assertEquals(otherRent, rentRepository.get(otherRent.getEntityId()));
         rentRepository.remove(otherRent);
-        assertNull(rentRepository.get(otherRent.getEntityId()));
+        assertThrows(IllegalArgumentException.class, () -> rentRepository.get(otherRent.getEntityId()));
+
+
+
+        //FIXME idk czy to poprawne jest, może dalej tak nie powinno działać
     }
 
     @Test
@@ -89,6 +93,7 @@ class RentCacheRepositoryDecoratorTest {
         boolean eqReturned = true;
         RentMgd updatedRent = rentRepository.updateMissingReturned(rent2, missing, eqReturned);
         assertEquals(updatedRent, rent2);
+        assertEquals(updatedRent, rentRepository.get(rent2.getEntityId()));
         assertEquals(updatedRent, rentRepository.get(updatedRent.getEntityId()));
         // equipment was also updated
 
