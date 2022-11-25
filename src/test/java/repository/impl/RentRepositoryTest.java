@@ -35,9 +35,9 @@ class RentRepositoryTest {
 
     @BeforeAll
     static void beforeAll() {
-        rent1 = new RentMgd(new UniqueIdMgd(), t0, t1, camera, client1, address1);
-        rent2 = new RentMgd(new UniqueIdMgd(), t0, t1, lens, client2, address2);
-        rent3 = new RentMgd(new UniqueIdMgd(), t0, t1, camera, client3, address3);
+        rent1 = new RentMgd(new UniqueIdMgd(), t0, t1, camera, client1, address1, false, false);
+        rent2 = new RentMgd(new UniqueIdMgd(), t0, t1, lens, client2, address2, false, false);
+        rent3 = new RentMgd(new UniqueIdMgd(), t0, t1, camera, client3, address3, false, false);
 
         clientRepository.add(client1);
         clientRepository.add(client2);

@@ -19,7 +19,7 @@ public class CameraMgd extends EquipmentMgd {
 
     @BsonCreator
     @JsonCreator
-    public CameraMgd(@BsonProperty("_id") @JsonProperty("_id") UniqueIdMgd entityId,
+    public CameraMgd(@BsonProperty("_id") @JsonProperty("entityId") UniqueIdMgd entityId,
                      @BsonProperty("name") @JsonProperty("name") String name,
                      @BsonProperty("bail") @JsonProperty("bail") double bail,
                      @BsonProperty("first_day_cost") @JsonProperty("first_day_cost") double firstDayCost,
@@ -63,5 +63,14 @@ public class CameraMgd extends EquipmentMgd {
         int result = super.hashCode();
         result = 31 * result + (resolution != null ? resolution.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("CameraMgd{");
+        sb.append(super.toString());
+        sb.append("resolution='").append(resolution).append('\'');
+        sb.append('}');
+        return sb.toString();
     }
 }

@@ -8,13 +8,13 @@ public abstract class AbstractEntityMgd implements AutoCloseable {
 
     public AbstractEntityMgd() {}
     @JsonCreator
-    public AbstractEntityMgd(@JsonProperty("entityId") UniqueIdMgd entityId) {
+    public AbstractEntityMgd(@BsonProperty("_id") @JsonProperty("entityId") UniqueIdMgd entityId) {
         this.entityId = entityId;
     }
 
     @BsonProperty("_id")
+    @JsonProperty("entityId")
     private UniqueIdMgd entityId;
-
     public UniqueIdMgd getEntityId() {
         return entityId;
     }

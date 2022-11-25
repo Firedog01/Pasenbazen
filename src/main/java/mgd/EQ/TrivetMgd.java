@@ -14,7 +14,7 @@ public class TrivetMgd extends EquipmentMgd {
     private double weight;
 
     @BsonCreator
-    public TrivetMgd(@BsonProperty("_id") @JsonProperty("_id") UniqueIdMgd entityId,
+    public TrivetMgd(@BsonProperty("_id") @JsonProperty("entityId") UniqueIdMgd entityId,
                          @BsonProperty("name") @JsonProperty("name") String name,
                          @BsonProperty("bail") @JsonProperty("bail") double bail,
                          @BsonProperty("first_day_cost") @JsonProperty("first_day_cost") double firstDayCost,
@@ -60,5 +60,14 @@ public class TrivetMgd extends EquipmentMgd {
         temp = Double.doubleToLongBits(weight);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         return result;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("TrivetMgd{");
+        sb.append(super.toString());
+        sb.append("weight=").append(weight);
+        sb.append('}');
+        return sb.toString();
     }
 }

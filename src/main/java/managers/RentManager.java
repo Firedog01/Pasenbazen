@@ -65,7 +65,8 @@ public class RentManager {
             }
         }
 
-        RentMgd rent = new RentMgd(new UniqueIdMgd(), beginTime, endTime, equipment, client, address);
+        RentMgd rent = new RentMgd(new UniqueIdMgd(), beginTime, endTime,
+                equipment, client, address, false, false);
         rentRepository.add(rent);
         return rent;
     }

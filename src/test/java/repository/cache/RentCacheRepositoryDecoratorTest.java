@@ -42,9 +42,9 @@ class RentCacheRepositoryDecoratorTest {
     static void beforeAll() {
         rentRepository.clearCache();
 
-        rent1 = new RentMgd(new UniqueIdMgd(), t0, t1, camera, client1, address1);
-        rent2 = new RentMgd(new UniqueIdMgd(), t0, t1, lens, client2, address2);
-        rent3 = new RentMgd(new UniqueIdMgd(), t0, t1, camera, client3, address3);
+        rent1 = new RentMgd(new UniqueIdMgd(), t0, t1, camera, client1, address1, false, false);
+        rent2 = new RentMgd(new UniqueIdMgd(), t0, t1, lens, client2, address2, false, false);
+        rent3 = new RentMgd(new UniqueIdMgd(), t0, t1, camera, client3, address3, false, false);
 
         clientRepository.add(client1);
         clientRepository.add(client2);
@@ -74,8 +74,6 @@ class RentCacheRepositoryDecoratorTest {
         rentRepository.remove(otherRent);
         assertThrows(IllegalArgumentException.class, () -> rentRepository.get(otherRent.getEntityId()));
 
-
-
         //FIXME idk czy to poprawne jest, może dalej tak nie powinno działać
     }
 
@@ -91,14 +89,29 @@ class RentCacheRepositoryDecoratorTest {
     void updateMissingReturnedTest() {
         boolean missing = true;
         boolean eqReturned = true;
-        RentMgd updatedRent = rentRepository.updateMissingReturned(rent2, missing, eqReturned);
-        assertEquals(updatedRent, rent2);
-        assertEquals(updatedRent, rentRepository.get(rent2.getEntityId()));
-        assertEquals(updatedRent, rentRepository.get(updatedRent.getEntityId()));
-        // equipment was also updated
 
-        assertEquals(missing, equipmentRepository.get(updatedRent.getEquipment().getEntityId())
-                .isMissing());
+//        System.out.println(rent2.toString());
+//
+        rent2.getEquipment().setMissing(true);
+        rent2.setEqReturned(true);
+
+//        rentRepository.update(rent2);
+//        System.out.println(rentRepository.get(rent2.getEntityId()).toString());
+
+
+        rentRepository.update(rent2);
+        assertEquals(rentRepository.get(rent2.getEntityId()), rent2);
+
+        //FIXME problem dalej jest taki, że przy deserializacji bierze domyślne? false a nie true
+        // Zmiana następuje ale nie ma odświeżenia cache?
+
+//        assertEquals(updatedRent, rentRepository.get(updatedRent.getEntityId()));
+//         equipment was also updated
+
+        //Nie aktualizuje się equipment repository
+        // Ale czy w ogóle powinno się też aktualizować?
+        assertEquals(missing, equipmentRepository
+                .get(rent2.getEquipment().getEntityId()).isMissing());
 
     }
 

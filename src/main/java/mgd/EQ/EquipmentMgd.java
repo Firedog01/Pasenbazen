@@ -40,7 +40,7 @@ public abstract class EquipmentMgd extends AbstractEntityMgd {
 
     @JsonCreator
     @BsonCreator
-    public EquipmentMgd(@BsonProperty("entityId") @JsonProperty("entityId") UniqueIdMgd entityId,
+    public EquipmentMgd(@BsonProperty("_id") @JsonProperty("entityId") UniqueIdMgd entityId,
                         @BsonProperty("name") @JsonProperty("name") String name,
                         @BsonProperty("bail") @JsonProperty("bail") double bail,
                         @BsonProperty("firstDayCost") @JsonProperty("firstDayCost") double firstDayCost,
@@ -145,5 +145,19 @@ public abstract class EquipmentMgd extends AbstractEntityMgd {
         result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + (missing ? 1 : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("EquipmentMgd{");
+        sb.append("name='").append(name).append('\'');
+        sb.append(", bail=").append(bail);
+        sb.append(", firstDayCost=").append(firstDayCost);
+        sb.append(", nextDaysCost=").append(nextDaysCost);
+        sb.append(", archive=").append(archive);
+        sb.append(", description='").append(description).append('\'');
+        sb.append(", missing=").append(missing);
+        sb.append('}');
+        return sb.toString();
     }
 }

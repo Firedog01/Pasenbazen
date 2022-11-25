@@ -58,7 +58,15 @@ public class RentRepository extends AbstractRepository<RentMgd> {
 
     @Override
     public void update(RentMgd elem) {
-        throw new RuntimeException("update not implemented for rent, use other methods");
+        MongoCollection<RentMgd> rentCollection = getDb().getCollection("rents", RentMgd.class);
+        Bson filter = eq("_id", elem.getEntityId().getUuid());
+        try {
+            rentCollection.deleteOne(filter);
+            rentCollection.insertOne(elem);
+        } catch (MongoCommandException e) {
+            System.out.println("#####  MongoCommandException  #####");
+            System.out.println(e.getMessage());
+        }
     }
 
     public void updateByKey(UniqueId uniqueIdMgd, String key, String value) {
@@ -116,7 +124,7 @@ public class RentRepository extends AbstractRepository<RentMgd> {
 
         // update model
         rent.setEqReturned(eqReturned);
-        rent.getEquipment().setMissing(eqReturned);
+        rent.getEquipment().setMissing(missing);
         return rent;
     }
     // delete

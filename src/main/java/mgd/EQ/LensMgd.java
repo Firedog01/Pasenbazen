@@ -1,5 +1,6 @@
 package mgd.EQ;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import mgd.UniqueIdMgd;
 import org.bson.codecs.pojo.annotations.BsonCreator;
@@ -14,7 +15,8 @@ public class LensMgd extends EquipmentMgd {
     private String focalLength;
 
     @BsonCreator
-    public LensMgd(@BsonProperty("_id") @JsonProperty("_id") UniqueIdMgd entityId,
+    @JsonCreator
+    public LensMgd(@BsonProperty("_id") @JsonProperty("entityId") UniqueIdMgd entityId,
                      @BsonProperty("name") @JsonProperty("name") String name,
                      @BsonProperty("bail") @JsonProperty("bail") double bail,
                      @BsonProperty("first_day_cost") @JsonProperty("first_day_cost") double firstDayCost,
@@ -58,5 +60,14 @@ public class LensMgd extends EquipmentMgd {
         int result = super.hashCode();
         result = 31 * result + (focalLength != null ? focalLength.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("LensMgd{");
+        sb.append(super.toString());
+        sb.append("focalLength='").append(focalLength).append('\'');
+        sb.append('}');
+        return sb.toString();
     }
 }
