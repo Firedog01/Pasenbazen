@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -25,7 +26,7 @@ class RentRepositoryTest {
     static EquipmentMgd lens    = DataFakerMgd.getLensMgd();
     static EquipmentMgd trivet  = DataFakerMgd.getTrivetMgd();
 
-    static LocalDateTime t0 = LocalDateTime.now();
+    static LocalDateTime t0 = LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS);
     static  LocalDateTime t1 = t0.plusDays('1');
     static RentMgd rent1;
     static RentMgd rent2;

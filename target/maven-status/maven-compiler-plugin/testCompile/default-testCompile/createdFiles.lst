@@ -1,0 +1,6 @@
+repository\cache\RentCacheTest.class
+managers\RentManagerTest.class
+repository\impl\ClientRepositoryTest.class
+repository\cache\RentCacheRepositoryDecoratorTest.class
+repository\impl\EquipmentRepositoryTest.class
+repository\impl\RentRepositoryTest.class

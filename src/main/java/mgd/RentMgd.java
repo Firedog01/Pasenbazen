@@ -21,6 +21,8 @@ public class RentMgd extends AbstractEntityMgd {
 
     public RentMgd() {}
 
+    // LocalDateTime.parse(beginTime.toString(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.[SSS]"));
+
     @BsonCreator
     public RentMgd(@BsonProperty("_id") UniqueIdMgd entityId,
                    @BsonProperty("beginTime") LocalDateTime beginTime,

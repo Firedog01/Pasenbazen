@@ -14,6 +14,8 @@ import repository.impl.EquipmentRepository;
 import repository.impl.RentRepository;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -62,7 +64,9 @@ class RentManagerTest {
 
 
     RentManagerTest() {
-        t0 = LocalDateTime.now();
+//        t0 = LocalDateTime.now();
+//        t0 = LocalDateTime.parse(LocalDateTime.now().toString(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSSSSS"));
+        t0 = LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS);
         t1 = t0.plusDays(1);
         t2 = t0.plusDays(2);
         t3 = t0.plusDays(3);
