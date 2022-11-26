@@ -44,6 +44,19 @@ public class ClientCacheRepositoryDecorator extends RepositoryDecorator<ClientMg
         return decoratedRepository.get(id);
     }
 
+    public ClientMgd getFromMongo(UniqueIdMgd id) {
+        return decoratedRepository.get(id);
+    }
+
+    public ClientMgd getFromRedis(UniqueIdMgd id) {
+        try {
+            return cache.get(id);
+        } catch (JsonProcessingException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
     @Override
     public List<ClientMgd> getAll() {
         return decoratedRepository.getAll();
@@ -63,5 +76,13 @@ public class ClientCacheRepositoryDecorator extends RepositoryDecorator<ClientMg
             cache.delete(elem);
         }
         decoratedRepository.remove(elem);
+    }
+
+    public void removeFromMongo(ClientMgd elem) {
+        decoratedRepository.remove(elem);
+    }
+
+    public void removeFromRedis(ClientMgd elem) {
+        cache.delete(elem);
     }
 }
