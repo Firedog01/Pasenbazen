@@ -1,53 +1,45 @@
 package repository.cache;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import mgd.ClientMgd;
 import mgd.RentMgd;
 import mgd.UniqueIdMgd;
 import redis.clients.jedis.*;
-import redis.clients.jedis.exceptions.JedisConnectionException;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.*;
-
-public class RentCache extends AbstractCache {
+public class ClientCache extends AbstractCache {
 
     ObjectMapper obj;
     String prefix;
 
-    public RentCache() {
+    public ClientCache() {
         super();
         obj = new ObjectMapper();
         obj.registerModule(new JavaTimeModule());
 //        obj.registerModule(new JodaModule());
-        prefix = "rent:";
+        prefix = "client:";
     }
 
-
-    public void save(RentMgd rent) {
-        String rentString;
+    public void save(ClientMgd client) {
+        String clientString;
         try {
-            rentString = obj.writeValueAsString(rent);
+            clientString = obj.writeValueAsString(client);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
-        String key = prefix + rent.getEntityId().toString();
-        pool.set(key, rentString);
+        String key = prefix + client.getEntityId().toString();
+        pool.set(key, clientString);
     }
 
-    public RentMgd get(UniqueIdMgd entityId) throws JsonProcessingException {
+    public ClientMgd get(UniqueIdMgd entityId) throws JsonProcessingException {
         String key = prefix + entityId.toString();
         System.out.println(key);
         var ret = pool.get(key);
-//        return obj.convertValue(ret, RentMgd.class);
-        return obj.readValue(ret, RentMgd.class);
+        return obj.readValue(ret, ClientMgd.class);
     }
 
-    public void delete(RentMgd rent) {
+    public void delete(ClientMgd rent) {
         String key = prefix + rent.getEntityId().toString();
         pool.del(key);
     }

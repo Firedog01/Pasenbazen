@@ -21,7 +21,7 @@ public abstract class AbstractCache {
             pool = new JedisPooled(hnp, clientConfig);
             task = new Healthcheck();
             timer = new Timer(true);
-            healthy = RentCache.checkHealthy();
+            healthy = ClientCache.checkHealthy();
             timer.scheduleAtFixedRate(task, 2, 2);
         }
     }
@@ -42,7 +42,7 @@ public abstract class AbstractCache {
     }
 
     protected static HostAndPort getHostAndPort() {
-        String connectionString = RentCache.getConnectionString();
+        String connectionString = ClientCache.getConnectionString();
         return HostAndPort.from(connectionString);
     }
 
@@ -53,7 +53,7 @@ public abstract class AbstractCache {
     static class Healthcheck extends TimerTask {
         @Override
         public void run() {
-            AbstractCache.healthy = RentCache.checkHealthy();
+            AbstractCache.healthy = ClientCache.checkHealthy();
         }
     }
 

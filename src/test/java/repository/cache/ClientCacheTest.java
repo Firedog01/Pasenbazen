@@ -1,14 +1,11 @@
 package repository.cache;
 
-import org.junit.jupiter.api.Test;
-import repository.cache.RentCache;
-
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class RentCacheTest {
+public class ClientCacheTest {
 //    @Test
 //    void redisTestHealthy() throws InterruptedException {
-//        RentCache cache = new RentCache();
+//        ClientCache cache = new ClientCache();
 //        for(int i = 0; i < 10; i++) {
 //            assertTrue(cache.isHealthy());
 //            Thread.sleep(2000);
