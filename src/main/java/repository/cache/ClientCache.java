@@ -33,7 +33,6 @@ public class ClientCache extends AbstractCache {
 
     public ClientMgd get(UniqueIdMgd entityId) throws JsonProcessingException {
         String key = prefix + entityId.toString();
-        System.out.println(key);
         var ret = pool.get(key);
         return obj.readValue(ret, ClientMgd.class);
     }

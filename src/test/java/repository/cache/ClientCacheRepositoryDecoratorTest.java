@@ -1,17 +1,13 @@
 package repository.cache;
 
-import mgd.*;
-import mgd.EQ.EquipmentMgd;
+import mgd.AddressMgd;
+import mgd.ClientMgd;
+import mgd.DataFakerMgd;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import repository.Repository;
+import redis.clients.jedis.exceptions.JedisConnectionException;
 import repository.impl.ClientRepository;
-import repository.impl.EquipmentRepository;
-import repository.impl.RentRepository;
-
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -33,7 +29,6 @@ class ClientCacheRepositoryDecoratorTest {
         clientRepository.add(client1);
         clientRepository.add(client2);
         clientRepository.add(client3);
-
     }
 
     @Test
@@ -72,8 +67,8 @@ class ClientCacheRepositoryDecoratorTest {
 
         clientRepository.remove(r3);
 
-        assertThrows(IllegalArgumentException.class, () -> clientRepository.getFromRedis(r3.getEntityId()));
         assertNull(clientRepository.getFromMongo(r3.getEntityId()));
+        assertThrows(IllegalArgumentException.class, () -> clientRepository.getFromRedis(r3.getEntityId()));
 
         clientRepository.removeFromRedis(r2);
 
@@ -81,6 +76,7 @@ class ClientCacheRepositoryDecoratorTest {
         assertEquals(clientRepository.getFromMongo(r2.getEntityId()), r2);
 
         clientRepository.removeFromMongo(r1);
+
         assertNull(clientRepository.getFromMongo(r1.getEntityId()));
         assertEquals(r1, clientRepository.getFromRedis(r1.getEntityId()));
 
@@ -96,7 +92,7 @@ class ClientCacheRepositoryDecoratorTest {
         clientRepository.add(r2);
         clientRepository.add(r3);
 
-        String lastName = new String("fghfytkj");
+        String lastName = "fghfytkj";
         r1.setLastName(lastName);
         clientRepository.update(r1);
 
@@ -128,8 +124,6 @@ class ClientCacheRepositoryDecoratorTest {
         assertThrows(IllegalArgumentException.class, () -> clientRepository.getFromRedis(client1.getEntityId()));
         assertThrows(IllegalArgumentException.class, () -> clientRepository.getFromRedis(client2.getEntityId()));
         assertThrows(IllegalArgumentException.class, () -> clientRepository.getFromRedis(client3.getEntityId()));
-
-        //Idk tak samo?
     }
 
     @Test
@@ -141,11 +135,17 @@ class ClientCacheRepositoryDecoratorTest {
         assertEquals(clientRepository.get(r1.getEntityId()), r1);
         System.out.println("DISABLE REDIS VIA SERVICES!!!");
 
-        while (ClientCache.checkHealthy()) {}
+        while (ClientCache.checkHealthy()) {
+        }
 
-        assertEquals(clientRepository.get(client1.getEntityId()), client1);
-        assertEquals(clientRepository.getFromMongo(client1.getEntityId()), client1);
-        assertThrows(IllegalArgumentException.class, () -> clientRepository.getFromRedis(client1.getEntityId()));
+        try {
+            Thread.sleep(5);
+        } catch (InterruptedException e) {
+            System.out.println(e.getMessage());
+        }
+        assertEquals(clientRepository.get(r1.getEntityId()), r1);
+        assertEquals(clientRepository.getFromMongo(r1.getEntityId()), r1);
+        assertThrows(JedisConnectionException.class, () -> clientRepository.getFromRedis(r1.getEntityId()));
     }
 
 }
