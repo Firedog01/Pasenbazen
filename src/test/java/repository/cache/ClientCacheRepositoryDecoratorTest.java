@@ -37,11 +37,6 @@ class ClientCacheRepositoryDecoratorTest {
     }
 
     @Test
-    void basicCheck() {
-        Repository decoratedRentRepo = new ClientCacheRepositoryDecorator(new ClientRepository());
-    }
-
-    @Test
     void count() {
         int startingCount = clientRepository.getAll().size();
 
@@ -71,8 +66,6 @@ class ClientCacheRepositoryDecoratorTest {
         clientRepository.add(r1);
         clientRepository.add(r2);
         clientRepository.add(r3);
-        //FIXME Są jakieś problemy z redisem i tym beforeAll, czasem to działa, czasem nie
-
 
         assertEquals(clientRepository.getFromMongo(r1.getEntityId()),
                 clientRepository.getFromRedis(r1.getEntityId()));
@@ -81,7 +74,6 @@ class ClientCacheRepositoryDecoratorTest {
 
         assertThrows(IllegalArgumentException.class, () -> clientRepository.getFromRedis(r3.getEntityId()));
         assertNull(clientRepository.getFromMongo(r3.getEntityId()));
-        // Nie pamiętam czy tak powinno być, że to zwraca null
 
         clientRepository.removeFromRedis(r2);
 
@@ -92,7 +84,37 @@ class ClientCacheRepositoryDecoratorTest {
         assertNull(clientRepository.getFromMongo(r1.getEntityId()));
         assertEquals(r1, clientRepository.getFromRedis(r1.getEntityId()));
 
-        //W sumie to działa ale czy powinno? Jakieś odświeżanie cache?
+    }
+
+    @Test
+    void updateCacheTest() {
+        ClientMgd r1 = DataFakerMgd.getClientMgd();
+        ClientMgd r2 = DataFakerMgd.getClientMgd();
+        ClientMgd r3 = DataFakerMgd.getClientMgd();
+
+        clientRepository.add(r1);
+        clientRepository.add(r2);
+        clientRepository.add(r3);
+
+        String lastName = new String("fghfytkj");
+        r1.setLastName(lastName);
+        clientRepository.update(r1);
+
+        assertEquals(lastName, clientRepository.getFromRedis(r1.getEntityId()).getLastName());
+        assertEquals(lastName, clientRepository.getFromMongo(r1.getEntityId()).getLastName());
+
+        AddressMgd a1 = DataFakerMgd.getAddressMgd();
+        r2.setAddress(a1);
+        clientRepository.update(r2);
+
+        assertEquals(r2.getAddress(), clientRepository.getFromRedis(r2.getEntityId()).getAddress());
+        assertEquals(r2.getAddress(), clientRepository.getFromMongo(r2.getEntityId()).getAddress());
+
+        r3.setArchive(true);
+        clientRepository.update(r3);
+        assertEquals(r3, clientRepository.getFromRedis(r3.getEntityId()));
+        assertEquals(r3, clientRepository.getFromMongo(r3.getEntityId()));
+
     }
 
     @Test
@@ -111,13 +133,14 @@ class ClientCacheRepositoryDecoratorTest {
     }
 
     @Test
-//    @Disabled
+    @Disabled
     void disableRedisGetDataTest() {
         ClientMgd r1 = DataFakerMgd.getClientMgd();
         clientRepository.add(r1);
 
         assertEquals(clientRepository.get(r1.getEntityId()), r1);
         System.out.println("DISABLE REDIS VIA SERVICES!!!");
+
         while (ClientCache.checkHealthy()) {}
 
         assertEquals(clientRepository.get(client1.getEntityId()), client1);

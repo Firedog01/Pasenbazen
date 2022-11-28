@@ -17,7 +17,6 @@ public class ClientCache extends AbstractCache {
         super();
         obj = new ObjectMapper();
         obj.registerModule(new JavaTimeModule());
-//        obj.registerModule(new JodaModule());
         prefix = "client:";
     }
 
