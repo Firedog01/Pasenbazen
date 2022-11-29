@@ -70,6 +70,7 @@ class ClientCacheRepositoryDecoratorTest {
         assertNull(clientRepository.getFromMongo(r3.getEntityId()));
         assertThrows(IllegalArgumentException.class, () -> clientRepository.getFromRedis(r3.getEntityId()));
 
+        // Removing from particular db
         clientRepository.removeFromRedis(r2);
 
         assertThrows(IllegalArgumentException.class, () -> clientRepository.getFromRedis(r2.getEntityId()));
@@ -124,6 +125,10 @@ class ClientCacheRepositoryDecoratorTest {
         assertThrows(IllegalArgumentException.class, () -> clientRepository.getFromRedis(client1.getEntityId()));
         assertThrows(IllegalArgumentException.class, () -> clientRepository.getFromRedis(client2.getEntityId()));
         assertThrows(IllegalArgumentException.class, () -> clientRepository.getFromRedis(client3.getEntityId()));
+
+        assertEquals(clientRepository.getFromMongo(client1.getEntityId()), client1);
+        assertEquals(clientRepository.getFromMongo(client2.getEntityId()), client2);
+        assertEquals(clientRepository.getFromMongo(client3.getEntityId()), client3);
     }
 
     @Test
@@ -144,6 +149,7 @@ class ClientCacheRepositoryDecoratorTest {
             System.out.println(e.getMessage());
         }
         assertEquals(clientRepository.get(r1.getEntityId()), r1);
+
         assertEquals(clientRepository.getFromMongo(r1.getEntityId()), r1);
         assertThrows(JedisConnectionException.class, () -> clientRepository.getFromRedis(r1.getEntityId()));
     }

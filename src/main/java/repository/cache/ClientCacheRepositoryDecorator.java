@@ -44,6 +44,7 @@ public class ClientCacheRepositoryDecorator extends RepositoryDecorator<ClientMg
         return decoratedRepository.get(id);
     }
 
+    //Get methods only used in tests
     public ClientMgd getFromMongo(UniqueIdMgd id) {
         return decoratedRepository.get(id);
     }
@@ -78,6 +79,7 @@ public class ClientCacheRepositoryDecorator extends RepositoryDecorator<ClientMg
         decoratedRepository.remove(elem);
     }
 
+    //Delete methods only used in tests
     public void removeFromMongo(ClientMgd elem) {
         decoratedRepository.remove(elem);
     }
