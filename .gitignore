@@ -1,3 +1,4 @@
+     */target/*
      target/
      !.mvn/wrapper/maven-wrapper.jar
      !**/src/main/**/target/
@@ -36,3 +37,8 @@
 
      ### Mac OS ###
      .DS_Store
+
+
+     ### CASSANDRA ###
+     Docker/cassandra1_data
+     Docker/cassandra2_data

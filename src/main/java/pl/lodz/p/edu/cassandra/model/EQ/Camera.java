@@ -1,6 +1,5 @@
 package pl.lodz.p.edu.cassandra.model.EQ;
 
-import exception.EquipmentException;
 import pl.lodz.p.edu.cassandra.exception.EquipmentException;
 
 public class Camera extends Equipment {

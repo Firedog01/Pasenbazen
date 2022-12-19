@@ -1,17 +1,20 @@
-package pl.lodz.p.edu.cassandra.model;
-
+package pl.lodz.p.edu.cassandra.repository;
 
 import pl.lodz.p.edu.cassandra.exception.ClientException;
 import pl.lodz.p.edu.cassandra.exception.EquipmentException;
+import pl.lodz.p.edu.cassandra.model.Address;
+import pl.lodz.p.edu.cassandra.model.Client;
 import pl.lodz.p.edu.cassandra.model.EQ.Camera;
 import pl.lodz.p.edu.cassandra.model.EQ.Equipment;
 import pl.lodz.p.edu.cassandra.model.EQ.Lens;
 import pl.lodz.p.edu.cassandra.model.EQ.Trivet;
+import pl.lodz.p.edu.cassandra.model.IdType;
+import pl.lodz.p.edu.cassandra.model.Rent;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
-import org.joda.time.DateTime;
 
 public class DataFaker {
 
@@ -47,13 +50,9 @@ public class DataFaker {
         }
     }
 
-    public static Lens getLens() {
-        try {
-            return new Lens(Math.random() * 100, Math.random() * 200,
-                    Math.random() * 1000, randStr(10), randStr(8));
-        } catch (EquipmentException e) {
-            return null;
-        }
+    public static Lens getLens() throws EquipmentException {
+        return new Lens(Math.random() * 100, Math.random() * 200,
+                Math.random() * 1000, randStr(10), randStr(8));
     }
 
 
@@ -76,18 +75,12 @@ public class DataFaker {
         if(a == null) {
             a = getAddress();
         }
-        LocalDateTime nowLocal = LocalDateTime.now();
-        DateTime now = new DateTime(nowLocal);
-        long sinceEpoch = now.getMillis();
+        long sinceEpoch = LocalDateTime.now().toInstant(ZoneOffset.UTC).toEpochMilli();
         long beginUnix = sinceEpoch + (long) (Math.random() * 10000000);
         long endUnix = beginUnix + (long) (Math.random() * 10000000);
-        LocalDateTime begin = LocalDateTime.from(Instant.ofEpochMilli(beginUnix));
-        LocalDateTime end = LocalDateTime.from(Instant.ofEpochMilli(endUnix));
+        LocalDateTime begin = Instant.ofEpochMilli(beginUnix).atZone(ZoneOffset.UTC).toLocalDateTime();
+        LocalDateTime end = Instant.ofEpochMilli(endUnix).atZone(ZoneOffset.UTC).toLocalDateTime();
         return new Rent(begin, end, e, c, a);
-    }
-
-    public static Rent getRent() {
-        return getRent(null, null, null);
     }
 
 

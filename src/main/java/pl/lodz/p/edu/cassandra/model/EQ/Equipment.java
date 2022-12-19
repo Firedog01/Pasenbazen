@@ -1,5 +1,6 @@
 package pl.lodz.p.edu.cassandra.model.EQ;
 
+import pl.lodz.p.edu.cassandra.exception.EquipmentException;
 import pl.lodz.p.edu.cassandra.model.AbstractEntity;
 import pl.lodz.p.edu.cassandra.model.Rent;
 

@@ -1,5 +1,7 @@
 package pl.lodz.p.edu.cassandra.model.EQ;
 
+import pl.lodz.p.edu.cassandra.exception.EquipmentException;
+
 public class Lens extends Equipment{
 
         private String focalLength;
