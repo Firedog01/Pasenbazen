@@ -1,11 +1,12 @@
 package pl.lodz.p.edu.cassandra.model;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 
-public class Address extends AbstractEntity {
+public class Address implements Serializable {
 
-    private long id;
+    private UUID addressUuid;
 
     private String city;
 
@@ -20,7 +21,7 @@ public class Address extends AbstractEntity {
     }
 
     public Address(UUID uuid, String city, String street, String streetNr) {
-        super();
+        addressUuid = UUID.randomUUID();
         this.city = city;
         this.street = street;
         this.streetNr = streetNr;

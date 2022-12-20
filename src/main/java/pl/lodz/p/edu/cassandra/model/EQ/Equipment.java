@@ -1,17 +1,17 @@
 package pl.lodz.p.edu.cassandra.model.EQ;
 
 import pl.lodz.p.edu.cassandra.exception.EquipmentException;
-import pl.lodz.p.edu.cassandra.model.AbstractEntity;
 import pl.lodz.p.edu.cassandra.model.Rent;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 
-public abstract class Equipment extends AbstractEntity {
-
-
-    private Long id;
+public abstract class Equipment implements Serializable {
+    
+    private UUID uuid;
 
     private String name;
 
@@ -24,7 +24,6 @@ public abstract class Equipment extends AbstractEntity {
     private boolean archive;
 
     private String description;
-
 
     private boolean missing;
 
@@ -53,21 +52,20 @@ public abstract class Equipment extends AbstractEntity {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("-------------------- EquipmentException{");
-        sb.append("id=").append(id);
+        sb.append("uuid=").append(uuid);
         sb.append(", firstDayCost=").append(firstDayCost);
         sb.append(", nextDaysCost=").append(nextDaysCost);
         sb.append(", bail=").append(bail);
         sb.append(", name='").append(name).append('\'');
         sb.append(", archive=").append(archive);
         sb.append(", description='").append(description).append('\'');
-        sb.append(", id=").append(id);
         sb.append(", missing=").append(missing);
         sb.append('}');
         return sb.toString();
     }
 
-    public Long getId() {
-        return id;
+    public UUID getUuid() {
+        return uuid;
     }
 
     public double getFirstDayCost() {

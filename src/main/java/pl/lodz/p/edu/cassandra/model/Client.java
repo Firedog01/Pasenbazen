@@ -1,40 +1,62 @@
 package pl.lodz.p.edu.cassandra.model;
 
 
+import com.datastax.oss.driver.api.mapper.annotations.*;
 import pl.lodz.p.edu.cassandra.exception.ClientException;
 
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 
+import static com.datastax.oss.driver.api.mapper.entity.naming.NamingConvention.UPPER_SNAKE_CASE;
 
-public class Client extends AbstractEntity {
+@Entity(defaultKeyspace = "just_rent")
+@CqlName("clients")
+@NamingStrategy(convention = UPPER_SNAKE_CASE)
+public class Client implements Serializable {
 
+    @CqlName("clientUuid")
+    private UUID uuid;
 
+    @CqlName("clientId")
+    @PartitionKey
     private String clientId;
 
+    @CqlName("idType")
+//    @ClusteringColumn
+    private String idType;
+    //FIXME String or other type of enum mapping?
+    // There is possibility to add custom codec to cluster configuration but...
+    // We have only session configuration based on lecture document
 
-    private IdType idType;
-
-
+    @CqlName("firstName")
     private String firstName;
 
-
+    @CqlName("lastName")
     private String lastName;
 
-
-    private Address address;
-
+    @CqlName("archive")
     private boolean archive;
+
+    @CqlName("city")
+    private String city;
+
+    @CqlName("street")
+    private String street;
+
+    @CqlName("streetNr")
+    private String streetNr;
 
     public Client(
             String clientId,
-            IdType idType,
+            String idType,
+            boolean archive,
             String firstName,
             String lastName,
-            Address address
-
+            String city,
+            String street,
+            String streetNr
     ) throws ClientException {
-        super();
         if (firstName.isEmpty()) {
             throw new ClientException("Imię nie może być puste");
         }
@@ -44,38 +66,51 @@ public class Client extends AbstractEntity {
         if (clientId.isEmpty()) {
             throw new ClientException("Identyfikator klienta nie może być pusty");
         }
-        if (address == null) {
-            throw new ClientException("Adres nie może być pusty");
+        if (city.isEmpty()) {
+            throw new ClientException("Miasto nie może być pusty");
+        }
+        if (streetNr.isEmpty()) {
+            throw new ClientException("Numer mieszkania nie może być puste");
         }
 
         this.clientId = clientId;
         this.idType = idType;
+        this.archive = archive;
+        this.city = city;
+        this.uuid = UUID.randomUUID();
         this.firstName = firstName;
         this.lastName = lastName;
-        this.address = address;
-        this.archive = false;
+        this.street = street;
+        this.streetNr = streetNr;
 
     }
     public Client(UUID uuid,
                   String clientId,
-                  IdType idType,
+                  String idType, //Changed from IdType to String
+                  boolean archive,
                   String firstName,
                   String lastName,
-                  Address address
+                  String city,
+                  String street,
+                  String streetNr
     ) throws ClientException {
-        this(clientId, idType, firstName, lastName, address);
+        this(clientId, idType, archive, firstName, lastName, city, street, streetNr);
+        this.uuid = uuid;
     }
 
     protected Client() {
-        super();
     }
 
     public String getClientId() {
         return clientId;
     }
 
-    public IdType getIdType() {
+    public String getIdType() {
         return idType;
+    }
+
+    public void setIdType(String idType) {
+        this.idType = idType;
     }
 
     public String getFirstName() {
@@ -94,20 +129,40 @@ public class Client extends AbstractEntity {
         this.lastName = lastName;
     }
 
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
-    }
-
     public boolean isArchive() {
         return archive;
     }
 
     public void setArchive(boolean archive) {
         this.archive = archive;
+    }
+
+    public UUID getClientUuid() {
+        return uuid;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getStreet() {
+        return street;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    public String getStreetNr() {
+        return streetNr;
+    }
+
+    public void setStreetNr(String streetNr) {
+        this.streetNr = streetNr;
     }
 
     @Override
@@ -121,18 +176,18 @@ public class Client extends AbstractEntity {
         return sb.toString();
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Client client = (Client) o;
-        return clientId.equals(client.clientId) && idType == client.idType;
-    }
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (o == null || getClass() != o.getClass()) return false;
+//        Client client = (Client) o;
+//        return clientId.equals(client.clientId) && idType == client.idType;
+//    }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(clientId, idType);
-    }
+//    @Override
+//    public int hashCode() {
+//        return Objects.hash(clientId, idType);
+//    }
 
 
 }

@@ -22,20 +22,21 @@ public class DataFaker {
         return new Address(randStr(7), randStr(10), randStr(4));
     }
 
-    public static Client getClient(Address a) {
-        try {
-            return new Client(randStr(7), IdType.values()[(int)(Math.random() * 2) % 2],
-                    randStr(10), randStr(10), a);
-        } catch(ClientException e) {
-            return null; // will never happen
-        }
-    }
+//    public static Client getClient(Address a) {
+//        try {
+//            return new Client(randStr(7), IdType.values()[(int)(Math.random() * 2) % 2],
+//                    randStr(10), randStr(10), a);
+//        } catch(ClientException e) {
+//            return null; // will never happen
+//        }
+//    }
 
     public static Client getClient() {
         try {
-            Address a = getAddress();
-            return new Client(randStr(7), IdType.values()[(int)(Math.random() * 2) % 2],
-                    randStr(10), randStr(10), a);
+//            Address a = getAddress();
+            return new Client(randStr(7),
+                    String.valueOf(IdType.values()[(int)(Math.random() * 2) % 2]),
+                    false, randStr(10), randStr(10), randStr(10), randStr(10), randStr(2));
         } catch(ClientException e) {
             return null; // will never happen
         }
@@ -75,6 +76,7 @@ public class DataFaker {
         if(a == null) {
             a = getAddress();
         }
+        //If something doesn't work, it's here
         long sinceEpoch = LocalDateTime.now().toInstant(ZoneOffset.UTC).toEpochMilli();
         long beginUnix = sinceEpoch + (long) (Math.random() * 10000000);
         long endUnix = beginUnix + (long) (Math.random() * 10000000);

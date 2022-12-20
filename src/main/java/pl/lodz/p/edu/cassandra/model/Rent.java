@@ -2,17 +2,17 @@ package pl.lodz.p.edu.cassandra.model;
 
 import pl.lodz.p.edu.cassandra.model.EQ.Equipment;
 
+import java.io.Serializable;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 
-public class Rent extends AbstractEntity {
+public class Rent implements Serializable {
 
-    private long id;
-
+    private UUID rentUuid;
 
     private Equipment equipment;
-
 
     private Client client;
 
@@ -34,8 +34,8 @@ public class Rent extends AbstractEntity {
 
     public Rent(LocalDateTime beginTime, LocalDateTime endTime,
                 Equipment equipment, Client client, Address shippingAddress) {
-        super();
 
+        this.rentUuid = UUID.randomUUID();
         this.beginTime = beginTime;
         this.endTime = endTime;
         this.shipped = false;
@@ -46,14 +46,6 @@ public class Rent extends AbstractEntity {
     }
 
     protected Rent() {}
-
-    public Rent(long id, LocalDateTime beginTime, LocalDateTime endTime,
-                Equipment equipment, Client client, Address shippingAddress) {
-
-        this(beginTime, endTime, equipment, client, shippingAddress);
-        this.id = id;
-    }
-
 
     public double getRentCost() {
         if (!eqReturned) {
@@ -72,7 +64,7 @@ public class Rent extends AbstractEntity {
 
     public String toString() {
         final StringBuilder sb = new StringBuilder("Rent{");
-        sb.append("id=").append(id);
+        sb.append("uuid=").append(rentUuid.toString());
         sb.append("Klient=").append(getClient().toString());
         sb.append("Sprzęt=").append(getEquipment().toString());
         sb.append("Adres dostawy= ").append(shippingAddress);

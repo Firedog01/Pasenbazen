@@ -1,5 +1,6 @@
 package pl.lodz.p.edu.cassandra.model;
 
+
 public enum IdType {
     DowodOsobisty(0),
     Passport(1);
