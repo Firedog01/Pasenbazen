@@ -1,12 +1,5 @@
 version: '3.9'
 
-networks:
-  cassandra:
-
-volumes:
-  cassandra1_data:
-  cassandra2_data:
-
 services:
   cassandra1:
     image: docker.io/bitnami/cassandra:latest
@@ -26,6 +19,8 @@ services:
       - CASSANDRA_DATACENTER=dc1
       - CASSANDRA_PASSWORD_SEEDER=yes
       - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch
+      - CASSANDRA_USER=cassandra
+      - CASSANDRA_PASSWORD=cassandra
       - MAX_HEAP_SIZE=1000M
       - HEAP_NEWSIZE=200M
 # cassandra cassandra (login password)
@@ -40,12 +35,21 @@ services:
     volumes:
           - cassandra2_data:/bitnami
     environment:
-      - CASSANDRA_LISTEN_ADDRESS=cassandra1
-      - CASSANDRA_BROADCAST_ADDRESS=cassandra1
+      - CASSANDRA_LISTEN_ADDRESS=cassandra2
+      - CASSANDRA_BROADCAST_ADDRESS=cassandra2
       - CASSANDRA_SEEDS=cassandra1,cassandra2
       - CASSANDRA_CLUSTER_NAME=nbd-cassandra-cluster
       - CASSANDRA_DATACENTER=dc1
       - CASSANDRA_PASSWORD_SEEDER=yes
       - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch
+      - CASSANDRA_USER=cassandra
+      - CASSANDRA_PASSWORD=cassandra
       - MAX_HEAP_SIZE=1000M
       - HEAP_NEWSIZE=200M
+
+networks:
+  cassandra: { }
+
+volumes:
+  cassandra1_data:
+  cassandra2_data:

@@ -3,12 +3,12 @@ package RepositoryTests;
 import com.datastax.oss.driver.api.core.CqlIdentifier;
 import com.datastax.oss.driver.api.core.CqlSession;
 import com.datastax.oss.driver.api.core.cql.SimpleStatement;
-import com.datastax.oss.driver.api.core.metadata.schema.ClusteringOrder;
 import com.datastax.oss.driver.api.core.type.DataTypes;
 import com.datastax.oss.driver.api.querybuilder.SchemaBuilder;
 import com.datastax.oss.driver.api.querybuilder.schema.CreateKeyspace;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import pl.lodz.p.edu.cassandra.exception.ClientException;
 import pl.lodz.p.edu.cassandra.model.Client;
 import pl.lodz.p.edu.cassandra.repository.DataFaker;
 import pl.lodz.p.edu.cassandra.repository.Schemas.ClientSchema;
@@ -19,6 +19,7 @@ import pl.lodz.p.edu.cassandra.repository.impl.ClientMapperBuilder;
 
 import java.net.InetSocketAddress;
 
+import static com.datastax.oss.driver.api.querybuilder.SchemaBuilder.dropKeyspace;
 import static com.datastax.oss.driver.api.querybuilder.SchemaBuilder.dropTable;
 import static org.junit.jupiter.api.Assertions.*;
 //import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -30,7 +31,7 @@ public class ClientRepositoryTest {
     static ClientDao clientDao;
 
     @BeforeAll
-    public static void init() { //Throw into static method in interface and then run after initialization?
+    public static void init() {
         session = CqlSession.builder()
                 .addContactPoint(new InetSocketAddress("localhost", 9042))
                 .addContactPoint(new InetSocketAddress("localhost", 9043))
@@ -44,15 +45,11 @@ public class ClientRepositoryTest {
                 .withSimpleStrategy(2)
                 .withDurableWrites(true);
 
-        SimpleStatement createKeySpace = keyspace.build();
-        session.execute(createKeySpace);
-
 
         SimpleStatement createClients =
                 SchemaBuilder.createTable(ClientSchema.clients)
                         .ifNotExists()
-//                        .withPartitionKey(ClientSchema.clientId, DataTypes.TEXT)
-                        .withPartitionKey("clientId", DataTypes.TEXT)
+                        .withPartitionKey(ClientSchema.clientId, DataTypes.TEXT)
 //                        .withClusteringColumn(ClientSchema.idType, DataTypes.TEXT)
                         .withColumn(ClientSchema.idType, DataTypes.TEXT)
                         .withColumn(ClientSchema.archive, DataTypes.BOOLEAN)
@@ -64,30 +61,44 @@ public class ClientRepositoryTest {
                         .withColumn(ClientSchema.streetNr, DataTypes.TEXT)
 //                        .withClusteringOrder(ClientSchema.idType, ClusteringOrder.ASC)
                         .build();
+
         session.execute(dropTable(ClientSchema.clients).ifExists().build());
+
+        SimpleStatement createKeySpace = keyspace.build();
+        session.execute(createKeySpace);
         session.execute(createClients);
 
         clientMapper = new ClientMapperBuilder(session).build();
         clientDao = clientMapper.clientDao();
-
-
     }
 
     @Test
-    void checkConnection() {
-        assertFalse(session.isClosed());
-    }
-
-    @Test
-    void createClient() {
+    void clientTest() throws ClientException {
         Client client1 = DataFaker.getClient();
-        assert client1 != null;
-        assertNotNull(client1.getClientId());
-        clientDao.add(client1);
-//
-//        assertNotNull(client1);
-//        Client clientGet = clientDao.get(client1.getClientUuid());
-//        assertEquals(client1, clientGet);
 
+        assertNotNull(client1);
+
+        System.out.println(client1);
+
+        clientDao.add(client1);
+
+        Client rClient =  clientDao.get(client1.getClientId());
+
+        assertEquals(client1, rClient);
+
+        client1.setCity("idk");
+        client1.setArchive(true);
+
+        clientDao.update(client1);
+
+        client1 =  clientDao.get(client1.getClientId());
+
+        assertNotEquals(client1, rClient);
+
+        System.out.println(client1);
+
+        assertTrue(clientDao.deleteIfExists(client1));
+
+        assertNull(clientDao.get(client1.getClientId()));
     }
 }

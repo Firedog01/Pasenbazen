@@ -27,21 +27,21 @@ public class ClientRepositoryProvider {
         this.clientEntityHelper = clientEntityHelper;
     }
 
-    public void add(Client client) {
-        session.execute(
-                session.prepare(clientEntityHelper.insert().build())
-                        .bind()
-                        .setString(ClientSchema.clientId, client.getClientId())
-                        .setString(ClientSchema.idType, client.getIdType())
-                        .setBoolean(ClientSchema.archive, client.isArchive())
-                        .setString(ClientSchema.city, client.getCity())
-                        .setUuid(ClientSchema.clientUuid, client.getClientUuid())
-                        .setString(ClientSchema.firstName, client.getFirstName())
-                        .setString(ClientSchema.lastName, client.getLastName())
-                        .setString(ClientSchema.street, client.getStreet())
-                        .setString(ClientSchema.streetNr, client.getStreetNr())
-        );
-    }
+//    public void add(Client client) {
+//        session.execute(
+//                session.prepare(clientEntityHelper.insert().build())
+//                        .bind()
+//                        .setString(ClientSchema.clientId, client.getClientId())
+//                        .setString(ClientSchema.idType, client.getIdType())
+//                        .setBoolean(ClientSchema.archive, client.isArchive())
+//                        .setString(ClientSchema.city, client.getCity())
+//                        .setUuid(ClientSchema.clientUuid, client.getClientUuid())
+//                        .setString(ClientSchema.firstName, client.getFirstName())
+//                        .setString(ClientSchema.lastName, client.getLastName())
+//                        .setString(ClientSchema.street, client.getStreet())
+//                        .setString(ClientSchema.streetNr, client.getStreetNr())
+//        );
+//    }
 
     public Client get(UUID uuid) {
         Select selectClient = QueryBuilder

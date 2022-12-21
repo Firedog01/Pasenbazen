@@ -12,7 +12,6 @@ import static com.datastax.oss.driver.api.mapper.entity.naming.NamingConvention.
 
 @Entity(defaultKeyspace = "just_rent")
 @CqlName("clients")
-@NamingStrategy(convention = UPPER_SNAKE_CASE)
 public class Client implements Serializable {
 
     @CqlName("clientUuid")
@@ -101,8 +100,20 @@ public class Client implements Serializable {
     protected Client() {
     }
 
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
+    }
+
     public String getClientId() {
         return clientId;
+    }
+
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
     }
 
     public String getIdType() {
@@ -137,10 +148,6 @@ public class Client implements Serializable {
         this.archive = archive;
     }
 
-    public UUID getClientUuid() {
-        return uuid;
-    }
-
     public String getCity() {
         return city;
     }
@@ -167,27 +174,30 @@ public class Client implements Serializable {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("model.Client{");
-        sb.append("firstName='").append(firstName).append('\'');
+        final StringBuilder sb = new StringBuilder("Client{");
+        sb.append("uuid=").append(uuid);
+        sb.append(", clientId='").append(clientId).append('\'');
+        sb.append(", idType='").append(idType).append('\'');
+        sb.append(", firstName='").append(firstName).append('\'');
         sb.append(", lastName='").append(lastName).append('\'');
-        sb.append(", ID='").append(clientId).append('\'');
         sb.append(", archive=").append(archive);
+        sb.append(", city='").append(city).append('\'');
+        sb.append(", street='").append(street).append('\'');
+        sb.append(", streetNr='").append(streetNr).append('\'');
         sb.append('}');
         return sb.toString();
     }
 
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || getClass() != o.getClass()) return false;
-//        Client client = (Client) o;
-//        return clientId.equals(client.clientId) && idType == client.idType;
-//    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Client client = (Client) o;
+        return archive == client.archive && Objects.equals(uuid, client.uuid) && Objects.equals(clientId, client.clientId) && Objects.equals(idType, client.idType) && Objects.equals(firstName, client.firstName) && Objects.equals(lastName, client.lastName) && Objects.equals(city, client.city) && Objects.equals(street, client.street) && Objects.equals(streetNr, client.streetNr);
+    }
 
-//    @Override
-//    public int hashCode() {
-//        return Objects.hash(clientId, idType);
-//    }
-
-
+    @Override
+    public int hashCode() {
+        return Objects.hash(uuid, clientId, idType, firstName, lastName, archive, city, street, streetNr);
+    }
 }
