@@ -1,26 +1,18 @@
-//package pl.lodz.p.edu.cassandra.managers;
-//
-//import jakarta.persistence.EntityNotFoundException;
-//
-//import pl.lodz.p.edu.cassandra.model.Address;
-//import pl.lodz.p.edu.cassandra.model.Client;
-//import pl.lodz.p.edu.cassandra.model.EQ.Equipment;
-//import pl.lodz.p.edu.cassandra.model.Rent;
-//import pl.lodz.p.edu.cassandra.repository.impl.RentRepository;
-//
-//import java.time.LocalDateTime;
-//import java.util.List;
-//import java.util.Objects;
-//import java.util.UUID;
-//
-//
-//public class RentManager {
-//    private RentRepository rentRepository;
-//
-//    public RentManager(RentRepository rentRepository) {
-//        this.rentRepository = rentRepository;
-//    }
-//
+package pl.lodz.p.edu.cassandra.managers;
+
+import pl.lodz.p.edu.cassandra.repository.impl.RentByClientDao;
+import pl.lodz.p.edu.cassandra.repository.impl.RentByEquipmentDao;
+
+
+public class RentManager {
+    private final RentByClientDao rentByClientDao;
+    private final RentByEquipmentDao rentByEquipmentDao;
+
+    public RentManager(RentByClientDao rentByClientDao, RentByEquipmentDao rentByEquipmentDao) {
+        this.rentByClientDao = rentByClientDao;
+        this.rentByEquipmentDao = rentByEquipmentDao;
+    }
+
 //    public Rent makeReservation(Client client, Equipment equipment, Address address,
 //                                LocalDateTime beginTime, LocalDateTime endTime) {
 //        if (equipment.isMissing() || equipment.isArchive()) {
@@ -165,4 +157,4 @@
 //            return null;
 //        }
 //    }
-//}
+}

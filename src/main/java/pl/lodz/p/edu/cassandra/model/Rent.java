@@ -1,5 +1,7 @@
 package pl.lodz.p.edu.cassandra.model;
 
+import com.datastax.oss.driver.api.mapper.annotations.CqlName;
+import com.datastax.oss.driver.api.mapper.annotations.Entity;
 import pl.lodz.p.edu.cassandra.model.EQ.Equipment;
 
 import java.io.Serializable;
@@ -7,7 +9,8 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-
+@Entity(defaultKeyspace = "just_rent")
+@CqlName("rents")
 public class Rent implements Serializable {
 
     private UUID rentUuid;
@@ -15,10 +18,6 @@ public class Rent implements Serializable {
     private Equipment equipment;
 
     private Client client;
-
-
-    private Address shippingAddress;
-
 
     private LocalDateTime beginTime;
 
@@ -33,7 +32,7 @@ public class Rent implements Serializable {
 
 
     public Rent(LocalDateTime beginTime, LocalDateTime endTime,
-                Equipment equipment, Client client, Address shippingAddress) {
+                Equipment equipment, Client client) {
 
         this.rentUuid = UUID.randomUUID();
         this.beginTime = beginTime;
@@ -42,10 +41,10 @@ public class Rent implements Serializable {
         this.eqReturned = false;
         this.equipment = equipment;
         this.client = client;
-        this.shippingAddress = shippingAddress;
     }
 
-    protected Rent() {}
+    protected Rent() {
+    }
 
     public double getRentCost() {
         if (!eqReturned) {
@@ -53,7 +52,7 @@ public class Rent implements Serializable {
         } else if (equipment.isMissing()) {
             return equipment.getBail();
         } else {
-            long diffDays= Math.abs(Duration.between(beginTime, endTime).toDays()); //If something works incorrectly, it's here
+            long diffDays = Math.abs(Duration.between(beginTime, endTime).toDays()); //If something works incorrectly, it's here
             if (diffDays > 1) {
                 return equipment.getFirstDayCost() + equipment.getNextDaysCost() * (diffDays - 1);
             } else {
@@ -67,7 +66,6 @@ public class Rent implements Serializable {
         sb.append("uuid=").append(rentUuid.toString());
         sb.append("Klient=").append(getClient().toString());
         sb.append("Sprzęt=").append(getEquipment().toString());
-        sb.append("Adres dostawy= ").append(shippingAddress);
         sb.append("Czas wypożyczenia=");
         sb.append("Początek=").append(beginTime);
         sb.append(" do ");
@@ -123,14 +121,6 @@ public class Rent implements Serializable {
 
     public void setClient(Client client) {
         this.client = client;
-    }
-
-    public Address getShippingAddress() {
-        return shippingAddress;
-    }
-
-    public void setShippingAddress(Address shippingAddress) {
-        this.shippingAddress = shippingAddress;
     }
 
 }

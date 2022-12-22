@@ -30,7 +30,6 @@ import static org.junit.jupiter.api.Assertions.*;
 public class EquipmentRepositoryTest {
     static CqlSession session;
     static EquipmentMapper equipmentMapper;
-    static EquipmentDao equipmentDao;
     static EquipmentManager equipmentManager;
 
     @BeforeAll
