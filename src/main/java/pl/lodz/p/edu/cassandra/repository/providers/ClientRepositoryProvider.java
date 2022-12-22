@@ -47,7 +47,7 @@ public class ClientRepositoryProvider {
         Select selectClient = QueryBuilder
                 .selectFrom(CqlIdentifier.fromCql("clients"))
                 .all()
-                .where(Relation.column(SchemaConst.UUID).isEqualTo(literal(uuid)));
+                .where(Relation.column(ClientSchema.clientUuid).isEqualTo(literal(uuid)));
         Row row = session.execute(selectClient.build()).one();
         try {
             return getClient(row);

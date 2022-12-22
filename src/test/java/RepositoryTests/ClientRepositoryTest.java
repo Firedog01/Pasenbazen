@@ -19,10 +19,8 @@ import pl.lodz.p.edu.cassandra.repository.impl.ClientMapperBuilder;
 
 import java.net.InetSocketAddress;
 
-import static com.datastax.oss.driver.api.querybuilder.SchemaBuilder.dropKeyspace;
 import static com.datastax.oss.driver.api.querybuilder.SchemaBuilder.dropTable;
 import static org.junit.jupiter.api.Assertions.*;
-//import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class ClientRepositoryTest {
 
@@ -82,7 +80,7 @@ public class ClientRepositoryTest {
 
         clientDao.add(client1);
 
-        Client rClient =  clientDao.get(client1.getClientId());
+        Client rClient = clientDao.get(client1.getClientId());
 
         assertEquals(client1, rClient);
 
@@ -91,7 +89,7 @@ public class ClientRepositoryTest {
 
         clientDao.update(client1);
 
-        client1 =  clientDao.get(client1.getClientId());
+        client1 = clientDao.get(client1.getClientId());
 
         assertNotEquals(client1, rClient);
 

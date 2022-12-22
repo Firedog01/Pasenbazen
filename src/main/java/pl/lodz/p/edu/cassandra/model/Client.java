@@ -34,7 +34,7 @@ public class Client implements Serializable {
     @CqlName("lastName")
     private String lastName;
 
-    @CqlName("archive")
+    @CqlName("isArchived")
     private boolean archive;
 
     @CqlName("city")

@@ -18,6 +18,8 @@ import java.time.ZoneOffset;
 
 public class DataFaker {
 
+    enum eqTypes {camera, lens, trivet}
+
     public static Address getAddress() {
         return new Address(randStr(7), randStr(10), randStr(4));
     }
@@ -45,22 +47,30 @@ public class DataFaker {
     public static Camera getCamera() {
         try {
             return new Camera(Math.random() * 100, Math.random() * 200,
-                    Math.random() * 1000, randStr(10), randStr(8));
+                    Math.random() * 1000, randStr(10), randStr(8),
+                    eqTypes.camera.toString());
         } catch (EquipmentException e) {
             return null;
         }
     }
 
-    public static Lens getLens() throws EquipmentException {
-        return new Lens(Math.random() * 100, Math.random() * 200,
-                Math.random() * 1000, randStr(10), randStr(8));
+    public static Lens getLens() {
+        try {
+            return new Lens(Math.random() * 100, Math.random() * 200,
+                    Math.random() * 1000, randStr(10), randStr(8),
+                    eqTypes.lens.toString());
+        } catch (EquipmentException e) {
+            return null;
+        }
     }
 
 
     public static Trivet getTrivet() {
         try {
             return new Trivet(Math.random() * 100, Math.random() * 200,
-                    Math.random() * 1000, randStr(10), Math.random() * 10);
+                    Math.random() * 1000,
+                    randStr(10), Math.random() * 10,
+                    eqTypes.trivet.toString());
         } catch (EquipmentException e) {
             return null;
         }
