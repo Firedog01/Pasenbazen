@@ -9,6 +9,7 @@ import com.datastax.oss.driver.api.querybuilder.schema.CreateKeyspace;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import pl.lodz.p.edu.cassandra.exception.ClientException;
+import pl.lodz.p.edu.cassandra.managers.ClientManager;
 import pl.lodz.p.edu.cassandra.model.Client;
 import pl.lodz.p.edu.cassandra.repository.DataFaker;
 import pl.lodz.p.edu.cassandra.repository.Schemas.ClientSchema;
@@ -26,7 +27,8 @@ public class ClientRepositoryTest {
 
     static CqlSession session;
     static ClientMapper clientMapper;
-    static ClientDao clientDao;
+//    static ClientDao clientDao;
+    static ClientManager clientManager;
 
     @BeforeAll
     public static void init() {
@@ -67,7 +69,7 @@ public class ClientRepositoryTest {
         session.execute(createClients);
 
         clientMapper = new ClientMapperBuilder(session).build();
-        clientDao = clientMapper.clientDao();
+        clientManager = new ClientManager(clientMapper.clientDao());
     }
 
     @Test
@@ -78,25 +80,22 @@ public class ClientRepositoryTest {
 
         System.out.println(client1);
 
-        clientDao.add(client1);
+        clientManager.addClient(client1);
 
-        Client rClient = clientDao.get(client1.getUuid());
+        Client rClient = clientManager.getClient(client1.getUuid());
 
         assertEquals(client1, rClient);
 
         client1.setCity("idk");
-        client1.setArchive(true);
 
-        clientDao.update(client1);
+        clientManager.updateClient(client1);
 
-        client1 = clientDao.get(client1.getUuid());
+        client1 = clientManager.getClient(client1.getUuid());
 
         assertNotEquals(client1, rClient);
 
         System.out.println(client1);
 
-        assertTrue(clientDao.deleteIfExistsByUUID(client1.getUuid()));
-
-        assertNull(clientDao.get(client1.getUuid()));
+        assertTrue(clientManager.unregisterClient(client1.getUuid()));
     }
 }

@@ -1,6 +1,7 @@
 package pl.lodz.p.edu.cassandra.repository.impl;
 
 import com.datastax.oss.driver.api.mapper.annotations.*;
+import com.datastax.oss.driver.api.mapper.entity.saving.NullSavingStrategy;
 import pl.lodz.p.edu.cassandra.model.Client;
 import pl.lodz.p.edu.cassandra.repository.providers.ClientRepositoryProvider;
 
@@ -21,8 +22,9 @@ public interface ClientDao {
 //    Client get(String clientId);
 
     @Update
-    void update(Client client);
+    boolean update(Client client);
 
-    @Delete(ifExists = true, entityClass = Client.class)
-    boolean deleteIfExistsByUUID(UUID uuid);
+
+    @Update(customWhereClause = "clientUuid in (:clientUuid)", nullSavingStrategy = NullSavingStrategy.DO_NOT_SET)
+    boolean archive(Client client, UUID clientUuid);
 }

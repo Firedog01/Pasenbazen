@@ -69,8 +69,7 @@ public class Equipment implements Serializable {
         this.missing = false;
     }
 
-
-    protected Equipment() {
+    public Equipment() {
     }
 
     @Override

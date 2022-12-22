@@ -1,14 +1,14 @@
 package pl.lodz.p.edu.cassandra.model;
 
 
-import com.datastax.oss.driver.api.mapper.annotations.*;
+import com.datastax.oss.driver.api.mapper.annotations.CqlName;
+import com.datastax.oss.driver.api.mapper.annotations.Entity;
+import com.datastax.oss.driver.api.mapper.annotations.PartitionKey;
 import pl.lodz.p.edu.cassandra.exception.ClientException;
 
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
-
-import static com.datastax.oss.driver.api.mapper.entity.naming.NamingConvention.UPPER_SNAKE_CASE;
 
 @Entity(defaultKeyspace = "just_rent")
 @CqlName("clients")
@@ -82,7 +82,7 @@ public class Client implements Serializable {
 
     }
 
-    protected Client() {
+    public Client() {
     }
 
     public UUID getUuid() {

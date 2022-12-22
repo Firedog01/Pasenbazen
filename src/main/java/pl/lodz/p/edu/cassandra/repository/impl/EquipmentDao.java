@@ -4,6 +4,7 @@ import com.datastax.oss.driver.api.mapper.annotations.Dao;
 import com.datastax.oss.driver.api.mapper.annotations.Delete;
 import com.datastax.oss.driver.api.mapper.annotations.QueryProvider;
 import com.datastax.oss.driver.api.mapper.annotations.Update;
+import com.datastax.oss.driver.api.mapper.entity.saving.NullSavingStrategy;
 import pl.lodz.p.edu.cassandra.exception.EquipmentException;
 import pl.lodz.p.edu.cassandra.model.Client;
 import pl.lodz.p.edu.cassandra.model.EQ.Camera;
@@ -26,8 +27,8 @@ public interface EquipmentDao {
     Equipment get(UUID uuid) throws EquipmentException;
 
     @Update
-    void update(Equipment equipment);
+    boolean update(Equipment equipment);
 
-    @Delete(ifExists = true, entityClass = Equipment.class)
-    boolean deleteIfExistsByUUID(UUID uuid);
+    @Update(customWhereClause = "equipmentUuid in (:equipmentUuid)", nullSavingStrategy = NullSavingStrategy.DO_NOT_SET)
+    boolean archive(Equipment equipment, UUID equipmentUuid);
 }

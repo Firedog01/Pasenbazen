@@ -1,34 +1,45 @@
-//package pl.lodz.p.edu.cassandra.managers;
-//
-//import jakarta.persistence.EntityNotFoundException;
-//import pl.lodz.p.edu.cassandra.exception.EquipmentException;
-//import pl.lodz.p.edu.cassandra.model.EQ.Camera;
-//import pl.lodz.p.edu.cassandra.model.EQ.Equipment;
-//import pl.lodz.p.edu.cassandra.model.EQ.Lens;
-//import pl.lodz.p.edu.cassandra.model.EQ.Trivet;
-//import pl.lodz.p.edu.cassandra.repository.impl.EquipmentRepository;
-//
-//
-//import java.util.ArrayList;
-//import java.util.List;
-//import java.util.UUID;
-//
-//public class EquipmentManager {
-//    EquipmentRepository equipmentRepository;
-//
-//    public EquipmentManager(EquipmentRepository equipmentRepository) {
-//        this.equipmentRepository = equipmentRepository;
-//    }
-//
-//    public void unregisterEquipment(Equipment equipment) {
-//        Equipment e = equipmentRepository.get(equipment.getUuid());
-//        equipmentRepository.remove(e);
-//    }
-//
+package pl.lodz.p.edu.cassandra.managers;
+
+import jakarta.persistence.EntityNotFoundException;
+import pl.lodz.p.edu.cassandra.exception.EquipmentException;
+import pl.lodz.p.edu.cassandra.model.EQ.Equipment;
+import pl.lodz.p.edu.cassandra.repository.impl.EquipmentDao;
+
+import java.util.UUID;
+
+public class EquipmentManager {
+    private final EquipmentDao equipmentDao;
+
+    public EquipmentManager(EquipmentDao equipmentDao) {
+        this.equipmentDao = equipmentDao;
+    }
+
+    public boolean unregisterEquipment(UUID uuid) {
+        Equipment equipment = new Equipment();
+        equipment.setArchive(true);
+        return equipmentDao.archive(equipment, uuid);
+    }
+
+    public void registerEquipment(Equipment equipment) throws EquipmentException {
+        equipmentDao.add(equipment);
+    }
+
+    public Equipment getEquipment(UUID equipmentUuid) {
+        try {
+            return equipmentDao.get(equipmentUuid);
+        } catch (EntityNotFoundException | EquipmentException ex) {
+            return null;
+        }
+    }
+
+    public boolean updateEquipment(Equipment equipment) {
+        return equipmentDao.update(equipment);
+    }
+
 //    public List<Equipment> getAllEquipment() {
 //        return equipmentRepository.getAll();
 //    }
-//
+
 //    public List<Equipment> getAllAvailableEquipment() {
 //        List<Equipment> all = getAllEquipment();
 //        List<Equipment> available = new ArrayList<>();
@@ -39,7 +50,7 @@
 //        }
 //        return available;
 //    }
-//
+
 //    public Equipment registerCamera(double fDayCost, double nDayCost, double bail, String name, String resolution) throws EquipmentException {
 //        Camera camera = new Camera(fDayCost, nDayCost, bail, name, resolution);
 //        equipmentRepository.add(camera);
@@ -57,12 +68,4 @@
 //        equipmentRepository.add(lens);
 //        return lens;
 //    }
-//
-//    public Equipment getEquipment(UUID id) {
-//        try {
-//            return equipmentRepository.get(id);
-//        } catch(EntityNotFoundException ex) {
-//            return null;
-//        }
-//    }
-//}
+}

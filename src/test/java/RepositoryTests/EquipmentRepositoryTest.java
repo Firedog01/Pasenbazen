@@ -9,6 +9,7 @@ import com.datastax.oss.driver.api.querybuilder.schema.CreateKeyspace;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import pl.lodz.p.edu.cassandra.exception.EquipmentException;
+import pl.lodz.p.edu.cassandra.managers.EquipmentManager;
 import pl.lodz.p.edu.cassandra.model.EQ.Camera;
 import pl.lodz.p.edu.cassandra.model.EQ.Equipment;
 import pl.lodz.p.edu.cassandra.model.EQ.Lens;
@@ -30,6 +31,7 @@ public class EquipmentRepositoryTest {
     static CqlSession session;
     static EquipmentMapper equipmentMapper;
     static EquipmentDao equipmentDao;
+    static EquipmentManager equipmentManager;
 
     @BeforeAll
     public static void init() {
@@ -71,7 +73,7 @@ public class EquipmentRepositoryTest {
         session.execute(createEquipment);
 
         equipmentMapper = new EquipmentMapperBuilder(session).build();
-        equipmentDao = equipmentMapper.equipmentDao();
+        equipmentManager = new EquipmentManager(equipmentMapper.equipmentDao());
     }
 
     @Test
@@ -80,13 +82,13 @@ public class EquipmentRepositoryTest {
         Equipment trivet1 = DataFaker.getTrivet();
         Equipment camera1 = DataFaker.getCamera();
 
-        equipmentDao.add(lens1);
-        equipmentDao.add(trivet1);
-        equipmentDao.add(camera1);
+        equipmentManager.registerEquipment(lens1);
+        equipmentManager.registerEquipment(trivet1);
+        equipmentManager.registerEquipment(camera1);
 
-        Lens daoLens = (Lens) equipmentDao.get(lens1.getUuid());
-        Trivet daoTrivet = (Trivet) equipmentDao.get(trivet1.getUuid());
-        Camera daoCamera = (Camera) equipmentDao.get(camera1.getUuid());
+        Lens daoLens = (Lens) equipmentManager.getEquipment(lens1.getUuid());
+        Trivet daoTrivet = (Trivet) equipmentManager.getEquipment(trivet1.getUuid());
+        Camera daoCamera = (Camera) equipmentManager.getEquipment(camera1.getUuid());
 
         assertEquals(daoLens, lens1);
         assertEquals(daoTrivet, trivet1);
@@ -94,15 +96,15 @@ public class EquipmentRepositoryTest {
 
         lens1.setDescription("askdbjaskbhjdbjkas");
 
-        equipmentDao.update(lens1);
+        equipmentManager.updateEquipment(lens1);
 
-        lens1 = equipmentDao.get(lens1.getUuid());
+        lens1 = equipmentManager.getEquipment(lens1.getUuid());
 
         assertNotEquals(lens1, daoLens);
 
-        assertTrue(equipmentDao.deleteIfExistsByUUID(lens1.getUuid()));
+        assertTrue(equipmentManager.unregisterEquipment(lens1.getUuid()));
 
-        assertNull(equipmentDao.get(lens1.getUuid()));
+        assertNull(equipmentManager.getEquipment(lens1.getUuid()));
 
     }
 
