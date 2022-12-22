@@ -19,15 +19,10 @@ public class Lens extends Equipment {
                 double bail,
                 String name,
                 String focalLength,
+                String description,
                 String discriminator
     ) throws EquipmentException {
-        super(firstDayCost, nextDaysCost, bail, name, discriminator);
-        this.focalLength = focalLength;
-    }
-
-    public Lens(UUID uuid, String name, double bail, double firstDayCost, double nextDaysCost, boolean archive,
-                String description, String discriminator, boolean missing, String focalLength) throws EquipmentException {
-        super(uuid, name, bail, firstDayCost, nextDaysCost, archive, description, discriminator, missing);
+        super(firstDayCost, nextDaysCost, bail, name, description, discriminator);
         this.focalLength = focalLength;
     }
 

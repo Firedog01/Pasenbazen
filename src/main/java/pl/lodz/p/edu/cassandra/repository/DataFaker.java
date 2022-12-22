@@ -38,7 +38,7 @@ public class DataFaker {
 //            Address a = getAddress();
             return new Client(randStr(7),
                     String.valueOf(IdType.values()[(int)(Math.random() * 2) % 2]),
-                    false, randStr(10), randStr(10), randStr(10), randStr(10), randStr(2));
+                    randStr(10), randStr(10), randStr(10), randStr(10), randStr(2));
         } catch(ClientException e) {
             return null; // will never happen
         }
@@ -48,7 +48,7 @@ public class DataFaker {
         try {
             return new Camera(Math.random() * 100, Math.random() * 200,
                     Math.random() * 1000, randStr(10), randStr(8),
-                    eqTypes.camera.toString());
+                    randStr(20), eqTypes.camera.toString());
         } catch (EquipmentException e) {
             return null;
         }
@@ -58,7 +58,7 @@ public class DataFaker {
         try {
             return new Lens(Math.random() * 100, Math.random() * 200,
                     Math.random() * 1000, randStr(10), randStr(8),
-                    eqTypes.lens.toString());
+                    randStr(20), eqTypes.lens.toString());
         } catch (EquipmentException e) {
             return null;
         }
@@ -70,7 +70,7 @@ public class DataFaker {
             return new Trivet(Math.random() * 100, Math.random() * 200,
                     Math.random() * 1000,
                     randStr(10), Math.random() * 10,
-                    eqTypes.trivet.toString());
+                    randStr(20), eqTypes.trivet.toString());
         } catch (EquipmentException e) {
             return null;
         }

@@ -19,17 +19,13 @@ public class Camera extends Equipment {
                   double bail,
                   String name,
                   String resolution,
+                  String description,
                   String discriminator
     ) throws EquipmentException {
-        super(firstDayCost, nextDaysCost, bail, name, discriminator);
+        super(firstDayCost, nextDaysCost, bail, name,description, discriminator);
         this.resolution = resolution;
     }
 
-    public Camera(UUID uuid, String name, double bail, double firstDayCost, double nextDaysCost, boolean archive,
-                  String description, String discriminator, boolean missing, String resolution) throws EquipmentException {
-        super(uuid, name, bail, firstDayCost, nextDaysCost, archive, description, discriminator, missing);
-        this.resolution = resolution;
-    }
     protected Camera() {}
 
     @Override

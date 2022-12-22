@@ -98,51 +98,58 @@ public class EquipmentRepositoryProvider {
                 .all()
                 .where(Relation.column(EquipmentSchema.equipmentUuid).isEqualTo(literal(key)));
         Row row = session.execute(selectEquipment.build()).one();
-        if (row == null) {
-            throw new NullPointerException("row not found idk"); //fixme
+        if (row != null) {
+            String discriminator = row.getString(EquipmentSchema.discriminator);
+            if (discriminator == null) {
+                throw new NullPointerException("discriminator not found idk"); //fixme
+            }
+            return switch (discriminator) {
+                case "lens" -> {
+                    Lens lens = new Lens(
+                            row.getDouble(EquipmentSchema.firstDayCost),
+                            row.getDouble(EquipmentSchema.nextDaysCost),
+                            row.getDouble(EquipmentSchema.bail),
+                            row.getString(EquipmentSchema.name),
+                            row.getString(EquipmentSchema.focalLength),
+                            row.getString(EquipmentSchema.description),
+                            row.getString(EquipmentSchema.discriminator));
+                    lens.setUuid(row.getUuid(EquipmentSchema.equipmentUuid));
+                    lens.setArchive(row.getBoolean(EquipmentSchema.isArchived));
+                    lens.setMissing(row.getBoolean(EquipmentSchema.isMissing));
+                    yield lens;
+                }
+
+                case "trivet" -> {
+                    Trivet trivet = new Trivet(
+                            row.getDouble(EquipmentSchema.firstDayCost),
+                            row.getDouble(EquipmentSchema.nextDaysCost),
+                            row.getDouble(EquipmentSchema.bail),
+                            row.getString(EquipmentSchema.name),
+                            row.getDouble(EquipmentSchema.weight),
+                            row.getString(EquipmentSchema.description),
+                            row.getString(EquipmentSchema.discriminator));
+                    trivet.setUuid(row.getUuid(EquipmentSchema.equipmentUuid));
+                    trivet.setArchive(row.getBoolean(EquipmentSchema.isArchived));
+                    trivet.setMissing(row.getBoolean(EquipmentSchema.isMissing));
+                    yield trivet;
+                }
+                case "camera" -> {
+                    Camera camera = new Camera(
+                            row.getDouble(EquipmentSchema.firstDayCost),
+                            row.getDouble(EquipmentSchema.nextDaysCost),
+                            row.getDouble(EquipmentSchema.bail),
+                            row.getString(EquipmentSchema.name),
+                            row.getString(EquipmentSchema.resolution),
+                            row.getString(EquipmentSchema.description),
+                            row.getString(EquipmentSchema.discriminator));
+                    camera.setUuid(row.getUuid(EquipmentSchema.equipmentUuid));
+                    camera.setArchive(row.getBoolean(EquipmentSchema.isArchived));
+                    camera.setMissing(row.getBoolean(EquipmentSchema.isMissing));
+                    yield camera;
+                }
+                default -> throw new IllegalStateException("Unexpected value: " + discriminator);
+            };
         }
-        String discriminator = row.getString(EquipmentSchema.discriminator);
-        if (discriminator == null) {
-            throw new NullPointerException("discriminator not found idk"); //fixme
-        }
-        return switch (discriminator) {
-            case "lens" -> new Lens(
-                    row.getUuid(EquipmentSchema.equipmentUuid),
-                    row.getString(EquipmentSchema.name),
-                    row.getDouble(EquipmentSchema.bail),
-                    row.getDouble(EquipmentSchema.firstDayCost),
-                    row.getDouble(EquipmentSchema.nextDaysCost),
-                    row.getBoolean(EquipmentSchema.isArchived),
-                    row.getString(EquipmentSchema.description),
-                    row.getString(EquipmentSchema.discriminator),
-                    row.getBoolean(EquipmentSchema.isMissing),
-                    row.getString(EquipmentSchema.focalLength));
-
-            case "trivet" -> new Trivet(
-                    row.getUuid(EquipmentSchema.equipmentUuid),
-                    row.getString(EquipmentSchema.name),
-                    row.getDouble(EquipmentSchema.bail),
-                    row.getDouble(EquipmentSchema.firstDayCost),
-                    row.getDouble(EquipmentSchema.nextDaysCost),
-                    row.getBoolean(EquipmentSchema.isArchived),
-                    row.getString(EquipmentSchema.description),
-                    row.getString(EquipmentSchema.discriminator),
-                    row.getBoolean(EquipmentSchema.isMissing),
-                    row.getDouble(EquipmentSchema.weight));
-
-            case "camera" -> new Camera(
-                    row.getUuid(EquipmentSchema.equipmentUuid),
-                    row.getString(EquipmentSchema.name),
-                    row.getDouble(EquipmentSchema.bail),
-                    row.getDouble(EquipmentSchema.firstDayCost),
-                    row.getDouble(EquipmentSchema.nextDaysCost),
-                    row.getBoolean(EquipmentSchema.isArchived),
-                    row.getString(EquipmentSchema.description),
-                    row.getString(EquipmentSchema.discriminator),
-                    row.getBoolean(EquipmentSchema.isMissing),
-                    row.getString(EquipmentSchema.resolution));
-
-            default -> throw new IllegalStateException("Unexpected value: " + discriminator);
-        };
+        return null;
     }
 }

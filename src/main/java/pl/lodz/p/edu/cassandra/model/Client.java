@@ -15,14 +15,13 @@ import static com.datastax.oss.driver.api.mapper.entity.naming.NamingConvention.
 public class Client implements Serializable {
 
     @CqlName("clientUuid")
+    @PartitionKey
     private UUID uuid;
 
     @CqlName("clientId")
-    @PartitionKey
     private String clientId;
 
     @CqlName("idType")
-//    @ClusteringColumn
     private String idType;
     //FIXME String or other type of enum mapping?
     // There is possibility to add custom codec to cluster configuration but...
@@ -49,7 +48,6 @@ public class Client implements Serializable {
     public Client(
             String clientId,
             String idType,
-            boolean archive,
             String firstName,
             String lastName,
             String city,
@@ -74,7 +72,7 @@ public class Client implements Serializable {
 
         this.clientId = clientId;
         this.idType = idType;
-        this.archive = archive;
+        this.archive = false;
         this.city = city;
         this.uuid = UUID.randomUUID();
         this.firstName = firstName;
@@ -82,19 +80,6 @@ public class Client implements Serializable {
         this.street = street;
         this.streetNr = streetNr;
 
-    }
-    public Client(UUID uuid,
-                  String clientId,
-                  String idType, //Changed from IdType to String
-                  boolean archive,
-                  String firstName,
-                  String lastName,
-                  String city,
-                  String street,
-                  String streetNr
-    ) throws ClientException {
-        this(clientId, idType, archive, firstName, lastName, city, street, streetNr);
-        this.uuid = uuid;
     }
 
     protected Client() {

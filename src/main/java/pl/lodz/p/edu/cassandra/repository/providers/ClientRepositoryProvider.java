@@ -9,9 +9,8 @@ import com.datastax.oss.driver.api.querybuilder.QueryBuilder;
 import com.datastax.oss.driver.api.querybuilder.relation.Relation;
 import com.datastax.oss.driver.api.querybuilder.select.Select;
 import pl.lodz.p.edu.cassandra.exception.ClientException;
-import pl.lodz.p.edu.cassandra.repository.Schemas.ClientSchema;
-import pl.lodz.p.edu.cassandra.repository.Schemas.SchemaConst;
 import pl.lodz.p.edu.cassandra.model.Client;
+import pl.lodz.p.edu.cassandra.repository.Schemas.ClientSchema;
 
 import java.util.UUID;
 
@@ -56,21 +55,21 @@ public class ClientRepositoryProvider {
         }
     }
 
-    private Client getClient(Row client) throws ClientException {
-        if (client != null) {
-        Client rClient = new Client(
-                client.getUuid(ClientSchema.clientUuid),
-                client.getString(ClientSchema.clientId),
-                client.getString(ClientSchema.idType),
-                client.getBoolean(ClientSchema.archive),
-                client.getString(ClientSchema.firstName),
-                client.getString(ClientSchema.lastName),
-                client.getString(ClientSchema.city),
-                client.getString(ClientSchema.street),
-                client.getString(ClientSchema.streetNr)
-        );
-        return rClient;
-    }
+    private Client getClient(Row row) throws ClientException {
+        if (row != null) {
+            Client rClient = new Client(
+                    row.getString(ClientSchema.clientId),
+                    row.getString(ClientSchema.idType),
+                    row.getString(ClientSchema.firstName),
+                    row.getString(ClientSchema.lastName),
+                    row.getString(ClientSchema.city),
+                    row.getString(ClientSchema.street),
+                    row.getString(ClientSchema.streetNr)
+            );
+            rClient.setArchive(row.getBoolean(ClientSchema.archive));
+            rClient.setUuid(row.getUuid(ClientSchema.clientUuid));
+            return rClient;
+        }
         return null;
     }
 }

@@ -1,8 +1,11 @@
 package pl.lodz.p.edu.cassandra.repository.impl;
 
 import com.datastax.oss.driver.api.mapper.annotations.Dao;
+import com.datastax.oss.driver.api.mapper.annotations.Delete;
 import com.datastax.oss.driver.api.mapper.annotations.QueryProvider;
+import com.datastax.oss.driver.api.mapper.annotations.Update;
 import pl.lodz.p.edu.cassandra.exception.EquipmentException;
+import pl.lodz.p.edu.cassandra.model.Client;
 import pl.lodz.p.edu.cassandra.model.EQ.Camera;
 import pl.lodz.p.edu.cassandra.model.EQ.Equipment;
 import pl.lodz.p.edu.cassandra.model.EQ.Lens;
@@ -21,4 +24,10 @@ public interface EquipmentDao {
     @QueryProvider(providerClass = EquipmentRepositoryProvider.class,
             entityHelpers = {Lens.class, Trivet.class, Camera.class})
     Equipment get(UUID uuid) throws EquipmentException;
+
+    @Update
+    void update(Equipment equipment);
+
+    @Delete(ifExists = true, entityClass = Equipment.class)
+    boolean deleteIfExistsByUUID(UUID uuid);
 }

@@ -12,18 +12,17 @@ public interface ClientDao {
 
     @Insert
     void add(Client client);
-//
-//
-//    @QueryProvider(providerClass = ClientRepositoryProvider.class,
-//            entityHelpers = {Client.class})
-//    Client get(UUID clientId);
 
-    @Select
-    Client get(String clientId);
+    @QueryProvider(providerClass = ClientRepositoryProvider.class,
+            entityHelpers = {Client.class})
+    Client get(UUID clientId);
+
+//    @Select
+//    Client get(String clientId);
 
     @Update
     void update(Client client);
-//
-    @Delete(ifExists = true)
-    boolean deleteIfExists(Client client);
+
+    @Delete(ifExists = true, entityClass = Client.class)
+    boolean deleteIfExistsByUUID(UUID uuid);
 }

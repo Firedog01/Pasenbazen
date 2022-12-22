@@ -50,7 +50,7 @@ public class Equipment implements Serializable {
 
 //    private List<Rent> equipmentRents = new ArrayList<>();
 
-    public Equipment(double firstDayCost, double nextDaysCost, double bail, String name, String discriminator
+    public Equipment(double firstDayCost, double nextDaysCost, double bail, String name, String description,  String discriminator
     ) throws EquipmentException {
         if (firstDayCost <= 0.0 || nextDaysCost <= 0.0 || bail <= 0.0) {
             throw new EquipmentException("Prosze podac prawidlowy koszt wypozyczenia");
@@ -65,18 +65,10 @@ public class Equipment implements Serializable {
         this.name = name;
         this.discriminator = discriminator;
         this.archive = false;
-        this.description = null;
+        this.description = description;
         this.missing = false;
     }
 
-    public Equipment(UUID uuid, String name, double bail, double firstDayCost, double nextDaysCost,
-                     boolean archive, String description, String discriminator, boolean missing) throws EquipmentException {
-        this(firstDayCost, nextDaysCost, bail, name, discriminator);
-        this.uuid = uuid;
-        this.archive = archive;
-        this.description = description;
-        this.missing = missing;
-    }
 
     protected Equipment() {
     }

@@ -47,12 +47,12 @@ public class ClientRepositoryTest {
         SimpleStatement createClients =
                 SchemaBuilder.createTable(ClientSchema.clients)
                         .ifNotExists()
-                        .withPartitionKey(ClientSchema.clientId, DataTypes.TEXT)
+                        .withPartitionKey(ClientSchema.clientUuid, DataTypes.UUID)
 //                        .withClusteringColumn(ClientSchema.idType, DataTypes.TEXT)
+                        .withColumn(ClientSchema.clientId, DataTypes.TEXT)
                         .withColumn(ClientSchema.idType, DataTypes.TEXT)
                         .withColumn(ClientSchema.archive, DataTypes.BOOLEAN)
                         .withColumn(ClientSchema.city, DataTypes.TEXT)
-                        .withColumn(ClientSchema.clientUuid, DataTypes.UUID)
                         .withColumn(ClientSchema.firstName, DataTypes.TEXT)
                         .withColumn(ClientSchema.lastName, DataTypes.TEXT)
                         .withColumn(ClientSchema.street, DataTypes.TEXT)
@@ -80,7 +80,7 @@ public class ClientRepositoryTest {
 
         clientDao.add(client1);
 
-        Client rClient = clientDao.get(client1.getClientId());
+        Client rClient = clientDao.get(client1.getUuid());
 
         assertEquals(client1, rClient);
 
@@ -89,14 +89,14 @@ public class ClientRepositoryTest {
 
         clientDao.update(client1);
 
-        client1 = clientDao.get(client1.getClientId());
+        client1 = clientDao.get(client1.getUuid());
 
         assertNotEquals(client1, rClient);
 
         System.out.println(client1);
 
-        assertTrue(clientDao.deleteIfExists(client1));
+        assertTrue(clientDao.deleteIfExistsByUUID(client1.getUuid()));
 
-        assertNull(clientDao.get(client1.getClientId()));
+        assertNull(clientDao.get(client1.getUuid()));
     }
 }

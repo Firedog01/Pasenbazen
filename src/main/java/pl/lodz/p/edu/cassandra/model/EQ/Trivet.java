@@ -20,15 +20,10 @@ public class Trivet extends Equipment{
                   double bail,
                   String name,
                   double weight,
+                  String description,
                   String discriminator
     ) throws EquipmentException {
-        super(firstDayCost, nextDaysCost, bail, name, discriminator);
-        this.weight = weight;
-    }
-
-    public Trivet(UUID uuid, String name, double bail, double firstDayCost, double nextDaysCost, boolean archive,
-                String description, String discriminator, boolean missing, double weight) throws EquipmentException {
-        super(uuid, name, bail, firstDayCost, nextDaysCost, archive, description, discriminator, missing);
+        super(firstDayCost, nextDaysCost, bail, name, description, discriminator);
         this.weight = weight;
     }
 

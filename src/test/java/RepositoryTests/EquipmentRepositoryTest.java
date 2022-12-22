@@ -92,6 +92,18 @@ public class EquipmentRepositoryTest {
         assertEquals(daoTrivet, trivet1);
         assertEquals(daoCamera, camera1);
 
+        lens1.setDescription("askdbjaskbhjdbjkas");
+
+        equipmentDao.update(lens1);
+
+        lens1 = equipmentDao.get(lens1.getUuid());
+
+        assertNotEquals(lens1, daoLens);
+
+        assertTrue(equipmentDao.deleteIfExistsByUUID(lens1.getUuid()));
+
+        assertNull(equipmentDao.get(lens1.getUuid()));
+
     }
 
 }
