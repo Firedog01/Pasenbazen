@@ -26,10 +26,10 @@ public class RentByClient implements Serializable {
 
     @CqlName("beginTime")
     @ClusteringColumn(1)
-    private LocalDateTime beginTime;
+    private String beginTime;
 
     @CqlName("endTime")
-    private LocalDateTime endTime;
+    private String endTime;
 
     @CqlName("shipped")
     private boolean shipped;
@@ -42,8 +42,8 @@ public class RentByClient implements Serializable {
                         UUID equipment, UUID client) {
 
         this.rentUuid = UUID.randomUUID();
-        this.beginTime = beginTime;
-        this.endTime = endTime;
+        this.beginTime = beginTime.toString();
+        this.endTime = endTime.toString();
         this.shipped = false;
         this.eqReturned = false;
         this.equipmentUuid = equipment;
@@ -107,19 +107,19 @@ public class RentByClient implements Serializable {
         this.clientUuid = clientUuid;
     }
 
-    public LocalDateTime getBeginTime() {
+    public String getBeginTime() {
         return beginTime;
     }
 
-    public void setBeginTime(LocalDateTime beginTime) {
+    public void setBeginTime(String beginTime) {
         this.beginTime = beginTime;
     }
 
-    public LocalDateTime getEndTime() {
+    public String getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(LocalDateTime endTime) {
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
 

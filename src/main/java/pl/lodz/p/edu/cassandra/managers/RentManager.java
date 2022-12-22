@@ -1,36 +1,40 @@
 package pl.lodz.p.edu.cassandra.managers;
 
-import pl.lodz.p.edu.cassandra.repository.impl.RentByClientDao;
-import pl.lodz.p.edu.cassandra.repository.impl.RentByEquipmentDao;
+import com.datastax.oss.driver.api.core.PagingIterable;
+import pl.lodz.p.edu.cassandra.model.Client;
+import pl.lodz.p.edu.cassandra.model.EQ.Equipment;
+import pl.lodz.p.edu.cassandra.model.RentByClient;
+import pl.lodz.p.edu.cassandra.model.RentByEquipment;
+import pl.lodz.p.edu.cassandra.repository.impl.RentDao;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
 
 
 public class RentManager {
-    private final RentByClientDao rentByClientDao;
-    private final RentByEquipmentDao rentByEquipmentDao;
+    private final RentDao rentDao;
 
-    public RentManager(RentByClientDao rentByClientDao, RentByEquipmentDao rentByEquipmentDao) {
-        this.rentByClientDao = rentByClientDao;
-        this.rentByEquipmentDao = rentByEquipmentDao;
+    public RentManager(RentDao rentDao) {
+        this.rentDao = rentDao;
     }
 
-//    public Rent makeReservation(Client client, Equipment equipment, Address address,
-//                                LocalDateTime beginTime, LocalDateTime endTime) {
-//        if (equipment.isMissing() || equipment.isArchive()) {
-//            return null;
-//        }
-//        if (client.isArchive()) {
-//            return null;
-//        }
-//        LocalDateTime now = LocalDateTime.now();
-//        if (beginTime.isEqual(now) || beginTime.isBefore(now)) {
-//            return null;
-//        }
-//        if (beginTime.isAfter(endTime)) {
-//            return null;
-//        }
-//
-//        boolean good = true;
-////        List<Rent> rentEquipmentList = equipment.getEquipmentRents();
+    public UUID makeReservation(LocalDateTime beginTime, LocalDateTime endTime, Equipment equipment, Client client) {
+        if (equipment.isMissing() || equipment.isArchive()) {
+            return null;
+        }
+        if (client.isArchive()) {
+            return null;
+        }
+        LocalDateTime now = LocalDateTime.now();
+        if (beginTime.isEqual(now) || beginTime.isBefore(now)) {
+            return null;
+        }
+        if (beginTime.isAfter(endTime)) {
+            return null;
+        }
+
+        boolean good = true;
 //        List<Rent> rentEquipmentList = rentRepository.getEquipmentRents(equipment);
 //
 //        System.out.println(rentEquipmentList);
@@ -62,20 +66,30 @@ public class RentManager {
 //                good = false;
 //            }
 //        }
-//
-//        if (good) {
-//            Rent rent = new Rent(beginTime, endTime, equipment, client, address);
-//            rentRepository.add(rent);
-//            return rent;
-//        } else {
-//            return null;
-//        }
-//    }
-//
-//    public List<Rent> getClientRents(Client client) {
-//        return rentRepository.getRentByClient(client);
-//    }
-//
+
+        if (good) {
+            RentByClient rentByClient = new RentByClient(beginTime, endTime, equipment.getUuid(), client.getUuid());
+            RentByEquipment rentByEquipment = new RentByEquipment(beginTime, endTime, equipment.getUuid(), client.getUuid());
+            UUID uuid = UUID.randomUUID();
+            rentByClient.setRentUuid(uuid);
+            rentByEquipment.setRentUuid(uuid);
+
+            rentDao.add(rentByClient, rentByEquipment);
+
+            return uuid;
+        } else {
+            return null;
+        }
+    }
+    //todo some of other methods?
+
+    public List<RentByClient> getClientRents(UUID uuid) {
+        return rentDao.getByClient(uuid).all();
+    }
+
+    public PagingIterable<RentByEquipment> getEquipmentRents(UUID uuid) {
+        return rentDao.getByEquipment(uuid);
+    }
 //    public void shipEquipment(Rent rent) {
 //        rent.setShipped(true);
 //        rentRepository.update(rent);
