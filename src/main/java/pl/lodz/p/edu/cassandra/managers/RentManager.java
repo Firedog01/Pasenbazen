@@ -1,9 +1,7 @@
 package pl.lodz.p.edu.cassandra.managers;
 
-import com.datastax.oss.driver.api.core.PagingIterable;
 import pl.lodz.p.edu.cassandra.model.Client;
 import pl.lodz.p.edu.cassandra.model.EQ.Equipment;
-import pl.lodz.p.edu.cassandra.model.Rent;
 import pl.lodz.p.edu.cassandra.model.RentByClient;
 import pl.lodz.p.edu.cassandra.model.RentByEquipment;
 import pl.lodz.p.edu.cassandra.repository.impl.RentDao;
@@ -84,15 +82,23 @@ public class RentManager {
             return null;
         }
     }
-    //todo some of other methods?
 
-    public List<RentByClient> getClientRents(UUID uuid) {
+    public List<RentByClient> getAllClientRents(UUID uuid) {
         return rentDao.getByClient(uuid).all();
     }
 
-    public PagingIterable<RentByEquipment> getEquipmentRents(UUID uuid) {
-        return rentDao.getByEquipment(uuid);
+    public List<RentByEquipment> getAllEquipmentRents(UUID uuid) {
+        return rentDao.getByEquipment(uuid).all();
     }
+
+    public void updateClientRent(RentByClient rent) {
+        rentDao.updateRentClient(rent);
+    }
+    public void updateEquipmentRent(RentByEquipment rent) {
+        rentDao.updateRentEquipment(rent);
+    }
+
+
 
 //    public void shipEquipment(Rent rent) {
 //        rent.setShipped(true);

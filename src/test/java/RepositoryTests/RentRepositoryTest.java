@@ -2,7 +2,6 @@ package RepositoryTests;
 
 import com.datastax.oss.driver.api.core.CqlIdentifier;
 import com.datastax.oss.driver.api.core.CqlSession;
-import com.datastax.oss.driver.api.core.PagingIterable;
 import com.datastax.oss.driver.api.core.cql.SimpleStatement;
 import com.datastax.oss.driver.api.core.type.DataTypes;
 import com.datastax.oss.driver.api.querybuilder.SchemaBuilder;
@@ -14,6 +13,7 @@ import pl.lodz.p.edu.cassandra.model.Client;
 import pl.lodz.p.edu.cassandra.model.EQ.Equipment;
 import pl.lodz.p.edu.cassandra.model.Rent;
 import pl.lodz.p.edu.cassandra.model.RentByClient;
+import pl.lodz.p.edu.cassandra.model.RentByEquipment;
 import pl.lodz.p.edu.cassandra.repository.DataFaker;
 import pl.lodz.p.edu.cassandra.repository.Schemas.RentsSchema;
 import pl.lodz.p.edu.cassandra.repository.Schemas.SchemaConst;
@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static com.datastax.oss.driver.api.querybuilder.SchemaBuilder.dropTable;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class RentRepositoryTest {
     static CqlSession session;
@@ -82,16 +83,38 @@ public class RentRepositoryTest {
         rentManager = new RentManager(rentMapper.rentDao());
     }
 
+
     @Test
     void rentTest() {
-        Equipment equipment = DataFaker.getTrivet();
-        Client client = DataFaker.getClient();
-        Rent rent = DataFaker.getRent(equipment, client);
+        Equipment equipment1 = DataFaker.getTrivet();
+        Equipment equipment2 = DataFaker.getCamera();
+        Client client1 = DataFaker.getClient();
+        Client client2 = DataFaker.getClient();
+        Rent rent1 = DataFaker.getRent(equipment1, client1);
+        Rent rent2 = DataFaker.getRent(equipment2, client1);
+        Rent rent3 = DataFaker.getRent(equipment2, client2);
 
-        UUID rentUuid = rentManager.makeReservation(rent.getBeginTime(), rent.getEndTime(), equipment, client);
+        assert equipment1 != null;
+        UUID rent1Uuid = rentManager.makeReservation(rent1.getBeginTime(), rent1.getEndTime(), equipment1, client1);
+        assert equipment2 != null;
+        UUID rent2Uuid = rentManager.makeReservation(rent2.getBeginTime(), rent2.getEndTime(), equipment2, client1);
+        UUID rent3Uuid = rentManager.makeReservation(rent3.getBeginTime(), rent3.getEndTime(), equipment2, client2);
 
-        List<RentByClient> rent1 = rentManager.getClientRents(client.getUuid());
-        System.out.println(rent1);
+
+        assert client1 != null;
+        List<RentByClient> rentListC = rentManager.getAllClientRents(client1.getUuid());
+        assertEquals(rentListC.size(), 2);
+
+        List<RentByEquipment> rentListE = rentManager.getAllEquipmentRents(equipment2.getUuid());
+        assertEquals(rentListE.size(), 2); //FIXME somehow doesnt work here?
+
+        RentByEquipment rbe = new RentByEquipment(rent1.getBeginTime(), rent1.getEndTime(), equipment2.getUuid(), client1.getUuid());
+        rbe.setRentUuid(rent1Uuid);
+        rentManager.updateEquipmentRent(rbe);
+
+        List<RentByEquipment> rentListENew = rentManager.getAllEquipmentRents(equipment2.getUuid());
+        assertEquals(rentListENew.size(), 3);
+//        assertNotEquals(rentListE.get(0).getEquipmentUuid(), rentListENew.get(0).getEquipmentUuid());
     }
 
 }

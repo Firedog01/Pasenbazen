@@ -3,7 +3,6 @@ package pl.lodz.p.edu.cassandra.repository.impl;
 import com.datastax.oss.driver.api.mapper.annotations.*;
 import com.datastax.oss.driver.api.mapper.entity.saving.NullSavingStrategy;
 import pl.lodz.p.edu.cassandra.exception.EquipmentException;
-import pl.lodz.p.edu.cassandra.model.Client;
 import pl.lodz.p.edu.cassandra.model.EQ.Camera;
 import pl.lodz.p.edu.cassandra.model.EQ.Equipment;
 import pl.lodz.p.edu.cassandra.model.EQ.Lens;

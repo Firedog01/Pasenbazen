@@ -11,7 +11,4 @@ public interface ClientMapper {
     @DaoFactory
     ClientDao clientDao();
 
-    @DaoFactory
-    ClientDao clientDao(@DaoKeyspace String keyspace, @DaoTable String daoTable);
-    //
 }

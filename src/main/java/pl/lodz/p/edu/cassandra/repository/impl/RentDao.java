@@ -29,7 +29,7 @@ public interface RentDao {
     boolean delete(UUID uuid);
 
     @StatementAttributes(consistencyLevel = "QUORUM")
-    @Update()
+    @Update
     void updateRentEquipment(RentByEquipment rent);
 
     @Update
