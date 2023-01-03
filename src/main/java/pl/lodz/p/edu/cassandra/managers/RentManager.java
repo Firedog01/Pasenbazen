@@ -2,6 +2,7 @@ package pl.lodz.p.edu.cassandra.managers;
 
 import pl.lodz.p.edu.cassandra.model.Client;
 import pl.lodz.p.edu.cassandra.model.EQ.Equipment;
+import pl.lodz.p.edu.cassandra.model.Rent;
 import pl.lodz.p.edu.cassandra.model.RentByClient;
 import pl.lodz.p.edu.cassandra.model.RentByEquipment;
 import pl.lodz.p.edu.cassandra.repository.impl.RentDao;
@@ -18,7 +19,7 @@ public class RentManager {
         this.rentDao = rentDao;
     }
 
-    public UUID makeReservation(LocalDateTime beginTime, LocalDateTime endTime, Equipment equipment, Client client) {
+    public Rent makeReservation(LocalDateTime beginTime, LocalDateTime endTime, Equipment equipment, Client client) {
         if (equipment.isMissing() || equipment.isArchive()) {
             return null;
         }
@@ -26,7 +27,7 @@ public class RentManager {
             return null;
         }
         LocalDateTime now = LocalDateTime.now();
-        if (beginTime.isEqual(now) || beginTime.isBefore(now)) {
+        if (beginTime.isBefore(now)) {
             return null;
         }
         if (beginTime.isAfter(endTime)) {
@@ -74,10 +75,14 @@ public class RentManager {
             UUID uuid = UUID.randomUUID();
             rentByClient.setRentUuid(uuid);
             rentByEquipment.setRentUuid(uuid);
-
             rentDao.add(rentByClient, rentByEquipment);
 
-            return uuid;
+            Rent rent = new Rent(beginTime, endTime, equipment, client);
+            rent.setRentByClient(rentByClient);
+            rent.setRentByEquipment(rentByEquipment);
+
+
+            return rent;
         } else {
             return null;
         }
@@ -98,7 +103,34 @@ public class RentManager {
         rentDao.updateRentEquipment(rent);
     }
 
+    public Rent updateRentClient(Rent rent, Client client) {
+        Rent updatedRent = new Rent(rent);
+        updatedRent.setClient(client);
+        RentByClient byClient = updatedRent.toRentByClient();
+        RentByEquipment byEquipment = updatedRent.toRentByEquipment();
+        RentByClient byClientOld = rent.toRentByClient();
+        rentDao.updateRentEquipment(updatedRent.toRentByEquipment());
+        rentDao.addRentByClient(updatedRent.toRentByClient());
+        rentDao.deleteClientRents(rent.toRentByClient());
+        return updatedRent;
+    }
 
+    public Rent updateRentEquipment(Rent rent, Equipment equipment) {
+        Rent updatedRent = new Rent(rent);
+        updatedRent.setEquipment(equipment);
+        RentByClient byClient = updatedRent.toRentByClient();
+        RentByEquipment byEquipment = updatedRent.toRentByEquipment();
+        RentByEquipment byClientOld = rent.toRentByEquipment();
+        rentDao.updateRentClient(updatedRent.toRentByClient());
+        rentDao.addRentByEquipment(updatedRent.toRentByEquipment());
+        rentDao.deleteEquipmentRents(rent.toRentByEquipment());
+        return updatedRent;
+    }
+
+    public boolean delete(Rent rent) {
+        return rentDao.deleteEquipmentRents(rent.getRentByEquipment())
+                && rentDao.deleteClientRents(rent.getRentByClient());
+    }
 
 //    public void shipEquipment(Rent rent) {
 //        rent.setShipped(true);

@@ -23,9 +23,6 @@ public class Client implements Serializable {
 
     @CqlName("idType")
     private String idType;
-    //FIXME String or other type of enum mapping?
-    // There is possibility to add custom codec to cluster configuration but...
-    // We have only session configuration based on lecture document
 
     @CqlName("firstName")
     private String firstName;

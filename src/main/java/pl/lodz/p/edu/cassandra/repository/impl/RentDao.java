@@ -16,6 +16,14 @@ public interface RentDao {
     @StatementAttributes(consistencyLevel = "QUORUM")
     void add(RentByClient rentByClient, RentByEquipment rentByEquipment);
 
+    @Insert
+    @StatementAttributes(consistencyLevel = "QUORUM")
+    void addRentByClient(RentByClient rentByClient);
+
+    @Insert
+    @StatementAttributes(consistencyLevel = "QUORUM")
+    void addRentByEquipment(RentByEquipment rentByEquipment);
+
     @Select
     @StatementAttributes(consistencyLevel = "QUORUM")
     PagingIterable<RentByClient> getByClient(UUID clientUuid);
@@ -24,9 +32,13 @@ public interface RentDao {
     @StatementAttributes(consistencyLevel = "QUORUM")
     PagingIterable<RentByEquipment> getByEquipment(UUID equipmentUuid);
 
-    @Delete(entityClass = {RentByEquipment.class, RentByClient.class})
+    @Delete(entityClass = RentByEquipment.class)
     @StatementAttributes(consistencyLevel = "QUORUM")
-    boolean delete(UUID uuid);
+    boolean deleteEquipmentRents(RentByEquipment rent);
+
+    @Delete(entityClass = RentByClient.class)
+    @StatementAttributes(consistencyLevel = "QUORUM")
+    boolean deleteClientRents(RentByClient rent);
 
     @StatementAttributes(consistencyLevel = "QUORUM")
     @Update

@@ -50,6 +50,17 @@ public class RentByClient implements Serializable {
         this.clientUuid = client;
     }
 
+    public RentByClient(UUID rentUuid, UUID equipmentUuid, UUID clientUuid,
+                        String beginTime, String endTime, boolean shipped, boolean eqReturned) {
+        this.rentUuid = rentUuid;
+        this.equipmentUuid = equipmentUuid;
+        this.clientUuid = clientUuid;
+        this.beginTime = beginTime;
+        this.endTime = endTime;
+        this.shipped = shipped;
+        this.eqReturned = eqReturned;
+    }
+
     public RentByClient() {
 
     }

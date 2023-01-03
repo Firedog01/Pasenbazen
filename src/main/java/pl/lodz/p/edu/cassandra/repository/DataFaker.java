@@ -85,10 +85,20 @@ public class DataFaker {
         }
         //If something doesn't work, it's here
         long sinceEpoch = LocalDateTime.now().toInstant(ZoneOffset.UTC).toEpochMilli();
-        long beginUnix = sinceEpoch + (long) (Math.random() * 10000000);
-        long endUnix = beginUnix + (long) (Math.random() * 10000000);
+        long beginUnix = sinceEpoch + (long) (Math.random() * 10000000 + 10000000);
+        long endUnix = beginUnix + (long) (Math.random() * 10000000 + 10000000);
         LocalDateTime begin = Instant.ofEpochMilli(beginUnix).atZone(ZoneOffset.UTC).toLocalDateTime();
         LocalDateTime end = Instant.ofEpochMilli(endUnix).atZone(ZoneOffset.UTC).toLocalDateTime();
+        return new Rent(begin, end, e, c);
+    }
+
+    public static Rent getRent(LocalDateTime begin, LocalDateTime end, Equipment e, Client c) {
+        if(e == null) {
+            e = getCamera();
+        }
+        if(c == null) {
+            c = getClient();
+        }
         return new Rent(begin, end, e, c);
     }
 

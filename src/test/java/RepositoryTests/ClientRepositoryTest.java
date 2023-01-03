@@ -97,5 +97,7 @@ public class ClientRepositoryTest {
         System.out.println(client1);
 
         assertTrue(clientManager.unregisterClient(client1.getUuid()));
+
+
     }
 }

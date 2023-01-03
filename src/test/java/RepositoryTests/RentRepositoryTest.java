@@ -17,10 +17,12 @@ import pl.lodz.p.edu.cassandra.model.RentByEquipment;
 import pl.lodz.p.edu.cassandra.repository.DataFaker;
 import pl.lodz.p.edu.cassandra.repository.Schemas.RentsSchema;
 import pl.lodz.p.edu.cassandra.repository.Schemas.SchemaConst;
+import pl.lodz.p.edu.cassandra.repository.impl.RentDao;
 import pl.lodz.p.edu.cassandra.repository.impl.RentMapper;
 import pl.lodz.p.edu.cassandra.repository.impl.RentMapperBuilder;
 
 import java.net.InetSocketAddress;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,8 +34,18 @@ public class RentRepositoryTest {
     static RentMapper rentMapper;
     static RentManager rentManager;
 
+    static LocalDateTime t0;
+    static LocalDateTime t1;
+    static LocalDateTime t2;
+    static LocalDateTime t3;
+    static LocalDateTime t4;
+    static LocalDateTime t5;
+    // t0 = now
+    // t0 < t1 < t2 < t3 < t4 < t5
+
+
     @BeforeAll
-    public static void init() {
+    static void init() {
         session = CqlSession.builder()
                 .addContactPoint(new InetSocketAddress("localhost", 9042))
                 .addContactPoint(new InetSocketAddress("localhost", 9043))
@@ -81,6 +93,14 @@ public class RentRepositoryTest {
 
         rentMapper = new RentMapperBuilder(session).build();
         rentManager = new RentManager(rentMapper.rentDao());
+
+
+        t0 = LocalDateTime.now().plusHours(1);
+        t1 = t0.plusDays(1);
+        t2 = t0.plusDays(2);
+        t3 = t0.plusDays(3);
+        t4 = t0.plusDays(4);
+        t5 = t0.plusDays(5);
     }
 
 
@@ -90,31 +110,43 @@ public class RentRepositoryTest {
         Equipment equipment2 = DataFaker.getCamera();
         Client client1 = DataFaker.getClient();
         Client client2 = DataFaker.getClient();
-        Rent rent1 = DataFaker.getRent(equipment1, client1);
-        Rent rent2 = DataFaker.getRent(equipment2, client1);
-        Rent rent3 = DataFaker.getRent(equipment2, client2);
 
-        assert equipment1 != null;
-        UUID rent1Uuid = rentManager.makeReservation(rent1.getBeginTime(), rent1.getEndTime(), equipment1, client1);
-        assert equipment2 != null;
-        UUID rent2Uuid = rentManager.makeReservation(rent2.getBeginTime(), rent2.getEndTime(), equipment2, client1);
-        UUID rent3Uuid = rentManager.makeReservation(rent3.getBeginTime(), rent3.getEndTime(), equipment2, client2);
+        Rent createdRent1 = rentManager.makeReservation(t0, t1, equipment1, client1);
+        Rent createdRent2 = rentManager.makeReservation(t1, t2, equipment2, client1);
+        Rent createdRent3 = rentManager.makeReservation(t3, t4, equipment2, client2);
 
+        assertNotNull(createdRent1);
+        assertNotNull(createdRent2);
+        assertNotNull(createdRent3);
 
-        assert client1 != null;
+        // get by client rents
         List<RentByClient> rentListC = rentManager.getAllClientRents(client1.getUuid());
         assertEquals(rentListC.size(), 2);
 
+        // get by equipment rents
         List<RentByEquipment> rentListE = rentManager.getAllEquipmentRents(equipment2.getUuid());
-        assertEquals(rentListE.size(), 2); //FIXME somehow doesnt work here?
+        assertEquals(rentListE.size(), 2);
 
-        RentByEquipment rbe = new RentByEquipment(rent1.getBeginTime(), rent1.getEndTime(), equipment2.getUuid(), client1.getUuid());
-        rbe.setRentUuid(rent1Uuid);
-        rentManager.updateEquipmentRent(rbe);
+        // add new
+        Rent createdRent4 = rentManager.makeReservation(t4, t5, equipment2, client1);
+        assertNotNull(createdRent4);
 
+        // new rent is included
         List<RentByEquipment> rentListENew = rentManager.getAllEquipmentRents(equipment2.getUuid());
         assertEquals(rentListENew.size(), 3);
-//        assertNotEquals(rentListE.get(0).getEquipmentUuid(), rentListENew.get(0).getEquipmentUuid());
+
+        // delete that new one
+        rentManager.delete(createdRent4);
+
+        rentListENew = rentManager.getAllEquipmentRents(equipment2.getUuid());
+        assertEquals(rentListENew.size(), 2);
+
+        // update equipment
+        Rent updatedRent1 = rentManager.updateRentEquipment(createdRent1, equipment2);
+        assertNotNull(updatedRent1);
+
+        rentListENew = rentManager.getAllEquipmentRents(equipment2.getUuid());
+        assertEquals(rentListENew.size(), 3);
     }
 
 }

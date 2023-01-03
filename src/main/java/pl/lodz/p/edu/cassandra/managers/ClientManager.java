@@ -30,7 +30,7 @@ public class ClientManager {
 
         Client client = new Client();
         client.setArchive(true);
-        return clientDao.archive(client, uuid); //FIXME ARCHIVE THAN DELETE
+        return clientDao.archive(client, uuid);
     }
 
     public Client getClient(UUID clientUuid) {

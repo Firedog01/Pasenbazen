@@ -24,6 +24,9 @@ public class Rent implements Serializable {
 
     private LocalDateTime endTime;
 
+    private RentByClient rentByClient;
+
+    private RentByEquipment rentByEquipment;
 
     private boolean shipped;
 
@@ -41,6 +44,16 @@ public class Rent implements Serializable {
         this.eqReturned = false;
         this.equipment = equipment;
         this.client = client;
+    }
+
+    public Rent(Rent rent) {
+        this.rentUuid = rent.rentUuid;
+        this.beginTime = rent.beginTime;
+        this.endTime = rent.endTime;
+        this.shipped = rent.shipped;
+        this.eqReturned = rent.eqReturned;
+        this.equipment = rent.equipment;
+        this.client = rent.client;
     }
 
     protected Rent() {
@@ -61,6 +74,22 @@ public class Rent implements Serializable {
         }
     }
 
+    public RentByClient toRentByClient() {
+        RentByClient rent = new RentByClient(beginTime, endTime, equipment.getUuid(), client.getUuid());
+        rent.setRentUuid(rentUuid);
+        rent.setShipped(shipped);
+        rent.setEqReturned(eqReturned);
+        return rent;
+    }
+
+    public RentByEquipment toRentByEquipment() {
+        RentByEquipment rent = new RentByEquipment(beginTime, endTime, equipment.getUuid(), client.getUuid());
+        rent.setRentUuid(rentUuid);
+        rent.setShipped(shipped);
+        rent.setEqReturned(eqReturned);
+        return rent;
+    }
+
     public String toString() {
         final StringBuilder sb = new StringBuilder("Rent{");
         sb.append("uuid=").append(rentUuid.toString());
@@ -74,6 +103,10 @@ public class Rent implements Serializable {
         return sb.toString();
     }
 
+
+    public UUID getUuid() {
+        return rentUuid;
+    }
 
     public LocalDateTime getBeginTime() {
         return beginTime;
@@ -123,4 +156,19 @@ public class Rent implements Serializable {
         this.client = client;
     }
 
+    public RentByClient getRentByClient() {
+        return rentByClient;
+    }
+
+    public void setRentByClient(RentByClient rentByClient) {
+        this.rentByClient = rentByClient;
+    }
+
+    public RentByEquipment getRentByEquipment() {
+        return rentByEquipment;
+    }
+
+    public void setRentByEquipment(RentByEquipment rentByEquipment) {
+        this.rentByEquipment = rentByEquipment;
+    }
 }
