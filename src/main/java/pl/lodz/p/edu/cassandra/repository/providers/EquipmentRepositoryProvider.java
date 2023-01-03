@@ -101,7 +101,7 @@ public class EquipmentRepositoryProvider {
         if (row != null) {
             String discriminator = row.getString(EquipmentSchema.discriminator);
             if (discriminator == null) {
-                throw new NullPointerException("discriminator not found idk"); //fixme
+                throw new NullPointerException("discriminator not found");
             }
             return switch (discriminator) {
                 case "lens" -> {

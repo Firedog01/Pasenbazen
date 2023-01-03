@@ -36,6 +36,10 @@ public class EquipmentManager {
         return equipmentDao.update(equipment);
     }
 
+    public boolean deleteEquipment(UUID equipmentUuid) {
+        return equipmentDao.delete(equipmentUuid);
+    }
+
 //    public List<Equipment> getAllEquipment() {
 //        return equipmentRepository.getAll();
 //    }

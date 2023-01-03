@@ -37,19 +37,17 @@ public class RentRepositoryProvider {
                 .ifNotExists();
 
         Insert insertRentEquipment = QueryBuilder.insertInto(RentsSchema.rentsByEquipment)
-                .value(RentsSchema.equipmentUuid, literal(rentByClient.getEquipmentUuid()))
-                .value(RentsSchema.rentUuid, literal(rentByClient.getRentUuid()))
-                .value(RentsSchema.endTime, literal(rentByClient.getEndTime()))
-                .value(RentsSchema.clientUuid, literal(rentByClient.getClientUuid()))
-                .value(RentsSchema.beginTime, literal(rentByClient.getBeginTime()))
-                .value(RentsSchema.shipped, literal(rentByClient.isShipped()))
-                .value(RentsSchema.eqReturned, literal(rentByClient.isEqReturned()))
+                .value(RentsSchema.equipmentUuid, literal(rentByEquipment.getEquipmentUuid()))
+                .value(RentsSchema.rentUuid, literal(rentByEquipment.getRentUuid()))
+                .value(RentsSchema.endTime, literal(rentByEquipment.getEndTime()))
+                .value(RentsSchema.clientUuid, literal(rentByEquipment.getClientUuid()))
+                .value(RentsSchema.beginTime, literal(rentByEquipment.getBeginTime()))
+                .value(RentsSchema.shipped, literal(rentByEquipment.isShipped()))
+                .value(RentsSchema.eqReturned, literal(rentByEquipment.isEqReturned()))
                 .ifNotExists();
 
         SimpleStatement clientRent = insertRentClient.build();
         SimpleStatement equipmentRent = insertRentEquipment.build();
-        //I was thinking about using BATCH, but then there is written in the lecture,
-        //that we shouldn't use it to load many entities into db sooo...?
 
         session.execute(clientRent);
         session.execute(equipmentRent);

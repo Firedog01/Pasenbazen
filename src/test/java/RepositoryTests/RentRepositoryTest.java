@@ -58,6 +58,7 @@ public class RentRepositoryTest {
                         .withColumn(RentsSchema.shipped, DataTypes.BOOLEAN)
                         .withColumn(RentsSchema.eqReturned, DataTypes.BOOLEAN)
                         .build();
+
         SimpleStatement createRentsByEquipment =
                 SchemaBuilder.createTable(RentsSchema.rentsByEquipment)
                         .ifNotExists()
@@ -69,7 +70,6 @@ public class RentRepositoryTest {
                         .withColumn(RentsSchema.shipped, DataTypes.BOOLEAN)
                         .withColumn(RentsSchema.eqReturned, DataTypes.BOOLEAN)
                         .build();
-
 
         session.execute(dropTable(RentsSchema.rentsByClient).ifExists().build());
 

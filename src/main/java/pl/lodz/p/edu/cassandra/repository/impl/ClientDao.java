@@ -12,19 +12,21 @@ import java.util.UUID;
 public interface ClientDao {
 
     @Insert
+    @StatementAttributes(consistencyLevel = "QUORUM")
     void add(Client client);
 
     @QueryProvider(providerClass = ClientRepositoryProvider.class,
             entityHelpers = {Client.class})
+    @StatementAttributes(consistencyLevel = "QUORUM")
     Client get(UUID clientId);
 
-//    @Select
-//    Client get(String clientId);
 
     @Update
+    @StatementAttributes(consistencyLevel = "QUORUM")
     boolean update(Client client);
 
 
     @Update(customWhereClause = "clientUuid in (:clientUuid)", nullSavingStrategy = NullSavingStrategy.DO_NOT_SET)
+    @StatementAttributes(consistencyLevel = "QUORUM")
     boolean archive(Client client, UUID clientUuid);
 }

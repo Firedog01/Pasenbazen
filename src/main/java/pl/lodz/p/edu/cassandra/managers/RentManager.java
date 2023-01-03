@@ -3,6 +3,7 @@ package pl.lodz.p.edu.cassandra.managers;
 import com.datastax.oss.driver.api.core.PagingIterable;
 import pl.lodz.p.edu.cassandra.model.Client;
 import pl.lodz.p.edu.cassandra.model.EQ.Equipment;
+import pl.lodz.p.edu.cassandra.model.Rent;
 import pl.lodz.p.edu.cassandra.model.RentByClient;
 import pl.lodz.p.edu.cassandra.model.RentByEquipment;
 import pl.lodz.p.edu.cassandra.repository.impl.RentDao;
@@ -35,37 +36,39 @@ public class RentManager {
         }
 
         boolean good = true;
-//        List<Rent> rentEquipmentList = rentRepository.getEquipmentRents(equipment);
-//
-//        System.out.println(rentEquipmentList);
-//        for(Rent r : rentEquipmentList) {
-//            System.out.println(r);
-//        }
-//
-//        for (int i = 0; i < rentEquipmentList.size(); i++) {
-//            Rent curRent = rentEquipmentList.get(i);
-//
-//            // +----- old rent -----+
-//            //         +----- new rent -----+
-//            if (beginTime.isBefore(curRent.getEndTime()) && beginTime.isAfter(curRent.getBeginTime())) {
-//                good = false;
-//            }
-//            //         +----- old rent -----+
-//            // +----- new rent -----+
-//            if (endTime.isAfter(curRent.getBeginTime()) && endTime.isBefore(curRent.getEndTime())) {
-//                good = false;
-//            }
-//            // +----- old rent -----+
-//            //    +-- new rent --+
-//            if (beginTime.isAfter(curRent.getBeginTime()) && beginTime.isBefore(curRent.getEndTime())) {
-//                good = false;
-//            }
-//            //    +-- old rent --+
-//            // +----- new rent -----+
-//            if (beginTime.isBefore(curRent.getBeginTime()) && endTime.isAfter(curRent.getEndTime())) {
-//                good = false;
-//            }
-//        }
+        List<RentByEquipment> rentEquipmentList = rentDao.getByEquipment(equipment.getUuid()).all();
+
+        System.out.println(rentEquipmentList);
+        for(RentByEquipment r : rentEquipmentList) {
+            System.out.println(r);
+        }
+
+        for (int i = 0; i < rentEquipmentList.size(); i++) {
+            RentByEquipment curRent = rentEquipmentList.get(i);
+
+            LocalDateTime beginTimeDB = LocalDateTime.parse(curRent.getBeginTime());
+            LocalDateTime endTimeDB = LocalDateTime.parse(curRent.getEndTime());
+            // +----- old rent -----+
+            //         +----- new rent -----+
+            if (beginTime.isBefore(endTimeDB) && beginTime.isAfter(beginTimeDB)) {
+                good = false;
+            }
+            //         +----- old rent -----+
+            // +----- new rent -----+
+            if (endTime.isAfter(beginTimeDB) && endTime.isBefore(endTimeDB)) {
+                good = false;
+            }
+            // +----- old rent -----+
+            //    +-- new rent --+
+            if (beginTime.isAfter(beginTimeDB) && beginTime.isBefore(endTimeDB)) {
+                good = false;
+            }
+            //    +-- old rent --+
+            // +----- new rent -----+
+            if (beginTime.isBefore(beginTimeDB) && endTime.isAfter(endTimeDB)) {
+                good = false;
+            }
+        }
 
         if (good) {
             RentByClient rentByClient = new RentByClient(beginTime, endTime, equipment.getUuid(), client.getUuid());
@@ -90,6 +93,7 @@ public class RentManager {
     public PagingIterable<RentByEquipment> getEquipmentRents(UUID uuid) {
         return rentDao.getByEquipment(uuid);
     }
+
 //    public void shipEquipment(Rent rent) {
 //        rent.setShipped(true);
 //        rentRepository.update(rent);
