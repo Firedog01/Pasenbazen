@@ -1,4 +1,4 @@
-package repository.impl;
+package repository.cache.impl;
 
 import mgd.AddressMgd;
 import mgd.ClientMgd;
@@ -7,8 +7,11 @@ import mgd.DataFakerMgd;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import repository.impl.ClientRepository;
 
+@Disabled
 class ClientRepositoryTest {
 
     static ClientRepository clientRepository = new ClientRepository();

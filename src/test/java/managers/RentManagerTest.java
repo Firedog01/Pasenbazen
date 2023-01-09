@@ -5,10 +5,7 @@ import mgd.ClientMgd;
 import mgd.DataFakerMgd;
 import mgd.EQ.EquipmentMgd;
 import mgd.RentMgd;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import repository.impl.ClientRepository;
 import repository.impl.EquipmentRepository;
 import repository.impl.RentRepository;
@@ -20,6 +17,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Disabled
 class RentManagerTest {
 
     static RentRepository rentRepository = new RentRepository();

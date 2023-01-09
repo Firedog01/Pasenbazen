@@ -2,19 +2,14 @@ package model;
 
 import exception.ClientException;
 import exception.EquipmentException;
-import model.Address;
-import model.Client;
-import model.EQ.*;
-import model.Rent;
-import model.idType;
-import org.joda.time.DateTime;
-import org.joda.time.Instant;
-import org.joda.time.LocalDateTime;
+import model.EQ.Camera;
+import model.EQ.Equipment;
+import model.EQ.Lens;
+import model.EQ.Trivet;
 
-import javax.xml.crypto.Data;
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.Random;
-import java.util.random.RandomGenerator;
 
 public class DataFaker {
 
@@ -24,9 +19,9 @@ public class DataFaker {
 
     public static Client getClient(Address a) {
         try {
-            return new Client(randStr(7), idType.values()[(int)(Math.random() * 2) % 2],
+            return new Client(randStr(7), IdType.values()[(int) (Math.random() * 2) % 2],
                     randStr(10), randStr(10), a);
-        } catch(ClientException e) {
+        } catch (ClientException e) {
             return null; // will never happen
         }
     }
@@ -34,9 +29,9 @@ public class DataFaker {
     public static Client getClient() {
         try {
             Address a = getAddress();
-            return new Client(randStr(7), idType.values()[(int)(Math.random() * 2) % 2],
+            return new Client(randStr(7), IdType.values()[(int) (Math.random() * 2) % 2],
                     randStr(10), randStr(10), a);
-        } catch(ClientException e) {
+        } catch (ClientException e) {
             return null; // will never happen
         }
     }
@@ -80,29 +75,27 @@ public class DataFaker {
     public static Trivet getTrivet() {
         try {
             return new Trivet(Math.random() * 100, Math.random() * 200,
-                Math.random() * 1000, randStr(10), Math.random() * 10);
+                    Math.random() * 1000, randStr(10), Math.random() * 10);
         } catch (EquipmentException e) {
             return null;
         }
     }
 
     public static Rent getRent(Equipment e, Client c, Address a) {
-        if(e == null) {
+        if (e == null) {
             e = getCamera();
         }
-        if(c == null) {
+        if (c == null) {
             c = getClient();
         }
-        if(a == null) {
+        if (a == null) {
             a = getAddress();
         }
-        LocalDateTime nowLocal = LocalDateTime.now();
-        DateTime now = nowLocal.toDateTime();
-        long sinceEpoch = now.getMillis();
-        long beginUnix = sinceEpoch + (long) (Math.random() * 10000000);
-        long endUnix = beginUnix + (long) (Math.random() * 10000000);
-        LocalDateTime begin = Instant.ofEpochMilli(beginUnix).toDateTime().toLocalDateTime();
-        LocalDateTime end = Instant.ofEpochMilli(endUnix).toDateTime().toLocalDateTime();
+        long sinceEpoch = LocalDateTime.now().toInstant(ZoneOffset.UTC).toEpochMilli();
+        long beginUnix = sinceEpoch + (long) (Math.random() * 10000000 + 10000000);
+        long endUnix = beginUnix + (long) (Math.random() * 10000000 + 10000000);
+        LocalDateTime begin = Instant.ofEpochMilli(beginUnix).atZone(ZoneOffset.UTC).toLocalDateTime();
+        LocalDateTime end = Instant.ofEpochMilli(endUnix).atZone(ZoneOffset.UTC).toLocalDateTime();
         return new Rent(begin, end, e, c, a);
     }
 
@@ -112,15 +105,14 @@ public class DataFaker {
 
 
     // source: https://www.geeksforgeeks.org/generate-random-string-of-given-size-in-java/
-    static String randStr(int size)
-    {
+    static String randStr(int size) {
         String AlphaNumericString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                 + "0123456789"
                 + "abcdefghijklmnopqrstuvxyz";
 
         StringBuilder sb = new StringBuilder(size);
         for (int i = 0; i < size; i++) {
-            int index = (int)(AlphaNumericString.length() * Math.random());
+            int index = (int) (AlphaNumericString.length() * Math.random());
             sb.append(AlphaNumericString.charAt(index));
         }
         return sb.toString();

@@ -4,6 +4,7 @@ import exception.ClientException;
 import mgd.AddressMgd;
 
 import model.Client;
+import model.IdType;
 import model.UniqueId;
 import org.bson.Document;
 
@@ -29,7 +30,7 @@ public class ClientMapper {
         Client clientModel = new Client(
                 new UniqueId(clientDocument.get(ID, UUID.class)).getUniqueID(),
                 clientDocument.getString(CLIENT_ID),
-                clientDocument.get(ID_TYPE, model.idType.class),
+                clientDocument.get(ID_TYPE, IdType.class),
                 clientDocument.getString(FIRST_NAME),
                 clientDocument.getString(LAST_NAME),
                 AddressMapper.fromMongoAddress(addressMgd)

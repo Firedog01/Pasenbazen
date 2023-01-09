@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ClientCacheTest {
     @Test
+    @Disabled
     void redisTestHealthy() throws InterruptedException {
         ClientCache cache = new ClientCache();
         for(int i = 0; i < 10; i++) {

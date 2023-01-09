@@ -1,56 +1,177 @@
 version: '3.8'
 
 services:
-  mongo:
-    build: .
-    image: mongocustom:1
-    container_name: mongodb
-    hostname: mongodb
-    networks:
-      - mongonet
+#  mongo:
+#    build: .
+#    image: mongocustom:1
+#    container_name: mongodb
+#    hostname: mongodb
+#    networks:
+#      - mongonet
+#    ports:
+#      - "27017:27017"
+#    restart: always
+#    environment:
+#      - MONGO_INITDB_ROOT_USERNAME=nbd
+#      - MONGO_INITDB_ROOT_PASSWORD=nbdpassword
+#      - MAX_HEAP_SIZE=6000M
+#      - HEAP_NEWSIZE=200M
+#    command: --config /etc/mongod.conf
+#    healthcheck:
+#      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+#      interval: 10s
+#      timeout: 2s
+#      retries: 5
+#
+#  mongoinit:
+#    build: .
+#    image: mongocustom:1
+#    hostname: mongodbinit
+#    container_name: mongodbinit
+#    networks:
+#      - mongonet
+#    depends_on:
+#      mongo:
+#        condition: service_healthy
+#    command: >
+#      mongosh --host mongodb:27017 --username nbd --password nbdpassword --authenticationDatabase admin --eval
+#      '
+#      rs.initiate();
+#      '
+#
+#  redis-stack:
+#    image: redis/redis-stack
+#    volumes:
+#      - redis-stack-data:/bitnami/redis/data
+#    ports:
+#      - "8001:8001"
+#      - "6379:6379"
+#    networks:
+#      - redisnet
+
+  kafka1:
+    image: docker.io/bitnami/kafka:3.3
+    hostname: kafka1
+    container_name: kafka1
     ports:
-      - "27017:27017"
-    restart: always
+      # External
+      - target: 9192
+        published: 9192
+        protocol: tcp
+      # Controller QUORUM
+      - target: 9191
+        published: 9191
+        protocol: tcp
+
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=nbd
-      - MONGO_INITDB_ROOT_PASSWORD=nbdpassword
-    command: --config /etc/mongod.conf
-    healthcheck:
-      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
-      interval: 10s
-      timeout: 2s
-      retries: 5
+      - KAFKA_CFG_BROKER_ID=1
+      - KAFKA_CFG_BROKER_RACK=KAFKA_RACK
+      - KAFKA_ENABLE_KRAFT=yes
+      - KAFKA_CFG_PROCESS_ROLES=broker,controller
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER1
+      - KAFKA_CFG_LISTENERS=CONTROLLER1://:9191,DOCKER_EXTERNAL://kafka1:9192,DOCKER_INTERNAL://kafka1:19192
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER1:PLAINTEXT,DOCKER_EXTERNAL:PLAINTEXT,DOCKER_INTERNAL:PLAINTEXT
+      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=DOCKER_INTERNAL
+      - KAFKA_CFG_ADVERTISED_LISTENERS=DOCKER_EXTERNAL://kafka1:9192,DOCKER_INTERNAL://kafka1:19192
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@kafka1:9191,2@kafka2:9291,3@kafka3:9391
+      - KAFKA_KRAFT_CLUSTER_ID=NTg2OWZhNzY3NDhjMTFlZG
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_OPTS=-Dlog4j.rootLogger=DEBUG
 
-  mongoinit:
-    build: .
-    image: mongocustom:1
-    hostname: mongodbinit
-    container_name: mongodbinit
-    networks:
-      - mongonet
-    depends_on:
-      mongo:
-        condition: service_healthy
-    command: >
-      mongosh --host mongodb:27017 --username nbd --password nbdpassword --authenticationDatabase admin --eval
-      '
-      rs.initiate();
-      '
-
-  redis-stack:
-    image: redis/redis-stack
     volumes:
-      - redis-stack-data:/bitnami/redis/data
-    ports:
-      - "8001:8001"
-      - "6379:6379"
+      - kafka1_data:/bitnami/kafka
     networks:
-      - redisnet
+      kafkanet:
+        ipv4_address: 172.25.0.11
+
+  kafka2:
+    image: docker.io/bitnami/kafka:3.3
+    hostname: kafka2
+    container_name: kafka2
+    ports:
+      # External
+      - target: 9292
+        published: 9292
+        protocol: tcp
+      # Controller QUORUM
+      - target: 9291
+        published: 9291
+        protocol: tcp
+
+    environment:
+      - KAFKA_CFG_BROKER_ID=2
+      - KAFKA_CFG_BROKER_RACK=KAFKA_RACK
+      - KAFKA_ENABLE_KRAFT=yes
+      - KAFKA_CFG_PROCESS_ROLES=broker,controller
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER2
+      - KAFKA_CFG_LISTENERS=CONTROLLER2://:9291,DOCKER_EXTERNAL://kafka2:9292,DOCKER_INTERNAL://kafka2:19292
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER2:PLAINTEXT,DOCKER_EXTERNAL:PLAINTEXT,DOCKER_INTERNAL:PLAINTEXT
+      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=DOCKER_INTERNAL
+      - KAFKA_CFG_ADVERTISED_LISTENERS=DOCKER_EXTERNAL://kafka2:9292,DOCKER_INTERNAL://kafka2:19292
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@kafka1:9191,2@kafka2:9291,3@kafka3:9391
+      - KAFKA_KRAFT_CLUSTER_ID=NTg2OWZhNzY3NDhjMTFlZG
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_OPTS=-Dlog4j.rootLogger=DEBUG
+
+    volumes:
+      - kafka2_data:/bitnami/kafka
+    networks:
+      kafkanet:
+        ipv4_address: 172.25.0.12
+
+
+  kafka3:
+    image: docker.io/bitnami/kafka:3.3
+    hostname: kafka3
+    container_name: kafka3
+    ports:
+      # External
+      - target: 9392
+        published: 9392
+        protocol: tcp
+      # Controller QUORUM
+      - target: 9391
+        published: 9391
+        protocol: tcp
+
+    environment:
+      - KAFKA_CFG_BROKER_ID=3
+      - KAFKA_CFG_BROKER_RACK=KAFKA_RACK
+      - KAFKA_ENABLE_KRAFT=yes
+      - KAFKA_CFG_PROCESS_ROLES=broker,controller
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER3
+      - KAFKA_CFG_LISTENERS=CONTROLLER3://:9391,DOCKER_EXTERNAL://kafka3:9392,DOCKER_INTERNAL://kafka3:19392
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER3:PLAINTEXT,DOCKER_EXTERNAL:PLAINTEXT,DOCKER_INTERNAL:PLAINTEXT
+      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=DOCKER_INTERNAL
+      - KAFKA_CFG_ADVERTISED_LISTENERS=DOCKER_EXTERNAL://kafka3:9392,DOCKER_INTERNAL://kafka3:19392
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@kafka1:9191,2@kafka2:9291,3@kafka3:9391
+      - KAFKA_KRAFT_CLUSTER_ID=NTg2OWZhNzY3NDhjMTFlZG
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_OPTS=-Dlog4j.rootLogger=DEBUG
+
+    volumes:
+      - kafka3_data:/bitnami/kafka
+    networks:
+      kafkanet:
+        ipv4_address: 172.25.0.13
+
 
 volumes:
   redis-stack-data:
+    driver: local
+  kafka1_data:
+    driver: local
+  kafka2_data:
+    driver: local
+  kafka3_data:
     driver: local
 
 networks:
   mongonet: {}
   redisnet: {}
+  kafkanet:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.25.0.0/16

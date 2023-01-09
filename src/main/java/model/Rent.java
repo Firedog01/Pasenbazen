@@ -1,11 +1,14 @@
 package model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import model.EQ.Equipment;
-import org.joda.time.Days;
-import org.joda.time.LocalDateTime;
+
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+
+import static java.time.temporal.ChronoUnit.DAYS;
+
 
 @Entity
 @Table(name = "rent")
@@ -66,7 +69,8 @@ public class Rent extends AbstractEntity {
         this.shippingAddress = shippingAddress;
     }
 
-    protected Rent() {}
+    protected Rent() {
+    }
 
     public Rent(long id, LocalDateTime beginTime, LocalDateTime endTime,
                 Equipment equipment, Client client, Address shippingAddress) {
@@ -82,9 +86,8 @@ public class Rent extends AbstractEntity {
         } else if (equipment.isMissing()) {
             return equipment.getBail();
         } else {
-            long diffDays= Math.abs(Days.daysBetween(beginTime, endTime).getDays());
-            //FIXME Nie jestem pewien co do tego, ustawiłem sprawdzanie od 1, bo myślę, że gdzieś indziej będzie sprawdzane
-            // Czy data jest w ogóle większa od 0?
+            long diffDays = Math.abs(DAYS.between(beginTime, endTime));
+
             if (diffDays > 1) {
                 return equipment.getFirstDayCost() + equipment.getNextDaysCost() * (diffDays - 1);
             } else {

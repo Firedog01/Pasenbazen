@@ -21,7 +21,7 @@ public class Client extends AbstractEntity  {
     @Id
     @NotNull
     @Column(name = "client_id_type")
-    private idType idType;
+    private IdType idType;
 
     @Size(min = 1)
     @Column(name = "first_name")
@@ -41,7 +41,7 @@ public class Client extends AbstractEntity  {
 
     public Client(
             String clientId,
-            idType idType,
+            IdType idType,
             String firstName,
             String lastName,
             Address address
@@ -70,7 +70,7 @@ public class Client extends AbstractEntity  {
     }
     public Client(UUID uuid,
                      String clientId,
-                     idType idType,
+                     IdType idType,
                      String firstName,
                      String lastName,
                      Address address
@@ -88,7 +88,7 @@ public class Client extends AbstractEntity  {
         return clientId;
     }
 
-    public idType getIdType() {
+    public IdType getIdType() {
         return idType;
     }
 

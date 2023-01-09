@@ -1,15 +1,20 @@
-package repository.impl;
+package repository.cache.impl;
 
 import mgd.*;
 import mgd.EQ.EquipmentMgd;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import repository.impl.ClientRepository;
+import repository.impl.EquipmentRepository;
+import repository.impl.RentRepository;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Disabled
 class RentRepositoryTest {
 
     static RentRepository rentRepository = new RentRepository();

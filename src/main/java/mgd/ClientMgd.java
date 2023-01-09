@@ -2,14 +2,9 @@ package mgd;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import exception.ClientException;
 import lombok.AllArgsConstructor;
-import model.Address;
-import model.idType;
 import org.bson.codecs.pojo.annotations.BsonCreator;
 import org.bson.codecs.pojo.annotations.BsonProperty;
-
-import java.util.Objects;
 
 @AllArgsConstructor
 public class ClientMgd extends AbstractEntityMgd {

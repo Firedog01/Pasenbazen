@@ -1,12 +1,12 @@
 package model;
 
-public enum idType {
+public enum IdType {
     DowodOsobisty(0),
     Passport(1);
 
     private int id;
 
-    idType(int id) {
+    IdType(int id) {
         this.id = id;
     }
 

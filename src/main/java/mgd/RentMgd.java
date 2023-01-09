@@ -2,26 +2,35 @@ package mgd;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import mgd.EQ.EquipmentMgd;
-import model.Address;
-import model.Client;
-import model.EQ.Equipment;
 import org.bson.codecs.pojo.annotations.BsonCreator;
 import org.bson.codecs.pojo.annotations.BsonProperty;
-import org.joda.time.Days;
-import java.time.LocalDateTime;
 
-import java.util.Objects;
+import java.time.LocalDateTime;
 
 @AllArgsConstructor
 public class RentMgd extends AbstractEntityMgd {
 
-    public RentMgd() {}
+    @BsonProperty("equipment")
+    private EquipmentMgd equipment;
 
     // LocalDateTime.parse(beginTime.toString(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.[SSS]"));
+    @BsonProperty("client")
+    private ClientMgd client;
+    @BsonProperty("address")
+    private AddressMgd address;
+    @BsonProperty("beginTime")
+    private LocalDateTime beginTime;
+    @BsonProperty("endTime")
+    private LocalDateTime endTime;
+    @BsonProperty("shipped")
+    private boolean shipped;
+    @BsonProperty("eqReturned")
+    private boolean eqReturned;
+
+    public RentMgd() {
+    }
 
     @BsonCreator
     public RentMgd(@BsonProperty("_id") UniqueIdMgd entityId,
@@ -58,28 +67,6 @@ public class RentMgd extends AbstractEntityMgd {
         this.shipped = shipped;
         this.eqReturned = eqReturned;
     }
-
-    @BsonProperty("equipment")
-    private EquipmentMgd equipment;
-
-    @BsonProperty("client")
-    private ClientMgd client;
-
-    @BsonProperty("address")
-    private AddressMgd address;
-
-    @BsonProperty("beginTime")
-    private LocalDateTime beginTime;
-
-    @BsonProperty("endTime")
-    private LocalDateTime endTime;
-
-    @BsonProperty("shipped")
-    private boolean shipped;
-
-    @BsonProperty("eqReturned")
-    private boolean eqReturned;
-
 
     public EquipmentMgd getEquipment() {
         return equipment;
@@ -120,6 +107,7 @@ public class RentMgd extends AbstractEntityMgd {
     public void setEndTime(LocalDateTime endTime) {
         this.endTime = endTime;
     }
+
     public boolean isShipped() {
         return shipped;
     }

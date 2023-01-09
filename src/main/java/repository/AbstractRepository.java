@@ -5,6 +5,7 @@ import com.mongodb.client.ClientSession;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
+import org.bson.codecs.jsr310.LocalDateTimeCodec;
 import repository.codec.EquipmentMgdCodecProvider;
 import repository.codec.LocalDateTimeCodecProvider;
 import repository.codec.UniqueIdCodecProvider;

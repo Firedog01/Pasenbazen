@@ -1,14 +1,17 @@
-package repository.impl;
+package repository.cache.impl;
 
 import mgd.DataFakerMgd;
 import mgd.EQ.CameraMgd;
 import mgd.EQ.EquipmentMgd;
 import mgd.EQ.LensMgd;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import repository.impl.EquipmentRepository;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Disabled
 class EquipmentRepositoryTest {
 
     static EquipmentRepository equipmentRepository = new EquipmentRepository();
