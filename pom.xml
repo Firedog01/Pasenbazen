@@ -7,6 +7,16 @@
     <groupId>org.example</groupId>
     <artifactId>NonRelational</artifactId>
     <version>1.0-SNAPSHOT</version>
+
+    <repositories>
+
+        <repository>
+            <id>confluent</id>
+            <url>https://packages.confluent.io/maven/</url>
+        </repository>
+
+    </repositories>
+
     <build>
         <plugins>
             <plugin>
@@ -22,48 +32,6 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.0.0-M7</version>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-                <version>3.3.0</version>
-                <executions>
-                    <execution>
-                        <phase>generate-test-sources</phase>
-                        <goals>
-                            <goal>add-test-source</goal>
-                        </goals>
-                        <configuration>
-                            <sources>
-                                <source>${project.build.directory}/generated-sources/avro</source>
-                            </sources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.avro</groupId>
-                <artifactId>avro-maven-plugin</artifactId>
-                <version>1.11.1</version>
-                <executions>
-                    <execution>
-                        <phase>generate-test-sources</phase>
-                        <goals>
-                            <goal>schema</goal>
-                        </goals>
-                        <configuration>
-                            <testSourceDirectory>src/test/java/avro/avro</testSourceDirectory>
-                            <testOutputDirectory>${project.build.directory}/generated-test-sources/avro
-                            </testOutputDirectory>
-                            <includes>
-                                <include>**/*.avro</include>
-                            </includes>
-                            <!--                            <testIncludes>-->
-                            <!--                                <testInclude>**/*.testavro</testInclude>-->
-                            <!--                            </testIncludes>-->
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>
@@ -155,18 +123,7 @@
             <version>RELEASE</version>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>org.apache.avro</groupId>
-            <artifactId>avro</artifactId>
-            <version>1.11.0</version>
-        </dependency>
 
-        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-avro -->
-        <dependency>
-            <groupId>com.fasterxml.jackson.dataformat</groupId>
-            <artifactId>jackson-dataformat-avro</artifactId>
-            <version>2.14.1</version>
-        </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.apache.kafka/kafka-clients -->
         <dependency>
