@@ -2,9 +2,9 @@ package model;
 
 import jakarta.persistence.metamodel.SingularAttribute;
 import jakarta.persistence.metamodel.StaticMetamodel;
+import java.time.LocalDateTime;
 import javax.annotation.processing.Generated;
 import model.EQ.Equipment;
-import org.joda.time.LocalDateTime;
 
 @Generated(value = "org.hibernate.jpamodelgen.JPAMetaModelEntityProcessor")
 @StaticMetamodel(Rent.class)

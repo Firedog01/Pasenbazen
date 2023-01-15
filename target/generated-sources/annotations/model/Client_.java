@@ -11,7 +11,7 @@ public abstract class Client_ extends model.AbstractEntity_ {
 	public static volatile SingularAttribute<Client, String> firstName;
 	public static volatile SingularAttribute<Client, String> lastName;
 	public static volatile SingularAttribute<Client, String> clientId;
-	public static volatile SingularAttribute<Client, idType> idType;
+	public static volatile SingularAttribute<Client, IdType> idType;
 	public static volatile SingularAttribute<Client, Address> address;
 	public static volatile SingularAttribute<Client, Boolean> archive;
 
