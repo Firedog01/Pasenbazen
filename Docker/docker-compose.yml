@@ -39,15 +39,15 @@ services:
       rs.initiate();
       '
 
-  redis-stack:
-    image: redis/redis-stack
-    volumes:
-      - redis-stack-data:/bitnami/redis/data
-    ports:
-      - "8001:8001"
-      - "6379:6379"
-    networks:
-      - redisnet
+#  redis-stack:
+#    image: redis/redis-stack
+#    volumes:
+#      - redis-stack-data:/bitnami/redis/data
+#    ports:
+#      - "8001:8001"
+#      - "6379:6379"
+#    networks:
+#      - redisnet
 
   kafka1:
     image: docker.io/bitnami/kafka:3.3
@@ -157,8 +157,8 @@ services:
 
 
 volumes:
-  redis-stack-data:
-    driver: local
+#  redis-stack-data:
+#    driver: local
   kafka1_data:
     driver: local
   kafka2_data:
@@ -168,7 +168,7 @@ volumes:
 
 networks:
   mongonet: {}
-  redisnet: {}
+#  redisnet: {}
   kafkanet:
     driver: bridge
     ipam:
